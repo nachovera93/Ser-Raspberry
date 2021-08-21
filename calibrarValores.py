@@ -40,14 +40,14 @@ esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
 esp32.flushInput()
 
 
-broker = '192.168.100.177'    #mqtt server
+broker = '192.168.100.58'    #mqtt server
 port = 1883
-dId = '1234'
-passw = 'ZLdW9SKwE2'
-webhook_endpoint = 'http://192.168.100.177:3001/api/getdevicecredentials'
+dId = '123456789'
+passw = 'fklPo4dAXm'
+webhook_endpoint = 'http://192.168.100.58:3001/api/getdevicecredentials'
 
 
- 
+""" 
 def get_mqtt_credentials():
     global usernamemqtt
     global passwordmqtt
@@ -122,6 +122,14 @@ time.sleep(5)
 
 
 
+def randomnum():
+    num = random.randint(0, 50)
+    str_num = {"value":num,"save":1}
+    msg = json.dumps(str_num)
+    return msg 
+       
+
+"""
 
 
 def cpu_temp():
@@ -177,11 +185,9 @@ def EscalaCorriente(corriente):   #bien para valores de bajos amperes en fft
     return newcorriente 
 
 
-vrms=0.0
-vrms0=0.0
+
 def VoltajeRms(listVoltage):
-    global vrms
-    global vrms0
+    #global vrms
     #print(f'maximo voltaje 2 : {max(listVoltage)}')
     
     listVoltage=savgol_filter(listVoltage,51,10)
@@ -203,19 +209,15 @@ def VoltajeRms(listVoltage):
 
     MeanSquares = (1/N)*SumSquares #Dividimos por N la sumatoria
 
-    vrms0=np.sqrt(MeanSquares)
-    str_num = {"value":vrms0,"save":1}
-    vrms = json.dumps(str_num)
-    print(f'Voltaje RMS : {vrms0}')
+    vrms=np.sqrt(MeanSquares)
+    print(f'Voltaje RMS : {vrms}')
     
 
 #    return vrms
 
-irms=0.0
-irms0=0.0
+
 def CorrienteRms(listCurrent):
-    global irms
-    global irms0
+    
     print(f'maximo corriente 2 : {max(listCurrent)}')
     if(max(listCurrent)>1):
         listCurrent=listCurrent*0.7
@@ -235,11 +237,9 @@ def CorrienteRms(listCurrent):
 
     MeanSquares = (1/N)*SumSquares #Dividimos por N la sumatoria
 
-    irms0=np.sqrt(MeanSquares)
-    str_num = {"value":irms0,"save":1}
-    irms = json.dumps(str_num)
-    print(f'Corriente RMS : {irms0}')
-    return irms0
+    irms=np.sqrt(MeanSquares)
+    print(f'Corriente RMS : {irms}')
+    return irms
 
 
 DATVoltajeCGE=0.0
@@ -332,12 +332,8 @@ def VoltageFFT(list_fftVoltages, samplings,i):
                  phasevoltajeCGE = np.arctan(real[0]/(imag[0]))
                  #FaseArmonicoFundamentalVoltaje1=round(np.angle(complejo[0]),2)
                  FDVoltajeCGE = Magnitud1/SumMagnitudEficaz
-                 DATVoltajeCGE0= np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
-                 print(f'DAT Voltaje CGE: {round(DATVoltajeCGE0,2)}')
-                 str_num = {"value":DATVoltajeCGE0,"save":1}
-                 DATVoltajeCGE = json.dumps(str_num)
+                 DATVoltajeCGE = np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
                  sincvoltaje1 = 1
-                 
                  #return phasevoltajeCGE,FDvoltajeCGE,DATVoltajeCGE
 
            #sincvoltaje2 = 0
@@ -469,8 +465,6 @@ def CurrentFFT(list_fftVoltages, samplings, i):
                  cosphiCGE=np.cos(phasevoltajeCGE-phasecorrienteCGE)
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
                  print(f'FP1 cge: {FPCGE}')
-                 str_num = {"value":FPCGE,"save":1}
-                 FPCGE = json.dumps(str_num)
                  print(f'cos(phi) cge : {cosphiCGE}')
                  sincvoltaje1=0  
                  #return FPCGE
@@ -534,17 +528,13 @@ def Potencias(i,irms,vrms):
           global ActivaCGEFase1
           global AparenteCGEFase1
           global ReactivaCGEFase1
-          AparenteCGEFase1 = vrms0*irms0
-          ActivaCGEFase01= np.abs(vrms0*irms0*cosphiCGE)
-          ReactivaCGEFase1 = vrms0*irms0*np.sin(phasevoltajeCGE-phasecorrienteCGE)
+          AparenteCGEFase1 = vrms*irms
+          ActivaCGEFase1= np.abs(vrms*irms*cosphiCGE)
+          ReactivaCGEFase1 = vrms*irms*np.sin(phasevoltajeCGE-phasecorrienteCGE)
           a2 = datetime.datetime.now()
           delta=(((a2 - a).microseconds)/1000+((a2 - a).seconds)*1000)/10000000000
-          energyCGEFase1 += AparenteCGEFase1*delta*2.8
+          energyCGEFase1 += ActivaCGEFase1*delta*2.8
           a = datetime.datetime.now()
-          print(f'Activa Fase 1: {round(ActivaCGEFase01,2)}')
-          print(f'Aparente Fase 1: {round(AparenteCGEFase1,2)}')
-          str_num = {"value":ActivaCGEFase01,"save":1}
-          ActivaCGEFase1 = json.dumps(str_num)
     if(i=="2"):
           global b
           global energyPanelesFase1
@@ -839,103 +829,43 @@ def received():
                           #distance()
                           tempESP32 = round(np_array[0],0)
                           #print(f'array: {np_array}')
-                  if  (client.connected_flag == True): 
-                          publish(client)
-
-
-b=time.time()
-c=time.time()
-d=time.time()
-e=time.time()
-f=time.time()
-#varsLastSend=[b,c,d,e]
-
-def publish(client):
-    
-        global b, c ,d, e, f
-        a=time.time()
-        for i in data["variables"]:
-
-            #    if(data["variables"][i]["variableType"]=="output"):
-            #        continue
-            if(i["variableFullName"]=="Corriente"):
-                freq = i["variableSendFreq"]
-                if(a - b > freq):
-                     b=time.time()
-                     str_variable = i["variable"]
-                     topic1 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic1, irms)
-                     status = result[0]
-                     
-                     if status == 0:
-                         print(f"Send irms: `{irms}` to topic `{topic1}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic1}")
-        
-                   
-            if(i["variableFullName"]=="Voltaje"):
-                freq = i["variableSendFreq"]
-                if(a - c > freq):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     c=time.time()
-                     str_variable2 = i["variable"]
-                     topic2 = topicmqtt + str_variable2 + "/sdata"
-                     result = client.publish(topic2, vrms)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send vrms: `{vrms}` to topic `{topic2}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic2}")
-
-            if(i["variableFullName"]=="Potencia-Activa"):
-                freq = i["variableSendFreq"]
-                if(a - d > freq):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     d=time.time()
-                     str_variable3 = i["variable"]
-                     topic3 = topicmqtt + str_variable3 + "/sdata"
-                     result = client.publish(topic3, ActivaCGEFase1)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send pot activa: `{ActivaCGEFase1}` to topic `{topic3}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic3}")
-
-            if(i["variableFullName"]=="Factor-de-Potencia"):
-                freq = i["variableSendFreq"]
-                if(a - e > freq):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     e=time.time()
-                     str_variable4 = i["variable"]
-                     topic4 = topicmqtt + str_variable4 + "/sdata"
-                     result = client.publish(topic4, FPCGE)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send FP: `{FPCGE}` to topic `{topic4}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic4}")
-
-            if(i["variableFullName"]=="THD"):
-                freq = i["variableSendFreq"]
-                if(a - f > freq):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     f=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, DATVoltajeCGE)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send DAT: `{DATVoltajeCGE}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
-            
         
 
 
 """
+def publish(client):
+    
+    #for i in range(0,len(data["variables"])):
+    #    if(data["variables"][i]["variableType"]=="output"):
+    #        continue
+        str_variable = data["variables"][0]["variable"]
+        #print("data:",str_variable)
+        topic1 = topicmqtt + str_variable + "/sdata"
+        msg=randomnum()
+        result = client.publish(topic1, msg)
+        # result: [0, 1]
+        status = result[0]
+        if status == 0:
+            print(f"Send `{msg}` to topic `{topic1}`")
+        else:
+            print(f"Failed to send message to topic {topic1}")
+        
+        #str_variable = data["variables"][1]["variable"]
+        #print("data:",str_variable)
+        #topic1 = topicmqtt + str_variable + "/sdata"
+        #msg=randomnum2()
+        #result = client.publish(topic1, msg)
+        # result: [0, 1]
+        #status = result[0]
+        #if status == 0:
+        #    print(f"Send `{msg}` to topic `{topic1}`")
+        #else:
+        #    print(f"Failed to send message to topic {topic1}")
+"""
+
+""" 
 while client.connected_flag: 
     #print("In loop")
-    #received()
     publish(client)
     #time.sleep(5)
 """   
@@ -946,4 +876,3 @@ if __name__ == '__main__':
     #t = threading.Thread(target=received)
     #t.daemon = True
     #t.start()
-

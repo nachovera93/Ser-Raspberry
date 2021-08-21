@@ -18,8 +18,8 @@ import time
 
 broker = '192.168.100.177'    #mqtt server
 port = 1883
-dId = '12345678'
-passw = 'a0r5Y6Gs0O'
+dId = '12345'
+passw = '2zycWBGxsS'
 webhook_endpoint = 'http://192.168.100.177:3001/api/getdevicecredentials'
 
 
@@ -63,6 +63,7 @@ def get_mqtt_credentials():
           respuesta.close()
           print("Ends mqtt credentials")
     return True
+
 
 get_mqtt_credentials()
    
