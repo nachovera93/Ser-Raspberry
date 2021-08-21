@@ -19,7 +19,7 @@ import time
 broker = '192.168.100.177'    #mqtt server
 port = 1883
 dId = '12345678'
-passw = 'a0r5Y6Gs0o'
+passw = 'a0r5Y6Gs0O'
 webhook_endpoint = 'http://192.168.100.177:3001/api/getdevicecredentials'
 
 
@@ -142,7 +142,7 @@ def publish(client):
             if(i["variableFullName"]=="Voltaje"):
                 freq = i["variableSendFreq"]
                 if(a - c > freq):
-                     print("varlastsend 1: ",varsLastSend[i])
+                     #print("varlastsend 1: ",varsLastSend[i])
                      c=time.time()
                      str_variable2 = i["variable"]
                      topic2 = topicmqtt + str_variable2 + "/sdata"
@@ -182,3 +182,27 @@ while client.connected_flag:
 
 print("client stop")  # no esta pasando en ninguna situación
 client.loop_stop()  
+
+
+
+"""
+{
+    "password": "7dnkOzqUwL",
+    "topic": "610a8d733d1a8852b4e6b775/12345678/",
+    "username": "CRE6Gpub8q",
+    "variables": [
+        {
+            "variable": "O1DM08hKvJ",
+            "variableFullName": "Voltaje",
+            "variableSendFreq": 10,
+            "variableType": "input"
+        },
+        {
+            "variable": "mmdKbcHfSA",
+            "variableFullName": "Corriente",
+            "variableSendFreq": 15,
+            "variableType": "input"
+        }
+    ]
+}
+"""
