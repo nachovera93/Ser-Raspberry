@@ -16,11 +16,11 @@ import time
     6-255: undefined
     """
 
-broker = '192.168.100.177'    #mqtt server
+broker = '192.168.100.122'    #mqtt server
 port = 1883
-dId = '12345'
-passw = '2zycWBGxsS'
-webhook_endpoint = 'http://192.168.100.177:3001/api/getdevicecredentials'
+dId = '123321'
+passw = 'SCdo7MDyJH'
+webhook_endpoint = 'http://192.168.100.122:3001/api/getdevicecredentials'
 
 
  
@@ -125,7 +125,7 @@ def publish(client):
 
             #    if(data["variables"][i]["variableType"]=="output"):
             #        continue
-            if(i["variableFullName"]=="Corriente"):
+            if(i["variableFullName"]=="Corriente-CGE"):
                 freq = i["variableSendFreq"]
                 if(a - b > freq):
                      b=time.time()

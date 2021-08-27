@@ -25,6 +25,7 @@ import os
 import serial
 import math
 import board
+import statistics as stat
 """
     0: connection succeeded
     1: connection failed - incorrect protocol version
@@ -130,6 +131,18 @@ def randomnum():
        
 
 """
+def setup():
+    GPIO.setmode(GPIO.BCM) 
+    GPIO.setup(4,GPIO.OUT)
+    GPIO.setup(24,GPIO.IN)
+    GPIO.setup(23, GPIO.OUT)
+    GPIO.setup(8, GPIO.OUT)
+    GPIO.output(8, GPIO.LOW)
+    GPIO.setwarnings(False)
+    return()
+
+
+setup()
 
 
 def cpu_temp():
@@ -143,7 +156,7 @@ CPU_temp = 0.0
 def Ventilador():
     global CPU_temp
     CPU_temp = round(cpu_temp(),0)
-    #print(f'temp cpu: {CPU_temp}')
+    print(f'temp cpu: {CPU_temp}')
     if CPU_temp > 50:
         #print("Ventilador on")
         GPIO.output(23, True)
@@ -164,7 +177,7 @@ def getMinValues(myList, quantity):
 def EscalaVoltaje(voltaje):
     Escala=getMaxValues(voltaje, 100)
     Escala2=np.mean(Escala)
-    print(f'maximo bits voltaje 1 : {Escala2}')
+    #print(f'maximo bits voltaje 1 : {Escala2}')
     if(Escala2>=330):
         newvoltaje=voltaje*0.86
     elif(Escala2<330):
@@ -172,7 +185,7 @@ def EscalaVoltaje(voltaje):
     #newvoltaje2=savgol_filter(newvoltaje,51,3)
     Escala3=getMaxValues(newvoltaje, 10)
     Escala4=np.mean(Escala3)
-    print(f'Escala4 : {Escala4}')
+    #print(f'Escala4 : {Escala4}')
     
     return newvoltaje
 
@@ -183,6 +196,17 @@ def EscalaCorriente(corriente):   #bien para valores de bajos amperes en fft
         newcorriente=corriente/140 
 
     return newcorriente 
+
+def VoltRms(maximovoltaje2):
+    vrms=(0.197 + 0.00338*maximovoltaje2 - 0.0000158*(maximovoltaje2**2) + 0.0000000326*(maximovoltaje2**3) - 0.0000000000248*(maximovoltaje2**4))*maximovoltaje2
+    print(f'vrms : {vrms}')
+    return vrms
+
+
+def CurrentRms(maximocorriente2):
+     irms=(-0.000399 + 0.000137*maximocorriente2 - 0.000000801*(maximocorriente2**2) + 0.00000000214*(maximocorriente2**3) - 0.000000000000218*(maximocorriente2**4))*maximocorriente2
+     print(f'irms : {irms}')
+     return irms
 
 
 
@@ -210,7 +234,7 @@ def VoltajeRms(listVoltage):
     MeanSquares = (1/N)*SumSquares #Dividimos por N la sumatoria
 
     vrms=np.sqrt(MeanSquares)
-    print(f'Voltaje RMS : {vrms}')
+    #print(f'Voltaje RMS : {vrms}')
     
 
 #    return vrms
@@ -218,7 +242,7 @@ def VoltajeRms(listVoltage):
 
 def CorrienteRms(listCurrent):
     
-    print(f'maximo corriente 2 : {max(listCurrent)}')
+    #print(f'maximo corriente 2 : {max(listCurrent)}')
     if(max(listCurrent)>1):
         listCurrent=listCurrent*0.7
     elif(max(listCurrent)<1):
@@ -238,7 +262,7 @@ def CorrienteRms(listCurrent):
     MeanSquares = (1/N)*SumSquares #Dividimos por N la sumatoria
 
     irms=np.sqrt(MeanSquares)
-    print(f'Corriente RMS : {irms}')
+    #print(f'Corriente RMS : {irms}')
     return irms
 
 
@@ -318,9 +342,9 @@ def VoltageFFT(list_fftVoltages, samplings,i):
                    FD2.append(FD[i])
                    
            SumMagnitudEficaz = (np.sum([FD2[0:len(FD2)]]))
-           print(f'Vrms total: {round(SumMagnitudEficaz,2)}')
+           #print(f'Vrms total: {round(SumMagnitudEficaz,2)}')
            Magnitud1 = FD[0]
-           print(f'V rms armonico 1: {round(Magnitud1,2)}')
+           #print(f'V rms armonico 1: {round(Magnitud1,2)}')
            #razon=Magnitud1/SumMagnitudEficaz
            #armonico1voltaje=valor*razon
            #print(f'FD Voltaje: {round(FD,2)}')
@@ -444,9 +468,9 @@ def CurrentFFT(list_fftVoltages, samplings, i):
          #print(f'FD2: {FD2}')
          #print(f'FD largo: {len(FD)}')
          SumMagnitudEficaz = (np.sum([FD2[0:len(FD2)]]))
-         print(f'Irms total: {round(SumMagnitudEficaz,2)}')
+         #print(f'Irms total: {round(SumMagnitudEficaz,2)}')
          Magnitud1 = FD[0]
-         print(f'Irms armonico 1: {round(Magnitud1,2)}')
+         #print(f'Irms armonico 1: {round(Magnitud1,2)}')
          #razon=Magnitud1/SumMagnitudEficaz
          #armonico1corriente=valor1*razon
          #MagnitudArmonicoFundamentalCorriente=round(thd_array[0],3)
@@ -519,7 +543,7 @@ ReactivaCargaFase1 = 0.0
 
 
 
-def Potencias(i,irms,vrms):
+def Potencias(i):
     i = str(i)
     
     if(i=="1"):
@@ -528,9 +552,12 @@ def Potencias(i,irms,vrms):
           global ActivaCGEFase1
           global AparenteCGEFase1
           global ReactivaCGEFase1
-          AparenteCGEFase1 = vrms*irms
-          ActivaCGEFase1= np.abs(vrms*irms*cosphiCGE)
-          ReactivaCGEFase1 = vrms*irms*np.sin(phasevoltajeCGE-phasecorrienteCGE)
+          AparenteCGEFase1 = vrms1*irms1
+          print(f'Aparente fase 1 : {AparenteCGEFase1}')
+          ActivaCGEFase1= np.abs(vrms1*irms1*cosphiCGE)
+          print(f'Activa Fase 1 : {ActivaCGEFase1}')
+          ReactivaCGEFase1 = vrms1*irms1*np.sin(phasevoltajeCGE-phasecorrienteCGE)
+          print(f'Reactiva Fase 1 : {ReactivaCGEFase1}')
           a2 = datetime.datetime.now()
           delta=(((a2 - a).microseconds)/1000+((a2 - a).seconds)*1000)/10000000000
           energyCGEFase1 += ActivaCGEFase1*delta*2.8
@@ -570,7 +597,8 @@ vrms3=0.0
 irms1=0.0
 irms2=0.0
 irms3=0.0
-
+modamaximovoltaje2=[]
+modamaximocorriente2=[]
 
 def received():
            while True:
@@ -582,8 +610,12 @@ def received():
        
                   if (len(np_array) == 8402):
                         if (np_array[0] == 11):
+                            global modamaximovoltaje2
+                            global modamaximocorriente2
                             global vrms1
                             global irms1
+                            global modavoltaje
+                            global modacorriente
                             samplings = np_array[-1]
                             list_FPVoltage3 = np_array[0:4200]
                             list_FPCurrent3 = np_array[4201:8400]
@@ -598,21 +630,38 @@ def received():
                             list_FPCurrent = list_FPCurrent2 [103:4200]
 
                             #Valor dc de Voltaje
-                            valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 20)
-                            valoresminimovoltajesinmedia=getMinValues(list_FPVoltage, 20)
+                            valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 50)
+                            valoresminimovoltajesinmedia=getMinValues(list_FPVoltage, 50)
                             maximovoltaje = np.median(valoresmaximovoltajesinmedia)
                             minimovoltaje = np.median(valoresminimovoltajesinmedia)
                             mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                             # Valores maximo y minimos de voltaje sin componente continua
                             NoVoltageoffset=list_FPVoltage-mediadcvoltaje
-                            #maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 20)
-                            #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 20)
-                            #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
+                            maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 50)
+                            #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
+                            maximovoltaje2 = np.median(maximovoltaje2sinmedia)
+                           # vrms1=VoltRms(maximovoltaje2)
                             #minimovoltaje2 = np.median(minimovoltaje2sinmedia)
-                            #print(f'maximo voltaje con get max value : {maximovoltaje}')
-                            #print(f'maximo voltaje{minimovoltaje2}')
-                            NoVoltageoffset2= EscalaVoltaje(NoVoltageoffset) #Devuelve Array con valores Voltaje peak to peak
-                            #NoVoltageoffset2=NoVoltageoffset/1.90
+                            
+                            if (len(modamaximovoltaje2)>=20):
+                                modavoltaje=np.median(modamaximovoltaje2)
+                                vrms1=VoltRms(modavoltaje) 
+                                #print(f'maximo voltaje: {maximovoltaje2}')
+                                #print(f'minimo voltaje: {minimovoltaje2}')
+                                NoVoltageoffset2= EscalaVoltaje(NoVoltageoffset) #Devuelve Array con valores Voltaje peak to peak
+                                #NoVoltageoffset2=NoVoltageoffset/1.90
+                                #VoltajeRms(NoVoltageoffset2)
+                                VoltageFFT(NoVoltageoffset2,samplings,1)
+                                #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
+                                #graphFFTV1(NoVoltageoffset2,samplings)
+                                #print(f'MODA VOLTAJE: {modavoltaje}')
+                                modamaximovoltaje2=[]
+                            else:
+                                modamaximovoltaje2.append(maximovoltaje2)
+                                #print(f'array voltaje: {modamaximovoltaje2}')
+
+                               
+                            
 
                             #print(f'len 1: {len(list_FPVoltage)}')
                                 # print(f'maximos{valoresmaximovoltajesinmedia}')
@@ -621,8 +670,8 @@ def received():
                                 # print(f'samplings 1: {len(NoVoltageoffset)}')
 
                             #Valor dc de corriente
-                            valoresmaxcorriente=getMaxValues(list_FPCurrent, 20)
-                            valoresmincorriente=getMinValues(list_FPCurrent, 20)
+                            valoresmaxcorriente=getMaxValues(list_FPCurrent, 50)
+                            valoresmincorriente=getMinValues(list_FPCurrent, 50)
                             maximocorriente = np.median(valoresmaxcorriente)
                             minimocorriente = np.median(valoresmincorriente)
         
@@ -630,37 +679,40 @@ def received():
                             
                             # Valores maximo y minimos de corriente
                             NoCurrentoffset=list_FPCurrent-mediadccorriente
-                            maximocorriente2sinmedia=getMaxValues(NoCurrentoffset, 20)
-                            minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 20)
+                            maximocorriente2sinmedia=getMaxValues(NoCurrentoffset, 50)
+                            #minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 50)
                             maximocorriente2 = np.median(maximocorriente2sinmedia)
-                            minimocorriente2 = np.median(minimocorriente2sinmedia)
-                            #print(f'corriente max: {maximocorriente2 }')
-                            #print(f'corriente min: {minimocorriente2 }')
-                            NoCurrentoffset2 = EscalaCorriente(NoCurrentoffset)
-                            #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
-
-
-                            VoltajeRms(NoVoltageoffset2)
-                            VoltageFFT(NoVoltageoffset2,samplings,1)
-                            #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
-                            #graphFFTV1(NoVoltageoffset2,samplings)
+                            #minimocorriente2 = np.median(minimocorriente2sinmedia)
+                            
+                            if (len(modamaximocorriente2)==20):
+                                modacorriente=np.median(modamaximocorriente2)
+                                irms1=CurrentRms(modacorriente)
+                                #print(f'corriente max: {maximocorriente2 }')
+                                #print(f'corriente min: {minimocorriente2 }')
+                                NoCurrentoffset2 = EscalaCorriente(NoCurrentoffset)
+                                #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
+                                #irms1 = CorrienteRms(NoCurrentoffset2)
+                                CurrentFFT(NoCurrentoffset2,samplings,1)
+                                #graphCurrent1(NoCurrentoffset2,samplings)
+                                #graphFFTI1(NoCurrentoffset2,samplings)
+                                #maximo=max(list_FPCurrent[1000:1700])
+                                #minimo=min(list_FPCurrent[1000:1700])
+                                #diferencia=maximo-minimo
+                                #maximo2=max(list_FPCurrent)
+                                #escalaI = valor1*np.sqrt(2) / maximo2
+                                #listEscalaI=list_FPCurrent*escalaI
+                                #samplings = np_array[-1]
+                                #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
+                                print(f'MODA CORRIENTE: {modacorriente}')
+                                Potencias(1)
+                                modamaximocorriente2=[]
+                            else:
+                                modamaximocorriente2.append(maximocorriente2)
+                            #    print(f'array corriente: {modamaximocorriente2}')
+                            
+                                
                             
                             
-                            irms1 = CorrienteRms(NoCurrentoffset2)
-                            CurrentFFT(NoCurrentoffset2,samplings,1)
-                            #graphCurrent1(NoCurrentoffset2,samplings)
-                            #graphFFTI1(NoCurrentoffset2,samplings)
-                            #maximo=max(list_FPCurrent[1000:1700])
-                            #minimo=min(list_FPCurrent[1000:1700])
-                            #diferencia=maximo-minimo
-                            #maximo2=max(list_FPCurrent)
-                            #escalaI = valor1*np.sqrt(2) / maximo2
-                            #listEscalaI=list_FPCurrent*escalaI
-                            #samplings = np_array[-1]
-                            #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
-                            Potencias(1,irms1,vrms1)
-                            print(f'samplings 1: {samplings}')
-                            #FP(list_FPVoltage, list_FPCurrent, i=1)
                         if (np_array[0] == 22):
                             global vrms2
                             global irms2
@@ -739,7 +791,7 @@ def received():
                             #samplings = np_array[-1]
                             #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
                             Potencias(2,irms2,vrms2)
-                            print(f'samplings 2: {samplings}')
+                         #   print(f'samplings 2: {samplings}')
                             #FP(list_FPVoltage, list_FPCurrent, i=1)
                         if (np_array[0] == 33):
                             global vrms3
@@ -819,12 +871,12 @@ def received():
                             #samplings = np_array[-1]
                             #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
                             Potencias(3,irms3,vrms3)
-                            print(f'samplings 3: {samplings}')
+                       #     print(f'samplings 3: {samplings}')
                             #FP(list_FPVoltage, list_FPCurrent, i=1)
                     
                   if (len(np_array)>0 and len(np_array)<=2):
                           global tempESP32
-                          #Ventilador()
+                          Ventilador()
                           #temphum()
                           #distance()
                           tempESP32 = round(np_array[0],0)
