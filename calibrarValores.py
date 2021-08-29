@@ -133,11 +133,11 @@ def randomnum():
 """
 def setup():
     GPIO.setmode(GPIO.BCM) 
-    GPIO.setup(4,GPIO.OUT)
-    GPIO.setup(24,GPIO.IN)
+    #GPIO.setup(4,GPIO.OUT)
+    #GPIO.setup(24,GPIO.IN)
     GPIO.setup(23, GPIO.OUT)
-    GPIO.setup(8, GPIO.OUT)
-    GPIO.output(8, GPIO.LOW)
+    #GPIO.setup(8, GPIO.OUT)
+    #GPIO.output(8, GPIO.LOW)
     GPIO.setwarnings(False)
     return()
 
@@ -154,15 +154,17 @@ def cpu_temp():
 
 CPU_temp = 0.0
 def Ventilador():
-    global CPU_temp
+    global EstateVentilador
     CPU_temp = round(cpu_temp(),0)
-    print(f'temp cpu: {CPU_temp}')
-    if CPU_temp > 50:
+    #print(f'temp cpu: {CPU_temp}')
+    if CPU_temp > 53:
         #print("Ventilador on")
         GPIO.output(23, True)
-    elif CPU_temp <= 40:
+        EstateVentilador="ON"
+    elif CPU_temp <= 38:
         #print("Ventilador off")
         GPIO.output(23, False)
+        EstateVentilador="OFF"
 
 def getMaxValues(myList, quantity):
         return(sorted(list(set(myList)), reverse=True)[:quantity]) 
@@ -599,6 +601,7 @@ irms2=0.0
 irms3=0.0
 modamaximovoltaje2=[]
 modamaximocorriente2=[]
+EstateVentilador="OFF"
 
 def received():
            while True:
@@ -876,11 +879,16 @@ def received():
                     
                   if (len(np_array)>0 and len(np_array)<=2):
                           global tempESP32
+                          #global EstateVentilador
+                          Temp_Raspberry=cpu_temp()
+                          #str(EstateVentilador)
                           Ventilador()
                           #temphum()
                           #distance()
                           tempESP32 = round(np_array[0],0)
-                          #print(f'array: {np_array}')
+                          print(f'tempESP32: {tempESP32}')
+                          print(f'tempRaspberry: {Temp_Raspberry}')
+                          print(f'Estado Vendilador: {EstateVentilador}')
         
 
 

@@ -40,11 +40,11 @@ esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
 esp32.flushInput()
 
 
-broker = '192.168.100.122'    #mqtt server
+broker = '18.230.177.45'    #mqtt server
 port = 1883
 dId = '12344321'
-passw = 'yFJMESnzxl'
-webhook_endpoint = 'http://192.168.100.122:3001/api/getdevicecredentials'
+passw = 'zbipDSskLT'
+webhook_endpoint = 'http://18.230.177.45:3001/api/getdevicecredentials'
 
 
  
@@ -120,7 +120,18 @@ client.on_connect = on_connected
 client.loop_start()
 time.sleep(5)
 
+def setup():
+    GPIO.setmode(GPIO.BCM) 
+    GPIO.setup(4,GPIO.OUT)
+    GPIO.setup(24,GPIO.IN)
+    GPIO.setup(23, GPIO.OUT)
+    GPIO.setup(8, GPIO.OUT)
+    GPIO.output(8, GPIO.LOW)
+    GPIO.setwarnings(False)
+    return()
 
+
+setup()
 
 
 
@@ -132,16 +143,23 @@ def cpu_temp():
 	return cpu_temp
 
 CPU_temp = 0.0
+EstateVentilador="OFF"
 def Ventilador():
-    global CPU_temp
+    global EstateVentilador
     CPU_temp = round(cpu_temp(),0)
     #print(f'temp cpu: {CPU_temp}')
-    if CPU_temp > 50:
+    if CPU_temp > 53:
         #print("Ventilador on")
         GPIO.output(23, True)
-    elif CPU_temp <= 40:
+        #EstateVentilador0="ON"
+        str_num = {"value":"ON","save":1}
+        EstateVentilador = json.dumps(str_num)
+    elif CPU_temp <= 38:
         #print("Ventilador off")
         GPIO.output(23, False)
+        #EstateVentilador0="OFF"
+        str_num = {"value":"OFF","save":1}
+        EstateVentilador = json.dumps(str_num)
 
 def getMaxValues(myList, quantity):
         return(sorted(list(set(myList)), reverse=True)[:quantity]) 
@@ -178,20 +196,18 @@ def EscalaCorriente(corriente):   #bien para valores de bajos amperes en fft
 
 vrms=0.0
 def VoltRms(maximovoltaje2):
-    global vrms
+    #global vrms
     vrmsx=(0.197 + 0.00338*maximovoltaje2 - 0.0000158*(maximovoltaje2**2) + 0.0000000326*(maximovoltaje2**3) - 0.0000000000248*(maximovoltaje2**4))*maximovoltaje2
     print(f'vrms : {vrmsx}')
-    str_num = {"value":vrmsx,"save":1}
-    vrms = json.dumps(str_num)
     return vrmsx
 
 irms=0.0
 def CurrentRms(maximocorriente2):
-     global irms
+     #global irms
      irmsx=(-0.000399 + 0.000137*maximocorriente2 - 0.000000801*(maximocorriente2**2) + 0.00000000214*(maximocorriente2**3) - 0.000000000000218*(maximocorriente2**4))*maximocorriente2
      print(f'irms : {irmsx}')
-     str_num = {"value":irmsx,"save":1}
-     irms = json.dumps(str_num)
+     #str_num = {"value":irmsx,"save":1}
+     #irms = json.dumps(str_num)
      return irmsx
 
 
@@ -487,8 +503,8 @@ def CurrentFFT(list_fftVoltages, samplings, i):
              FDCorrienteCGE1 = Magnitud1/SumMagnitudEficaz
              str_num = {"value":FDCorrienteCGE1,"save":1}
              FDCorrienteCGE = json.dumps(str_num)
-             DATCorrienteCGE = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
-             str_num2 = {"value":DATCorrienteCGE,"save":1}
+             DATCorrienteCGE1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
+             str_num2 = {"value":DATCorrienteCGE1,"save":1}
              DATCorrienteCGE = json.dumps(str_num2)
              #print(f'DAT corriente CGE: {DATCorrienteCGE}')
              phasecorrienteCGE = np.arctan(real[0]/(imag[0]))
@@ -504,42 +520,44 @@ def CurrentFFT(list_fftVoltages, samplings, i):
                  #return FPCGE
          #sincvoltaje1=0 
          if(q=="2"):
+             #print("paso fase 2")
              global sincvoltaje2
-             FDCorrientePaneles = Magnitud1/SumMagnitudEficaz
-             str_num = {"value":FDCorrientePaneles,"save":1}
+             FDCorrientePaneles1 = Magnitud1/SumMagnitudEficaz
+             str_num = {"value":FDCorrientePaneles1,"save":1}
              FDCorrientePaneles = json.dumps(str_num)
              #print(f'FDCorrientePaneles : {FDCorrientePaneles }')
-             DATCorrientePaneles = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
-             str_num2 = {"value":DATCorrientePaneles,"save":1}
+             DATCorrientePaneles1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
+             str_num2 = {"value":DATCorrientePaneles1,"save":1}
              DATCorrientePaneles = json.dumps(str_num2)
              phasecorrientePaneles = np.arctan(real[0]/(imag[0]))
              if (sincvoltaje2 == 1):
-                 FPPaneles=np.cos(phasevoltajePaneles-phasecorrientePaneles)*FDCorrientePaneles
+                 FPPaneles1=np.cos(phasevoltajePaneles-phasecorrientePaneles)*FDCorrientePaneles1
                  cosphiPaneles=np.cos(phasevoltajePaneles-phasecorrientePaneles)
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
                  #print(f'FP1 paneles: {FPPaneles}')
                  #print(f'cos(phi) paneles : {cosphiPaneles}')
-                 str_num = {"value":FPPaneles,"save":1}
+                 str_num = {"value":FPPaneles1,"save":1}
                  FPPaneles = json.dumps(str_num)
                  sincvoltaje2=0  
                  #return FPCGE
          #sincvoltaje2=0 
          if(q=="3"):
              global sincvoltaje3
-             FDCorrienteCarga=Magnitud1/SumMagnitudEficaz
-             str_num = {"value":FDCorrientePaneles,"save":1}
+             #print("paso fase 3")
+             FDCorrienteCarga1=Magnitud1/SumMagnitudEficaz
+             str_num = {"value":FDCorrienteCarga1,"save":1}
              FDCorrienteCarga = json.dumps(str_num)
-             DATCorrienteCarga = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
-             str_num2 = {"value":DATCorrienteCarga,"save":1}
+             DATCorrienteCarga1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
+             str_num2 = {"value":DATCorrienteCarga1,"save":1}
              DATCorrienteCarga = json.dumps(str_num2)
              phasecorrienteCarga = np.arctan(real[0]/(imag[0]))
              if (sincvoltaje3 == 1):
-                 FPCarga=np.cos(phasevoltajeCarga-phasecorrienteCarga)*FDCorrienteCarga
+                 FPCarga1 = np.cos(phasevoltajeCarga-phasecorrienteCarga)*FDCorrienteCarga1
                  cosphiCarga=np.cos(phasevoltajeCarga-phasecorrienteCarga)
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
                  #print(f'FP carga : {FPCarga}')
                  #print(f'cos(phi) carga : {cosphiCarga}')
-                 str_num = {"value":FPCarga,"save":1}
+                 str_num = {"value":FPCarga1,"save":1}
                  FPCarga = json.dumps(str_num)
                  sincvoltaje3=0
 
@@ -550,7 +568,19 @@ def CurrentFFT(list_fftVoltages, samplings, i):
 a = datetime.datetime.now()
 b = datetime.datetime.now() 
 c = datetime.datetime.now()  
-energyCGEFase01 = 0.0
+#energyCGEFase11 = 0.0
+energyCGEFase11 = 0.0
+energyPanelesFase12 = 0.0
+energyCargaFase13 = 0.0
+AparenteCGEFase11 = 0.0
+ActivaCGEFase11 = 0.0
+ReactivaCGEFase11 = 0.0
+AparentePanelesFase12 = 0.0
+ActivaPanelesFase12 = 0.0
+ReactivaPanelesFase12 = 0.0
+AparenteCargaFase13 = 0.0
+ActivaCargaFase13 = 0.0
+ReactivaCargaFase13 = 0.0
 energyCGEFase1 = 0.0
 energyPanelesFase1 = 0.0
 energyCargaFase1 = 0.0
@@ -571,24 +601,28 @@ def Potencias(i,irms,vrms):
     
     if(i=="1"):
           global a
-          global energyCGEFase01
+          global energyCGEFase1
           global ActivaCGEFase1
           global AparenteCGEFase1
           global ReactivaCGEFase1
-          AparenteCGEFase1 = vrms0*irms0
-          ActivaCGEFase1= np.abs(vrms0*irms0*cosphiCGE)
-          ReactivaCGEFase1 = vrms0*irms0*np.sin(phasevoltajeCGE-phasecorrienteCGE)
+          global energyCGEFase11
+          global AparenteCGEFase11
+          global ActivaCGEFase11
+          global ReactivaCGEFase11
+          AparenteCGEFase11 = vrms*irms
+          ActivaCGEFase11 = np.abs(vrms*irms*cosphiCGE)
+          ReactivaCGEFase11 = vrms*irms*np.sin(phasevoltajeCGE-phasecorrienteCGE)
           a2 = datetime.datetime.now()
           delta=(((a2 - a).microseconds)/1000+((a2 - a).seconds)*1000)/10000000000
-          energyCGEFase01 += ActivaCGEFase1*delta*2.8
+          energyCGEFase11 += ActivaCGEFase11*delta*2.8
           a = datetime.datetime.now()
 
           #print(f'Activa Fase 1: {round(ActivaCGEFase01,2)}')
           #print(f'Aparente Fase 1: {round(AparenteCGEFase1,2)}')
-          str_num = {"value":ActivaCGEFase1,"save":1}
-          str_num2 = {"value":ReactivaCGEFase1,"save":1}
-          str_num3 = {"value":AparenteCGEFase1,"save":1}
-          str_num4 = {"value":energyCGEFase01,"save":1}
+          str_num = {"value":ActivaCGEFase11,"save":1}
+          str_num2 = {"value":ReactivaCGEFase11,"save":1}
+          str_num3 = {"value":AparenteCGEFase11,"save":1}
+          str_num4 = {"value":energyCGEFase11 ,"save":1}
           ActivaCGEFase1 = json.dumps(str_num)
           AparenteCGEFase1 = json.dumps(str_num3)
           ReactivaCGEFase1 = json.dumps(str_num2)
@@ -599,18 +633,22 @@ def Potencias(i,irms,vrms):
           global AparentePanelesFase1
           global ActivaPanelesFase1
           global ReactivaPanelesFase1
-          AparentePanelesFase1 = vrms0*irms0
-          ActivaPanelesFase1= np.abs(vrms0*irms0*cosphiPaneles)
-          ReactivaPanelesFase1 = vrms0*irms0*np.sin(phasevoltajePaneles-phasecorrientePaneles)
+          global energyPanelesFase12
+          global AparentePanelesFase12
+          global ActivaPanelesFase12
+          global ReactivaPanelesFase12
+          AparentePanelesFase12 = vrms*irms
+          ActivaPanelesFase12= np.abs(vrms*irms*cosphiPaneles)
+          ReactivaPanelesFase12 = vrms*irms*np.sin(phasevoltajePaneles-phasecorrientePaneles)
           b2 = datetime.datetime.now()
           delta=(((b2 - b).microseconds)/1000+((b2 - b).seconds)*1000)/10000000000
-          energyPanelesFase1 += ActivaPanelesFase1*delta*2.8
+          energyPanelesFase12 += ActivaPanelesFase12*delta*2.8
           b = datetime.datetime.now()
 
-          str_num = {"value":ActivaPanelesFase1,"save":1}
-          str_num2 = {"value":ReactivaPanelesFase1,"save":1}
-          str_num3 = {"value":AparentePanelesFase1,"save":1}
-          str_num4 = {"value":energyPanelesFase1,"save":1}
+          str_num = {"value":ActivaPanelesFase12,"save":1}
+          str_num2 = {"value":ReactivaPanelesFase12,"save":1}
+          str_num3 = {"value":AparentePanelesFase12,"save":1}
+          str_num4 = {"value":energyPanelesFase12,"save":1}
           ActivaPanelesFase1 = json.dumps(str_num)
           AparentePanelesFase1 = json.dumps(str_num3)
           ReactivaPanelesFase1 = json.dumps(str_num2)
@@ -621,18 +659,22 @@ def Potencias(i,irms,vrms):
           global AparenteCargaFase1
           global ActivaCargaFase1
           global ReactivaCargaFase1
-          AparenteCargaFase1 = vrms0*irms0
-          ActivaCargaFase1= np.abs(vrms0*irms0*cosphiCarga)
-          ReactivaCargaFase1 = vrms0*irms0*np.sin(phasevoltajeCarga-phasecorrienteCarga)
+          global energyCargaFase13
+          global AparenteCargaFase13
+          global ActivaCargaFase13
+          global ReactivaCargaFase13
+          AparenteCargaFase13 = vrms*irms
+          ActivaCargaFase13= np.abs(vrms*irms*cosphiCarga)
+          ReactivaCargaFase13 = vrms*irms*np.sin(phasevoltajeCarga-phasecorrienteCarga)
           c2 = datetime.datetime.now()
           delta=(((c2 - c).microseconds)/1000+((c2 - c).seconds)*1000)/10000000000
-          energyCargaFase1 += ActivaCargaFase1*delta*2.8
+          energyCargaFase13 += ActivaCargaFase13*delta*2.8
           c = datetime.datetime.now()
 
-          str_num = {"value":ActivaCargaFase1,"save":1}
-          str_num2 = {"value":ReactivaCargaFase1,"save":1}
-          str_num3 = {"value":AparenteCargaFase1,"save":1}
-          str_num4 = {"value":energyCargaFase1,"save":1}
+          str_num = {"value":ActivaCargaFase13,"save":1}
+          str_num2 = {"value":ReactivaCargaFase13,"save":1}
+          str_num3 = {"value":AparenteCargaFase13,"save":1}
+          str_num4 = {"value":energyCargaFase13,"save":1}
           ActivaCargaFase1 = json.dumps(str_num)
           AparenteCargaFase1 = json.dumps(str_num3)
           ReactivaCargaFase1 = json.dumps(str_num2)
@@ -646,8 +688,18 @@ vrms3=0.0
 irms1=0.0
 irms2=0.0
 irms3=0.0
-modamaximovoltaje2=[]
-modamaximocorriente2=[]
+vrms11=0.0
+vrms22=0.0
+vrms33=0.0
+irms11=0.0
+irms22=0.0
+irms33=0.0
+modamaximovoltaje11=[]
+modamaximocorriente11=[]
+modamaximovoltaje22=[]
+modamaximocorriente22=[]
+modamaximovoltaje33=[]
+modamaximocorriente33=[]
 
 def received():
            while True:
@@ -659,12 +711,15 @@ def received():
        
                   if (len(np_array) == 8402):
                         if (np_array[0] == 11):
-                            global modamaximovoltaje2
-                            global modamaximocorriente2
+                            global modamaximovoltaje11
+                            global modamaximocorriente11
                             global vrms1
+                            global vrms11
                             global irms1
-                            global modavoltaje
-                            global modacorriente
+                            global irms11
+                            print("11")
+                            #global modavoltaje
+                            #global modacorriente
                             samplings = np_array[-1]
                             list_FPVoltage3 = np_array[0:4200]
                             list_FPCurrent3 = np_array[4201:8400]
@@ -687,22 +742,32 @@ def received():
                             # Valores maximo y minimos de voltaje sin componente continua
                             NoVoltageoffset=list_FPVoltage-mediadcvoltaje
                             maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 50)
-                            minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
+                            #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
                             maximovoltaje2 = np.median(maximovoltaje2sinmedia)
-                            minimovoltaje2 = np.median(minimovoltaje2sinmedia)
-
-                            if (len(modamaximovoltaje2)==10):
-                                modavoltaje=np.median(modamaximovoltaje2)
+                           # vrms1=VoltRms(maximovoltaje2)
+                            #minimovoltaje2 = np.median(minimovoltaje2sinmedia)
+                            
+                            if (len(modamaximovoltaje11)>=10):
+                                modavoltaje=np.median(modamaximovoltaje11)
+                                vrms1=VoltRms(modavoltaje)
+                                str_num = {"value":vrms1,"save":1}
+                                vrms11 = json.dumps(str_num)
+                                #print(f'maximo voltaje: {maximovoltaje2}')
+                                #print(f'minimo voltaje: {minimovoltaje2}')
+                                NoVoltageoffset2= EscalaVoltaje(NoVoltageoffset) #Devuelve Array con valores Voltaje peak to peak
+                                #NoVoltageoffset2=NoVoltageoffset/1.90
+                                #VoltajeRms(NoVoltageoffset2)
+                                VoltageFFT(NoVoltageoffset2,samplings,1)
+                                #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
+                                #graphFFTV1(NoVoltageoffset2,samplings)
                                 #print(f'MODA VOLTAJE: {modavoltaje}')
-                                vrms1=VoltRms(modavoltaje) 
-                                modamaximovoltaje2=[]
+                                modamaximovoltaje11=[]
                             else:
-                                modamaximovoltaje2.append(maximovoltaje2)
+                                modamaximovoltaje11.append(maximovoltaje2)
                                 #print(f'array voltaje: {modamaximovoltaje2}')
-                            #print(f'maximo voltaje con get max value : {maximovoltaje}')
-                            #print(f'maximo voltaje{minimovoltaje2}')
-                            NoVoltageoffset2= EscalaVoltaje(NoVoltageoffset) #Devuelve Array con valores Voltaje peak to peak
-                            #NoVoltageoffset2=NoVoltageoffset/1.90
+
+                               
+                            
 
                             #print(f'len 1: {len(list_FPVoltage)}')
                                 # print(f'maximos{valoresmaximovoltajesinmedia}')
@@ -721,77 +786,98 @@ def received():
                             # Valores maximo y minimos de corriente
                             NoCurrentoffset=list_FPCurrent-mediadccorriente
                             maximocorriente2sinmedia=getMaxValues(NoCurrentoffset, 50)
-                            minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 50)
+                            #minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 50)
                             maximocorriente2 = np.median(maximocorriente2sinmedia)
-
-                            if (len(modamaximocorriente2)==10):
-                                modacorriente=np.median(modamaximocorriente2)
-                                irms1=CurrentRms(modacorriente)
-                               # print(f'MODA CORRIENTE: {modacorriente}')
-                                modamaximocorriente2=[]
-                            else:
-                                modamaximocorriente2.append(maximocorriente2)
-                            #    print(f'array corriente: {modamaximocorriente2}')
                             #minimocorriente2 = np.median(minimocorriente2sinmedia)
-                            #print(f'corriente max: {maximocorriente2 }')
-                            #print(f'corriente min: {minimocorriente2 }')
-                            NoCurrentoffset2 = EscalaCorriente(NoCurrentoffset)
-                            #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
-
-
-                            VoltajeRms(NoVoltageoffset2)
-                            VoltageFFT(NoVoltageoffset2,samplings,1)
-                            #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
-                            #graphFFTV1(NoVoltageoffset2,samplings)
                             
-                            
-                            irms1 = CorrienteRms(NoCurrentoffset2)
-                            CurrentFFT(NoCurrentoffset2,samplings,1)
-                            #graphCurrent1(NoCurrentoffset2,samplings)
-                            #graphFFTI1(NoCurrentoffset2,samplings)
-                            #maximo=max(list_FPCurrent[1000:1700])
-                            #minimo=min(list_FPCurrent[1000:1700])
-                            #diferencia=maximo-minimo
-                            #maximo2=max(list_FPCurrent)
-                            #escalaI = valor1*np.sqrt(2) / maximo2
-                            #listEscalaI=list_FPCurrent*escalaI
-                            #samplings = np_array[-1]
-                            #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
-                            Potencias(1,irms1,vrms1)
-                            #print(f'samplings 1: {samplings}')
-                            #FP(list_FPVoltage, list_FPCurrent, i=1)
+                            if (len(modamaximocorriente11)>=10):
+                                modacorriente=np.median(modamaximocorriente11)
+                                irms1=CurrentRms(modacorriente)
+                                str_num = {"value":irms1,"save":1}
+                                irms11 = json.dumps(str_num)
+                                #print(f'corriente max: {maximocorriente2 }')
+                                #print(f'corriente min: {minimocorriente2 }')
+                                NoCurrentoffset2 = EscalaCorriente(NoCurrentoffset)
+                                #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
+                                #irms1 = CorrienteRms(NoCurrentoffset2)
+                                CurrentFFT(NoCurrentoffset2,samplings,1)
+                                #graphCurrent1(NoCurrentoffset2,samplings)
+                                #graphFFTI1(NoCurrentoffset2,samplings)
+                                #maximo=max(list_FPCurrent[1000:1700])
+                                #minimo=min(list_FPCurrent[1000:1700])
+                                #diferencia=maximo-minimo
+                                #maximo2=max(list_FPCurrent)
+                                #escalaI = valor1*np.sqrt(2) / maximo2
+                                #listEscalaI=list_FPCurrent*escalaI
+                                #samplings = np_array[-1]
+                                #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
+                                #print(f'MODA CORRIENTE: {modacorriente}')
+                                Potencias(1,irms1,vrms1)
+                                modamaximocorriente11=[]
+                            else:
+                                modamaximocorriente11.append(maximocorriente2)
+                            #    print(f'array corriente: {modamaximocorriente2}')
+
                         if (np_array[0] == 22):
+                            #global modamaximovoltaje2
+                            #global modamaximocorriente2
+                            print("22")
+                            global modamaximovoltaje22
+                            global modamaximocorriente22
                             global vrms2
+                            global vrms22
                             global irms2
+                            global irms22
+                            #global modavoltaje
+                            #global modacorriente
                             samplings = np_array[-1]
                             list_FPVoltage3 = np_array[0:4200]
                             list_FPCurrent3 = np_array[4201:8400]
-                            
+                            #print(f'max inicio: {max(list_FPVoltage3)}')
                             sos = signal.butter(10, 3000, 'low', fs=samplings, output='sos')
                             list_FPVoltage2 = signal.sosfilt(sos, list_FPVoltage3)
                             #list_FPVoltage2 = savgol_filter(list_FPVoltage2,len(list_FPVoltage2)-1,))
                             #sos = signal.butter(4, 50, 'low', fs=samplings, output='sos')
                             list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
-                            
+                            #print(f'max inicio con filtro: {max(list_FPVoltage2)}')
                             list_FPVoltage = list_FPVoltage2[104:4200]
                             list_FPCurrent = list_FPCurrent2 [103:4200]
 
                             #Valor dc de Voltaje
-                            valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 20)
-                            valoresminimovoltajesinmedia=getMinValues(list_FPVoltage, 20)
+                            valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 50)
+                            valoresminimovoltajesinmedia=getMinValues(list_FPVoltage, 50)
                             maximovoltaje = np.median(valoresmaximovoltajesinmedia)
                             minimovoltaje = np.median(valoresminimovoltajesinmedia)
                             mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                             # Valores maximo y minimos de voltaje sin componente continua
                             NoVoltageoffset=list_FPVoltage-mediadcvoltaje
-                            maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 20)
-                            minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 20)
+                            maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 50)
+                            #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
                             maximovoltaje2 = np.median(maximovoltaje2sinmedia)
-                            minimovoltaje2 = np.median(minimovoltaje2sinmedia)
-                            #print(f'maximo voltaje{maximovoltaje2}')
-                            #print(f'maximo voltaje{minimovoltaje2}')
-                            NoVoltageoffset2 = EscalaVoltaje(NoVoltageoffset)
-                            #NoVoltageoffset2=NoVoltageoffset/1.90
+                           # vrms1=VoltRms(maximovoltaje2)
+                            #minimovoltaje2 = np.median(minimovoltaje2sinmedia)
+                            
+                            if (len(modamaximovoltaje22)>=10):
+                                modavoltaje=np.median(modamaximovoltaje22)
+                                vrms2=VoltRms(modavoltaje) 
+                                str_num = {"value":vrms2,"save":1}
+                                vrms22 = json.dumps(str_num)
+                                #print(f'maximo voltaje: {maximovoltaje2}')
+                                #print(f'minimo voltaje: {minimovoltaje2}')
+                                NoVoltageoffset2= EscalaVoltaje(NoVoltageoffset) #Devuelve Array con valores Voltaje peak to peak
+                                #NoVoltageoffset2=NoVoltageoffset/1.90
+                                #VoltajeRms(NoVoltageoffset2)
+                                VoltageFFT(NoVoltageoffset2,samplings,2)
+                                #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
+                                #graphFFTV1(NoVoltageoffset2,samplings)
+                                #print(f'MODA VOLTAJE: {modavoltaje}')
+                                modamaximovoltaje22=[]
+                            else:
+                                modamaximovoltaje22.append(maximovoltaje2)
+                                #print(f'array voltaje: {modamaximovoltaje2}')
+
+                               
+                            
 
                             #print(f'len 1: {len(list_FPVoltage)}')
                                 # print(f'maximos{valoresmaximovoltajesinmedia}')
@@ -800,8 +886,8 @@ def received():
                                 # print(f'samplings 1: {len(NoVoltageoffset)}')
 
                             #Valor dc de corriente
-                            valoresmaxcorriente=getMaxValues(list_FPCurrent, 20)
-                            valoresmincorriente=getMinValues(list_FPCurrent, 20)
+                            valoresmaxcorriente=getMaxValues(list_FPCurrent, 50)
+                            valoresmincorriente=getMinValues(list_FPCurrent, 50)
                             maximocorriente = np.median(valoresmaxcorriente)
                             minimocorriente = np.median(valoresmincorriente)
         
@@ -809,69 +895,96 @@ def received():
                             
                             # Valores maximo y minimos de corriente
                             NoCurrentoffset=list_FPCurrent-mediadccorriente
-                            maximocorriente2sinmedia=getMaxValues(NoCurrentoffset, 20)
-                            minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 20)
+                            maximocorriente2sinmedia=getMaxValues(NoCurrentoffset, 50)
+                            #minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 50)
                             maximocorriente2 = np.median(maximocorriente2sinmedia)
-                            minimocorriente2 = np.median(minimocorriente2sinmedia)
-                            #print(f'corriente max: {maximocorriente2 }')
-                            #print(f'corriente min: {minimocorriente2 }')
-                            NoCurrentoffset2 = EscalaCorriente(NoCurrentoffset)
-                            #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
-
-
-                            vrms2=VoltajeRms(NoVoltageoffset2)
-                            VoltageFFT(NoVoltageoffset2,samplings,2)
-                            #graphVoltage2(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
-                            #graphFFTV2(NoVoltageoffset2,samplings)
+                            #minimocorriente2 = np.median(minimocorriente2sinmedia)
                             
-                            
-                            irms2 = CorrienteRms(NoCurrentoffset2)
-                            CurrentFFT(NoCurrentoffset2,samplings,2)
-                            #graphCurrent2(NoCurrentoffset2,samplings)
-                            #graphFFTI2(NoCurrentoffset2,samplings)
-                            #maximo=max(list_FPCurrent[1000:1700])
-                            #minimo=min(list_FPCurrent[1000:1700])
-                            #diferencia=maximo-minimo
-                            #maximo2=max(list_FPCurrent)
-                            #escalaI = valor1*np.sqrt(2) / maximo2
-                            #listEscalaI=list_FPCurrent*escalaI
-                            #samplings = np_array[-1]
-                            #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
-                            Potencias(2,irms2,vrms2)
-                            print(f'samplings 2: {samplings}')
-                            #FP(list_FPVoltage, list_FPCurrent, i=1)
+                            if (len(modamaximocorriente22)>=10):
+                                modacorriente=np.median(modamaximocorriente22)
+                                irms2=CurrentRms(modacorriente)
+                                str_num = {"value":irms2,"save":1}
+                                irms22 = json.dumps(str_num)
+                                #print(f'corriente max: {maximocorriente2 }')
+                                #print(f'corriente min: {minimocorriente2 }')
+                                NoCurrentoffset2 = EscalaCorriente(NoCurrentoffset)
+                                #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
+                                #irms1 = CorrienteRms(NoCurrentoffset2)
+                                CurrentFFT(NoCurrentoffset2,samplings,2)
+                                #graphCurrent1(NoCurrentoffset2,samplings)
+                                #graphFFTI1(NoCurrentoffset2,samplings)
+                                #maximo=max(list_FPCurrent[1000:1700])
+                                #minimo=min(list_FPCurrent[1000:1700])
+                                #diferencia=maximo-minimo
+                                #maximo2=max(list_FPCurrent)
+                                #escalaI = valor1*np.sqrt(2) / maximo2
+                                #listEscalaI=list_FPCurrent*escalaI
+                                #samplings = np_array[-1]
+                                #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
+                                #print(f'MODA CORRIENTE: {modacorriente}')
+                                Potencias(2,irms2,vrms2)
+                                modamaximocorriente22=[]
+                            else:
+                                modamaximocorriente22.append(maximocorriente2)
+                            #    print(f'array corriente: {modamaximocorriente2}')
                         if (np_array[0] == 33):
+                            global modamaximovoltaje33
+                            global modamaximocorriente33
+                            print("33")
                             global vrms3
+                            global vrms33
                             global irms3
+                            global irms33
+                            #global modavoltaje
+                            #global modacorriente
                             samplings = np_array[-1]
                             list_FPVoltage3 = np_array[0:4200]
                             list_FPCurrent3 = np_array[4201:8400]
-                            
+                            #print(f'max inicio: {max(list_FPVoltage3)}')
                             sos = signal.butter(10, 3000, 'low', fs=samplings, output='sos')
                             list_FPVoltage2 = signal.sosfilt(sos, list_FPVoltage3)
                             #list_FPVoltage2 = savgol_filter(list_FPVoltage2,len(list_FPVoltage2)-1,))
                             #sos = signal.butter(4, 50, 'low', fs=samplings, output='sos')
                             list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
-                            
+                            #print(f'max inicio con filtro: {max(list_FPVoltage2)}')
                             list_FPVoltage = list_FPVoltage2[104:4200]
-                            list_FPCurrent = list_FPCurrent2[103:4200]
+                            list_FPCurrent = list_FPCurrent2 [103:4200]
 
                             #Valor dc de Voltaje
-                            valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 20)
-                            valoresminimovoltajesinmedia=getMinValues(list_FPVoltage, 20)
+                            valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 50)
+                            valoresminimovoltajesinmedia=getMinValues(list_FPVoltage, 50)
                             maximovoltaje = np.median(valoresmaximovoltajesinmedia)
                             minimovoltaje = np.median(valoresminimovoltajesinmedia)
                             mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                             # Valores maximo y minimos de voltaje sin componente continua
                             NoVoltageoffset=list_FPVoltage-mediadcvoltaje
-                            maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 20)
-                            minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 20)
+                            maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 50)
+                            #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
                             maximovoltaje2 = np.median(maximovoltaje2sinmedia)
-                            minimovoltaje2 = np.median(minimovoltaje2sinmedia)
-                            #print(f'maximo voltaje{maximovoltaje2}')
-                            #print(f'maximo voltaje{minimovoltaje2}')
-                            NoVoltageoffset2 = EscalaVoltaje(NoVoltageoffset)
-                            #NoVoltageoffset2=NoVoltageoffset/1.90
+                           # vrms1=VoltRms(maximovoltaje2)
+                            #minimovoltaje2 = np.median(minimovoltaje2sinmedia)
+                            
+                            if (len(modamaximovoltaje33)>=10):
+                                modavoltaje=np.median(modamaximovoltaje33)
+                                vrms3=VoltRms(modavoltaje) 
+                                str_num = {"value":vrms3,"save":1}
+                                vrms33 = json.dumps(str_num)
+                                #print(f'maximo voltaje: {maximovoltaje2}')
+                                #print(f'minimo voltaje: {minimovoltaje2}')
+                                NoVoltageoffset2= EscalaVoltaje(NoVoltageoffset) #Devuelve Array con valores Voltaje peak to peak
+                                #NoVoltageoffset2=NoVoltageoffset/1.90
+                                #VoltajeRms(NoVoltageoffset2)
+                                VoltageFFT(NoVoltageoffset2,samplings,3)
+                                #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
+                                #graphFFTV1(NoVoltageoffset2,samplings)
+                                #print(f'MODA VOLTAJE: {modavoltaje}')
+                                modamaximovoltaje33=[]
+                            else:
+                                modamaximovoltaje33.append(maximovoltaje2)
+                                #print(f'array voltaje: {modamaximovoltaje2}')
+
+                               
+                            
 
                             #print(f'len 1: {len(list_FPVoltage)}')
                                 # print(f'maximos{valoresmaximovoltajesinmedia}')
@@ -880,8 +993,8 @@ def received():
                                 # print(f'samplings 1: {len(NoVoltageoffset)}')
 
                             #Valor dc de corriente
-                            valoresmaxcorriente=getMaxValues(list_FPCurrent, 20)
-                            valoresmincorriente=getMinValues(list_FPCurrent, 20)
+                            valoresmaxcorriente=getMaxValues(list_FPCurrent, 50)
+                            valoresmincorriente=getMinValues(list_FPCurrent, 50)
                             maximocorriente = np.median(valoresmaxcorriente)
                             minimocorriente = np.median(valoresmincorriente)
         
@@ -889,47 +1002,58 @@ def received():
                             
                             # Valores maximo y minimos de corriente
                             NoCurrentoffset=list_FPCurrent-mediadccorriente
-                            maximocorriente2sinmedia=getMaxValues(NoCurrentoffset, 20)
-                            minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 20)
+                            maximocorriente2sinmedia=getMaxValues(NoCurrentoffset, 50)
+                            #minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 50)
                             maximocorriente2 = np.median(maximocorriente2sinmedia)
-                            minimocorriente2 = np.median(minimocorriente2sinmedia)
-                            #print(f'corriente max: {maximocorriente2 }')
-                            #print(f'corriente min: {minimocorriente2 }')
-                            NoCurrentoffset2 = EscalaCorriente(NoCurrentoffset)
-                            #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
-
-
-                            vrms3=VoltajeRms(NoVoltageoffset2)
-                            VoltageFFT(NoVoltageoffset2,samplings,3)
-                            #graphVoltage3(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
-                            #graphFFTV3(NoVoltageoffset2,samplings)
+                            #minimocorriente2 = np.median(minimocorriente2sinmedia)
                             
-                            
-                            irms3 = CorrienteRms(NoCurrentoffset2)
-                            CurrentFFT(NoCurrentoffset2,samplings,3)
-                            #graphCurrent3(NoCurrentoffset2,samplings)
-                            #graphFFTI3(NoCurrentoffset2,samplings)
-                            #maximo=max(list_FPCurrent[1000:1700])
-                            #minimo=min(list_FPCurrent[1000:1700])
-                            #diferencia=maximo-minimo
-                            #maximo2=max(list_FPCurrent)
-                            #escalaI = valor1*np.sqrt(2) / maximo2
-                            #listEscalaI=list_FPCurrent*escalaI
-                            #samplings = np_array[-1]
-                            #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
-                            Potencias(3,irms3,vrms3)
-                            print(f'samplings 3: {samplings}')
-                            #FP(list_FPVoltage, list_FPCurrent, i=1)
+                            if (len(modamaximocorriente33)>=10):
+
+                                modacorriente=np.median(modamaximocorriente33)
+                                irms3=CurrentRms(modacorriente)
+                                str_num = {"value":irms3,"save":1}
+                                irms33 = json.dumps(str_num)
+                                #print(f'corriente max: {maximocorriente2 }')
+                                #print(f'corriente min: {minimocorriente2 }')
+                                NoCurrentoffset2 = EscalaCorriente(NoCurrentoffset)
+                                #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
+                                #irms1 = CorrienteRms(NoCurrentoffset2)
+                                CurrentFFT(NoCurrentoffset2,samplings,3)
+                                #graphCurrent1(NoCurrentoffset2,samplings)
+                                #graphFFTI1(NoCurrentoffset2,samplings)
+                                #maximo=max(list_FPCurrent[1000:1700])
+                                #minimo=min(list_FPCurrent[1000:1700])
+                                #diferencia=maximo-minimo
+                                #maximo2=max(list_FPCurrent)
+                                #escalaI = valor1*np.sqrt(2) / maximo2
+                                #listEscalaI=list_FPCurrent*escalaI
+                                #samplings = np_array[-1]
+                                #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
+                                #print(f'MODA CORRIENTE: {modacorriente}')
+                                Potencias(3,irms3,vrms3)
+                                modamaximocorriente33=[]
+                            else:
+                                modamaximocorriente33.append(maximocorriente2)
+                            #    print(f'array corriente: {modamaximocorriente2}')
                     
                   if (len(np_array)>0 and len(np_array)<=2):
                           global tempESP32
-                          #Ventilador()
+                          global Temp_Raspberry
+                          #global EstateVentilador
+                          Temp_Raspberry0=cpu_temp()
+                          str_num = {"value":Temp_Raspberry0,"save":1}
+                          Temp_Raspberry = json.dumps(str_num)
+                          Ventilador()
                           #temphum()
                           #distance()
-                          tempESP32 = round(np_array[0],0)
+                          tempESP320 = round(np_array[0],0)
+                          str_num2 = {"value":tempESP320,"save":1}
+                          tempESP32 = json.dumps(str_num2)
                           print(f'array: {np_array}')
                   if  (client.connected_flag == True): 
                           publish(client)
+                  #else:
+                      #continue
 
 
 b1=time.time()
@@ -941,10 +1065,32 @@ g1=time.time()
 h1=time.time()
 j1=time.time()
 k1=time.time()
+z1=time.time()
+l1=time.time()
+m1=time.time()
+n1=time.time()
+o21=time.time()
+p1=time.time()
+q1=time.time()
+r1=time.time()
+s1=time.time()
+t1=time.time()
+u1=time.time()
+v1=time.time()
+v12=time.time()
+v13=time.time()
+v14=time.time()
+v15=time.time()
+v16=time.time()
+v17=time.time()
+w1=time.time()
+x1=time.time()
+y1=time.time()
 #varsLastSend=[b,c,d,e]
 
 def publish(client): 
-        global b1, c1 ,d1, e21, f1 ,g1 ,h1 , j1, k1
+        global b1, c1 ,d1, e21, f1 ,g1 ,h1 , j1, k1, l1, m1, n1, o21 ,p1, q1, r1, s1, t1, u1, v1 
+        global v12, v13, v14, v15, v16, v17, w1, x1, y1, z1
         a1=time.time()
         for i in data["variables"]:
 
@@ -956,11 +1102,11 @@ def publish(client):
                      b1=time.time()
                      str_variable = i["variable"]
                      topic1 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic1, irms)
+                     result = client.publish(topic1, irms11)
                      status = result[0]
                      
                      if status == 0:
-                         print(f"Send irms: `{irms}` to topic `{topic1}` con freq: {freq}")
+                         print(f"Send irms1: `{irms11}` to topic `{topic1}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic1}")
         
@@ -972,10 +1118,10 @@ def publish(client):
                      c1=time.time()
                      str_variable2 = i["variable"]
                      topic2 = topicmqtt + str_variable2 + "/sdata"
-                     result = client.publish(topic2, vrms)
+                     result = client.publish(topic2, vrms11)
                      status = result[0]
                      if status == 0:
-                         print(f"Send vrms: `{vrms}` to topic `{topic2}` con freq: {freq}")
+                         print(f"Send vrms1: `{vrms11}` to topic `{topic2}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic2}")
             
@@ -989,7 +1135,7 @@ def publish(client):
                      result = client.publish(topic3, ReactivaCGEFase1)
                      status = result[0]
                      if status == 0:
-                         print(f"Send pot activa: `{ReactivaCGEFase1}` to topic `{topic3}` con freq: {freq}")
+                         print(f"Send Pot-Reactiva-CGE: `{ReactivaCGEFase1}` to topic `{topic3}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic3}")
             
@@ -1003,7 +1149,7 @@ def publish(client):
                      result = client.publish(topic4, ActivaCGEFase1)
                      status = result[0]
                      if status == 0:
-                         print(f"Send FP: `{ActivaCGEFase1}` to topic `{topic4}` con freq: {freq}")
+                         print(f"Send Pot-Activa CGE: `{ActivaCGEFase1}` to topic `{topic4}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic4}")
             
@@ -1017,7 +1163,7 @@ def publish(client):
                      result = client.publish(topic5, energyCGEFase1)
                      status = result[0]
                      if status == 0:
-                         print(f"Send DAT: `{energyCGEFase1}` to topic `{topic5}` con freq: {freq}")
+                         print(f"Send energia CGE: `{energyCGEFase1}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
             if(i["variableFullName"]=="FP-CGE"):
@@ -1030,7 +1176,7 @@ def publish(client):
                      result = client.publish(topic5, FPCGE)
                      status = result[0]
                      if status == 0:
-                         print(f"Send DAT: `{FPCGE}` to topic `{topic5}` con freq: {freq}")
+                         print(f"Send FP-CGE: `{FPCGE}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
             if(i["variableFullName"]=="FD-CGE"):
@@ -1043,7 +1189,7 @@ def publish(client):
                      result = client.publish(topic5, FDCorrienteCGE)
                      status = result[0]
                      if status == 0:
-                         print(f"Send DAT: `{FDCorrienteCGE}` to topic `{topic5}` con freq: {freq}")
+                         print(f"Send FD-CGE: `{FDCorrienteCGE}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
             if(i["variableFullName"]=="DAT-CGE"):
@@ -1056,7 +1202,7 @@ def publish(client):
                      result = client.publish(topic5, DATCorrienteCGE)
                      status = result[0]
                      if status == 0:
-                         print(f"Send DAT: `{DATCorrienteCGE}` to topic `{topic5}` con freq: {freq}")
+                         print(f"Send DAT-CGE: `{DATCorrienteCGE}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
             if(i["variableFullName"]=="Pot-Aparente-CGE"):
@@ -1069,9 +1215,300 @@ def publish(client):
                      result = client.publish(topic5, AparenteCGEFase1)
                      status = result[0]
                      if status == 0:
-                         print(f"Send DAT: `{AparenteCGEFase1}` to topic `{topic5}` con freq: {freq}")
+                         print(f"Send Pot-Aparente-CGE : `{AparenteCGEFase1}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
+
+            #SEGUNDA TOMA
+            if(i["variableFullName"]=="Corriente-Carga"):
+                freq = i["variableSendFreq"]
+                if(a1 - l1 > float(freq)):
+                     l1=time.time()
+                     str_variable = i["variable"]
+                     topic = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic, irms22)
+                     status = result[0]
+                     
+                     if status == 0:
+                         print(f"Send Corriente-Carga: `{irms22}` to topic `{topic}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic}")
+        
+                   
+            if(i["variableFullName"]=="Voltaje-Carga"):
+                freq = i["variableSendFreq"]
+                if(a1 - m1 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     m1=time.time()
+                     str_variable2 = i["variable"]
+                     topic2 = topicmqtt + str_variable2 + "/sdata"
+                     result = client.publish(topic2, vrms22)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Voltaje-Carga: `{vrms22}` to topic `{topic2}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic2}")
+            
+            if(i["variableFullName"]=="Potencia-Reactiva-Carga"):
+                freq = i["variableSendFreq"]
+                if(a1 - n1 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     n1=time.time()
+                     str_variable3 = i["variable"]
+                     topic3 = topicmqtt + str_variable3 + "/sdata"
+                     result = client.publish(topic3, ReactivaCargaFase1)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Potencia-Reactiva-Carga: `{ReactivaCargaFase1}` to topic `{topic3}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic3}")
+            
+            if(i["variableFullName"]=="Pot-Activa-Carga"):
+                freq = i["variableSendFreq"]
+                if(a1 - o21 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     o21=time.time()
+                     str_variable4 = i["variable"]
+                     topic4 = topicmqtt + str_variable4 + "/sdata"
+                     result = client.publish(topic4, ActivaCargaFase1)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Pot-Activa-Carga: `{ActivaCargaFase1}` to topic `{topic4}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic4}")
+            
+            if(i["variableFullName"]=="Energia-Carga"):
+                freq = i["variableSendFreq"]
+                if(a1 - p1 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     p1=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, energyCargaFase1)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Energia-Carga: `{energyCargaFase1}` to topic `{topic5}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic5}")
+            if(i["variableFullName"]=="FP-Carga"):
+                freq = i["variableSendFreq"]
+                if(a1 - q1 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     q1=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, FPCarga)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send FP-Carga: `{FPCarga}` to topic `{topic5}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic5}")
+            if(i["variableFullName"]=="FD-Carga"):
+                freq = i["variableSendFreq"]
+                if(a1 - r1 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     r1=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, FDCorrienteCarga)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send FD-Carga: `{FDCorrienteCarga}` to topic `{topic5}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic5}")
+            if(i["variableFullName"]=="DAT-Carga"):
+                freq = i["variableSendFreq"]
+                if(a1 - s1 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     s1=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, DATCorrienteCarga)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send DAT-Carga: `{DATCorrienteCarga}` to topic `{topic5}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic5}")
+            if(i["variableFullName"]=="Pot-Aparente-Carga"):
+                freq = i["variableSendFreq"]
+                if(a1 - t1 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     t1=time.time()
+                     str_variable = i["variable"]
+                     topic5= topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, AparenteCargaFase1)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Pot-Aparente-Carga: `{AparenteCargaFase1}` to topic `{topic5}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic5}")
+            
+            #Tercera Toma
+            if(i["variableFullName"]=="Corriente-Paneles"):
+                freq = i["variableSendFreq"]
+                if(a1 - u1 > float(freq)):
+                     u1=time.time()
+                     str_variable = i["variable"]
+                     topic = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic, irms33)
+                     status = result[0]
+                     
+                     if status == 0:
+                         print(f"Send Corriente-Paneles: `{irms33}` to topic `{topic}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic}")
+        
+                   
+            if(i["variableFullName"]=="Voltaje-Paneles"):
+                freq = i["variableSendFreq"]
+                if(a1 - v1 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v1=time.time()
+                     str_variable2 = i["variable"]
+                     topic2 = topicmqtt + str_variable2 + "/sdata"
+                     result = client.publish(topic2, vrms33)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Voltaje-Paneles: `{vrms33}` to topic `{topic2}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic2}")
+            
+            if(i["variableFullName"]=="Potencia-Reactiva-Paneles"):
+                freq = i["variableSendFreq"]
+                if(a1 - v12 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v12=time.time()
+                     str_variable3 = i["variable"]
+                     topic3 = topicmqtt + str_variable3 + "/sdata"
+                     result = client.publish(topic3, ReactivaPanelesFase1)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Potencia-Reactiva-Paneles: `{ReactivaPanelesFase1}` to topic `{topic3}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic3}")
+            
+            if(i["variableFullName"]=="Pot-Activa-Paneles"):
+                freq = i["variableSendFreq"]
+                if(a1 - v13 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v13=time.time()
+                     str_variable4 = i["variable"]
+                     topic4 = topicmqtt + str_variable4 + "/sdata"
+                     result = client.publish(topic4, ActivaPanelesFase1)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Pot-Activa-Paneles: `{ActivaPanelesFase1}` to topic `{topic4}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic4}")
+            
+            if(i["variableFullName"]=="Energia-Paneles"):
+                freq = i["variableSendFreq"]
+                if(a1 - v14 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v14=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, energyPanelesFase1)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Energia-Paneles: `{energyPanelesFase1}` to topic `{topic5}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic5}")
+            if(i["variableFullName"]=="FP-Paneles"):
+                freq = i["variableSendFreq"]
+                if(a1 - v15 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v15=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, FPPaneles)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send FP-Paneles: `{FPPaneles}` to topic `{topic5}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic5}")
+            if(i["variableFullName"]=="FD-Paneles"):
+                freq = i["variableSendFreq"]
+                if(a1 - v16 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v16=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, FDCorrientePaneles)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send FD-Paneles: `{FDCorrientePaneles}` to topic `{topic5}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic5}")
+            if(i["variableFullName"]=="DAT-Paneles"):
+                freq = i["variableSendFreq"]
+                if(a1 - v17 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v17=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, DATCorrientePaneles)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send DAT-Paneles: `{DATCorrientePaneles}` to topic `{topic5}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic5}")
+            if(i["variableFullName"]=="Pot-Aparente-Paneles"):
+                freq = i["variableSendFreq"]
+                if(a1 - w1 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     w1=time.time()
+                     str_variable = i["variable"]
+                     topic5= topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, AparentePanelesFase1)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Pot-Aparente-Paneles: `{AparentePanelesFase1}` to topic `{topic5}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic5}")
+            
+            
+            if(i["variableFullName"]=="Temperatura-ESP32"):
+                freq = i["variableSendFreq"]
+                if(a1 - x1 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     x1=time.time()
+                     str_variable = i["variable"]
+                     topic= topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic, tempESP32)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Temperatura-ESP32: `{tempESP32}` to topic `{topic}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic}")
+
+            if(i["variableFullName"]=="Ventilador-Raspberry"):
+                freq = i["variableSendFreq"]
+                if(a1 - y1 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     y1=time.time()
+                     str_variable = i["variable"]
+                     topic= topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic, EstateVentilador)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Ventilador-Raspberry: `{EstateVentilador}` to topic `{topic}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic}")
+            
+            if(i["variableFullName"]=="Temperatura-Raspberry"):
+                freq = i["variableSendFreq"]
+                if(a1 - z1 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     z1=time.time()
+                     str_variable = i["variable"]
+                     topic= topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic, Temp_Raspberry)
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Temperatura-Raspberry: `{Temp_Raspberry}` to topic `{topic}` con freq: {freq}")
+                     else:
+                         print(f"Failed to send message to topic {topic}")
             
 
 
