@@ -133,11 +133,11 @@ def randomnum():
 """
 def setup():
     GPIO.setmode(GPIO.BCM) 
-    GPIO.setup(4,GPIO.OUT)
-    GPIO.setup(24,GPIO.IN)
+    #GPIO.setup(4,GPIO.OUT)
+    #GPIO.setup(24,GPIO.IN)
     GPIO.setup(23, GPIO.OUT)
-    GPIO.setup(8, GPIO.OUT)
-    GPIO.output(8, GPIO.LOW)
+    #GPIO.setup(8, GPIO.OUT)
+    #GPIO.output(8, GPIO.LOW)
     GPIO.setwarnings(False)
     return()
 
@@ -154,15 +154,17 @@ def cpu_temp():
 
 CPU_temp = 0.0
 def Ventilador():
-    global CPU_temp
+    global EstateVentilador
     CPU_temp = round(cpu_temp(),0)
-    print(f'temp cpu: {CPU_temp}')
-    if CPU_temp > 50:
+    #print(f'temp cpu: {CPU_temp}')
+    if CPU_temp > 53:
         #print("Ventilador on")
         GPIO.output(23, True)
-    elif CPU_temp <= 40:
+        EstateVentilador="ON"
+    elif CPU_temp <= 38:
         #print("Ventilador off")
         GPIO.output(23, False)
+        EstateVentilador="OFF"
 
 def getMaxValues(myList, quantity):
         return(sorted(list(set(myList)), reverse=True)[:quantity]) 
@@ -198,15 +200,25 @@ def EscalaCorriente(corriente):   #bien para valores de bajos amperes en fft
     return newcorriente 
 
 def VoltRms(maximovoltaje2):
-    vrms=(0.197 + 0.00338*maximovoltaje2 - 0.0000158*(maximovoltaje2**2) + 0.0000000326*(maximovoltaje2**3) - 0.0000000000248*(maximovoltaje2**4))*maximovoltaje2
+    if(maximovoltaje2<13):
+        vrms=0
+        print(f'vrms : {vrms}')
+        return 
+    vrms=maximovoltaje2*0.65
+    #vrms=(0.197 + 0.00338*maximovoltaje2 - 0.0000158*(maximovoltaje2**2) + 0.0000000326*(maximovoltaje2**3) - 0.0000000000248*(maximovoltaje2**4))*maximovoltaje2
+    #vrms=(-1.16 + 0.179*(maximovoltaje2) +  -0.00718*(maximovoltaje2**2) + 0.000155*(maximovoltaje2**3) + -0.00000203*(maximovoltaje2**4) + 0.0000000168*(maximovoltaje2**5) + -0.0000000000912*(maximovoltaje2**6) + 0.00000000000032*(maximovoltaje2**7) + -0.000000000000000703*(maximovoltaje2**8) + 0.000000000000000000875*(maximovoltaje2**9) + -0.000000000000000000000472*(maximovoltaje2**10))*maximovoltaje2
+    #vrms=(0.225+ 0.0204*(maximovoltaje2) +  -0.000366*(maximovoltaje2**2) + 0.0000032*(maximovoltaje2**3) + -0.0000000145*(maximovoltaje2**4) + 0.0000000000325*(maximovoltaje2**5) + -0.0000000000000286*(maximovoltaje2**6))*maximovoltaje2
     print(f'vrms : {vrms}')
-    return vrms
+    #return vrms
 
 
 def CurrentRms(maximocorriente2):
-     irms=(-0.000399 + 0.000137*maximocorriente2 - 0.000000801*(maximocorriente2**2) + 0.00000000214*(maximocorriente2**3) - 0.000000000000218*(maximocorriente2**4))*maximocorriente2
+     #irms=(-0.000399 + 0.000137*maximocorriente2 - 0.000000801*(maximocorriente2**2) + 0.00000000214*(maximocorriente2**3) - 0.000000000000218*(maximocorriente2**4))*maximocorriente2
+     #irms=(-0.0248 + 0.00402*maximocorriente2 - 0.000176*(maximocorriente2**2) + 0.00000392*(maximocorriente2**3) - 0.000000046*(maximocorriente2**4) + 0.000000000284*(maximocorriente2**5) - 0.00000000000069*(maximocorriente2**6))*maximocorriente2
+     irms=(0.00435 + 0.000298*maximocorriente2 - 0.00000349*(maximocorriente2**2) + 0.0000000176*(maximocorriente2**3) - 0.0000000000398*(maximocorriente2**4) + 0.0000000000000332*(maximocorriente2**5))*maximocorriente2
      print(f'irms : {irms}')
-     return irms
+     #4.35E-03 + 2.98E-04x + -3.49E-06x^2 + 1.76E-08x^3 + -3.98E-11x^4 + 3.32E-14x^5
+     #return irms
 
 
 
@@ -214,8 +226,8 @@ def VoltajeRms(listVoltage):
     #global vrms
     #print(f'maximo voltaje 2 : {max(listVoltage)}')
     
-    listVoltage=savgol_filter(listVoltage,51,10)
-    listVoltage=listVoltage*1.055
+    #listVoltage=savgol_filter(listVoltage,51,10)
+    #listVoltage=listVoltage*1.055
     #if(max(listVoltage)>=420):
     #    listVoltage=listVoltage*0.75
     #elif(max(listVoltage)<420):
@@ -235,18 +247,16 @@ def VoltajeRms(listVoltage):
 
     vrms=np.sqrt(MeanSquares)
     #print(f'Voltaje RMS : {vrms}')
-    
-
-#    return vrms
+    return vrms
 
 
 def CorrienteRms(listCurrent):
     
     #print(f'maximo corriente 2 : {max(listCurrent)}')
-    if(max(listCurrent)>1):
-        listCurrent=listCurrent*0.7
-    elif(max(listCurrent)<1):
-        listCurrent=listCurrent*1.5
+    #if(max(listCurrent)>1):
+    #    listCurrent=listCurrent*0.7
+    #elif(max(listCurrent)<1):
+    #    listCurrent=listCurrent*1.5
     
     N = len(listCurrent)
     Squares = []
@@ -397,7 +407,7 @@ FPPaneles= 0.0
 cosphiPaneles= 0.0
 FPCarga= 0.0
 cosphiCarga= 0.0
-
+FPCGEList=[]
 
 def CurrentFFT(list_fftVoltages, samplings, i):
     global DATCorrienteCGE
@@ -417,6 +427,7 @@ def CurrentFFT(list_fftVoltages, samplings, i):
     global FPCarga
     global cosphiCarga
     global q
+    global FPCGEList
    
     q = str(i)
     N = len(list_fftVoltages)
@@ -481,15 +492,20 @@ def CurrentFFT(list_fftVoltages, samplings, i):
          if(q=="1"):
              global sincvoltaje1
              FDCorrienteCGE = Magnitud1/SumMagnitudEficaz
-             print(f'FD corriente CGE: {FDCorrienteCGE}')
+            # print(f'FD corriente CGE: {FDCorrienteCGE}')
              DATCorrienteCGE = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
              phasecorrienteCGE = np.arctan(real[0]/(imag[0]))
              if (sincvoltaje1 == 1):
                  FPCGE=np.cos(phasevoltajeCGE-phasecorrienteCGE)*FDCorrienteCGE
                  cosphiCGE=np.cos(phasevoltajeCGE-phasecorrienteCGE)
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
-                 print(f'FP1 cge: {FPCGE}')
-                 print(f'cos(phi) cge : {cosphiCGE}')
+                 if(len(FPCGEList)>=10):
+                     medianFPCGE=np.median(FPCGEList)
+                     print(f'FP1 CGE: {medianFPCGE}')
+                     FPCGEList=[]
+                 else:
+                     FPCGEList.append(FPCGE)
+             #   print(f'cos(phi) cge : {cosphiCGE}')
                  sincvoltaje1=0  
                  #return FPCGE
          #sincvoltaje1=0 
@@ -599,12 +615,17 @@ irms2=0.0
 irms3=0.0
 modamaximovoltaje2=[]
 modamaximocorriente2=[]
+EstateVentilador="OFF"
 
 def received():
-           while True:
-                  
-                  esp32_bytes = esp32.readline()
-                  decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
+        while True:
+                  try:  
+                        esp32_bytes = esp32.readline()
+                        decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
+                  except:
+                        print("Error en la decodificacion")
+                        continue
+
                   np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')
                   #print(f'largo array inicial: {len(np_array)}')
        
@@ -617,6 +638,7 @@ def received():
                             global modavoltaje
                             global modacorriente
                             samplings = np_array[-1]
+                            #print("samplings: ",samplings)
                             list_FPVoltage3 = np_array[0:4200]
                             list_FPCurrent3 = np_array[4201:8400]
                             #print(f'max inicio: {max(list_FPVoltage3)}')
@@ -637,27 +659,27 @@ def received():
                             mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                             # Valores maximo y minimos de voltaje sin componente continua
                             NoVoltageoffset=list_FPVoltage-mediadcvoltaje
-                            maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 50)
+                            #maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 50)
                             #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
-                            maximovoltaje2 = np.median(maximovoltaje2sinmedia)
+                            #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
                            # vrms1=VoltRms(maximovoltaje2)
                             #minimovoltaje2 = np.median(minimovoltaje2sinmedia)
-                            
-                            if (len(modamaximovoltaje2)>=20):
+                            #NoVoltageoffset2= EscalaVoltaje(NoVoltageoffset) #Devuelve Array con valores Voltaje peak to peak
+                            #NoVoltageoffset2=NoVoltageoffset/1.90
+                            voltagerms=VoltajeRms(NoVoltageoffset)
+                            VoltageFFT(NoVoltageoffset,samplings,1)
+                            if (len(modamaximovoltaje2)>=10):
                                 modavoltaje=np.median(modamaximovoltaje2)
-                                vrms1=VoltRms(modavoltaje) 
+                                VoltRms(modavoltaje) 
                                 #print(f'maximo voltaje: {maximovoltaje2}')
                                 #print(f'minimo voltaje: {minimovoltaje2}')
-                                NoVoltageoffset2= EscalaVoltaje(NoVoltageoffset) #Devuelve Array con valores Voltaje peak to peak
-                                #NoVoltageoffset2=NoVoltageoffset/1.90
-                                #VoltajeRms(NoVoltageoffset2)
-                                VoltageFFT(NoVoltageoffset2,samplings,1)
+                                
                                 #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
                                 #graphFFTV1(NoVoltageoffset2,samplings)
-                                #print(f'MODA VOLTAJE: {modavoltaje}')
+                                print(f'MODA VOLTAJE: {modavoltaje}')
                                 modamaximovoltaje2=[]
                             else:
-                                modamaximovoltaje2.append(maximovoltaje2)
+                                modamaximovoltaje2.append(voltagerms)
                                 #print(f'array voltaje: {modamaximovoltaje2}')
 
                                
@@ -679,20 +701,20 @@ def received():
                             
                             # Valores maximo y minimos de corriente
                             NoCurrentoffset=list_FPCurrent-mediadccorriente
-                            maximocorriente2sinmedia=getMaxValues(NoCurrentoffset, 50)
+                            #maximocorriente2sinmedia=getMaxValues(NoCurrentoffset, 50)
                             #minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 50)
-                            maximocorriente2 = np.median(maximocorriente2sinmedia)
+                            #maximocorriente2 = np.median(maximocorriente2sinmedia)
                             #minimocorriente2 = np.median(minimocorriente2sinmedia)
-                            
-                            if (len(modamaximocorriente2)==20):
+                            current=CorrienteRms(NoCurrentoffset)
+                            CurrentFFT(NoCurrentoffset,samplings,1)
+                            if (len(modamaximocorriente2)>=10):
                                 modacorriente=np.median(modamaximocorriente2)
-                                irms1=CurrentRms(modacorriente)
+                                CurrentRms(modacorriente)
                                 #print(f'corriente max: {maximocorriente2 }')
                                 #print(f'corriente min: {minimocorriente2 }')
-                                NoCurrentoffset2 = EscalaCorriente(NoCurrentoffset)
+                                #NoCurrentoffset2 = EscalaCorriente(NoCurrentoffset)
                                 #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
-                                #irms1 = CorrienteRms(NoCurrentoffset2)
-                                CurrentFFT(NoCurrentoffset2,samplings,1)
+                                
                                 #graphCurrent1(NoCurrentoffset2,samplings)
                                 #graphFFTI1(NoCurrentoffset2,samplings)
                                 #maximo=max(list_FPCurrent[1000:1700])
@@ -704,10 +726,10 @@ def received():
                                 #samplings = np_array[-1]
                                 #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
                                 print(f'MODA CORRIENTE: {modacorriente}')
-                                Potencias(1)
+                                #Potencias(1)
                                 modamaximocorriente2=[]
                             else:
-                                modamaximocorriente2.append(maximocorriente2)
+                                modamaximocorriente2.append(current)
                             #    print(f'array corriente: {modamaximocorriente2}')
                             
                                 
@@ -876,11 +898,16 @@ def received():
                     
                   if (len(np_array)>0 and len(np_array)<=2):
                           global tempESP32
+                          #global EstateVentilador
+                          Temp_Raspberry=cpu_temp()
+                          #str(EstateVentilador)
                           Ventilador()
                           #temphum()
                           #distance()
                           tempESP32 = round(np_array[0],0)
-                          #print(f'array: {np_array}')
+                          #print(f'tempESP32: {tempESP32}')
+                          print(f'tempRaspberry: {Temp_Raspberry}')
+                          #print(f'Estado Vendilador: {EstateVentilador}')
         
 
 

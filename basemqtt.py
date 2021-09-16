@@ -212,7 +212,7 @@ def publish(client):
                          print(f"Failed to send message to topic {topic1}")
         
                    
-            if(i["variableFullName"]=="Voltaje"):
+            if(i["variableFullName"]=="Voltaje-CGE"):
                 freq = i["variableSendFreq"]
                 if(a - c > freq):
                      #print("varlastsend 1: ",varsLastSend[i])
