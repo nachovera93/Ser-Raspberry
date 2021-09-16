@@ -40,11 +40,11 @@ esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
 esp32.flushInput()
 
 
-broker = '18.230.177.45'    #mqtt server
+broker = '18.228.175.193'    #mqtt server
 port = 1883
-dId = '12344321'
-passw = 'zbipDSskLT'
-webhook_endpoint = 'http://18.230.177.45:3001/api/getdevicecredentials'
+dId = '123456'
+passw = 'zDu9VeuECs'
+webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
  
@@ -109,16 +109,19 @@ def on_connected(client, userdata, flags, rc):
     else:
         print("Bad connection Returned code=",rc)
         client.bad_connection_flag=False
+
    
-def connectMQTT():
-     get_mqtt_credentials()     
-     client = mqtt.Client(str_client_id)   #Creación cliente
-     client.connect(broker, port)     #Conexión al broker
-     client.on_disconnect = on_disconnect
-     client.username_pw_set(usernamemqtt, passwordmqtt)
-     client.on_connect = on_connected
-     client.loop_start()
-     time.sleep(5)
+
+get_mqtt_credentials()     
+client = mqtt.Client(str_client_id)   #Creación cliente
+client.connect(broker, port)     #Conexión al broker
+client.on_disconnect = on_disconnect
+client.username_pw_set(usernamemqtt, passwordmqtt)
+client.on_connect = on_connected
+client.loop_start()
+     #time.sleep(5)
+
+#connectMQTT()
 
 def setup():
     GPIO.setmode(GPIO.BCM) 
@@ -812,7 +815,7 @@ def received():
                                #samplings = np_array[-1]
                                #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
                                #print(f'MODA CORRIENTE: {modacorriente}')
-                               Potencias(1,modacorriente,modavoltaje)
+                               Potencias(1,irms1,vrms1)
                                modamaximocorriente11=[]
                            else:
                                modamaximocorriente11.append(irms1)
@@ -821,7 +824,7 @@ def received():
                        if (np_array[0] == 22):
                            #global modamaximovoltaje2
                            #global modamaximocorriente2
-                           print("22")
+                           #print("22")
                            global modamaximovoltaje22
                            global modamaximocorriente22
                            global vrms2
@@ -918,7 +921,7 @@ def received():
                                #samplings = np_array[-1]
                                #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
                                #print(f'MODA CORRIENTE: {modacorriente}')
-                               Potencias(2,modacorriente22,modavoltaje22)
+                               Potencias(2,irms2,vrms2)
                                modamaximocorriente22=[]
                            else:
                                modamaximocorriente22.append(irms2)
@@ -1025,7 +1028,7 @@ def received():
                                #samplings = np_array[-1]
                                #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
                                #print(f'MODA CORRIENTE: {modacorriente}')
-                               Potencias(3,modacorriente33,modavoltaje33)
+                               Potencias(3,irms3,vrms3)
                                modamaximocorriente33=[]
                            else:
                                modamaximocorriente33.append(irms3)
@@ -1035,6 +1038,7 @@ def received():
                          global Temp_Raspberry
                          #global EstateVentilador
                          Temp_Raspberry0=cpu_temp()
+                         print("Temperatura Raspberry:  ",Temp_Raspberry0)
                          str_num = {"value":Temp_Raspberry0,"save":1}
                          Temp_Raspberry = json.dumps(str_num)
                          Ventilador()
@@ -1045,9 +1049,11 @@ def received():
                          tempESP32 = json.dumps(str_num2)
                          #print(f'array: {np_array}')
                  try:  
-                     if(client.connected_flag == True): 
-                         publish(client)
+                       if(client.connected_flag==True): 
+                             #print("paso")
+                             publish(client)
                  except:
+                     print("rc: 0")
                      continue
         #except:
         #    print("Error en Bucle")
