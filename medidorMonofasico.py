@@ -112,13 +112,13 @@ def on_connected(client, userdata, flags, rc):
 
    
 
-get_mqtt_credentials()     
-client = mqtt.Client(str_client_id)   #Creación cliente
-client.connect(broker, port)     #Conexión al broker
-client.on_disconnect = on_disconnect
-client.username_pw_set(usernamemqtt, passwordmqtt)
-client.on_connect = on_connected
-client.loop_start()
+#get_mqtt_credentials()     
+#client = mqtt.Client(str_client_id)   #Creación cliente
+#client.connect(broker, port)     #Conexión al broker
+#client.on_disconnect = on_disconnect
+#client.username_pw_set(usernamemqtt, passwordmqtt)
+#client.on_connect = on_connected
+#client.loop_start()
      #time.sleep(5)
 
 #connectMQTT()
@@ -359,30 +359,32 @@ def VoltageFFT(list_fftVoltages, samplings,i):
                  FDVoltajeCGE = Magnitud1/SumMagnitudEficaz
                  str_num = {"value":FDVoltajeCGE,"save":1}
                  FDVoltajeCGE = json.dumps(str_num)
-                 DATVoltajeCGE= np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
-                 #print(f'DAT Voltaje CGE: {round(DATVoltajeCGE,2)}')
-                 str_num = {"value":DATVoltajeCGE,"save":1}
+                 DATVoltajeCGE1= np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
+                 print(f'DAT Voltaje CGE: {round(DATVoltajeCGE1,2)}')
+                 str_num = {"value":DATVoltajeCGE1,"save":1}
                  DATVoltajeCGE = json.dumps(str_num)
                  sincvoltaje1 = 1
                  
                  #return phasevoltajeCGE,FDvoltajeCGE,DATVoltajeCGE
 
            #sincvoltaje2 = 0
-           if(j=="2"):
+           if(j=="3"):
                  global sincvoltaje2              
                  phasevoltajePaneles = np.arctan(real[0]/(imag[0]))
+                 print(f'phase voltaje paneles: {round(phasevoltajePaneles,2)}')
                  #FaseArmonicoFundamentalVoltaje1=round(np.angle(complejo[0]),2)
                  FDVoltajePaneles = Magnitud1/SumMagnitudEficaz
                  str_num = {"value":FDVoltajePaneles,"save":1}
                  FDVoltajePaneles = json.dumps(str_num)
-                 DATVoltajePaneles = np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
-                 str_num = {"value":DATVoltajePaneles,"save":1}
+                 DATVoltajePaneles1 = np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
+                 print(f'DAT Voltaje Paneles: {round(DATVoltajePaneles1,2)}')
+                 str_num = {"value":DATVoltajePaneles1,"save":1}
                  DATVoltajePaneles = json.dumps(str_num)
                  sincvoltaje2 = 1
                  #return phasevoltajePaneles,FDvoltajePaneles,DATVoltajePaneles
 
            #sincvoltaje3 = 0
-           if(j=="3"):
+           if(j=="2"):
                  global sincvoltaje3
                  phasevoltajeCarga = np.arctan(real[0]/(imag[0]))
                  #FaseArmonicoFundamentalVoltaje1=round(np.angle(complejo[0]),2)
@@ -513,14 +515,14 @@ def CurrentFFT(list_fftVoltages, samplings, i):
                  #print(f'cos(phi) cge : {cosphiCGE}')
                  sincvoltaje1=0  
                  #return FPCGE
-         #sincvoltaje1=0 
-         if(q=="2"):
+         #sincvolaje1=0 
+         if(q=="3"):
              #print("paso fase 2")
              global sincvoltaje2
              FDCorrientePaneles1 = Magnitud1/SumMagnitudEficaz
              str_num = {"value":FDCorrientePaneles1,"save":1}
              FDCorrientePaneles = json.dumps(str_num)
-             #print(f'FDCorrientePaneles : {FDCorrientePaneles }')
+             print(f'FDCorrientePaneles : {FDCorrientePaneles1 }')
              DATCorrientePaneles1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
              str_num2 = {"value":DATCorrientePaneles1,"save":1}
              DATCorrientePaneles = json.dumps(str_num2)
@@ -536,15 +538,17 @@ def CurrentFFT(list_fftVoltages, samplings, i):
                  sincvoltaje2=0  
                  #return FPCGE
          #sincvoltaje2=0 
-         if(q=="3"):
+         if(q=="2"):
              global sincvoltaje3
              #print("paso fase 3")
              FDCorrienteCarga1=Magnitud1/SumMagnitudEficaz
+             print(f'FD Corriente Carga : {FDCorrienteCarga1}')
              str_num = {"value":FDCorrienteCarga1,"save":1}
              FDCorrienteCarga = json.dumps(str_num)
              DATCorrienteCarga1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
              str_num2 = {"value":DATCorrienteCarga1,"save":1}
              DATCorrienteCarga = json.dumps(str_num2)
+             print(f'DAT carga: {DATCorrienteCarga1}')
              phasecorrienteCarga = np.arctan(real[0]/(imag[0]))
              if (sincvoltaje3 == 1):
                  FPCarga1 = np.cos(phasevoltajeCarga-phasecorrienteCarga)*FDCorrienteCarga1 + 0.05
@@ -626,7 +630,7 @@ def Potencias(i,irms,vrms):
           AparenteCGEFase1 = json.dumps(str_num3)
           ReactivaCGEFase1 = json.dumps(str_num2)
           energyCGEFase1 = json.dumps(str_num4)
-    if(i=="2"):
+    if(i=="3"):
           global b
           global energyPanelesFase1
           global AparentePanelesFase1
@@ -637,9 +641,12 @@ def Potencias(i,irms,vrms):
           global ActivaPanelesFase12
           global ReactivaPanelesFase12
           AparentePanelesFase12 = vrms*irms
+          print(f'Aparente Paneles: {AparentePanelesFase12}')
           ActivaPanelesFase12= np.abs(vrms*irms*cosphiPaneles)
+          print(f'Activa Paneles: {ActivaPanelesFase12}')
           ReactivaPanelesFase12 = vrms*irms*np.sin(phasevoltajePaneles-phasecorrientePaneles)
           b2 = datetime.datetime.now()
+          print(f'Reactiva Paneles: {ReactivaPanelesFase12}')
           delta=(((b2 - b).microseconds)/1000+((b2 - b).seconds)*1000)/10000000000
           energyPanelesFase12 += ActivaPanelesFase12*delta#*2.8
           b = datetime.datetime.now()
@@ -652,7 +659,7 @@ def Potencias(i,irms,vrms):
           AparentePanelesFase1 = json.dumps(str_num3)
           ReactivaPanelesFase1 = json.dumps(str_num2)
           energyPanelesFase1 = json.dumps(str_num4)
-    if(i=="3"):
+    if(i=="2"):
           global c
           global energyCargaFase1 
           global AparenteCargaFase1
@@ -663,9 +670,12 @@ def Potencias(i,irms,vrms):
           global ActivaCargaFase13
           global ReactivaCargaFase13
           AparenteCargaFase13 = vrms*irms
+          print(f'Aparente Carga: {AparenteCargaFase13}')
           ActivaCargaFase13= np.abs(vrms*irms*cosphiCarga)
+          print(f'Activa Carga: {ActivaCargaFase13}')
           ReactivaCargaFase13 = vrms*irms*np.sin(phasevoltajeCarga-phasecorrienteCarga)
           c2 = datetime.datetime.now()
+          print(f'Reactiva Carga: {ReactivaCargaFase13}')
           delta=(((c2 - c).microseconds)/1000+((c2 - c).seconds)*1000)/10000000000
           energyCargaFase13 += ActivaCargaFase13*delta*2.8
           c = datetime.datetime.now()
@@ -858,19 +868,20 @@ def received():
                            #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
                            #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
                            vrms2=VoltajeRms(NoVoltageoffset)
-                           VoltageFFT(NoVoltageoffset,samplings,2)
+                           
                            if (len(modamaximovoltaje22)>=10):
                                modavoltaje22=np.median(modamaximovoltaje22)
                                vrms2=VoltRms(modavoltaje22)
                                str_num = {"value":vrms2,"save":1}
                                vrms22 = json.dumps(str_num)
-                               #print(f'maximo voltaje: {maximovoltaje2}')
+                               print(f'Vrms Carga: {vrms2}')
                                #print(f'minimo voltaje: {minimovoltaje2}')
                                #NoVoltageoffset2=NoVoltageoffset/1.90
                                #VoltajeRms(NoVoltageoffset2)
                                #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
                                #graphFFTV1(NoVoltageoffset2,samplings)
                                #print(f'MODA VOLTAJE: {modavoltaje}')
+                               VoltageFFT(NoVoltageoffset,samplings,2)
                                modamaximovoltaje22=[]
                            else:
                                modamaximovoltaje22.append(vrms2)
@@ -906,7 +917,7 @@ def received():
                                irms2=CurrentRms(modacorriente22)
                                str_num = {"value":irms2,"save":1}
                                irms22 = json.dumps(str_num)
-                               #print(f'corriente max: {maximocorriente2 }')
+                               print(f'Irms Carga: {irms2}')
                                #print(f'corriente min: {minimocorriente2 }')
                                #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
                                #irms1 = CorrienteRms(NoCurrentoffset2)
@@ -921,6 +932,7 @@ def received():
                                #samplings = np_array[-1]
                                #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
                                #print(f'MODA CORRIENTE: {modacorriente}')
+                               CurrentFFT(NoCurrentoffset,samplings,2)
                                Potencias(2,irms2,vrms2)
                                modamaximocorriente22=[]
                            else:
@@ -964,19 +976,20 @@ def received():
                            #minimovoltaje2 = np.median(minimovoltaje2sinmedia)
                            
                            vrms3=VoltajeRms(NoVoltageoffset)
-                           VoltageFFT(NoVoltageoffset,samplings,3)
+                           
                            if (len(modamaximovoltaje33)>=10):
                                modavoltaje33=np.median(modamaximovoltaje33)
                                vrms3=VoltRms(modavoltaje33)
                                str_num = {"value":vrms3,"save":1}
                                vrms33 = json.dumps(str_num)
-                               #print(f'maximo voltaje: {maximovoltaje2}')
+                               print(f'Vrms Paneles: {vrms3}')
                                #print(f'minimo voltaje: {minimovoltaje2}')
                                #NoVoltageoffset2=NoVoltageoffset/1.90
                                #VoltajeRms(NoVoltageoffset2)
                                #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
                                #graphFFTV1(NoVoltageoffset2,samplings)
                                #print(f'MODA VOLTAJE: {modavoltaje}')
+                               VoltageFFT(NoVoltageoffset,samplings,3)
                                modamaximovoltaje33=[]
                            else:
                                modamaximovoltaje33.append(vrms3)
@@ -1012,7 +1025,7 @@ def received():
                                irms3=CurrentRms(modacorriente33)
                                str_num = {"value":irms3,"save":1}
                                irms33 = json.dumps(str_num)
-                               #print(f'corriente max: {maximocorriente2 }')
+                               print(f'Irms Paneles : {irms3}')
                                #print(f'corriente min: {minimocorriente2 }')
                                #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
                                #irms1 = CorrienteRms(NoCurrentoffset2)
@@ -1028,6 +1041,7 @@ def received():
                                #samplings = np_array[-1]
                                #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
                                #print(f'MODA CORRIENTE: {modacorriente}')
+                               CurrentFFT(NoCurrentoffset,samplings,3)
                                Potencias(3,irms3,vrms3)
                                modamaximocorriente33=[]
                            else:
@@ -1053,7 +1067,7 @@ def received():
                              #print("paso")
                              publish(client)
                  except:
-                     print("rc: 0")
+                     #print("rc: 0")
                      continue
         #except:
         #    print("Error en Bucle")
