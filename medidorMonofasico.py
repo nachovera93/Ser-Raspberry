@@ -112,13 +112,13 @@ def on_connected(client, userdata, flags, rc):
 
    
 
-#get_mqtt_credentials()     
-#client = mqtt.Client(str_client_id)   #Creación cliente
-#client.connect(broker, port)     #Conexión al broker
-#client.on_disconnect = on_disconnect
-#client.username_pw_set(usernamemqtt, passwordmqtt)
-#client.on_connect = on_connected
-#client.loop_start()
+get_mqtt_credentials()     
+client = mqtt.Client(str_client_id)   #Creación cliente
+client.connect(broker, port)     #Conexión al broker
+client.on_disconnect = on_disconnect
+client.username_pw_set(usernamemqtt, passwordmqtt)
+client.on_connect = on_connected
+client.loop_start()
      #time.sleep(5)
 
 #connectMQTT()
@@ -217,7 +217,11 @@ def CurrentRms(maximocorriente2):
     #irms=(-0.000399 + 0.000137*maximocorriente2 - 0.000000801*(maximocorriente2**2) + 0.00000000214*(maximocorriente2**3) - 0.000000000000218*(maximocorriente2**4))*maximocorriente2
     #irms=(-0.0248 + 0.00402*maximocorriente2 - 0.000176*(maximocorriente2**2) + 0.00000392*(maximocorriente2**3) - 0.000000046*(maximocorriente2**4) + 0.000000000284*(maximocorriente2**5) - 0.00000000000069*(maximocorriente2**6))*maximocorriente2
     #print(f'irms : {irms}')
-    irms=(0.00435 + 0.000298*maximocorriente2 - 0.00000349*(maximocorriente2**2) + 0.0000000176*(maximocorriente2**3) - 0.0000000000398*(maximocorriente2**4) + 0.0000000000000332*(maximocorriente2**5))*maximocorriente2
+    if(maximocorriente2>430):
+         irms = maximocorriente2*0.0133
+    else:
+         irms=(0.00435 + 0.000298*maximocorriente2 - 0.00000349*(maximocorriente2**2) + 0.0000000176*(maximocorriente2**3) - 0.0000000000398*(maximocorriente2**4) + 0.0000000000000332*(maximocorriente2**5))*maximocorriente2
+    
     return irms
 
 
@@ -342,7 +346,7 @@ def VoltageFFT(list_fftVoltages, samplings,i):
                if(FD[i]>(FD[0]/10)):
                    FD2.append(FD[i])
                    
-           SumMagnitudEficaz = (np.sum([FD2[0:len(FD2)]]))
+           SumMagnitudEficaz = (np.sum([FD[0:len(FD)]]))
            #print(f'Vrms total: {round(SumMagnitudEficaz,2)}')
            Magnitud1 = FD[0]
            #print(f'V rms armonico 1: {round(Magnitud1,2)}')
@@ -416,7 +420,7 @@ FPCarga= 0.0
 cosphiCarga= 0.0
 
 
-def CurrentFFT(list_fftVoltages, samplings, i):
+def CurrentFFT(list_fftVoltages, samplings, i,irms):
     global DATCorrienteCGE
     global a2
     global FDCorrienteCGE 
@@ -477,19 +481,23 @@ def CurrentFFT(list_fftVoltages, samplings, i):
                FD.append(arra)
                #print(f'Armonico numero:{z} {i+index_max} + magnitud de {arra} + magnitud2 {abs(ynew[i+index_max])} + forma rectangular de {a} o {a*2/N} y radianes : {np.angle(a)}')
                #print(f'Armonico corriente numero: {z} =>  {round(arra,3)} + {a2} + .. + {round(radiani,4)})')
-         FD2=[]       
-         for i in range(0,len(FD)):
-             if(FD[i]>(FD[0]/10)):
-                 FD2.append(FD[i])
+         #FD2=[]       
+         #for i in range(0,len(FD)):
+         #    if(FD[i]>(FD[0]/10)):
+         #        FD2.append(FD[i])
                  
          #print(f'FD2: {FD2}')
          #print(f'FD largo: {len(FD)}')
-         SumMagnitudEficaz = (np.sum([FD2[0:len(FD2)]]))
-         #print(f'Irms total: {round(SumMagnitudEficaz,2)}')
-         Magnitud1 = FD[0]
-         #print(f'Irms armonico 1: {round(Magnitud1,2)}')
-         #razon=Magnitud1/SumMagnitudEficaz
-         #armonico1corriente=valor1*razon
+         SumMagnitudEficaz = (np.sum([FD[0:len(FD)]]))*0.01
+         
+         Magnitud1 = FD[0]*0.01
+         ArmonicosRestantes=SumMagnitudEficaz-Magnitud1
+         #print(f'Irms armonico 1 {q}: {round(Magnitud1,2)}')
+         proporcion = irms/(np.sqrt(Magnitud1**2+ArmonicosRestantes**2))
+         irmsarmonico1prop=Magnitud1*proporcion
+         print(f'Irms armonico 1 proporcionado {q}: {round(irmsarmonico1prop,2)}')
+         irmstotalproporcionado=np.sqrt((irmsarmonico1prop**2)+(ArmonicosRestantes*proporcion)**2)
+         print(f'Irms total proporcionado{q}: {round(irmstotalproporcionado,2)}')
          #MagnitudArmonicoFundamentalCorriente=round(thd_array[0],3)
          #fp2=round((armonico1corriente*np.cos(phasevoltaje-phasen))/valor1,2)
          #FaseArmonicoFundamentalCorriente=round(np.angle(complejo[0]),2)
@@ -497,43 +505,52 @@ def CurrentFFT(list_fftVoltages, samplings, i):
          #GradoArmonicoFundamentalCorriente=round(Grados,2)
          if(q=="1"):
              global sincvoltaje1
-             FDCorrienteCGE1 = Magnitud1/SumMagnitudEficaz
-             str_num = {"value":FDCorrienteCGE1,"save":1}
+             FDCorrienteCGE1 = irmsarmonico1prop/irms
+             print(f'FDCorrienteCGE : {FDCorrienteCGE1 }')
+             str_num = {"value":FDCorrienteCGE1,"save":0}
              FDCorrienteCGE = json.dumps(str_num)
              DATCorrienteCGE1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
-             str_num2 = {"value":DATCorrienteCGE1,"save":1}
+             str_num2 = {"value":DATCorrienteCGE1,"save":0}
              DATCorrienteCGE = json.dumps(str_num2)
              #print(f'DAT corriente CGE: {DATCorrienteCGE}')
              phasecorrienteCGE = np.arctan(real[0]/(imag[0]))
              if (sincvoltaje1 == 1):
                  FPCGE0=np.cos(phasevoltajeCGE-phasecorrienteCGE)*FDCorrienteCGE1+0.05
                  cosphiCGE=np.cos(phasevoltajeCGE-phasecorrienteCGE)
+                 if(FPCGE0>0.0):
+                     FPCGE0=FPCGE0+0.05
+                 else:
+                     FPCGE0=FPCGE0-0.05
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
                  print(f'FP1 cge: {FPCGE0}')
-                 str_num3 = {"value":FPCGE0,"save":1}
+                 str_num3 = {"value":FPCGE0,"save":0}
                  FPCGE = json.dumps(str_num3)
-                 #print(f'cos(phi) cge : {cosphiCGE}')
+                 print(f'cos(phi) cge : {cosphiCGE}')
                  sincvoltaje1=0  
                  #return FPCGE
          #sincvolaje1=0 
          if(q=="3"):
              #print("paso fase 2")
              global sincvoltaje2
-             FDCorrientePaneles1 = Magnitud1/SumMagnitudEficaz
-             str_num = {"value":FDCorrientePaneles1,"save":1}
+             FDCorrientePaneles1 = irmsarmonico1prop/irms
+             str_num = {"value":FDCorrientePaneles1,"save":0}
              FDCorrientePaneles = json.dumps(str_num)
              print(f'FDCorrientePaneles : {FDCorrientePaneles1 }')
              DATCorrientePaneles1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
-             str_num2 = {"value":DATCorrientePaneles1,"save":1}
+             str_num2 = {"value":DATCorrientePaneles1,"save":0}
              DATCorrientePaneles = json.dumps(str_num2)
              phasecorrientePaneles = np.arctan(real[0]/(imag[0]))
              if (sincvoltaje2 == 1):
-                 FPPaneles1=np.cos(phasevoltajePaneles-phasecorrientePaneles)*FDCorrientePaneles1 + 0.05
+                 FPPaneles1=np.cos(phasevoltajePaneles-phasecorrientePaneles)*FDCorrientePaneles1
+                 if (FPPaneles1>0.0):
+                     FPPaneles1 = FPPaneles1+0.05
+                 else:
+                     FPPaneles1 = FPPaneles1-0.05
                  cosphiPaneles=np.cos(phasevoltajePaneles-phasecorrientePaneles)
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
                  print(f'FP1 paneles: {FPPaneles1}')
-                 #print(f'cos(phi) paneles : {cosphiPaneles}')
-                 str_num = {"value":FPPaneles1,"save":1}
+                 print(f'cos(phi) paneles : {cosphiPaneles}')
+                 str_num = {"value":FPPaneles1,"save":0}
                  FPPaneles = json.dumps(str_num)
                  sincvoltaje2=0  
                  #return FPCGE
@@ -541,12 +558,12 @@ def CurrentFFT(list_fftVoltages, samplings, i):
          if(q=="2"):
              global sincvoltaje3
              #print("paso fase 3")
-             FDCorrienteCarga1=Magnitud1/SumMagnitudEficaz
+             FDCorrienteCarga1=irmsarmonico1prop/irms
              print(f'FD Corriente Carga : {FDCorrienteCarga1}')
-             str_num = {"value":FDCorrienteCarga1,"save":1}
+             str_num = {"value":FDCorrienteCarga1,"save":0}
              FDCorrienteCarga = json.dumps(str_num)
              DATCorrienteCarga1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
-             str_num2 = {"value":DATCorrienteCarga1,"save":1}
+             str_num2 = {"value":DATCorrienteCarga1,"save":0}
              DATCorrienteCarga = json.dumps(str_num2)
              print(f'DAT carga: {DATCorrienteCarga1}')
              phasecorrienteCarga = np.arctan(real[0]/(imag[0]))
@@ -554,9 +571,13 @@ def CurrentFFT(list_fftVoltages, samplings, i):
                  FPCarga1 = np.cos(phasevoltajeCarga-phasecorrienteCarga)*FDCorrienteCarga1 + 0.05
                  cosphiCarga=np.cos(phasevoltajeCarga-phasecorrienteCarga)
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
+                 if(FPCarga1>0.0):
+                     FPCarga1=FPCarga1+0.05
+                 else:
+                     FPCarga1=FPCarga1-0.05
                  print(f'FP carga : {FPCarga1}')
-                 #print(f'cos(phi) carga : {cosphiCarga}')
-                 str_num = {"value":FPCarga1,"save":1}
+                 print(f'cos(phi) carga : {cosphiCarga}')
+                 str_num = {"value":FPCarga1,"save":0}
                  FPCarga = json.dumps(str_num)
                  sincvoltaje3=0
 
@@ -623,9 +644,9 @@ def Potencias(i,irms,vrms):
           print(f'Energia CGE: {energyCGEFase11}')
           #print(f'Aparente Fase 1: {round(AparenteCGEFase1,2)}')
           str_num = {"value":ActivaCGEFase11,"save":1}
-          str_num2 = {"value":ReactivaCGEFase11,"save":1}
-          str_num3 = {"value":AparenteCGEFase11,"save":1}
-          str_num4 = {"value":energyCGEFase11 ,"save":1}
+          str_num2 = {"value":ReactivaCGEFase11,"save":0}
+          str_num3 = {"value":AparenteCGEFase11,"save":0}
+          str_num4 = {"value":energyCGEFase11 ,"save":0}
           ActivaCGEFase1 = json.dumps(str_num)
           AparenteCGEFase1 = json.dumps(str_num3)
           ReactivaCGEFase1 = json.dumps(str_num2)
@@ -652,9 +673,9 @@ def Potencias(i,irms,vrms):
           b = datetime.datetime.now()
 
           str_num = {"value":ActivaPanelesFase12,"save":1}
-          str_num2 = {"value":ReactivaPanelesFase12,"save":1}
-          str_num3 = {"value":AparentePanelesFase12,"save":1}
-          str_num4 = {"value":energyPanelesFase12,"save":1}
+          str_num2 = {"value":ReactivaPanelesFase12,"save":0}
+          str_num3 = {"value":AparentePanelesFase12,"save":0}
+          str_num4 = {"value":energyPanelesFase12,"save":0}
           ActivaPanelesFase1 = json.dumps(str_num)
           AparentePanelesFase1 = json.dumps(str_num3)
           ReactivaPanelesFase1 = json.dumps(str_num2)
@@ -681,9 +702,9 @@ def Potencias(i,irms,vrms):
           c = datetime.datetime.now()
 
           str_num = {"value":ActivaCargaFase13,"save":1}
-          str_num2 = {"value":ReactivaCargaFase13,"save":1}
-          str_num3 = {"value":AparenteCargaFase13,"save":1}
-          str_num4 = {"value":energyCargaFase13,"save":1}
+          str_num2 = {"value":ReactivaCargaFase13,"save":0}
+          str_num3 = {"value":AparenteCargaFase13,"save":0}
+          str_num4 = {"value":energyCargaFase13,"save":0}
           ActivaCargaFase1 = json.dumps(str_num)
           AparenteCargaFase1 = json.dumps(str_num3)
           ReactivaCargaFase1 = json.dumps(str_num2)
@@ -813,7 +834,7 @@ def received():
                                #print(f'corriente min: {minimocorriente2 }')
                                #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
                                #irms1 = CorrienteRms(NoCurrentoffset2)
-                               CurrentFFT(NoCurrentoffset,samplings,1)
+                               CurrentFFT(NoCurrentoffset,samplings,1,irms1)
                                #graphCurrent1(NoCurrentoffset2,samplings)
                                #graphFFTI1(NoCurrentoffset2,samplings)
                                #maximo=max(list_FPCurrent[1000:1700])
@@ -824,7 +845,7 @@ def received():
                                #listEscalaI=list_FPCurrent*escalaI
                                #samplings = np_array[-1]
                                #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
-                               #print(f'MODA CORRIENTE: {modacorriente}')
+                               print(f'MODA CORRIENTE CGE: {modacorriente}')
                                Potencias(1,irms1,vrms1)
                                modamaximocorriente11=[]
                            else:
@@ -931,8 +952,8 @@ def received():
                                #listEscalaI=list_FPCurrent*escalaI
                                #samplings = np_array[-1]
                                #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
-                               #print(f'MODA CORRIENTE: {modacorriente}')
-                               CurrentFFT(NoCurrentoffset,samplings,2)
+                               print(f'MODA CORRIENTE Carga: {modacorriente22}')
+                               CurrentFFT(NoCurrentoffset,samplings,2,irms2)
                                Potencias(2,irms2,vrms2)
                                modamaximocorriente22=[]
                            else:
@@ -1040,8 +1061,8 @@ def received():
                                #listEscalaI=list_FPCurrent*escalaI
                                #samplings = np_array[-1]
                                #graphVoltageCurrent(NoVoltageoffset,NoCurrentoffset,samplings)
-                               #print(f'MODA CORRIENTE: {modacorriente}')
-                               CurrentFFT(NoCurrentoffset,samplings,3)
+                               print(f'MODA CORRIENTE Paneles: {modacorriente33}')
+                               CurrentFFT(NoCurrentoffset,samplings,3,irms3)
                                Potencias(3,irms3,vrms3)
                                modamaximocorriente33=[]
                            else:
