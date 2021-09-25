@@ -29,6 +29,13 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font
 import openpyxl
+import smtplib, ssl
+import getpass
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email import encoders
+from email.mime.base import MIMEBase
+import datetime
 """
     0: connection succeeded
     1: connection failed - incorrect protocol version
@@ -42,6 +49,8 @@ import openpyxl
 esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
 esp32.flushInput()
 
+horasetup=datetime.datetime.now()
+print(f'Hora de comienzo: {horasetup}')
 
 broker = '18.228.175.193'    #mqtt server
 port = 1883
@@ -49,7 +58,59 @@ dId = '123456'
 passw = 'zDu9VeuECs'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
- 
+
+Lugar="Santa Cristina"
+username = "empresasserspa@gmail.com"
+password = "empresasserspa"
+destinatario = "empresasserspa@gmail.com"
+destinatario2 = "demetrio.vera@serm.cl"
+
+mensaje = MIMEMultipart("Alternative")
+mensaje["Subject"] = "Reportes "+str(Lugar)+" "+str(datetime.date.today())
+mensaje["From"] = username
+mensaje["To"] = destinatario
+
+html = f"""
+<html>
+<body>
+     <p> Hola <i>{destinatario}</i> <br>
+     Reportes desde {Lugar} </b>
+</body>
+</html>
+"""
+
+parte_html = MIMEText(html, "html")
+mensaje.attach(parte_html)
+
+archivo = "prueba_Medidor.xlsx"
+
+with open(archivo, "rb") as adjunto:
+     contenido_adjunto = MIMEBase("application", "octet-stream")
+     contenido_adjunto.set_payload(adjunto.read())
+
+encoders.encode_base64(contenido_adjunto)
+
+contenido_adjunto.add_header(
+     "Content-Disposition",
+     f"attachment; filename= {archivo}",
+)
+
+mensaje.attach(contenido_adjunto)
+text = mensaje.as_string()
+
+
+context = ssl.create_default_context()
+
+def SendEmail():
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+          server.login(username,password)
+          print("Sesión Iniciada Correctamente !")
+          #server.sendmail(username, destinatario, mensaje)
+          server.sendmail(username, destinatario, text)
+          server.sendmail(username, destinatario2, text)
+          print("Mensaje Enviado Correctamente !")
+
+
 def get_mqtt_credentials():
     global usernamemqtt
     global passwordmqtt
@@ -661,7 +722,8 @@ def Potencias(i,irms,vrms):
           delta=(((b2 - b).microseconds)/1000+((b2 - b).seconds)*1000)/10000000000
           energyPanelesFase12 += ActivaPanelesFase12*delta#*2.8
           b = datetime.datetime.now()
-
+          if(b2.hour==0 and b2.minute==0):
+              energyPanelesFase12=0
           str_num = {"value":ActivaPanelesFase12,"save":1}
           str_num2 = {"value":ReactivaPanelesFase12,"save":0}
           str_num3 = {"value":AparentePanelesFase12,"save":0}
@@ -690,7 +752,8 @@ def Potencias(i,irms,vrms):
           delta=(((c2 - c).microseconds)/1000+((c2 - c).seconds)*1000)/10000000000
           energyCargaFase13 += ActivaCargaFase13*delta*2.8
           c = datetime.datetime.now()
-
+          if(c2.hour==0 and c2.minute==0):
+              energyCGEFase13=0
           str_num = {"value":ActivaCargaFase13,"save":1}
           str_num2 = {"value":ReactivaCargaFase13,"save":0}
           str_num3 = {"value":AparenteCargaFase13,"save":0}
@@ -1033,6 +1096,8 @@ def received():
                  Maximo15minCarga()
                  Maximo15minPaneles()
                  excel=datetime.datetime.now()
+                 if(excel.hour==13 or excel.minute==00):
+                     SendEmail()
                  if(excel.minute==1 or excel.minute==16 or excel.minute==31 or excel.minute==46):
                      ExcelDataCGE()
                      ExcelDataCarga()
