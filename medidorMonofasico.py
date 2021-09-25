@@ -59,57 +59,6 @@ passw = 'zDu9VeuECs'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
-Lugar="Santa Cristina"
-username = "empresasserspa@gmail.com"
-password = "empresasserspa"
-destinatario = "empresasserspa@gmail.com"
-destinatario2 = "demetrio.vera@serm.cl"
-
-mensaje = MIMEMultipart("Alternative")
-mensaje["Subject"] = "Reportes "+str(Lugar)+" "+str(datetime.date.today())
-mensaje["From"] = username
-mensaje["To"] = destinatario
-
-html = f"""
-<html>
-<body>
-     <p> Hola <i>{destinatario}</i> <br>
-     Reportes desde {Lugar} </b>
-</body>
-</html>
-"""
-
-parte_html = MIMEText(html, "html")
-mensaje.attach(parte_html)
-
-archivo = "prueba_Medidor.xlsx"
-
-with open(archivo, "rb") as adjunto:
-     contenido_adjunto = MIMEBase("application", "octet-stream")
-     contenido_adjunto.set_payload(adjunto.read())
-
-encoders.encode_base64(contenido_adjunto)
-
-contenido_adjunto.add_header(
-     "Content-Disposition",
-     f"attachment; filename= {archivo}",
-)
-
-mensaje.attach(contenido_adjunto)
-text = mensaje.as_string()
-
-
-context = ssl.create_default_context()
-
-def SendEmail():
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-          server.login(username,password)
-          print("Sesión Iniciada Correctamente !")
-          #server.sendmail(username, destinatario, mensaje)
-          server.sendmail(username, destinatario, text)
-          server.sendmail(username, destinatario2, text)
-          print("Mensaje Enviado Correctamente !")
-
 
 def get_mqtt_credentials():
     global usernamemqtt
@@ -172,7 +121,7 @@ def on_connected(client, userdata, flags, rc):
         client.bad_connection_flag=False
 
    
-
+"""
 get_mqtt_credentials()     
 client = mqtt.Client(str_client_id)   #Creación cliente
 client.connect(broker, port)     #Conexión al broker
@@ -180,7 +129,7 @@ client.on_disconnect = on_disconnect
 client.username_pw_set(usernamemqtt, passwordmqtt)
 client.on_connect = on_connected
 client.loop_start()
-  
+"""  
 
 def setup():
     GPIO.setmode(GPIO.BCM) 
@@ -458,8 +407,9 @@ DATCorrienteCGE1=0.0
 FPCarga1=0.0
 FPPaneles1 = 0.0
 FDCorrientePaneles1 = 0.0
-DATCorrientePaneles1 = 0.0  
-
+DATCorrientePaneles1 = 0.0 
+FDCorrienteCarga1=0.0 
+DATCorrienteCarga1=0.0
 
 def CurrentFFT(list_fftVoltages, samplings, i,irms):
     global DATCorrienteCGE
@@ -1096,8 +1046,19 @@ def received():
                  Maximo15minCarga()
                  Maximo15minPaneles()
                  excel=datetime.datetime.now()
-                 if(excel.hour==13 or excel.minute==00):
-                     SendEmail()
+                 global accesoemail
+                 accesoemail=0
+                 #print(f'excel hour : {excel.hour}')
+                 #print(f'excel minute : {excel.minute}')
+                 if(excel.hour==12): 
+                     if(excel.minute==47):
+                          if(accesoemail==0):
+                                 print("Entro a SendEmail")
+                                 SendEmail()
+                                 accesoemail=1
+                 else:
+                     accesoemail=0
+                 
                  if(excel.minute==1 or excel.minute==16 or excel.minute==31 or excel.minute==46):
                      ExcelDataCGE()
                      ExcelDataCarga()
@@ -1610,7 +1571,7 @@ def Maximo15minCGE():
     global Volt15CGE
     global acceso
     basea = datetime.datetime.now()
-    print(f'Maximo Voltaje 15 CGE: {maximoVoltaje15CGE}')
+    #print(f'Maximo Voltaje 15 CGE: {maximoVoltaje15CGE}')
     if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
          print("paso if")
          if(acceso == 0):
@@ -1664,7 +1625,7 @@ def Maximo15minCGE():
         if(len(Volt15CGE)>4):
             indice=np.argmin(Volt15CGE)
             Volt15CGE.pop(indice)
-            print(f'Volt15CGE Despúes: {Volt15CGE}')
+            #print(f'Volt15CGE Despúes: {Volt15CGE}')
             indice=np.argmin(Corriente15CGE)
             Corriente15CGE.pop(indice)
             indice=np.argmin(PotActiva15CGE)
@@ -1718,7 +1679,7 @@ def Maximo15minCarga():
     global Volt15Carga
     global accesoCarga
     basea = datetime.datetime.now()
-    print(f'Maximo Voltaje 15 Carga: {maximoVoltaje15Carga}')
+    #print(f'Maximo Voltaje 15 Carga: {maximoVoltaje15Carga}')
     if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
          print("paso if Carga")
          if(accesoCarga == 0):
@@ -1772,7 +1733,7 @@ def Maximo15minCarga():
         if(len(Volt15Carga)>4):
             indice=np.argmin(Volt15Carga)
             Volt15Carga.pop(indice)
-            print(f'Volt15Carga Despúes: {Volt15Carga}')
+            ##print(f'Volt15Carga Despúes: {Volt15Carga}')
             indice=np.argmin(Corriente15Carga)
             Corriente15Carga.pop(indice)
             indice=np.argmin(PotActiva15Carga)
@@ -1826,7 +1787,7 @@ def Maximo15minPaneles():
     global Volt15Paneles
     global accesoPaneles
     basea = datetime.datetime.now()
-    print(f'Maximo Voltaje 15 Paneles: {maximoVoltaje15Paneles}')
+    #print(f'Maximo Voltaje 15 Paneles: {maximoVoltaje15Paneles}')
     if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
          print("paso if Paneles")
          if(accesoPaneles == 0):
@@ -1857,7 +1818,7 @@ def Maximo15minPaneles():
               FD15Paneles=[]
               DAT15Paneles=[]
          elif(accesoPaneles==1):
-              print("paso elif Paneles")
+              #print("paso elif Paneles")
               Volt15Paneles.append(vrms3)
               Corriente15Paneles.append(irms3)
               PotActiva15Paneles.append(ActivaPanelesFase12)
@@ -1882,7 +1843,7 @@ def Maximo15minPaneles():
         if(len(Volt15Carga)>4):
             indice=np.argmin(Volt15Paneles)
             Volt15Paneles.pop(indice)
-            print(f'Volt15Carga Despúes: {Volt15Paneles}')
+            #print(f'Volt15Carga Despúes: {Volt15Paneles}')
             indice=np.argmin(Corriente15Paneles)
             Corriente15Paneles.pop(indice)
             indice=np.argmin(PotActiva15Paneles)
@@ -1973,6 +1934,59 @@ def ExcelDataPaneles():
                        AccesoExcelPaneles=1
        else:
                AccesoExcelPaneles=0
+
+
+Lugar="Santa Cristina"
+username = "empresasserspa@gmail.com"
+password = "empresasserspa"
+destinatario = "empresasserspa@gmail.com"
+#destinatario2 = "demetrio.vera@serm.cl"
+
+mensaje = MIMEMultipart("Alternative")
+mensaje["Subject"] = "Reportes "+str(Lugar)+" "+str(datetime.date.today())
+mensaje["From"] = username
+mensaje["To"] = destinatario
+
+html = f"""
+<html>
+<body>
+     <p> Hola <i>{destinatario}</i> <br>
+     Reportes desde {Lugar} </b>
+</body>
+</html>
+"""
+
+parte_html = MIMEText(html, "html")
+mensaje.attach(parte_html)
+
+archivo = dest_filename
+
+with open(archivo, "rb") as adjunto:
+     contenido_adjunto = MIMEBase("application", "octet-stream")
+     contenido_adjunto.set_payload(adjunto.read())
+
+encoders.encode_base64(contenido_adjunto)
+
+contenido_adjunto.add_header(
+     "Content-Disposition",
+     f"attachment; filename= {archivo}",
+)
+
+mensaje.attach(contenido_adjunto)
+text = mensaje.as_string()
+
+
+context = ssl.create_default_context()
+
+def SendEmail():
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+          server.login(username,password)
+          print("Sesión Iniciada Correctamente !")
+          #server.sendmail(username, destinatario, mensaje)
+          server.sendmail(username, destinatario, text)
+          #server.sendmail(username, destinatario2, text)
+          print("Mensaje Enviado Correctamente !")
+
 
 """
 while client.connected_flag: 
