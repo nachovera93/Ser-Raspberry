@@ -1050,15 +1050,16 @@ def received():
                  accesoemail=0
                  #print(f'excel hour : {excel.hour}')
                  #print(f'excel minute : {excel.minute}')
-                 if(excel.hour==12): 
-                     if(excel.minute==47):
+                 """
+                 if(excel.hour==13): 
+                     if(excel.minute==32):
                           if(accesoemail==0):
                                  print("Entro a SendEmail")
                                  SendEmail()
                                  accesoemail=1
                  else:
                      accesoemail=0
-                 
+                 """
                  if(excel.minute==1 or excel.minute==16 or excel.minute==31 or excel.minute==46):
                      ExcelDataCGE()
                      ExcelDataCarga()
@@ -1788,7 +1789,7 @@ def Maximo15minPaneles():
     global accesoPaneles
     basea = datetime.datetime.now()
     #print(f'Maximo Voltaje 15 Paneles: {maximoVoltaje15Paneles}')
-    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
+    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45):  
          print("paso if Paneles")
          if(accesoPaneles == 0):
               print("paso if 2 Paneles")
@@ -1861,7 +1862,7 @@ def Maximo15minPaneles():
 
 
 book = Workbook()
-dest_filename = 'Reportes_csv.xlsx'
+dest_filename = 'Reportes_csv0.xlsx'
 sheet = book.active
 sheet.title = "Resumen Reportes"
 sheet2 = book.create_sheet("CGE")
@@ -1881,6 +1882,7 @@ accesoexcel=0
 def ExcelDataCGE():
        global dataCGE
        global accesoexcel
+       global sheet2
        base=datetime.datetime.now()
        if(base.minute==1 or base.minute==16 or base.minute==31 or base.minute==46):
                if(accesoexcel==0):              
@@ -1888,7 +1890,7 @@ def ExcelDataCGE():
                        sheet2 = workbook["CGE"]
                        dataCGE.insert(0,datetime.datetime.now())
                        sheet2.append(list(dataCGE))
-                       print(f'Data Carga: {dataCGE}')
+                       print(f'Data CGE: {dataCGE}')
                        print("Datos Insertados Correctamente!")
                        workbook.save(filename = dest_filename)
                        dataCGE=[]
@@ -1901,13 +1903,14 @@ AccesoExcelCarga=0
 def ExcelDataCarga():
        global dataCarga
        global AccesoExcelCarga
+       global sheet3
        base=datetime.datetime.now()
        if(base.minute==1 or base.minute==16 or base.minute==31 or base.minute==46):
                if(AccesoExcelCarga==0):              
                        workbook=openpyxl.load_workbook(filename = dest_filename)
-                       sheet2 = workbook["CGE"]
+                       sheet3 = workbook["CGE"]
                        dataCarga.insert(0,datetime.datetime.now())
-                       sheet2.append(list(dataCGE))
+                       sheet3.append(list(dataCGE))
                        print(f'Data Carga: {dataCarga}')
                        print("Datos Insertados Correctamente!")
                        workbook.save(filename = dest_filename)
@@ -1920,14 +1923,15 @@ AccesoExcelPaneles=0
 def ExcelDataPaneles():
        global dataPaneles
        global AccesoExcelPaneles
+       global sheet4
        base=datetime.datetime.now()
        if(base.minute==1 or base.minute==16 or base.minute==31 or base.minute==46):
                if(AccesoExcelPaneles==0):              
                        workbook=openpyxl.load_workbook(filename = dest_filename)
-                       sheet2 = workbook["CGE"]
+                       sheet4 = workbook["CGE"]
                        dataPaneles.insert(0,datetime.datetime.now())
-                       sheet2.append(list(dataPaneles))
-                       print(f'Data Carga: {dataPaneles}')
+                       sheet4.append(list(dataPaneles))
+                       print(f'Data paneles: {dataPaneles}')
                        print("Datos Insertados Correctamente!")
                        workbook.save(filename = dest_filename)
                        dataPaneles=[]
