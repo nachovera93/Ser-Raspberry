@@ -50,7 +50,7 @@ esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
 esp32.flushInput()
 
 horasetup=datetime.datetime.now()
-print(f'Hora de comienzo: {horasetup}')
+print("Hora de comienzo:", horasetup)
 
 broker = '18.228.175.193'    #mqtt server
 port = 1883
@@ -395,8 +395,8 @@ FDCorrienteCGE= 0.0
 phasecorrienteCGE= 0.0
 phasecorrientePaneles= 0.0
 phasecorrienteCarga= 0.0
-FPCGE= 0.0
-FPCGE0= 0.0
+FPCGE= 0.99
+FPCGE0= 0.99
 cosphiCGE= 0.0
 FPPaneles= 0.0
 cosphiPaneles= 0.0
@@ -404,8 +404,8 @@ FPCarga= 0.0
 cosphiCarga= 0.0
 FDCorrienteCGE1=0.0
 DATCorrienteCGE1=0.0
-FPCarga1=0.0
-FPPaneles1 = 0.0
+FPCarga1=0.99
+FPPaneles1 = 0.99
 FDCorrientePaneles1 = 0.0
 DATCorrientePaneles1 = 0.0 
 FDCorrienteCarga1=0.0 
@@ -1053,18 +1053,18 @@ def received():
                  #print(f'excel hour : {excel.hour}')
                  #print(f'excel minute : {excel.minute}')
                  
-                 if(excel.hour==13 and excel.minute==32):
+                 if(excel.hour==12 and excel.minute==2):
                           if(accesoemail==0):
                                  accesoemail=1
                                  print("Entro a SendEmail")
-                                 #SendEmail()
+                                 SendEmail()
                  else:
                      accesoemail=0
                  
-                 if(excel.minute==1 or excel.minute==16 or excel.minute==31 or excel.minute==46):
-                     ExcelDataCGE()
-                     ExcelDataCarga()
-                     ExcelDataPaneles()
+                 
+                 ExcelDataCGE()
+                 ExcelDataCarga()
+                 ExcelDataPaneles()
 
                  try:  
                        if(client.connected_flag==True): 
@@ -1544,14 +1544,16 @@ maximoCorrienteCGE=0
 maximoPotActivaCGE=0
 maximoPotReactivaCGE=0
 maximoPotAparenteCGE=0
-maximoFPCGE=0
+maximoFPCGEInductivo=-0.99
+maximoFPCGEReactivo=0.99
 maximoFDCGE=0
 maximoDATCGE=0
 Corriente15CGE=[]
 PotActiva15CGE=[]
 PotReactiva15CGE=[]
 PotAparente15CGE=[]
-FP15CGE=[]
+FP15CGEReactivo=[]
+FP15CGEInductivo=[]
 FD15CGE=[]
 DAT15CGE=[]
 def Maximo15minCGE():
@@ -1567,14 +1569,15 @@ def Maximo15minCGE():
     global PotActiva15CGE
     global PotReactiva15CGE
     global PotAparente15CGE
-    global FP15CGE
+    global FP15CGEReactivo
+    global FP15CGEInductivo
     global FD15CGE
     global DAT15CGE
     global Volt15CGE
     global acceso
     basea = datetime.datetime.now()
     #print(f'Maximo Voltaje 15 CGE: {maximoVoltaje15CGE}')
-    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
+    if(basea.minute==0 or basea.minute==15 or basea.minute==20 or basea.minute==45): 
          print("paso if")
          if(acceso == 0):
               print("paso if 2")
@@ -1584,7 +1587,14 @@ def Maximo15minCGE():
               maximoPotActivaCGE=max(PotActiva15CGE)
               maximoPotReactivaCGE=max(PotReactiva15CGE)
               maximoPotAparenteCGE=max(PotAparente15CGE)
-              maximoFPCGE=min(FP15CGE)
+              if(len(FP15CGEInductivo)>0):
+                     maximoFPCGEInductivo=max(FP15CGEInductivo)
+              else:
+                     maximoFPCGEInductivo=-0.99
+              if(len(FP15CGEReactivo)>0):
+                     maximoFPCGEReactivo=min(FP15CGEReactivo)
+              else:
+                     maximoFPCGEReactivo=0.99
               maximoFDCGE=max(FD15CGE)
               maximoDATCGE=max(DAT15CGE)
               dataCGE.insert(1,maximoVoltaje15CGE)
@@ -1592,15 +1602,18 @@ def Maximo15minCGE():
               dataCGE.insert(3,maximoPotActivaCGE)
               dataCGE.insert(4,maximoPotReactivaCGE)
               dataCGE.insert(5,maximoPotAparenteCGE)
-              dataCGE.insert(6,maximoFPCGE)
-              dataCGE.insert(7,maximoFDCGE)
-              dataCGE.insert(8,maximoDATCGE)
+              dataCGE.insert(6,maximoFPCGEReactivo)
+              dataCGE.insert(7,maximoFPCGEInductivo)
+              dataCGE.insert(8,maximoFDCGE)
+              dataCGE.insert(9,maximoDATCGE)
+              dataCGE.insert(10,energyCGEFase11)
               Volt15CGE=[]
               Corriente15CGE=[]
               PotActiva15CGE=[]
               PotReactiva15CGE=[]
               PotAparente15CGE=[]
-              FP15CGE=[]
+              FP15CGEReactivo=[]
+              FP15CGEInductivo=[]
               FD15CGE=[]
               DAT15CGE=[]
          elif(acceso==1):
@@ -1610,7 +1623,10 @@ def Maximo15minCGE():
               PotActiva15CGE.append(ActivaCGEFase11)
               PotReactiva15CGE.append(ReactivaCGEFase11)
               PotAparente15CGE.append(AparenteCGEFase11)
-              FP15CGE.append(FPCGE0)
+              if(FPCGE0>0.0):
+                    FP15CGEReactivo.append(FPCGE0)
+              else: 
+                    FP15CGEInductivo.append(FPCGE0)
               FD15CGE.append(FDCorrienteCGE1)
               DAT15CGE.append(DATCorrienteCGE1)
  
@@ -1620,7 +1636,10 @@ def Maximo15minCGE():
         PotActiva15CGE.append(ActivaCGEFase11)
         PotReactiva15CGE.append(ReactivaCGEFase11)
         PotAparente15CGE.append(AparenteCGEFase11)
-        FP15CGE.append(FPCGE0)
+        if(FPCGE0>0.0):
+              FP15CGEReactivo.append(FPCGE0)
+        else: 
+              FP15CGEInductivo.append(FPCGE0)
         FD15CGE.append(FDCorrienteCGE1)
         DAT15CGE.append(DATCorrienteCGE1)
         acceso = 0
@@ -1636,8 +1655,12 @@ def Maximo15minCGE():
             PotReactiva15CGE.pop(indice)
             indice=np.argmin(PotAparente15CGE)
             PotAparente15CGE.pop(indice)
-            indice=np.argmax(FP15CGE)
-            FP15CGE.pop(indice)
+            if(len(FP15CGEReactivo)>=2):
+                indice=np.argmax(FP15CGEReactivo)
+                FP15CGEReactivo.pop(indice)
+            if(len(FP15CGEInductivo)>=2):
+                indice=np.argmin(FP15CGEInductivo)
+                FP15CGEInductivo.pop(indice)
             indice=np.argmin(FD15CGE)
             FD15CGE.pop(indice)
             indice=np.argmin(DAT15CGE)
@@ -1652,14 +1675,16 @@ maximoCorrienteCarga=0
 maximoPotActivaCarga=0
 maximoPotReactivaCarga=0
 maximoPotAparenteCarga=0
-maximoFPCarga=0
+maximoFPCGEInductivo=-0.99
+maximoFPCGEReactivo=0.99
 maximoFDCarga=0
 maximoDATCarga=0
 Corriente15Carga=[]
 PotActiva15Carga=[]
 PotReactiva15Carga=[]
 PotAparente15Carga=[]
-FP15Carga=[]
+FP15CargaReactivo=[]
+FP15CargaInductivo=[]
 FD15Carga=[]
 DAT15Carga=[]
 def Maximo15minCarga():
@@ -1675,14 +1700,15 @@ def Maximo15minCarga():
     global PotActiva15Carga
     global PotReactiva15Carga
     global PotAparente15Carga
-    global FP15Carga
+    global FP15CargaReactivo
+    global FP15CargaInductivo
     global FD15Carga
     global DAT15Carga
     global Volt15Carga
     global accesoCarga
     basea = datetime.datetime.now()
     #print(f'Maximo Voltaje 15 Carga: {maximoVoltaje15Carga}')
-    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
+    if(basea.minute==0 or basea.minute==15 or basea.minute==20 or basea.minute==45): 
          print("paso if Carga")
          if(accesoCarga == 0):
               print("paso if 2 Carga")
@@ -1692,7 +1718,14 @@ def Maximo15minCarga():
               maximoPotActivaCarga=max(PotActiva15Carga)
               maximoPotReactivaCarga=max(PotReactiva15Carga)
               maximoPotAparenteCarga=max(PotAparente15Carga)
-              maximoFPCarga=min(FP15Carga)
+              if(len(FP15CargaInductivo)>0):
+                     maximoFPCargaInductivo=max(FP15CargaInductivo)
+              else:
+                     maximoFPCargaInductivo=-0.99
+              if(len(FP15CargaReactivo)>0):
+                     maximoFPCargaReactivo=min(FP15CargaReactivo)
+              else:
+                     maximoFPCargaReactivo=0.99
               maximoFDCarga=max(FD15Carga)
               maximoDATCarga=max(DAT15Carga)
               dataCarga.insert(1,maximoVoltaje15Carga)
@@ -1700,15 +1733,18 @@ def Maximo15minCarga():
               dataCarga.insert(3,maximoPotActivaCarga)
               dataCarga.insert(4,maximoPotReactivaCarga)
               dataCarga.insert(5,maximoPotAparenteCarga)
-              dataCarga.insert(6,maximoFPCarga)
-              dataCarga.insert(7,maximoFDCarga)
-              dataCarga.insert(8,maximoDATCarga)
+              dataCarga.insert(6,maximoFPCargaReactivo)
+              dataCarga.insert(7,maximoFPCargaInductivo)
+              dataCarga.insert(8,maximoFDCarga)
+              dataCarga.insert(9,maximoDATCarga)
+              dataCarga.insert(10,energyCargaFase13)
               Volt15Carga=[]
               Corriente15Carga=[]
               PotActiva15Carga=[]
               PotReactiva15Carga=[]
               PotAparente15Carga=[]
-              FP15Carga=[]
+              FP15CargaReactivo=[]
+              FP15CargaInductivo=[]
               FD15Carga=[]
               DAT15Carga=[]
          elif(accesoCarga==1):
@@ -1718,7 +1754,10 @@ def Maximo15minCarga():
               PotActiva15Carga.append(ActivaCargaFase13)
               PotReactiva15Carga.append(ReactivaCargaFase13)
               PotAparente15Carga.append(AparenteCargaFase13)
-              FP15Carga.append(FPCarga1)
+              if(FPCarga1>0.0):
+                    FP15CGEReactivo.append(FPCarga1)
+              else: 
+                    FP15CGEInductivo.append(FPCarga1)
               FD15Carga.append(FDCorrienteCarga1)
               DAT15Carga.append(DATCorrienteCarga1)
               
@@ -1728,7 +1767,10 @@ def Maximo15minCarga():
         PotActiva15Carga.append(ActivaCargaFase13)
         PotReactiva15Carga.append(ReactivaCargaFase13)
         PotAparente15Carga.append(AparenteCargaFase13)
-        FP15Carga.append(FPCarga1)
+        if(FPCarga1>0.0):
+                    FP15CargaReactivo.append(FPCarga1)
+        else: 
+              FP15CargaInductivo.append(FPCarga1)
         FD15Carga.append(FDCorrienteCarga1)
         DAT15Carga.append(DATCorrienteCarga1)
         accesoCarga = 0
@@ -1744,8 +1786,12 @@ def Maximo15minCarga():
             PotReactiva15Carga.pop(indice)
             indice=np.argmin(PotAparente15Carga)
             PotAparente15Carga.pop(indice)
-            indice=np.argmax(FP15Carga)
-            FP15Carga.pop(indice)
+            if(len(FP15CargaReactivo)>=2):
+                indice=np.argmax(FP15CargaReactivo)
+                FP15CargaReactivo.pop(indice)
+            if(len(FP15CargaInductivo)>=2):
+                indice=np.argmin(FP15CargaInductivo)
+                FP15CargaInductivo.pop(indice)
             indice=np.argmin(FD15Carga)
             FD15Carga.pop(indice)
             indice=np.argmin(DAT15Carga)
@@ -1760,14 +1806,16 @@ maximoCorrientePaneles=0
 maximoPotActivaPaneles=0
 maximoPotReactivaPaneles=0
 maximoPotAparentePaneles=0
-maximoFPPaneles=0
+maximoFPPanelesInductivo=-0.99
+maximoFPPanelesReactivo=0.99
 maximoFDPaneles=0
 maximoDATPaneles=0
 Corriente15Paneles=[]
 PotActiva15Paneles=[]
 PotReactiva15Paneles=[]
 PotAparente15Paneles=[]
-FP15Paneles=[]
+FP15PanelesReactivo=[]
+FP15PanelesInductivo=[]
 FD15Paneles=[]
 DAT15Paneles=[]
 def Maximo15minPaneles():
@@ -1783,14 +1831,15 @@ def Maximo15minPaneles():
     global PotActiva15Paneles
     global PotReactiva15Paneles
     global PotAparente15Paneles
-    global FP15Paneles
+    global FP15PanelesReactivo
+    global FP15PanelesInductivo
     global FD15Paneles
     global DAT15Paneles
     global Volt15Paneles
     global accesoPaneles
     basea = datetime.datetime.now()
     #print(f'Maximo Voltaje 15 Paneles: {maximoVoltaje15Paneles}')
-    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45):  
+    if(basea.minute==0 or basea.minute==15 or basea.minute==20 or basea.minute==45):  
          print("paso if Paneles")
          if(accesoPaneles == 0):
               print("paso if 2 Paneles")
@@ -1800,7 +1849,14 @@ def Maximo15minPaneles():
               maximoPotActivaPaneles=max(PotActiva15Paneles)
               maximoPotReactivaPaneles=max(PotReactiva15Paneles)
               maximoPotAparentePaneles=max(PotAparente15Paneles)
-              maximoFPPaneles=min(FP15Paneles)
+              if(len(FP15PanelesInductivo)>0):
+                     maximoFPPanelesInductivo=max(FP15PanelesInductivo)
+              else:
+                     maximoFPPanelesInductivo=-0.99
+              if(len(FP15PanelesReactivo)>0):
+                     maximoFPPanelesReactivo=min(FP15PanelesReactivo)
+              else:
+                     maximoFPPanelesReactivo=0.99
               maximoFDPaneles=max(FD15Paneles)
               maximoDATPaneles=max(DAT15Paneles)
               dataPaneles.insert(1,maximoVoltaje15Paneles)
@@ -1808,9 +1864,11 @@ def Maximo15minPaneles():
               dataPaneles.insert(3,maximoPotActivaPaneles)
               dataPaneles.insert(4,maximoPotReactivaPaneles)
               dataPaneles.insert(5,maximoPotAparentePaneles)
-              dataPaneles.insert(6,maximoFPPaneles)
-              dataPaneles.insert(7,maximoFDPaneles)
-              dataPaneles.insert(8,maximoDATPaneles)
+              dataPaneles.insert(6,maximoFPPanelesReactivo)
+              dataPaneles.insert(7,maximoFPPanelesInductivo)
+              dataPaneles.insert(8,maximoFDPaneles)
+              dataPaneles.insert(9,maximoDATPaneles)
+              dataPaneles.insert(10,energyPanelesFase12)
               Volt15Paneles=[]
               Corriente15Paneles=[]
               PotActiva15Paneles=[]
@@ -1826,7 +1884,10 @@ def Maximo15minPaneles():
               PotActiva15Paneles.append(ActivaPanelesFase12)
               PotReactiva15Paneles.append(ReactivaPanelesFase12)
               PotAparente15Paneles.append(AparentePanelesFase12)
-              FP15Paneles.append(FPCarga1)
+              if(FPPaneles1>0.0):
+                    FP15PanelesReactivo.append(FPPaneles1)
+              else: 
+                    FP15PanelesInductivo.append(FPPaneles1)
               FD15Paneles.append(FDCorrientePaneles1)
               DAT15Paneles.append(DATCorrientePaneles1)
               
@@ -1838,7 +1899,10 @@ def Maximo15minPaneles():
         PotActiva15Paneles.append(ActivaPanelesFase12)
         PotReactiva15Paneles.append(ReactivaPanelesFase12)
         PotAparente15Paneles.append(AparentePanelesFase12)
-        FP15Paneles.append(FPPaneles1)
+        if(FPPaneles1>0.0):
+                    FP15PanelesReactivo.append(FPPaneles1)
+        else: 
+              FP15PanelesInductivo.append(FPPaneles1)
         FD15Paneles.append(FDCorrientePaneles1)
         DAT15Paneles.append(DATCorrientePaneles1)      
         accesoPaneles = 0
@@ -1854,8 +1918,12 @@ def Maximo15minPaneles():
             PotReactiva15Paneles.pop(indice)
             indice=np.argmin(PotAparente15Paneles)
             PotAparente15Paneles.pop(indice)
-            indice=np.argmax(FP15Paneles)
-            FP15Paneles.pop(indice)
+            if(len(FP15PanelesReactivo)>=2):
+                indice=np.argmax(FP15PanelesReactivo)
+                FP15PanelesReactivo.pop(indice)
+            if(len(FP15PanelesInductivo)>=2):
+                indice=np.argmin(FP15PanelesInductivo)
+                FP15PanelesInductivo.pop(indice)
             indice=np.argmin(FD15Paneles)
             FD15Paneles.pop(indice)
             indice=np.argmin(DAT15Paneles)
@@ -1863,7 +1931,7 @@ def Maximo15minPaneles():
 
 
 book = Workbook()
-dest_filename = 'Reportes_csv.xlsx'
+dest_filename = 'Reportes_csv5.xlsx'
 sheet = book.active
 sheet.title = "Resumen Reportes"
 sheet2 = book.create_sheet("CGE")
@@ -1872,7 +1940,7 @@ sheet4 = book.create_sheet("Paneles")
 
 
 headings=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
-'FP','FD','DAT','Energia'])
+'FPReact','FPInduct','FD','DAT','Energia'])
 sheet2.append(headings)
 sheet3.append(headings)
 sheet4.append(headings)
@@ -1883,9 +1951,9 @@ accesoexcel=0
 def ExcelDataCGE():
        global dataCGE
        global accesoexcel
-       global sheet2
+       #global sheet2
        base=datetime.datetime.now()
-       if(base.minute==1 or base.minute==16 or base.minute==31 or base.minute==46):
+       if(base.minute==1 or base.minute==16 or base.minute==21 or base.minute==46):
                if(accesoexcel==0):              
                        workbook=openpyxl.load_workbook(filename = dest_filename)
                        sheet2 = workbook["CGE"]
@@ -1904,14 +1972,14 @@ AccesoExcelCarga=0
 def ExcelDataCarga():
        global dataCarga
        global AccesoExcelCarga
-       global sheet3
+       #global sheet3
        base=datetime.datetime.now()
-       if(base.minute==1 or base.minute==16 or base.minute==31 or base.minute==46):
+       if(base.minute==1 or base.minute==16 or base.minute==21 or base.minute==46):
                if(AccesoExcelCarga==0):              
                        workbook=openpyxl.load_workbook(filename = dest_filename)
                        sheet3 = workbook["Carga"]
                        dataCarga.insert(0,datetime.datetime.now())
-                       sheet3.append(list(dataCGE))
+                       sheet3.append(list(dataCarga))
                        print(f'Data Carga: {dataCarga}')
                        print("Datos Insertados Correctamente!")
                        workbook.save(filename = dest_filename)
@@ -1924,9 +1992,9 @@ AccesoExcelPaneles=0
 def ExcelDataPaneles():
        global dataPaneles
        global AccesoExcelPaneles
-       global sheet4
+       #global sheet4
        base=datetime.datetime.now()
-       if(base.minute==1 or base.minute==16 or base.minute==31 or base.minute==46):
+       if(base.minute==1 or base.minute==16 or base.minute==21 or base.minute==46):
                if(AccesoExcelPaneles==0):              
                        workbook=openpyxl.load_workbook(filename = dest_filename)
                        sheet4 = workbook["Paneles"]
