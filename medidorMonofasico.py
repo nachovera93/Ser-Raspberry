@@ -735,6 +735,8 @@ modamaximovoltaje33=[]
 modamaximocorriente33=[]
 global accesoemail
 accesoemail=0
+global accesoexcel
+accesoxcel=0
 
 def received():
     while True:
@@ -1061,10 +1063,14 @@ def received():
                  else:
                      accesoemail=0
                  
-                 
-                 ExcelDataCGE()
-                 ExcelDataCarga()
-                 ExcelDataPaneles()
+                 if(excel.minute==1 or excel.minute==16 or excel.minute==21 or excel.minute==46):
+                      if(accesoexcel==0): 
+                             ExcelDataCGE()
+                             ExcelDataCarga()
+                             ExcelDataPaneles()
+                             accesoexcel=1
+                 else:
+                         accesoexcel=0
 
                  try:  
                        if(client.connected_flag==True): 
@@ -1824,7 +1830,6 @@ def Maximo15minPaneles():
     global maximoPotActivaPaneles
     global maximoPotReactivaPaneles
     global maximoPotAparentePaneles
-    global maximoFPPaneles
     global maximoFDPaneles
     global maximoDATPaneles
     global Corriente15Paneles
@@ -1949,64 +1954,43 @@ book.save(filename = dest_filename)
 
 accesoexcel=0
 def ExcelDataCGE():
-       global dataCGE
-       global accesoexcel
-       #global sheet2
-       base=datetime.datetime.now()
-       if(base.minute==1 or base.minute==16 or base.minute==21 or base.minute==46):
-               if(accesoexcel==0):              
-                       workbook=openpyxl.load_workbook(filename = dest_filename)
-                       sheet2 = workbook["CGE"]
-                       dataCGE.insert(0,datetime.datetime.now())
-                       sheet2.append(list(dataCGE))
-                       print(f'Data CGE: {dataCGE}')
-                       print("Datos Insertados Correctamente!")
-                       workbook.save(filename = dest_filename)
-                       dataCGE=[]
-                       accesoexcel=1
-       else:
-               accesoexcel=0
+       global dataCGE                        
+       workbook=openpyxl.load_workbook(filename = dest_filename)
+       sheet2 = workbook["CGE"]
+       dataCGE.insert(0,datetime.datetime.now())
+       sheet2.append(list(dataCGE))
+       print(f'Data CGE: {dataCGE}')
+       print("Datos Insertados Correctamente!")
+       workbook.save(filename = dest_filename)
+       dataCGE=[]
+      
 
 
-AccesoExcelCarga=0
+
 def ExcelDataCarga():
        global dataCarga
-       global AccesoExcelCarga
-       #global sheet3
-       base=datetime.datetime.now()
-       if(base.minute==1 or base.minute==16 or base.minute==21 or base.minute==46):
-               if(AccesoExcelCarga==0):              
-                       workbook=openpyxl.load_workbook(filename = dest_filename)
-                       sheet3 = workbook["Carga"]
-                       dataCarga.insert(0,datetime.datetime.now())
-                       sheet3.append(list(dataCarga))
-                       print(f'Data Carga: {dataCarga}')
-                       print("Datos Insertados Correctamente!")
-                       workbook.save(filename = dest_filename)
-                       dataCarga=[]
-                       AccesoExcelCarga=1
-       else:
-               AccesoExcelCarga=0
+       workbook=openpyxl.load_workbook(filename = dest_filename)
+       sheet3 = workbook["Carga"]
+       dataCarga.insert(0,datetime.datetime.now())
+       sheet3.append(list(dataCarga))
+       print(f'Data Carga: {dataCarga}')
+       print("Datos Insertados Correctamente!")
+       workbook.save(filename = dest_filename)
+       dataCarga=[]
+     
 
-AccesoExcelPaneles=0
+
 def ExcelDataPaneles():
-       global dataPaneles
-       global AccesoExcelPaneles
-       #global sheet4
-       base=datetime.datetime.now()
-       if(base.minute==1 or base.minute==16 or base.minute==21 or base.minute==46):
-               if(AccesoExcelPaneles==0):              
-                       workbook=openpyxl.load_workbook(filename = dest_filename)
-                       sheet4 = workbook["Paneles"]
-                       dataPaneles.insert(0,datetime.datetime.now())
-                       sheet4.append(list(dataPaneles))
-                       print(f'Data paneles: {dataPaneles}')
-                       print("Datos Insertados Correctamente!")
-                       workbook.save(filename = dest_filename)
-                       dataPaneles=[]
-                       AccesoExcelPaneles=1
-       else:
-               AccesoExcelPaneles=0
+       global dataPaneles       
+       workbook=openpyxl.load_workbook(filename = dest_filename)
+       sheet4 = workbook["Paneles"]
+       dataPaneles.insert(0,datetime.datetime.now())
+       sheet4.append(list(dataPaneles))
+       print(f'Data paneles: {dataPaneles}')
+       print("Datos Insertados Correctamente!")
+       workbook.save(filename = dest_filename)
+       dataPaneles=[]
+  
 
 
 Lugar="Santa Cristina"
