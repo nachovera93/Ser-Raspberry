@@ -121,7 +121,7 @@ def on_connected(client, userdata, flags, rc):
         client.bad_connection_flag=False
 
    
-"""
+
 get_mqtt_credentials()     
 client = mqtt.Client(str_client_id)   #Creación cliente
 client.connect(broker, port)     #Conexión al broker
@@ -129,7 +129,7 @@ client.on_disconnect = on_disconnect
 client.username_pw_set(usernamemqtt, passwordmqtt)
 client.on_connect = on_connected
 client.loop_start()
-"""  
+  
 
 def setup():
     GPIO.setmode(GPIO.BCM) 
@@ -735,6 +735,10 @@ modamaximovoltaje33=[]
 modamaximocorriente33=[]
 global accesoemail
 accesoemail=0
+global accesoemail2
+accesoemail2=0
+global accesoemail3
+accesoemail3=0
 global accesoexcel
 accesoxcel=0
 
@@ -843,8 +847,9 @@ def received():
                                #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
                                #irms1 = CorrienteRms(NoCurrentoffset2)
                                CurrentFFT(NoCurrentoffset,samplings,1,irms1)
-                               print(f'MODA CORRIENTE CGE: {modacorriente}')
+                               #print(f'MODA CORRIENTE CGE: {modacorriente}')
                                Potencias(1,irms1,vrms1)
+                               Maximo15minCGE()
                                modamaximocorriente11=[]
                            else:
                                modamaximocorriente11.append(irms1)
@@ -937,9 +942,10 @@ def received():
                                str_num = {"value":irms2,"save":1}
                                irms22 = json.dumps(str_num)
                                print(f'Irms Carga: {irms2}')
-                               print(f'MODA CORRIENTE Carga: {modacorriente22}')
+                               #print(f'MODA CORRIENTE Carga: {modacorriente22}')
                                CurrentFFT(NoCurrentoffset,samplings,2,irms2)
                                Potencias(2,irms2,vrms2)
+                               Maximo15minCarga()
                                modamaximocorriente22=[]
                            else:
                                modamaximocorriente22.append(irms2)
@@ -1023,10 +1029,11 @@ def received():
                                irms3=CurrentRms(modacorriente33)
                                str_num = {"value":irms3,"save":1}
                                irms33 = json.dumps(str_num)
-                               print(f'Irms Paneles : {irms3}')
-                               print(f'MODA CORRIENTE Paneles: {modacorriente33}')
+                               #print(f'Irms Paneles : {irms3}')
+                               #print(f'MODA CORRIENTE Paneles: {modacorriente33}')
                                CurrentFFT(NoCurrentoffset,samplings,3,irms3)
                                Potencias(3,irms3,vrms3)
+                               Maximo15minPaneles()
                                modamaximocorriente33=[]
                            else:
                                modamaximocorriente33.append(irms3)
@@ -1046,16 +1053,16 @@ def received():
                          str_num2 = {"value":tempESP320,"save":1}
                          tempESP32 = json.dumps(str_num2)
                          #print(f'array: {np_array}')
-                 Maximo15minCGE()
-                 Maximo15minCarga()
-                 Maximo15minPaneles()
+                 #Maximo15minCGE()
+                 #Maximo15minCarga()
+                 #Maximo15minPaneles()
                  excel=datetime.datetime.now()
                  
 
                  #print(f'excel hour : {excel.hour}')
                  #print(f'excel minute : {excel.minute}')
                  
-                 if(excel.hour==12 and excel.minute==2):
+                 if(excel.hour==9 and excel.minute==33):
                           if(accesoemail==0):
                                  accesoemail=1
                                  print("Entro a SendEmail")
@@ -1063,7 +1070,23 @@ def received():
                  else:
                      accesoemail=0
                  
-                 if(excel.minute==1 or excel.minute==16 or excel.minute==21 or excel.minute==46):
+                 if(excel.hour==13 and excel.minute==3):
+                          if(accesoemail2==0):
+                                 accesoemail2=1
+                                 print("Entro a SendEmail")
+                                 SendEmail()
+                 else:
+                     accesoemail2=0
+                 
+                 if(excel.hour==0 and excel.minute==3):
+                          if(accesoemail3==0):
+                                 accesoemail3=1
+                                 print("Entro a SendEmail")
+                                 SendEmail()
+                 else:
+                     accesoemail3=0
+                 
+                 if(excel.minute==1 or excel.minute==16 or excel.minute==31 or excel.minute==46):
                       if(accesoexcel==0): 
                              ExcelDataCGE()
                              ExcelDataCarga()
@@ -1583,7 +1606,7 @@ def Maximo15minCGE():
     global acceso
     basea = datetime.datetime.now()
     #print(f'Maximo Voltaje 15 CGE: {maximoVoltaje15CGE}')
-    if(basea.minute==0 or basea.minute==15 or basea.minute==20 or basea.minute==45): 
+    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
          print("paso if")
          if(acceso == 0):
               print("paso if 2")
@@ -1603,8 +1626,8 @@ def Maximo15minCGE():
                      maximoFPCGEReactivo=0.99
               maximoFDCGE=max(FD15CGE)
               maximoDATCGE=max(DAT15CGE)
-              dataCGE.insert(1,maximoVoltaje15CGE)
-              dataCGE.insert(2,maximoCorrienteCGE)
+              dataCGE.insert(1,round(maximoVoltaje15CGE,1))
+              dataCGE.insert(2,round(maximoCorrienteCGE,2))
               dataCGE.insert(3,maximoPotActivaCGE)
               dataCGE.insert(4,maximoPotReactivaCGE)
               dataCGE.insert(5,maximoPotAparenteCGE)
@@ -1623,7 +1646,7 @@ def Maximo15minCGE():
               FD15CGE=[]
               DAT15CGE=[]
          elif(acceso==1):
-              print("paso elif CGE")
+              #print("paso elif CGE")
               Volt15CGE.append(vrms1)
               Corriente15CGE.append(irms1)
               PotActiva15CGE.append(ActivaCGEFase11)
@@ -1714,10 +1737,10 @@ def Maximo15minCarga():
     global accesoCarga
     basea = datetime.datetime.now()
     #print(f'Maximo Voltaje 15 Carga: {maximoVoltaje15Carga}')
-    if(basea.minute==0 or basea.minute==15 or basea.minute==20 or basea.minute==45): 
-         print("paso if Carga")
+    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
+         #print("paso if Carga")
          if(accesoCarga == 0):
-              print("paso if 2 Carga")
+              #print("paso if 2 Carga")
               accesoCarga = 1
               maximoVoltaje15Carga=max(Volt15Carga)
               maximoCorrienteCarga=max(Corriente15Carga)
@@ -1754,7 +1777,7 @@ def Maximo15minCarga():
               FD15Carga=[]
               DAT15Carga=[]
          elif(accesoCarga==1):
-              print("paso elif Carga")
+              #print("paso elif Carga")
               Volt15Carga.append(vrms1)
               Corriente15Carga.append(irms2)
               PotActiva15Carga.append(ActivaCargaFase13)
@@ -1844,10 +1867,10 @@ def Maximo15minPaneles():
     global accesoPaneles
     basea = datetime.datetime.now()
     #print(f'Maximo Voltaje 15 Paneles: {maximoVoltaje15Paneles}')
-    if(basea.minute==0 or basea.minute==15 or basea.minute==20 or basea.minute==45):  
-         print("paso if Paneles")
+    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45):  
+         #print("paso if Paneles")
          if(accesoPaneles == 0):
-              print("paso if 2 Paneles")
+              #print("paso if 2 Paneles")
               accesoPaneles = 1
               maximoVoltaje15Paneles=max(Volt15Paneles)
               maximoCorrientePaneles=max(Corriente15Paneles)
@@ -1900,6 +1923,7 @@ def Maximo15minPaneles():
  
     else:
         Volt15Paneles.append(vrms3)
+        print(f'Irms Paneles : {irms3}') 
         Corriente15Paneles.append(irms3)
         PotActiva15Paneles.append(ActivaPanelesFase12)
         PotReactiva15Paneles.append(ReactivaPanelesFase12)
@@ -1911,12 +1935,13 @@ def Maximo15minPaneles():
         FD15Paneles.append(FDCorrientePaneles1)
         DAT15Paneles.append(DATCorrientePaneles1)      
         accesoPaneles = 0
-        if(len(Volt15Carga)>4):
+        if(len(Volt15Paneles)>4):
             indice=np.argmin(Volt15Paneles)
             Volt15Paneles.pop(indice)
-            #print(f'Volt15Carga Despúes: {Volt15Paneles}')
+            #print(f'Volt15 paneles Despúes: {Volt15Paneles}')
             indice=np.argmin(Corriente15Paneles)
             Corriente15Paneles.pop(indice)
+            #print(f'Corriente15 paneles Despúes: {Corriente15Paneles}')
             indice=np.argmin(PotActiva15Paneles)
             PotActiva15Paneles.pop(indice)
             indice=np.argmin(PotReactiva15Paneles)
@@ -1936,7 +1961,7 @@ def Maximo15minPaneles():
 
 
 book = Workbook()
-dest_filename = 'Reportes_csv5.xlsx'
+dest_filename = f'Reportes_csv({horasetup}).xlsx'
 sheet = book.active
 sheet.title = "Resumen Reportes"
 sheet2 = book.create_sheet("CGE")
@@ -1993,55 +2018,58 @@ def ExcelDataPaneles():
   
 
 
-Lugar="Santa Cristina"
-username = "empresasserspa@gmail.com"
-password = "empresasserspa"
-destinatario = "empresasserspa@gmail.com"
-#destinatario2 = "demetrio.vera@serm.cl"
-
-mensaje = MIMEMultipart("Alternative")
-mensaje["Subject"] = "Reportes "+str(Lugar)+" "+str(datetime.date.today())
-mensaje["From"] = username
-mensaje["To"] = destinatario
-
-html = f"""
-<html>
-<body>
-     <p> Hola <i>{destinatario}</i> <br>
-     Reportes desde {Lugar} </b>
-</body>
-</html>
-"""
-
-parte_html = MIMEText(html, "html")
-mensaje.attach(parte_html)
-
-archivo = dest_filename
-
-with open(archivo, "rb") as adjunto:
-     contenido_adjunto = MIMEBase("application", "octet-stream")
-     contenido_adjunto.set_payload(adjunto.read())
-
-encoders.encode_base64(contenido_adjunto)
-
-contenido_adjunto.add_header(
-     "Content-Disposition",
-     f"attachment; filename= {archivo}",
-)
-
-mensaje.attach(contenido_adjunto)
-text = mensaje.as_string()
-
-
-context = ssl.create_default_context()
 
 def SendEmail():
+    global dest_filename
+    Lugar="Santa Cristina"
+    username = "empresasserspa@gmail.com"
+    password = "empresasserspa"
+    destinatario = "empresasserspa@gmail.com"
+    destinatario2 = "ricardovera.93@hotmail.com"
+    #destinatario2 = "demetrio.vera@serm.cl"
+    
+    mensaje = MIMEMultipart("Alternative")
+    mensaje["Subject"] = "Reportes "+str(Lugar)+" "+str(datetime.date.today())
+    mensaje["From"] = username
+    mensaje["To"] = destinatario
+    
+    html = f"""
+    <html>
+    <body>
+         <p> Hola <i>{destinatario}</i> <br>
+         Reportes desde {Lugar} </b>
+    </body>
+    </html>
+    """
+    
+    parte_html = MIMEText(html, "html")
+    mensaje.attach(parte_html)
+    
+    archivo = dest_filename
+    
+    with open(archivo, "rb") as adjunto:
+         contenido_adjunto = MIMEBase("application", "octet-stream")
+         contenido_adjunto.set_payload(adjunto.read())
+    
+    encoders.encode_base64(contenido_adjunto)
+    
+    contenido_adjunto.add_header(
+         "Content-Disposition",
+         f"attachment; filename= {archivo}",
+    )
+
+    mensaje.attach(contenido_adjunto)
+    text = mensaje.as_string()
+    
+    
+    context = ssl.create_default_context()
+
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
           server.login(username,password)
           print("Sesión Iniciada Correctamente !")
           #server.sendmail(username, destinatario, mensaje)
           server.sendmail(username, destinatario, text)
-          #server.sendmail(username, destinatario2, text)
+          server.sendmail(username, destinatario2, text)
           print("Mensaje Enviado Correctamente !")
 
 
