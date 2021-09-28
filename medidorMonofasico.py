@@ -1,3 +1,4 @@
+from pruebacsv.excelprueba import excelcreate
 import requests
 import datetime
 import json
@@ -1083,6 +1084,9 @@ def received():
                                  accesoemail3=1
                                  print("Entro a SendEmail")
                                  SendEmail()
+                                 time.sleep(5)
+                                 os.remove(dest_filename)
+                                 excelcreate()
                  else:
                      accesoemail3=0
                  
@@ -1959,23 +1963,27 @@ def Maximo15minPaneles():
             indice=np.argmin(DAT15Paneles)
             DAT15Paneles.pop(indice)
 
+def excelcreate():
+    global dest_filename
+    global sheet2
+    global sheet3
+    global sheet4
+    exceltime=datetime.datetime.now()
+    book = Workbook()
+    dest_filename = f'Reportes_csv: {exceltime}.xlsx'
+    sheet = book.active
+    sheet.title = "Resumen Reportes"
+    sheet2 = book.create_sheet("CGE")
+    sheet3 = book.create_sheet("Carga")
+    sheet4 = book.create_sheet("Paneles")
+    headings=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
+    'FPReact','FPInduct','FD','DAT','Energia'])
+    sheet2.append(headings)
+    sheet3.append(headings)
+    sheet4.append(headings)
+    book.save(filename = dest_filename)
 
-book = Workbook()
-dest_filename = f'Reportes_csv({horasetup}).xlsx'
-sheet = book.active
-sheet.title = "Resumen Reportes"
-sheet2 = book.create_sheet("CGE")
-sheet3 = book.create_sheet("Carga")
-sheet4 = book.create_sheet("Paneles")
-
-
-headings=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
-'FPReact','FPInduct','FD','DAT','Energia'])
-sheet2.append(headings)
-sheet3.append(headings)
-sheet4.append(headings)
-book.save(filename = dest_filename)
-
+excelcreate()
 
 accesoexcel=0
 def ExcelDataCGE():
@@ -2020,7 +2028,7 @@ def ExcelDataPaneles():
 
 
 def SendEmail():
-    global dest_filename
+    #global dest_filename
     Lugar="Santa Cristina"
     username = "empresasserspa@gmail.com"
     password = "empresasserspa"
