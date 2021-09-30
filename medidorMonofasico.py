@@ -202,7 +202,7 @@ def CurrentRms(maximocorriente2):
     if(maximocorriente2>430):
          irms = maximocorriente2*0.0133
     else:
-         irms=(0.00435 + 0.000298*maximocorriente2 - 0.00000349*(maximocorriente2**2) + 0.0000000176*(maximocorriente2**3) - 0.0000000000398*(maximocorriente2**4) + 0.0000000000000332*(maximocorriente2**5))*maximocorriente2
+         irms=(0.0046 + 0.000282*maximocorriente2 - 0.00000328*(maximocorriente2**2) + 0.0000000167*(maximocorriente2**3) - 0.0000000000382*(maximocorriente2**4) + 0.0000000000000322*(maximocorriente2**5))*maximocorriente2
     
     return irms
 
