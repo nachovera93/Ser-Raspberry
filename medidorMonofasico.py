@@ -1,4 +1,4 @@
-from pruebacsv.excelprueba import excelcreate
+#from pruebacsv.excelprueba import excelcreate
 import requests
 import datetime
 import json
@@ -671,7 +671,7 @@ def Potencias(i,irms,vrms):
           b2 = datetime.datetime.now()
           print(f'Reactiva Paneles: {ReactivaPanelesFase12}')
           delta=(((b2 - b).microseconds)/1000+((b2 - b).seconds)*1000)/10000000000
-          energyPanelesFase12 += ActivaPanelesFase12*delta#*2.8
+          energyPanelesFase12 += ActivaPanelesFase12*delta*2.8
           b = datetime.datetime.now()
           if(b2.hour==0 and b2.minute==0):
               energyPanelesFase12=0
@@ -704,7 +704,7 @@ def Potencias(i,irms,vrms):
           energyCargaFase13 += ActivaCargaFase13*delta*2.8
           c = datetime.datetime.now()
           if(c2.hour==0 and c2.minute==0):
-              energyCGEFase13=0
+              energyCargaFase13=0
           str_num = {"value":ActivaCargaFase13,"save":1}
           str_num2 = {"value":ReactivaCargaFase13,"save":0}
           str_num3 = {"value":AparenteCargaFase13,"save":0}
@@ -1045,13 +1045,13 @@ def received():
                          #global EstateVentilador
                          Temp_Raspberry0=cpu_temp()
                          print("Temperatura Raspberry:  ",Temp_Raspberry0)
-                         str_num = {"value":Temp_Raspberry0,"save":1}
+                         str_num = {"value":Temp_Raspberry0,"save":0}
                          Temp_Raspberry = json.dumps(str_num)
                          Ventilador()
                          #temphum()
                          #distance()
                          tempESP320 = round(np_array[0],0)
-                         str_num2 = {"value":tempESP320,"save":1}
+                         str_num2 = {"value":tempESP320,"save":0}
                          tempESP32 = json.dumps(str_num2)
                          #print(f'array: {np_array}')
                  #Maximo15minCGE()
@@ -1063,13 +1063,13 @@ def received():
                  #print(f'excel hour : {excel.hour}')
                  #print(f'excel minute : {excel.minute}')
                  
-                 if(excel.hour==9 and excel.minute==33):
-                          if(accesoemail==0):
-                                 accesoemail=1
-                                 print("Entro a SendEmail")
-                                 SendEmail()
-                 else:
-                     accesoemail=0
+                 #if(excel.hour==9 and excel.minute==33):
+                 #         if(accesoemail==0):
+                 #                accesoemail=1
+                 #                print("Entro a SendEmail")
+                 #                SendEmail()
+                 #else:
+                 #    accesoemail=0
                  
                  if(excel.hour==13 and excel.minute==3):
                           if(accesoemail2==0):
@@ -2032,14 +2032,14 @@ def SendEmail():
     Lugar="Santa Cristina"
     username = "empresasserspa@gmail.com"
     password = "empresasserspa"
-    destinatario = "empresasserspa@gmail.com"
-    destinatario2 = "ricardovera.93@hotmail.com"
-    #destinatario2 = "demetrio.vera@serm.cl"
+    destinatario = "ricardovera.93@hotmail.com"
+    #destinatario2 = "ricardovera.93@hotmail.com"
+    destinatario2 = "demetrio.vera@serm.cl"
     
     mensaje = MIMEMultipart("Alternative")
     mensaje["Subject"] = "Reportes "+str(Lugar)+" "+str(datetime.date.today())
     mensaje["From"] = username
-    mensaje["To"] = destinatario
+    mensaje["To"] = destinatario2
     
     html = f"""
     <html>
