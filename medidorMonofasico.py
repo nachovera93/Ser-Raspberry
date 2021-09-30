@@ -523,6 +523,11 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
                      FPCGE0=FPCGE0+0.05
                  else:
                      FPCGE0=FPCGE0-0.05
+                 if(FPCGE0>=1.0):
+                     FPCGE0=0.99
+                 if(FPCGE0<=-1.0):
+                     FPCGE0=-0.99
+                
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
                  print(f'FP1 cge: {FPCGE0}')
                  str_num3 = {"value":FPCGE0,"save":0}
@@ -548,6 +553,11 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
                      FPPaneles1 = FPPaneles1+0.05
                  else:
                      FPPaneles1 = FPPaneles1-0.05
+                 if(FPPaneles1>=1.0):
+                     FPPaneles1=0.99
+                 if(FPPaneles1<=-1.0):
+                    FPPaneles1=-0.99
+                
                  cosphiPaneles=np.cos(phasevoltajePaneles-phasecorrientePaneles)
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
                  print(f'FP1 paneles: {FPPaneles1}')
@@ -577,6 +587,11 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
                      FPCarga1=FPCarga1+0.05
                  else:
                      FPCarga1=FPCarga1-0.05
+                 if(FPCarga1>=1.0):
+                     FPCarga1=0.99
+                 if(FPCarga1<=-1.0):
+                     FPCarga1=-0.99
+                
                  print(f'FP carga : {FPCarga1}')
                  print(f'cos(phi) carga : {cosphiCarga}')
                  str_num = {"value":FPCarga1,"save":0}
@@ -643,6 +658,8 @@ def Potencias(i,irms,vrms):
           a = datetime.datetime.now()
           if(a2.hour==0 and a2.minute==0):
               energyCGEFase11=0
+          if(a2.hour==0 and a2.minute==1):
+              energyCGEFase11=0
           print(f'Energia CGE: {energyCGEFase11}')
           #print(f'Aparente Fase 1: {round(AparenteCGEFase1,2)}')
           str_num = {"value":ActivaCGEFase11,"save":1}
@@ -675,6 +692,8 @@ def Potencias(i,irms,vrms):
           b = datetime.datetime.now()
           if(b2.hour==0 and b2.minute==0):
               energyPanelesFase12=0
+          if(b2.hour==0 and b2.minute==1):
+              energyPanelesFase12=0
           str_num = {"value":ActivaPanelesFase12,"save":1}
           str_num2 = {"value":ReactivaPanelesFase12,"save":0}
           str_num3 = {"value":AparentePanelesFase12,"save":0}
@@ -704,6 +723,8 @@ def Potencias(i,irms,vrms):
           energyCargaFase13 += ActivaCargaFase13*delta*2.8
           c = datetime.datetime.now()
           if(c2.hour==0 and c2.minute==0):
+              energyCargaFase13=0
+          if(c2.hour==0 and c2.minute==1):
               energyCargaFase13=0
           str_num = {"value":ActivaCargaFase13,"save":1}
           str_num2 = {"value":ReactivaCargaFase13,"save":0}
