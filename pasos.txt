@@ -1,0 +1,36 @@
+wich: para saber donde se encuentra el archivo
+
+sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+
+
+on_reboot.sh
+
+#!/bin/bash
+
+echo "loading virtualenvwrapper.sh..." >>> /home/pi/test.log
+source `which virtualenvwrapper.sh`
+echo "accessing virtualenv..." >>> /home/pi/test.log
+workon py3cv4
+cd /home/pi/pyimagesearch-rpi-code/script_on_reboot
+python medidorMonofasico.py 
+
+
+Para hacerlo ejecutable: chmod +x on_reboot.sh 
+
+Ingresar a : sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+
+@/path/to/your/project/on_reboot.sh
+
+echo "loading virtualenvwrapper.sh..." >>> /home/pi/test.log
+source `which virtualenvwrapper.sh`
+echo "accessing virtualenv..." >>> /home/pi/test.log
+workon py3cv3
+cd /home/pi/pyimagesearch-rpi-code/script_on_reboot
+echo "running Python script..." >>> /home/pi/test.log
+python save_frames.py --output output --display 1
+echo "script exiting..." >>> /home/pi/test.log
+
+
+sudo crontab -e
+
+15 00 * * 1-6 reboot
