@@ -47,6 +47,17 @@ import datetime
     6-255: undefined
     """
 
+
+def BorrarArchivos():
+
+      current_time = time.time()
+      for f in os.listdir():
+            creation_time = os.path.getctime(f)
+            if (((current_time - creation_time) // (24 * 3600)) >= 7):
+                os.unlink(f)
+
+BorrarArchivos()
+                            
 esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
 esp32.flushInput()
 
@@ -130,6 +141,15 @@ client.on_disconnect = on_disconnect
 client.username_pw_set(usernamemqtt, passwordmqtt)
 client.on_connect = on_connected
 client.loop_start()
+
+def reconnectmqtt():
+    get_mqtt_credentials()     
+    client = mqtt.Client(str_client_id)   #Creación cliente
+    client.connect(broker, port)     #Conexión al broker
+    client.on_disconnect = on_disconnect
+    client.username_pw_set(usernamemqtt, passwordmqtt)
+    client.on_connect = on_connected
+    client.loop_start()
   
 
 def setup():
@@ -251,6 +271,20 @@ def CorrienteRms(listCurrent):
     
     #print(f'Corriente RMS : {irms0}')
     return irms0
+
+
+def CalculoDesfase(NoVoltageoffset,NoCurrentoffset,samplings):
+    tiempo = 1/(samplings*(0.001/4200))
+    tiempo2=(tiempo/4200)
+    peakind = signal.find_peaks_cwt(NoVoltageoffset,np.arange(1,100))
+    peakind2 = signal.find_peaks_cwt(NoCurrentoffset,np.arange(1,100))
+    peakindvoltajems = peakind* tiempo2
+    peakindcorrientems = peakind2* tiempo2
+    dif=(peakindvoltajems-peakindcorrientems)
+    print(np.mean(dif[1:10]/8.333))
+    
+    
+    
 
 
 DATVoltajeCGE=0.0
@@ -607,8 +641,9 @@ b = datetime.datetime.now()
 c = datetime.datetime.now()  
 #energyCGEFase11 = 0.0
 energyCGEFase11 = 0.0
-energyPanelesFase12 = 0.0
+energyCGEFase11Hour = 0.0
 energyCargaFase13 = 0.0
+energyCargaFase13Hour = 0.0
 AparenteCGEFase11 = 0.0
 ActivaCGEFase11 = 0.0
 ReactivaCGEFase11 = 0.0
@@ -620,6 +655,8 @@ ActivaCargaFase13 = 0.0
 ReactivaCargaFase13 = 0.0
 energyCGEFase1 = 0.0
 energyPanelesFase1 = 0.0
+energyPanelesFase12Hour = 0.0
+energyPanelesFase12 = 0.0
 energyCargaFase1 = 0.0
 AparenteCGEFase1 = 0.0
 ActivaCGEFase1 = 0.0
@@ -643,6 +680,7 @@ def Potencias(i,irms,vrms):
           global AparenteCGEFase1
           global ReactivaCGEFase1
           global energyCGEFase11
+          global energyCGEFase11Hour
           global AparenteCGEFase11
           global ActivaCGEFase11
           global ReactivaCGEFase11
@@ -654,8 +692,11 @@ def Potencias(i,irms,vrms):
           print(f'Reactiva CGE: {ReactivaCGEFase11}')
           a2 = datetime.datetime.now()
           delta=(((a2 - a).microseconds)/1000+((a2 - a).seconds)*1000)/10000000000
-          energyCGEFase11 += ActivaCGEFase11*delta*2.8
+          energyCGEFase11 += ActivaCGEFase11*delta*2.9
+          energyCGEFase11Hour += ActivaCGEFase11*delta*2.9
           a = datetime.datetime.now()
+          if(a2.minute==0 or a2.minute==1):
+              energyCGEFase11Hour=0
           if(a2.hour==0 and a2.minute==0):
               energyCGEFase11=0
           if(a2.hour==0 and a2.minute==1):
@@ -677,6 +718,7 @@ def Potencias(i,irms,vrms):
           global ActivaPanelesFase1
           global ReactivaPanelesFase1
           global energyPanelesFase12
+          global energyPanelesFase12Hour
           global AparentePanelesFase12
           global ActivaPanelesFase12
           global ReactivaPanelesFase12
@@ -688,8 +730,11 @@ def Potencias(i,irms,vrms):
           b2 = datetime.datetime.now()
           print(f'Reactiva Paneles: {ReactivaPanelesFase12}')
           delta=(((b2 - b).microseconds)/1000+((b2 - b).seconds)*1000)/10000000000
-          energyPanelesFase12 += ActivaPanelesFase12*delta*2.8
+          energyPanelesFase12Hour += ActivaPanelesFase12*delta*2.9
+          energyPanelesFase12 += ActivaPanelesFase12*delta*2.9
           b = datetime.datetime.now()
+          if(b2.minute==0 or b2.minute==1):
+              energyPanelesFase12Hour=0
           if(b2.hour==0 and b2.minute==0):
               energyPanelesFase12=0
           if(b2.hour==0 and b2.minute==1):
@@ -709,6 +754,7 @@ def Potencias(i,irms,vrms):
           global ActivaCargaFase1
           global ReactivaCargaFase1
           global energyCargaFase13
+          global energyCargaFase13Hour
           global AparenteCargaFase13
           global ActivaCargaFase13
           global ReactivaCargaFase13
@@ -720,8 +766,11 @@ def Potencias(i,irms,vrms):
           c2 = datetime.datetime.now()
           print(f'Reactiva Carga: {ReactivaCargaFase13}')
           delta=(((c2 - c).microseconds)/1000+((c2 - c).seconds)*1000)/10000000000
-          energyCargaFase13 += ActivaCargaFase13*delta*2.8
+          energyCargaFase13 += ActivaCargaFase13*delta*2.9
+          energyCargaFase13Hour += ActivaCargaFase13*delta*2.9
           c = datetime.datetime.now()
+          if(c2.minute==0 or c2.minute==1):
+              energyCargaFase13Hour=0
           if(c2.hour==0 and c2.minute==0):
               energyCargaFase13=0
           if(c2.hour==0 and c2.minute==1):
@@ -763,6 +812,8 @@ global accesoemail3
 accesoemail3=0
 global accesoexcel
 accesoxcel=0
+global countbroker
+countbroker=0
 
 def received():
     while True:
@@ -786,18 +837,19 @@ def received():
                            global irms11
                            global modavoltaje
                            global modacorriente
-                           samplings = np_array[-1]
+                           global samplings1
+                           samplings1 = np_array[-1]
                            list_FPVoltage3 = np_array[0:4200]
                            list_FPCurrent3 = np_array[4201:8400]
                            #print(f'max inicio: {max(list_FPVoltage3)}')
-                           sos = signal.butter(10, 3000, 'low', fs=samplings, output='sos')
+                           sos = signal.butter(10, 2500, 'low', fs=samplings1, output='sos')
                            list_FPVoltage2 = signal.sosfilt(sos, list_FPVoltage3)
                            #list_FPVoltage2 = savgol_filter(list_FPVoltage2,len(list_FPVoltage2)-1,))
                            #sos = signal.butter(4, 50, 'low', fs=samplings, output='sos')
                            list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
                            #print(f'max inicio con filtro: {max(list_FPVoltage2)}')
-                           list_FPVoltage = list_FPVoltage2[104:4200]
-                           list_FPCurrent = list_FPCurrent2 [103:4200]
+                           list_FPVoltage = list_FPVoltage2[100:4200]
+                           list_FPCurrent = list_FPCurrent2 [100:4200]
 
                            #Valor dc de Voltaje
                            valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 50)
@@ -812,7 +864,7 @@ def received():
                            #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
                            vrms1=VoltajeRms(NoVoltageoffset)
                           
-                           if (len(modamaximovoltaje11)>=10):
+                           if (len(modamaximovoltaje11)>=5):
                                modavoltaje=np.median(modamaximovoltaje11)
                                vrms1=VoltRms(modavoltaje)
                                print(f'Vrms CGE: {vrms1}')
@@ -822,7 +874,7 @@ def received():
                                #print(f'minimo voltaje: {minimovoltaje2}')
                                #NoVoltageoffset2=NoVoltageoffset/1.90
                                #VoltajeRms(NoVoltageoffset2)
-                               VoltageFFT(NoVoltageoffset,samplings,1)
+                               VoltageFFT(NoVoltageoffset,samplings1,1)
                                #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
                                #graphFFTV1(NoVoltageoffset2,samplings)
                                #print(f'MODA VOLTAJE: {modavoltaje}')
@@ -832,14 +884,6 @@ def received():
                                modamaximovoltaje11.append(vrms1)
                                #print(f'array voltaje: {modamaximovoltaje2}')
 
-                              
-                           
-
-                           #print(f'len 1: {len(list_FPVoltage)}')
-                               # print(f'maximos{valoresmaximovoltajesinmedia}')
-                               # print(f'minimos{valoresminimovoltajesinmedia}')
-                               # print(f'samplings 0: {len(list_FPVoltage)}')
-                               # print(f'samplings 1: {len(NoVoltageoffset)}')
 
                            #Valor dc de corriente
                            valoresmaxcorriente=getMaxValues(list_FPCurrent, 50)
@@ -858,7 +902,7 @@ def received():
                            irms1=CorrienteRms(NoCurrentoffset)
                            
 
-                           if (len(modamaximocorriente11)>=10):
+                           if (len(modamaximocorriente11)>=5):
                                modacorriente=np.median(modamaximocorriente11)
                                irms1=CurrentRms(modacorriente)
                                print(f'Irms CGE: {irms1}')
@@ -868,11 +912,12 @@ def received():
                                #print(f'corriente min: {minimocorriente2 }')
                                #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
                                #irms1 = CorrienteRms(NoCurrentoffset2)
-                               CurrentFFT(NoCurrentoffset,samplings,1,irms1)
+                               CurrentFFT(NoCurrentoffset,samplings1,1,irms1)
                                #print(f'MODA CORRIENTE CGE: {modacorriente}')
                                Potencias(1,irms1,vrms1)
                                Maximo15minCGE()
                                modamaximocorriente11=[]
+                               CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings1)
                            else:
                                modamaximocorriente11.append(irms1)
                            #    print(f'array corriente: {modamaximocorriente2}')
@@ -889,18 +934,19 @@ def received():
                            global irms22
                            global modavoltaje22
                            global modacorriente22
-                           samplings = np_array[-1]
+                           global samplings2
+                           samplings2 = np_array[-1]
                            list_FPVoltage3 = np_array[0:4200]
                            list_FPCurrent3 = np_array[4201:8400]
                            #print(f'max inicio: {max(list_FPVoltage3)}')
-                           sos = signal.butter(10, 3000, 'low', fs=samplings, output='sos')
+                           sos = signal.butter(10, 2500, 'low', fs=samplings2, output='sos')
                            list_FPVoltage2 = signal.sosfilt(sos, list_FPVoltage3)
                            #list_FPVoltage2 = savgol_filter(list_FPVoltage2,len(list_FPVoltage2)-1,))
                            #sos = signal.butter(4, 50, 'low', fs=samplings, output='sos')
                            list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
                            #print(f'max inicio con filtro: {max(list_FPVoltage2)}')
-                           list_FPVoltage = list_FPVoltage2[104:4200]
-                           list_FPCurrent = list_FPCurrent2 [103:4200]
+                           list_FPVoltage = list_FPVoltage2[100:4200]
+                           list_FPCurrent = list_FPCurrent2 [100:4200]
 
                            #Valor dc de Voltaje
                            valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 50)
@@ -915,32 +961,17 @@ def received():
                            #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
                            vrms2=VoltajeRms(NoVoltageoffset)
                            
-                           if (len(modamaximovoltaje22)>=10):
+                           if (len(modamaximovoltaje22)>=5):
                                modavoltaje22=np.median(modamaximovoltaje22)
                                vrms2=VoltRms(modavoltaje22)
                                str_num = {"value":vrms2,"save":1}
                                vrms22 = json.dumps(str_num)
                                print(f'Vrms Carga: {vrms2}')
-                               #print(f'minimo voltaje: {minimovoltaje2}')
-                               #NoVoltageoffset2=NoVoltageoffset/1.90
-                               #VoltajeRms(NoVoltageoffset2)
-                               #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
-                               #graphFFTV1(NoVoltageoffset2,samplings)
-                               #print(f'MODA VOLTAJE: {modavoltaje}')
-                               VoltageFFT(NoVoltageoffset,samplings,2)
+                               VoltageFFT(NoVoltageoffset,samplings2,2)
                                modamaximovoltaje22=[]
                            else:
                                modamaximovoltaje22.append(vrms2)
-                               #print(f'array voltaje: {modamaximovoltaje2}')
-
-                              
-                           
-
-                           #print(f'len 1: {len(list_FPVoltage)}')
-                               # print(f'maximos{valoresmaximovoltajesinmedia}')
-                               # print(f'minimos{valoresminimovoltajesinmedia}')
-                               # print(f'samplings 0: {len(list_FPVoltage)}')
-                               # print(f'samplings 1: {len(NoVoltageoffset)}')
+                            
 
                            #Valor dc de corriente
                            valoresmaxcorriente=getMaxValues(list_FPCurrent, 50)
@@ -958,17 +989,18 @@ def received():
                            #minimocorriente2 = np.median(minimocorriente2sinmedia)
                            irms2=CorrienteRms(NoCurrentoffset)
 
-                           if (len(modamaximocorriente22)>=10):
+                           if (len(modamaximocorriente22)>=5):
                                modacorriente22=np.median(modamaximocorriente22)
                                irms2=CurrentRms(modacorriente22)
                                str_num = {"value":irms2,"save":1}
                                irms22 = json.dumps(str_num)
                                print(f'Irms Carga: {irms2}')
                                #print(f'MODA CORRIENTE Carga: {modacorriente22}')
-                               CurrentFFT(NoCurrentoffset,samplings,2,irms2)
+                               CurrentFFT(NoCurrentoffset,samplings2,2,irms2)
                                Potencias(2,irms2,vrms2)
                                Maximo15minCarga()
                                modamaximocorriente22=[]
+                               CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings2)
                            else:
                                modamaximocorriente22.append(irms2)
 
@@ -982,18 +1014,19 @@ def received():
                            global irms33
                            global modavoltaje33
                            global modacorriente33
-                           samplings = np_array[-1]
+                           global samplings3
+                           samplings3 = np_array[-1]
                            list_FPVoltage3 = np_array[0:4200]
                            list_FPCurrent3 = np_array[4201:8400]
                            #print(f'max inicio: {max(list_FPVoltage3)}')
-                           sos = signal.butter(10, 3000, 'low', fs=samplings, output='sos')
+                           sos = signal.butter(10, 2500, 'low', fs=samplings3, output='sos')
                            list_FPVoltage2 = signal.sosfilt(sos, list_FPVoltage3)
                            #list_FPVoltage2 = savgol_filter(list_FPVoltage2,len(list_FPVoltage2)-1,))
                            #sos = signal.butter(4, 50, 'low', fs=samplings, output='sos')
                            list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
                            #print(f'max inicio con filtro: {max(list_FPVoltage2)}')
-                           list_FPVoltage = list_FPVoltage2[104:4200]
-                           list_FPCurrent = list_FPCurrent2 [103:4200]
+                           list_FPVoltage = list_FPVoltage2[100:4200]
+                           list_FPCurrent = list_FPCurrent2 [100:4200]
 
                            #Valor dc de Voltaje
                            valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 50)
@@ -1002,16 +1035,11 @@ def received():
                            minimovoltaje = np.median(valoresminimovoltajesinmedia)
                            mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                            # Valores maximo y minimos de voltaje sin componente continua
-                           NoVoltageoffset=list_FPVoltage-mediadcvoltaje
-                           #maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 50)
-                           #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
-                           #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
-                           #vrms1=VoltRms(maximovoltaje2)
-                           #minimovoltaje2 = np.median(minimovoltaje2sinmedia)
+                           NoVoltageoffset=list_FPVoltage-mediadcvoltaje  #Señal Voltaje 
                            
                            vrms3=VoltajeRms(NoVoltageoffset)
                            
-                           if (len(modamaximovoltaje33)>=10):
+                           if (len(modamaximovoltaje33)>=5):
                                modavoltaje33=np.median(modamaximovoltaje33)
                                vrms3=VoltRms(modavoltaje33)
                                str_num = {"value":vrms3,"save":1}
@@ -1023,7 +1051,7 @@ def received():
                                #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
                                #graphFFTV1(NoVoltageoffset2,samplings)
                                #print(f'MODA VOLTAJE: {modavoltaje}')
-                               VoltageFFT(NoVoltageoffset,samplings,3)
+                               VoltageFFT(NoVoltageoffset,samplings3,3)
                                modamaximovoltaje33=[]
                            else:
                                modamaximovoltaje33.append(vrms3)
@@ -1046,17 +1074,19 @@ def received():
                            irms3=CorrienteRms(NoCurrentoffset)
                            
 
-                           if (len(modamaximocorriente33)>=10):
+                           if (len(modamaximocorriente33)>=5):
                                modacorriente33=np.median(modamaximocorriente33)
                                irms3=CurrentRms(modacorriente33)
                                str_num = {"value":irms3,"save":1}
                                irms33 = json.dumps(str_num)
                                #print(f'Irms Paneles : {irms3}')
                                #print(f'MODA CORRIENTE Paneles: {modacorriente33}')
-                               CurrentFFT(NoCurrentoffset,samplings,3,irms3)
+                               CurrentFFT(NoCurrentoffset,samplings3,3,irms3)
                                Potencias(3,irms3,vrms3)
+                               ExcelAllInsertPaneles()
                                Maximo15minPaneles()
                                modamaximocorriente33=[]
+                               CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings3)
                            else:
                                modamaximocorriente33.append(irms3)
                    
@@ -1091,7 +1121,7 @@ def received():
                  #                SendEmail()
                  #else:
                  #    accesoemail=0
-                 
+                 """
                  if(excel.hour==13 and excel.minute==3):
                           if(accesoemail2==0):
                                  accesoemail2=1
@@ -1099,23 +1129,24 @@ def received():
                                  SendEmail()
                  else:
                      accesoemail2=0
-                 
+                 """
+                
                  if(excel.hour==0 and excel.minute==3):
                           if(accesoemail3==0):
                                  accesoemail3=1
                                  print("Entro a SendEmail")
                                  SendEmail()
                                  time.sleep(5)
-                                 os.remove(dest_filename)
+                                 #os.remove(dest_filename)
                                  excelcreate()
                  else:
                      accesoemail3=0
                  
                  if(excel.minute==1 or excel.minute==16 or excel.minute==31 or excel.minute==46):
                       if(accesoexcel==0): 
-                             ExcelDataCGE()
-                             ExcelDataCarga()
-                             ExcelDataPaneles()
+                             ExcelDataCGE15()
+                             ExcelDataCarga15()
+                             ExcelDataPaneles15()
                              accesoexcel=1
                  else:
                          accesoexcel=0
@@ -1125,7 +1156,14 @@ def received():
                              #print("paso")
                              publish(client)
                  except:
-                     #print("rc: 0")
+                     """
+                     print(f'Count Broker: {countbroker}')
+                     if(countbroker>=51):
+                         reconnectmqtt()
+                         countbroker=0
+                     else: 
+                         countbroker=countbroker+1
+                     """    
                      continue
         #except:
         #    print("Error en Bucle")
@@ -1200,7 +1238,7 @@ def publish(client):
                          print(f"Send vrms1: `{vrms11}` to topic `{topic2}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic2}")
-            
+            """
             if(i["variableFullName"]=="Potencia-Reactiva-CGE"):
                 freq = i["variableSendFreq"]
                 if(a1 - d1 > float(freq)):
@@ -1214,7 +1252,7 @@ def publish(client):
                          print(f"Send Pot-Reactiva-CGE: `{ReactivaCGEFase1}` to topic `{topic3}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic3}")
-            
+            """
             if(i["variableFullName"]=="Pot-Activa-CGE"):
                 freq = i["variableSendFreq"]
                 if(a1 - e21 > float(freq)):
@@ -1242,6 +1280,7 @@ def publish(client):
                          print(f"Send energia CGE: `{energyCGEFase1}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
+            """
             if(i["variableFullName"]=="FP-CGE"):
                 freq = i["variableSendFreq"]
                 if(a1 - g1 > float(freq)):
@@ -1294,7 +1333,7 @@ def publish(client):
                          print(f"Send Pot-Aparente-CGE : `{AparenteCGEFase1}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
-
+            """
             #SEGUNDA TOMA
             if(i["variableFullName"]=="Corriente-Carga"):
                 freq = i["variableSendFreq"]
@@ -1324,7 +1363,7 @@ def publish(client):
                          print(f"Send Voltaje-Carga: `{vrms22}` to topic `{topic2}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic2}")
-            
+            """
             if(i["variableFullName"]=="Potencia-Reactiva-Carga"):
                 freq = i["variableSendFreq"]
                 if(a1 - n1 > float(freq)):
@@ -1338,7 +1377,7 @@ def publish(client):
                          print(f"Send Potencia-Reactiva-Carga: `{ReactivaCargaFase1}` to topic `{topic3}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic3}")
-            
+            """
             if(i["variableFullName"]=="Pot-Activa-Carga"):
                 freq = i["variableSendFreq"]
                 if(a1 - o21 > float(freq)):
@@ -1366,6 +1405,7 @@ def publish(client):
                          print(f"Send Energia-Carga: `{energyCargaFase1}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
+            """
             if(i["variableFullName"]=="FP-Carga"):
                 freq = i["variableSendFreq"]
                 if(a1 - q1 > float(freq)):
@@ -1418,7 +1458,7 @@ def publish(client):
                          print(f"Send Pot-Aparente-Carga: `{AparenteCargaFase1}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
-            
+            """
             #Tercera Toma
             if(i["variableFullName"]=="Corriente-Paneles"):
                 freq = i["variableSendFreq"]
@@ -1448,7 +1488,7 @@ def publish(client):
                          print(f"Send Voltaje-Paneles: `{vrms33}` to topic `{topic2}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic2}")
-            
+            """
             if(i["variableFullName"]=="Potencia-Reactiva-Paneles"):
                 freq = i["variableSendFreq"]
                 if(a1 - v12 > float(freq)):
@@ -1462,7 +1502,7 @@ def publish(client):
                          print(f"Send Potencia-Reactiva-Paneles: `{ReactivaPanelesFase1}` to topic `{topic3}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic3}")
-            
+            """
             if(i["variableFullName"]=="Pot-Activa-Paneles"):
                 freq = i["variableSendFreq"]
                 if(a1 - v13 > float(freq)):
@@ -1490,6 +1530,7 @@ def publish(client):
                          print(f"Send Energia-Paneles: `{energyPanelesFase1}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
+            """
             if(i["variableFullName"]=="FP-Paneles"):
                 freq = i["variableSendFreq"]
                 if(a1 - v15 > float(freq)):
@@ -1543,7 +1584,7 @@ def publish(client):
                      else:
                          print(f"Failed to send message to topic {topic5}")
             
-            
+            """
             if(i["variableFullName"]=="Temperatura-ESP32"):
                 freq = i["variableSendFreq"]
                 if(a1 - x1 > float(freq)):
@@ -1585,7 +1626,49 @@ def publish(client):
                          print(f"Send Temperatura-Raspberry: `{Temp_Raspberry}` to topic `{topic}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic}")
-            
+ 
+
+
+dataCGEAll=[]
+dataCargaAll=[]
+dataPanelesAll=[]
+def ExcelAllInsertCGE():
+        dataCGEAll.insert(1,vrms1)
+        dataCGEAll.insert(2,irms1)
+        dataCGEAll.insert(3,ActivaCGEFase11)
+        dataCGEAll.insert(4,ReactivaCGEFase11)
+        dataCGEAll.insert(5,AparenteCGEFase11)
+        dataCGEAll.insert(6,FPCGE0)
+        dataCGEAll.insert(7,FDCorrienteCGE1)
+        dataCGEAll.insert(8,DATCorrienteCGE1)
+        dataCGEAll.insert(9,energyCGEFase11)
+        dataCGEAll.insert(10,energyCGEFase11Hour)
+        
+def ExcelAllInsertCarga():        
+        dataCargaAll.insert(1,vrms2)
+        dataCargaAll.insert(2,irms2)
+        dataCargaAll.insert(3,ActivaCargaFase13)
+        dataCargaAll.insert(4,ReactivaCargaFase13)
+        dataCargaAll.insert(5,AparenteCargaFase13)
+        dataCargaAll.insert(6,FPCarga1)
+        dataCargaAll.insert(7,FDCorrienteCarga1)
+        dataCargaAll.insert(8,DATCorrienteCarga1)
+        dataCargaAll.insert(9,energyCargaFase13Hour)
+        dataCargaAll.insert(10,energyCargaFase13Hour)
+        
+def ExcelAllInsertPaneles():        
+        dataPanelesAll.insert(1,vrms3)
+        dataPanelesAll.insert(2,irms3)
+        dataPanelesAll.insert(3,ActivaPanelesFase12)
+        dataPanelesAll.insert(4,ReactivaPanelesFase12)
+        dataPanelesAll.insert(5,AparentePanelesFase12)
+        dataPanelesAll.insert(6,FPPaneles1)
+        dataPanelesAll.insert(7,FDCorrientePaneles1)
+        dataPanelesAll.insert(8,DATCorrientePaneles1)
+        dataPanelesAll.insert(9,energyPanelesFase12)
+        dataPanelesAll.insert(10,energyPanelesFase12Hour)
+
+           
 """
 'Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
 'FP','FD','DAT',
@@ -1616,7 +1699,6 @@ def Maximo15minCGE():
     global maximoPotActivaCGE
     global maximoPotReactivaCGE
     global maximoPotAparenteCGE
-    global maximoFPCGE
     global maximoFDCGE
     global maximoDATCGE
     global Corriente15CGE
@@ -1651,8 +1733,8 @@ def Maximo15minCGE():
                      maximoFPCGEReactivo=0.99
               maximoFDCGE=max(FD15CGE)
               maximoDATCGE=max(DAT15CGE)
-              dataCGE.insert(1,round(maximoVoltaje15CGE,1))
-              dataCGE.insert(2,round(maximoCorrienteCGE,2))
+              dataCGE.insert(1,maximoVoltaje15CGE)
+              dataCGE.insert(2,maximoCorrienteCGE)
               dataCGE.insert(3,maximoPotActivaCGE)
               dataCGE.insert(4,maximoPotReactivaCGE)
               dataCGE.insert(5,maximoPotAparenteCGE)
@@ -1729,8 +1811,8 @@ maximoCorrienteCarga=0
 maximoPotActivaCarga=0
 maximoPotReactivaCarga=0
 maximoPotAparenteCarga=0
-maximoFPCGEInductivo=-0.99
-maximoFPCGEReactivo=0.99
+maximoFPCargaInductivo=-0.99
+maximoFPCargaReactivo=0.99
 maximoFDCarga=0
 maximoDATCarga=0
 Corriente15Carga=[]
@@ -1747,7 +1829,6 @@ def Maximo15minCarga():
     global maximoPotActivaCarga
     global maximoPotReactivaCarga
     global maximoPotAparenteCarga
-    global maximoFPCarga
     global maximoFDCarga
     global maximoDATCarga
     global Corriente15Carga
@@ -1809,9 +1890,9 @@ def Maximo15minCarga():
               PotReactiva15Carga.append(ReactivaCargaFase13)
               PotAparente15Carga.append(AparenteCargaFase13)
               if(FPCarga1>0.0):
-                    FP15CGEReactivo.append(FPCarga1)
+                    FP15CargaReactivo.append(FPCarga1)
               else: 
-                    FP15CGEInductivo.append(FPCarga1)
+                    FP15CargaInductivo.append(FPCarga1)
               FD15Carga.append(FDCorrienteCarga1)
               DAT15Carga.append(DATCorrienteCarga1)
               
@@ -1927,7 +2008,8 @@ def Maximo15minPaneles():
               PotActiva15Paneles=[]
               PotReactiva15Paneles=[]
               PotAparente15Paneles=[]
-              FP15Paneles=[]
+              FP15PanelesReactivo=[]
+              FP15PanelesInductivo=[]
               FD15Paneles=[]
               DAT15Paneles=[]
          elif(accesoPaneles==1):
@@ -1989,59 +2071,101 @@ def excelcreate():
     global sheet2
     global sheet3
     global sheet4
+    global sheet5
+    global sheet6
+    global sheet7
     exceltime=datetime.datetime.now()
     book = Workbook()
     dest_filename = f'Reportes_csv: {exceltime}.xlsx'
     sheet = book.active
     sheet.title = "Resumen Reportes"
-    sheet2 = book.create_sheet("CGE")
-    sheet3 = book.create_sheet("Carga")
-    sheet4 = book.create_sheet("Paneles")
+    sheet2 = book.create_sheet("CGE Maximos 15 Min")
+    sheet3 = book.create_sheet("Carga Maximos 15 Min")
+    sheet4 = book.create_sheet("Paneles Maximos 15 Min")
+    sheet5 = book.create_sheet("CGE")
+    sheet6 = book.create_sheet("Carga")
+    sheet7 = book.create_sheet("Paneles")
     headings=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
     'FPReact','FPInduct','FD','DAT','Energia'])
+    headings2=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
+    'FP','FD','DAT','Energia','Energia por Hora'])
     sheet2.append(headings)
     sheet3.append(headings)
     sheet4.append(headings)
+    sheet5.append(headings2)
+    sheet6.append(headings2)
+    sheet7.append(headings2)
     book.save(filename = dest_filename)
 
 excelcreate()
 
-accesoexcel=0
+
 def ExcelDataCGE():
+       global dataCGEAll                      
+       workbook=openpyxl.load_workbook(filename = dest_filename)
+       sheet5 = workbook["CGE"]
+       dataCGEAll.insert(0,datetime.datetime.now())
+       sheet5.append(list(dataCGEAll))
+       #print(f'Data CGE: {dataCGEAll}')
+       #print("Datos Insertados Correctamente!")
+       workbook.save(filename = dest_filename)
+       dataCGEAll=[]
+
+def ExcelDataCGE15():
        global dataCGE                        
        workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet2 = workbook["CGE"]
+       sheet2 = workbook["CGE Maximos 15 Min"]
        dataCGE.insert(0,datetime.datetime.now())
        sheet2.append(list(dataCGE))
-       print(f'Data CGE: {dataCGE}')
-       print("Datos Insertados Correctamente!")
+       #print(f'Data CGE: {dataCGE}')
+       #print("Datos Insertados Correctamente!")
        workbook.save(filename = dest_filename)
        dataCGE=[]
       
 
 
-
 def ExcelDataCarga():
+       global dataCargaAll
+       workbook=openpyxl.load_workbook(filename = dest_filename)
+       sheet6 = workbook["Carga"]
+       dataCargaAll.insert(0,datetime.datetime.now())
+       sheet6.append(list(dataCargaAll))
+       #print(f'Data Carga: {dataCarga}')
+       #print("Datos Insertados Correctamente!")
+       workbook.save(filename = dest_filename)
+       dataCargaAll=[]
+
+def ExcelDataCarga15():
        global dataCarga
        workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet3 = workbook["Carga"]
+       sheet3 = workbook["Carga Maximos 15 Min"]
        dataCarga.insert(0,datetime.datetime.now())
        sheet3.append(list(dataCarga))
-       print(f'Data Carga: {dataCarga}')
-       print("Datos Insertados Correctamente!")
+       #print(f'Data Carga: {dataCarga}')
+       #print("Datos Insertados Correctamente!")
        workbook.save(filename = dest_filename)
        dataCarga=[]
      
 
+def ExcelDataPaneles15():
+       global dataPanelesAll       
+       workbook=openpyxl.load_workbook(filename = dest_filename)
+       sheet7 = workbook["Paneles"]
+       dataPanelesAll.insert(0,datetime.datetime.now())
+       sheet7.append(list(dataPanelesAll))
+       #print(f'Data paneles: {dataPaneles}')
+       #print("Datos Insertados Correctamente!")
+       workbook.save(filename = dest_filename)
+       dataPanelesAll=[]
 
-def ExcelDataPaneles():
+def ExcelDataPaneles15():
        global dataPaneles       
        workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet4 = workbook["Paneles"]
+       sheet4 = workbook["Paneles Maximos 15 Min"]
        dataPaneles.insert(0,datetime.datetime.now())
        sheet4.append(list(dataPaneles))
-       print(f'Data paneles: {dataPaneles}')
-       print("Datos Insertados Correctamente!")
+       #print(f'Data paneles: {dataPaneles}')
+       #print("Datos Insertados Correctamente!")
        workbook.save(filename = dest_filename)
        dataPaneles=[]
   
@@ -2055,12 +2179,12 @@ def SendEmail():
     password = "empresasserspa"
     destinatario = "ricardovera.93@hotmail.com"
     #destinatario2 = "ricardovera.93@hotmail.com"
-    destinatario2 = "demetrio.vera@serm.cl"
+    #destinatario2 = "demetrio.vera@serm.cl"
     
     mensaje = MIMEMultipart("Alternative")
     mensaje["Subject"] = "Reportes "+str(Lugar)+" "+str(datetime.date.today())
     mensaje["From"] = username
-    mensaje["To"] = destinatario2
+    mensaje["To"] = destinatario
     
     html = f"""
     <html>
@@ -2098,7 +2222,7 @@ def SendEmail():
           print("Sesión Iniciada Correctamente !")
           #server.sendmail(username, destinatario, mensaje)
           server.sendmail(username, destinatario, text)
-          server.sendmail(username, destinatario2, text)
+          #server.sendmail(username, destinatario2, text)
           print("Mensaje Enviado Correctamente !")
 
 

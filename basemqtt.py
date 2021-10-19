@@ -16,13 +16,13 @@ import time
     6-255: undefined
     """
 
-broker = '18.228.175.193'    #mqtt server
+broker = '192.168.100.121'    #mqtt server
 port = 1883
-dId = '123'
-passw = 'SSf0SRnLkV'
+dId = '123456789'
+passw = 'oa5iFKhDjc'
 #dId2 = '12344321'
 #passw2 = 'yFJMESnzxl'
-webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
+webhook_endpoint = 'http://192.168.100.121:3001/api/getdevicecredentials'
 
 
  
@@ -54,7 +54,7 @@ def get_mqtt_credentials():
           my_new_string = my_bytes_value.decode("utf-8").replace("'", '"')
           data = json.loads(my_new_string)
           s = json.dumps(data, indent=4, sort_keys=True)
-          #print(s)
+          print(s)
           usernamemqtt = data["username"]
           #print("username:",usernamemqtt)
           passwordmqtt = data["password"]
@@ -197,9 +197,9 @@ def publish(client):
 
             #    if(data["variables"][i]["variableType"]=="output"):
             #        continue
-            if(i["variableFullName"]=="Corriente-CGE"):
+            if(i["variableFullName"]=="Voltaje"):
                 freq = i["variableSendFreq"]
-                if(a - b > freq):
+                if(a - b > float(freq)):
                      b=time.time()
                      str_variable = i["variable"]
                      topic1 = topicmqtt + str_variable + "/sdata"
@@ -212,7 +212,7 @@ def publish(client):
                          print(f"Failed to send message to topic {topic1}")
         
                    
-            if(i["variableFullName"]=="Voltaje-CGE"):
+            if(i["variableFullName"]=="Voltajeas"):
                 freq = i["variableSendFreq"]
                 if(a - c > freq):
                      #print("varlastsend 1: ",varsLastSend[i])
@@ -273,9 +273,8 @@ while client.connected_flag:
         Temperature()
         publish(client)
         #publish2(client2)
-   
-    #publish(client2)
-    #time.sleep(5)
+        #publish(client2)
+        time.sleep(5)
     
 
 print("client stop")  # no esta pasando en ninguna situación
