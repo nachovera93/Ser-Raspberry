@@ -157,7 +157,7 @@ def graphVoltage(list_fftVoltage,list_FPCurrent,samplings):
         oldepoch = time.time()
         st = datetime.datetime.fromtimestamp(oldepoch).strftime('%Y-%m-%d-%H:%M:%S') 
         #plt.xlabel("Tiempo(ms)",fontdict=font)
-        plt.title(f'cos phi: {cosphiCGE} FP: {FPCGE0} FD: {FDCorrienteCGE1} DAT: {DATCorrienteCGE1}',fontdict=font)
+        plt.title(f'cos phi: {cosphiCGE} FP: {FPCGE0} FD: {FDCorrienteCGE1}',fontdict=font)
         ax.set_xlabel('Tiempo (mS)',fontdict=font)
         ax.set_ylabel('Pk-Pk',fontdict=font) 
         imagenVoltaje = f'images/señal/voltage/{st}-Voltage.png'
@@ -524,7 +524,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
            n = n+1
          ax.xaxis.set_ticks(rangex)  
          ax.grid(True)
-         plt.title("FFT Corriente Fase",fontdict=font)
+         plt.title(f'FFT Corriente | DAT: {DATCorrienteCGE1}, FD: {FDCorrienteCGE1}',fontdict=font)
          ax.set_xlabel('Frecuencia (Hz)',fontdict=font)
          ax.set_ylabel('|dB|',fontdict=font) 
          oldepoch = time.time()
@@ -582,10 +582,10 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
          #GradoArmonicoFundamentalCorriente=round(Grados,2)
          if(q=="1"):
              global sincvoltaje1
-             FDCorrienteCGE1 = irmsarmonico1prop/irms
-             print(f'FDCorrienteCGE : {FDCorrienteCGE1 }')
+             FDCorrienteCGE1 = round(irmsarmonico1prop/irms
+             print(f'FDCorrienteCGE : {round(FDCorrienteCGE1,2)}')
              DATCorrienteCGE1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
-             #print(f'DAT corriente CGE: {DATCorrienteCGE}')
+             print(f'DAT corriente CGE: {round(DATCorrienteCGE1,2)}')
              phasecorrienteCGE = np.arctan(real[0]/(imag[0]))
              if (sincvoltaje1 == 1):
                  FPCGE0=np.cos(phasevoltajeCGE-phasecorrienteCGE)*FDCorrienteCGE1
