@@ -56,7 +56,7 @@ def BorrarArchivos():
             if (((current_time - creation_time) // (24 * 3600)) >= 7):
                 os.unlink(f)
 
-BorrarArchivos()
+#BorrarArchivos()
                             
 esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
 esp32.flushInput()
@@ -66,8 +66,8 @@ print("Hora de comienzo:", horasetup)
 
 broker = '18.228.175.193'    #mqtt server
 port = 1883
-dId = '123456'
-passw = 'zDu9VeuECs'
+dId = '123321'
+passw = 'xuZbIoq5EQ'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
@@ -695,7 +695,7 @@ def Potencias(i,irms,vrms):
           energyCGEFase11 += ActivaCGEFase11*delta*2.9
           energyCGEFase11Hour += ActivaCGEFase11*delta*2.9
           a = datetime.datetime.now()
-          if(a2.minute==0 or a2.minute==1):
+          if(a2.minute==0):
               energyCGEFase11Hour=0
           if(a2.hour==0 and a2.minute==0):
               energyCGEFase11=0
@@ -733,7 +733,7 @@ def Potencias(i,irms,vrms):
           energyPanelesFase12Hour += ActivaPanelesFase12*delta*2.9
           energyPanelesFase12 += ActivaPanelesFase12*delta*2.9
           b = datetime.datetime.now()
-          if(b2.minute==0 or b2.minute==1):
+          if(b2.minute==0):
               energyPanelesFase12Hour=0
           if(b2.hour==0 and b2.minute==0):
               energyPanelesFase12=0
@@ -769,7 +769,7 @@ def Potencias(i,irms,vrms):
           energyCargaFase13 += ActivaCargaFase13*delta*2.9
           energyCargaFase13Hour += ActivaCargaFase13*delta*2.9
           c = datetime.datetime.now()
-          if(c2.minute==0 or c2.minute==1):
+          if(c2.minute==0):
               energyCargaFase13Hour=0
           if(c2.hour==0 and c2.minute==0):
               energyCargaFase13=0
@@ -812,7 +812,7 @@ global accesoemail3
 accesoemail3=0
 global accesoexcel
 accesoxcel=0
-global countbroker
+
 countbroker=0
 
 def received():
@@ -848,8 +848,8 @@ def received():
                            #sos = signal.butter(4, 50, 'low', fs=samplings, output='sos')
                            list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
                            #print(f'max inicio con filtro: {max(list_FPVoltage2)}')
-                           list_FPVoltage = list_FPVoltage2[100:4200]
-                           list_FPCurrent = list_FPCurrent2 [100:4200]
+                           list_FPVoltage = list_FPVoltage2[104:4200]
+                           list_FPCurrent = list_FPCurrent2 [103:4200]
 
                            #Valor dc de Voltaje
                            valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 50)
@@ -915,9 +915,11 @@ def received():
                                CurrentFFT(NoCurrentoffset,samplings1,1,irms1)
                                #print(f'MODA CORRIENTE CGE: {modacorriente}')
                                Potencias(1,irms1,vrms1)
+                               ExcelAllInsertCGE()
+                               ExcelDataCGE()
                                Maximo15minCGE()
                                modamaximocorriente11=[]
-                               CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings1)
+                               #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings1)
                            else:
                                modamaximocorriente11.append(irms1)
                            #    print(f'array corriente: {modamaximocorriente2}')
@@ -945,8 +947,8 @@ def received():
                            #sos = signal.butter(4, 50, 'low', fs=samplings, output='sos')
                            list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
                            #print(f'max inicio con filtro: {max(list_FPVoltage2)}')
-                           list_FPVoltage = list_FPVoltage2[100:4200]
-                           list_FPCurrent = list_FPCurrent2 [100:4200]
+                           list_FPVoltage = list_FPVoltage2[104:4200]
+                           list_FPCurrent = list_FPCurrent2 [103:4200]
 
                            #Valor dc de Voltaje
                            valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 50)
@@ -998,9 +1000,11 @@ def received():
                                #print(f'MODA CORRIENTE Carga: {modacorriente22}')
                                CurrentFFT(NoCurrentoffset,samplings2,2,irms2)
                                Potencias(2,irms2,vrms2)
+                               ExcelAllInsertCarga()
+                               ExcelDataCarga()
                                Maximo15minCarga()
                                modamaximocorriente22=[]
-                               CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings2)
+                               #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings2)
                            else:
                                modamaximocorriente22.append(irms2)
 
@@ -1025,8 +1029,8 @@ def received():
                            #sos = signal.butter(4, 50, 'low', fs=samplings, output='sos')
                            list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
                            #print(f'max inicio con filtro: {max(list_FPVoltage2)}')
-                           list_FPVoltage = list_FPVoltage2[100:4200]
-                           list_FPCurrent = list_FPCurrent2 [100:4200]
+                           list_FPVoltage = list_FPVoltage2[104:4200]
+                           list_FPCurrent = list_FPCurrent2 [103:4200]
 
                            #Valor dc de Voltaje
                            valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 50)
@@ -1084,9 +1088,10 @@ def received():
                                CurrentFFT(NoCurrentoffset,samplings3,3,irms3)
                                Potencias(3,irms3,vrms3)
                                ExcelAllInsertPaneles()
+                               ExcelDataPaneles()
                                Maximo15minPaneles()
                                modamaximocorriente33=[]
-                               CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings3)
+                               #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings3)
                            else:
                                modamaximocorriente33.append(irms3)
                    
@@ -1141,29 +1146,31 @@ def received():
                                  excelcreate()
                  else:
                      accesoemail3=0
-                 
-                 if(excel.minute==1 or excel.minute==16 or excel.minute==31 or excel.minute==46):
-                      if(accesoexcel==0): 
-                             ExcelDataCGE15()
-                             ExcelDataCarga15()
-                             ExcelDataPaneles15()
-                             accesoexcel=1
-                 else:
-                         accesoexcel=0
+                 try:
+                       if(excel.minute==1 or excel.minute==16 or excel.minute==31 or excel.minute==46):
+                            if(accesoexcel==0): 
+                                   ExcelDataCGE15()
+                                   ExcelDataCarga15()
+                                   ExcelDataPaneles15()
+                                   accesoexcel=1
+                       else:
+                               accesoexcel=0
+                 except:
+                     continue
 
                  try:  
                        if(client.connected_flag==True): 
                              #print("paso")
                              publish(client)
                  except:
-                     """
+                     global countbroker
                      print(f'Count Broker: {countbroker}')
-                     if(countbroker>=51):
+                     if(countbroker>=71):
                          reconnectmqtt()
                          countbroker=0
                      else: 
                          countbroker=countbroker+1
-                     """    
+                         
                      continue
         #except:
         #    print("Error en Bucle")
@@ -1280,7 +1287,7 @@ def publish(client):
                          print(f"Send energia CGE: `{energyCGEFase1}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
-            """
+            
             if(i["variableFullName"]=="FP-CGE"):
                 freq = i["variableSendFreq"]
                 if(a1 - g1 > float(freq)):
@@ -1294,6 +1301,7 @@ def publish(client):
                          print(f"Send FP-CGE: `{FPCGE}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
+            """
             if(i["variableFullName"]=="FD-CGE"):
                 freq = i["variableSendFreq"]
                 if(a1 - h1 > float(freq)):
@@ -1405,7 +1413,7 @@ def publish(client):
                          print(f"Send Energia-Carga: `{energyCargaFase1}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
-            """
+            
             if(i["variableFullName"]=="FP-Carga"):
                 freq = i["variableSendFreq"]
                 if(a1 - q1 > float(freq)):
@@ -1419,6 +1427,7 @@ def publish(client):
                          print(f"Send FP-Carga: `{FPCarga}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
+            """
             if(i["variableFullName"]=="FD-Carga"):
                 freq = i["variableSendFreq"]
                 if(a1 - r1 > float(freq)):
@@ -1530,7 +1539,7 @@ def publish(client):
                          print(f"Send Energia-Paneles: `{energyPanelesFase1}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
-            """
+            
             if(i["variableFullName"]=="FP-Paneles"):
                 freq = i["variableSendFreq"]
                 if(a1 - v15 > float(freq)):
@@ -1544,6 +1553,7 @@ def publish(client):
                          print(f"Send FP-Paneles: `{FPPaneles}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
+            """
             if(i["variableFullName"]=="FD-Paneles"):
                 freq = i["variableSendFreq"]
                 if(a1 - v16 > float(freq)):
@@ -1633,40 +1643,40 @@ dataCGEAll=[]
 dataCargaAll=[]
 dataPanelesAll=[]
 def ExcelAllInsertCGE():
-        dataCGEAll.insert(1,vrms1)
-        dataCGEAll.insert(2,irms1)
-        dataCGEAll.insert(3,ActivaCGEFase11)
-        dataCGEAll.insert(4,ReactivaCGEFase11)
-        dataCGEAll.insert(5,AparenteCGEFase11)
-        dataCGEAll.insert(6,FPCGE0)
-        dataCGEAll.insert(7,FDCorrienteCGE1)
-        dataCGEAll.insert(8,DATCorrienteCGE1)
-        dataCGEAll.insert(9,energyCGEFase11)
-        dataCGEAll.insert(10,energyCGEFase11Hour)
+        dataCGEAll.insert(1,round(vrms1,2))
+        dataCGEAll.insert(2,round(irms1,2))
+        dataCGEAll.insert(3,round(ActivaCGEFase11,2))
+        dataCGEAll.insert(4,round(ReactivaCGEFase11,2))
+        dataCGEAll.insert(5,round(AparenteCGEFase11,2))
+        dataCGEAll.insert(6,round(FPCGE0,2))
+        dataCGEAll.insert(7,round(FDCorrienteCGE1,2))
+        dataCGEAll.insert(8,round(DATCorrienteCGE1,2))
+        dataCGEAll.insert(9,round(energyCGEFase11,2))
+        dataCGEAll.insert(10,round(energyCGEFase11Hour,2))
         
 def ExcelAllInsertCarga():        
-        dataCargaAll.insert(1,vrms2)
-        dataCargaAll.insert(2,irms2)
-        dataCargaAll.insert(3,ActivaCargaFase13)
-        dataCargaAll.insert(4,ReactivaCargaFase13)
-        dataCargaAll.insert(5,AparenteCargaFase13)
-        dataCargaAll.insert(6,FPCarga1)
-        dataCargaAll.insert(7,FDCorrienteCarga1)
-        dataCargaAll.insert(8,DATCorrienteCarga1)
-        dataCargaAll.insert(9,energyCargaFase13Hour)
-        dataCargaAll.insert(10,energyCargaFase13Hour)
+        dataCargaAll.insert(1,round(vrms2,2))
+        dataCargaAll.insert(2,round(irms2,2))
+        dataCargaAll.insert(3,round(ActivaCargaFase13,2))
+        dataCargaAll.insert(4,round(ReactivaCargaFase13,2))
+        dataCargaAll.insert(5,round(AparenteCargaFase13,2))
+        dataCargaAll.insert(6,round(FPCarga1,2))
+        dataCargaAll.insert(7,round(FDCorrienteCarga1,2))
+        dataCargaAll.insert(8,round(DATCorrienteCarga1,2))
+        dataCargaAll.insert(9,round(energyCargaFase13Hour,2))
+        dataCargaAll.insert(10,round(energyCargaFase13Hour,2))
         
 def ExcelAllInsertPaneles():        
-        dataPanelesAll.insert(1,vrms3)
-        dataPanelesAll.insert(2,irms3)
-        dataPanelesAll.insert(3,ActivaPanelesFase12)
-        dataPanelesAll.insert(4,ReactivaPanelesFase12)
-        dataPanelesAll.insert(5,AparentePanelesFase12)
-        dataPanelesAll.insert(6,FPPaneles1)
-        dataPanelesAll.insert(7,FDCorrientePaneles1)
-        dataPanelesAll.insert(8,DATCorrientePaneles1)
-        dataPanelesAll.insert(9,energyPanelesFase12)
-        dataPanelesAll.insert(10,energyPanelesFase12Hour)
+        dataPanelesAll.insert(1,round(vrms3,2))
+        dataPanelesAll.insert(2,round(irms3,2))
+        dataPanelesAll.insert(3,round(ActivaPanelesFase12,2))
+        dataPanelesAll.insert(4,round(ReactivaPanelesFase12,2))
+        dataPanelesAll.insert(5,round(AparentePanelesFase12,2))
+        dataPanelesAll.insert(6,round(FPPaneles1,2))
+        dataPanelesAll.insert(7,round(FDCorrientePaneles1,2))
+        dataPanelesAll.insert(8,round(DATCorrientePaneles1,2))
+        dataPanelesAll.insert(9,round(energyPanelesFase12,2))
+        dataPanelesAll.insert(10,round(energyPanelesFase12Hour,2))
 
            
 """
@@ -2147,7 +2157,7 @@ def ExcelDataCarga15():
        dataCarga=[]
      
 
-def ExcelDataPaneles15():
+def ExcelDataPaneles():
        global dataPanelesAll       
        workbook=openpyxl.load_workbook(filename = dest_filename)
        sheet7 = workbook["Paneles"]

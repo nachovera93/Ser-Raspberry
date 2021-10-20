@@ -34,7 +34,7 @@ from os import remove
 
 
 root = Tk()
-root.geometry("500x500")
+root.geometry("600x1000")
 root.title("Medidor SER")
 
 
@@ -88,7 +88,7 @@ def BorrarArchivos():
                  count3=count3+1
         #print(count)
       try:
-          if(count2>10):
+          if(count2>5):
                for i in os.listdir("images/señal/voltage"):
                     print(i)
                     os.remove(f'images/señal/voltage/{i}')
@@ -143,7 +143,7 @@ def graphVoltage(list_fftVoltage,list_FPCurrent,samplings):
         global render
         #plt.figure(figsize=(12,2))
         #plt.plot(list_fftVoltage)
-        fig=plt.figure(figsize=(12,3))
+        fig=plt.figure(figsize=(7,2))
         #plt.plot(list_fftVoltage, color="blue", label="Voltaje")
         #plt.plot(list_FPCurrent, color="green", label="Corriente")
         #plt.legend(loc='upper left')
@@ -157,6 +157,7 @@ def graphVoltage(list_fftVoltage,list_FPCurrent,samplings):
         oldepoch = time.time()
         st = datetime.datetime.fromtimestamp(oldepoch).strftime('%Y-%m-%d-%H:%M:%S') 
         #plt.xlabel("Tiempo(ms)",fontdict=font)
+        plt.title(f'cos phi: {cosphiCGE} FP: {FPCGE0} FD: {FDCorrienteCGE1} DAT: {DATCorrienteCGE1}',fontdict=font)
         ax.set_xlabel('Tiempo (mS)',fontdict=font)
         ax.set_ylabel('Pk-Pk',fontdict=font) 
         imagenVoltaje = f'images/señal/voltage/{st}-Voltage.png'
@@ -407,7 +408,7 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            ynew = f(xnew)
            ejeyabsolut =  2.0/4096 * np.abs(ynew)#ynew
            n = 0
-           fig = plt.figure(figsize=(12,2))
+           fig = plt.figure(figsize=(7,2))
            ax = fig.add_subplot(111)
            ax.plot(xnew,ejeyabsolut)
            rangex = np.zeros(28)
@@ -514,7 +515,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
          ynew = f(xnew)
          ejeyabsolut =  2.0/N * np.abs(ynew)
          n = 0
-         fig = plt.figure(figsize=(12,2))
+         fig = plt.figure(figsize=(7,2))
          ax = fig.add_subplot(111)
          ax.plot(xnew,ejeyabsolut)
          rangex = np.zeros(28)
@@ -603,7 +604,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
                 
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
                  print(f'FP1 cge: {round(FPCGE0,2)}')
-                 print(f'cos(phi) cge : {cosphiCGE}')
+                 print(f'cos(phi) cge : {round(cosphiCGE,2)}')
                  sincvoltaje1=0  
                  #return FPCGE
          #sincvolaje1=0 
@@ -725,7 +726,7 @@ def received():
                             list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
                             #print(f'max inicio con filtro: {max(list_FPVoltage2)}')
                             list_FPVoltage = list_FPVoltage2[104:4200]
-                            list_FPCurrent = list_FPCurrent2[104:4200]
+                            list_FPCurrent = list_FPCurrent2[103:4200]
                             #Valor dc de Voltaje
                             
                             valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 50)
@@ -785,7 +786,7 @@ def received():
             Label(root, text=round(cosphiCGE,2),font=('Arial', 16)).grid(row=8, column=1)
             
             BorrarArchivos()
-            root.after(2000, received) 
+            root.after(500, received) 
             
 
                 
@@ -821,5 +822,5 @@ Label(root, text="cos phi",font=('Arial', 16)).grid(row=8, column=0)
 
 
 
-root.after(2000, received)
+root.after(500, received)
 root.mainloop()
