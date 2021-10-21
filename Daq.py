@@ -34,20 +34,17 @@ from os import remove
 
 
 root = Tk()
-root.geometry("600x1000")
+root.geometry("1000x600")
 root.title("Medidor SER")
 
 
-esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
-esp32.flushInput()
+#esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
+#esp32.flushInput()
 
-
-if not os.path.exists('log/'):
-    os.makedirs('log/')
 
 if not os.path.exists('images/'):
     os.makedirs('images/')
-
+"""
 if not os.path.exists('images/fft'):
     os.makedirs('images/fft')
 
@@ -63,7 +60,7 @@ if not os.path.exists('images/señal'):
 
 if not os.path.exists('images/señal/voltage'):
     os.makedirs('images/señal/voltage') 
-   
+"""   
 
 font = {'family': 'serif',
         'color':  'darkred',
@@ -71,7 +68,7 @@ font = {'family': 'serif',
         'size': 8,
         }
 
-
+"""
 folder = "images/señal/voltage/"
 def BorrarArchivos():
       count1=0
@@ -105,7 +102,23 @@ def BorrarArchivos():
       except OSError: 
                print("Imagen does not exists or is inaccessible")
                pass
+"""
 
+def BorrarArchivos():
+      count1=0
+      for f in os.listdir("images/"):
+                 #print(f)
+                 count1=count1+1
+      
+      try:
+          if(count1>5):
+               for i in os.listdir("images/"):
+                    print(i)
+                    os.remove(f'images/{i}')          
+                       
+      except OSError: 
+               print("Imagen does not exists or is inaccessible")
+               pass
 
 
 def graphVoltageCurrent(listVoltage,listCurrent,samplings): ##Grafica corriente y Voltaje
@@ -136,36 +149,7 @@ def graphVoltageCurrent(listVoltage,listCurrent,samplings): ##Grafica corriente 
         minvoltaje = min(valores)-300
         
 
-def graphVoltage(list_fftVoltage,list_FPCurrent,samplings):
-        #y = np.linspace(0,len(list_fftVoltage),1000)
-        #x = len(list_fftVoltage)
-        #print(f'largo : {x}') 
-        global render
-        #plt.figure(figsize=(12,2))
-        #plt.plot(list_fftVoltage)
-        fig=plt.figure(figsize=(7,2))
-        #plt.plot(list_fftVoltage, color="blue", label="Voltaje")
-        #plt.plot(list_FPCurrent, color="green", label="Corriente")
-        #plt.legend(loc='upper left')
-        tiempo = 1/(samplings*(0.001/4200))
-        tiempoms = np.arange(0,tiempo,tiempo/4096)
-        ax = fig.add_subplot(111)
-        ax.plot(tiempoms,list_fftVoltage,color="blue", label="Voltaje")
-        ax.plot(tiempoms,list_FPCurrent,color="green", label="Corriente")
-        ax.legend(loc='upper left')
-        #st=datetime.datetime.minute
-        oldepoch = time.time()
-        st = datetime.datetime.fromtimestamp(oldepoch).strftime('%Y-%m-%d-%H:%M:%S') 
-        #plt.xlabel("Tiempo(ms)",fontdict=font)
-        plt.title(f'cos phi: {cosphiCGE} FP: {FPCGE0} FD: {FDCorrienteCGE1}',fontdict=font)
-        ax.set_xlabel('Tiempo (mS)',fontdict=font)
-        ax.set_ylabel('Pk-Pk',fontdict=font) 
-        imagenVoltaje = f'images/señal/voltage/{st}-Voltage.png'
-        plt.savefig(imagenVoltaje)
-        load = Image.open(imagenVoltaje)
-        render = ImageTk.PhotoImage(load)
-        Label(root, image=render).grid(column=2, row=0, rowspan=6)
-        
+
         
         #plt.savefig(imagenVoltaje)
         #plt.close(fig)
@@ -382,11 +366,11 @@ FDVoltajeCGE=0.0
 def VoltageFFT(list_fftVoltages, samplings,i):
     global j
     j = str(i)
-    global DATVoltajeCGE
+    global DATVoltajeCGE1
     global phasevoltajeCGE
     global FDVoltajeCGE
-    global renderfftVoltage
-    
+    global ejeyabsolutv
+    global xnewv
     #global FaseArmonicoFundamentalVoltaje
     N = len(list_fftVoltages)
     T = 1 / samplings
@@ -403,30 +387,30 @@ def VoltageFFT(list_fftVoltages, samplings,i):
     if (samplings > 5100):
            #f = interpolate.interp1d(xf, ejey)
            f = interpolate.interp1d(xf, yf[:N//2] )
-           xnew = np.arange(0, 2575, 1)  # 2550
+           xnewv = np.arange(0, 2575, 1)  # 2550
            # print(f'largo xnew : {len(xnew)}')
-           ynew = f(xnew)
-           ejeyabsolut =  2.0/4096 * np.abs(ynew)#ynew
-           n = 0
-           fig = plt.figure(figsize=(7,2))
-           ax = fig.add_subplot(111)
-           ax.plot(xnew,ejeyabsolut)
-           rangex = np.zeros(28)
-           for h in range(50, 2600, 100):
-             rangex[n]=h
-             n = n+1
-           ax.xaxis.set_ticks(rangex)  
-           ax.grid(True)
-           plt.title("FFT Voltaje",fontdict=font)
-           ax.set_xlabel('Frecuencia (Hz)',fontdict=font)
-           ax.set_ylabel('|dB|',fontdict=font) 
-           oldepoch = time.time()
-           st = datetime.datetime.fromtimestamp(oldepoch).strftime('%Y-%m-%d-%H:%M:%S')  
-           imagenVoltajeFFT = f'images/fft/voltage/{st}-Voltagefft.png'
-           plt.savefig(imagenVoltajeFFT)
-           load = Image.open(imagenVoltajeFFT)
-           renderfftVoltage = ImageTk.PhotoImage(load)
-           Label(root, image=renderfftVoltage).grid(column=2, row=13, rowspan=6)
+           ynew = f(xnewv)
+           ejeyabsolutv =  2.0/4096 * np.abs(ynew)#ynew
+           #n = 0
+           #fig = plt.figure(figsize=(7,2))
+           #ax = fig.add_subplot(3,1,3)
+           #ax.plot(xnew,ejeyabsolut)
+           #rangex = np.zeros(28)
+           #for h in range(50, 2600, 100):
+           #  rangex[n]=h
+           #  n = n+1
+           #ax.xaxis.set_ticks(rangex)  
+           #ax.grid(True)
+           #plt.title("FFT Voltaje",fontdict=font)
+           #ax.set_xlabel('Frecuencia (Hz)',fontdict=font)
+           #ax.set_ylabel('|dB|',fontdict=font) 
+           #oldepoch = time.time()
+           #st = datetime.datetime.fromtimestamp(oldepoch).strftime('%Y-%m-%d-%H:%M:%S')  
+           #imagenVoltajeFFT = f'images/fft/voltage/{st}-Voltagefft.png'
+           #plt.savefig(imagenVoltajeFFT)
+           #load = Image.open(imagenVoltajeFFT)
+           #renderfftVoltage = ImageTk.PhotoImage(load)
+           #Label(root, image=renderfftVoltage).grid(column=2, row=13, rowspan=6)
            FD = []
            complejo = []
            real=[]
@@ -435,7 +419,7 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            z=0
            for i in range(45, 2575, 50):
                  a2 = max(ynew[i:i+10])
-                 arra = max(ejeyabsolut[i:i+10])
+                 arra = max(ejeyabsolutv[i:i+10])
                  complejo.append(a2)
                  #index_max = np.argmax(ejeyabsolut[i-10:i+20])
                  #print(f'a : {a}')
@@ -465,8 +449,8 @@ def VoltageFFT(list_fftVoltages, samplings,i):
                  global sincvoltaje1            
                  phasevoltajeCGE = np.arctan(real[0]/(imag[0]))
                  #FaseArmonicoFundamentalVoltaje1=round(np.angle(complejo[0]),2)
-                 FDVoltajeCGE = Magnitud1/SumMagnitudEficaz
-                 DATVoltajeCGE1= np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
+                 FDVoltajeCGE = round(Magnitud1/SumMagnitudEficaz,2)
+                 DATVoltajeCGE1= round(np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2)),2)
                  print(f'DAT Voltaje CGE: {round(DATVoltajeCGE1,2)}')
                  sincvoltaje1 = 1
                  
@@ -496,7 +480,8 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
     global cosphiCGE
     global q
     global renderfftcurrent
-
+    global xnew
+    global ejeyabsolut
    
     q = str(i)
     N = len(list_fftVoltages)
@@ -514,26 +499,26 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
          xnew = np.arange(0, 2575, 1)
          ynew = f(xnew)
          ejeyabsolut =  2.0/N * np.abs(ynew)
-         n = 0
-         fig = plt.figure(figsize=(7,2))
-         ax = fig.add_subplot(111)
-         ax.plot(xnew,ejeyabsolut)
-         rangex = np.zeros(28)
-         for h in range(50, 2600, 100):
-           rangex[n]=h
-           n = n+1
-         ax.xaxis.set_ticks(rangex)  
-         ax.grid(True)
-         plt.title(f'FFT Corriente | DAT: {DATCorrienteCGE1}, FD: {FDCorrienteCGE1}',fontdict=font)
-         ax.set_xlabel('Frecuencia (Hz)',fontdict=font)
-         ax.set_ylabel('|dB|',fontdict=font) 
-         oldepoch = time.time()
-         st = datetime.datetime.fromtimestamp(oldepoch).strftime('%Y-%m-%d-%H:%M:%S')  
-         imagenCurrentFFT = f'images/fft/current/{st}-Currentfft.png'
-         plt.savefig(imagenCurrentFFT)
-         load = Image.open(imagenCurrentFFT)
-         renderfftcurrent = ImageTk.PhotoImage(load)
-         Label(root, image=renderfftcurrent).grid(column=2, row=7, rowspan=6)
+         #n = 0
+         #fig = plt.figure(figsize=(7,2))
+         #ax = fig.add_subplot(3,1,2)
+         #ax.plot(xnew,ejeyabsolut)
+         #rangex = np.zeros(28)
+         #for h in range(50, 2600, 100):
+         #  rangex[n]=h
+         #  n = n+1
+         #ax.xaxis.set_ticks(rangex)  
+         #ax.grid(True)
+         #plt.title(f'FFT Corriente | DAT: {DATCorrienteCGE1}, FD: {FDCorrienteCGE1}',fontdict=font)
+         #ax.set_xlabel('Frecuencia (Hz)',fontdict=font)
+         #ax.set_ylabel('|dB|',fontdict=font) 
+         #oldepoch = time.time()
+         #st = datetime.datetime.fromtimestamp(oldepoch).strftime('%Y-%m-%d-%H:%M:%S')  
+         #imagenCurrentFFT = f'images/fft/current/{st}-Currentfft.png'
+         #plt.savefig(imagenCurrentFFT)
+         #load = Image.open(imagenCurrentFFT)
+         #renderfftcurrent = ImageTk.PhotoImage(load)
+         #Label(root, image=renderfftcurrent).grid(column=2, row=7, rowspan=6)
          #p = int(i)
          #z=0
          FD= []
@@ -582,7 +567,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
          #GradoArmonicoFundamentalCorriente=round(Grados,2)
          if(q=="1"):
              global sincvoltaje1
-             FDCorrienteCGE1 = round(irmsarmonico1prop/irms
+             FDCorrienteCGE1 = round(irmsarmonico1prop/irms)
              print(f'FDCorrienteCGE : {round(FDCorrienteCGE1,2)}')
              DATCorrienteCGE1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
              print(f'DAT corriente CGE: {round(DATCorrienteCGE1,2)}')
@@ -593,14 +578,14 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
                  print(f'Desfase corriente: {phasecorrienteCGE}')
                  print(f'Desfase: {phasevoltajeCGE-phasecorrienteCGE}')
                  cosphiCGE=np.cos(phasevoltajeCGE-phasecorrienteCGE)
-                 if(FPCGE0>0.0):
-                     FPCGE0=FPCGE0+0.05
-                 else:
-                     FPCGE0=FPCGE0-0.05
-                 if(FPCGE0>=1.0):
-                     FPCGE0=0.99
-                 if(FPCGE0<=-1.0):
-                     FPCGE0=-0.99
+                 #if(FPCGE0>0.0):
+                 #    FPCGE0=FPCGE0+0.05
+                 #else:
+                 #    FPCGE0=FPCGE0-0.05
+                 #if(FPCGE0>=1.0):
+                 #    FPCGE0=0.99
+                 #if(FPCGE0<=-1.0):
+                 #    FPCGE0=-0.99
                 
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
                  print(f'FP1 cge: {round(FPCGE0,2)}')
@@ -609,7 +594,69 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
                  #return FPCGE
          #sincvolaje1=0 
 
+def graphVoltage(list_fftVoltage,list_FPCurrent,samplings):
+        global ax
+        #y = np.linspace(0,len(list_fftVoltage),1000)
+        #x = len(list_fftVoltage)
+        #print(f'largo : {x}') 
+        global render
+        #plt.figure(figsize=(12,2))
+        #plt.plot(list_fftVoltage)
+        fig=plt.figure(figsize=(12,8))
+        #plt.plot(list_fftVoltage, color="blue", label="Voltaje")
+        #plt.plot(list_FPCurrent, color="green", label="Corriente")
+        #plt.legend(loc='upper left')
+        tiempo = 1/(samplings*(0.001/4200))
+        tiempoms = np.arange(0,tiempo,tiempo/4096)
 
+
+        ax = fig.add_subplot(5,1,1)
+        ax.plot(tiempoms,list_fftVoltage,color="blue", label="Voltaje")
+        ax.plot(tiempoms,list_FPCurrent,color="green", label="Corriente")
+        ax.legend(loc='upper left')
+        ax.set_xlabel('Tiempo (mS)',fontdict=font)
+        plt.title(f'Voltaje y Corriente | V: {round(vrms1,2)}    |    I: {round(irms1,2)}     |     P-Activa: {round(ActivaCGEFase11,2)}   |    P-Aparente: {round(AparenteCGEFase11,2)}    |     P-Reactiva:{round(ReactivaCGEFase11,2)}    |    FP: {round(FPCGE0,2)}',fontdict=font)
+        
+        
+        ax = fig.add_subplot(5,1,3)
+        plt.title(f'FFT Corriente | DAT: {round(DATCorrienteCGE1,2)}, FD: {round(FDCorrienteCGE1,2)}',fontdict=font)
+        ax.plot(xnew,ejeyabsolut)
+        rangex = np.zeros(28)
+        n=0
+        for h in range(50, 2600, 100):
+           rangex[n]=h
+           n = n+1
+        ax.xaxis.set_ticks(rangex)  
+        ax.grid(True)
+        ax.set_xlabel('Frecuencia (Hz)',fontdict=font)
+        #ax.set_ylabel('|dB|',fontdict=font) 
+        
+
+
+        ax = fig.add_subplot(5,1,5)
+        ax.plot(xnewv,ejeyabsolutv)
+        rangex = np.zeros(28)
+        n=0
+        for h in range(50, 2600, 100):
+           rangex[n]=h
+           n = n+1
+        ax.xaxis.set_ticks(rangex)  
+        ax.grid(True)
+        ax.set_xlabel('Frecuencia (Hz)',fontdict=font)
+        #ax.set_ylabel('|dB|',fontdict=font) 
+
+        oldepoch = time.time()
+        st = datetime.datetime.fromtimestamp(oldepoch).strftime('%Y-%m-%d-%H:%M:%S') 
+        #plt.xlabel("Tiempo(ms)",fontdict=font)
+        plt.title(f'FFT Voltaje |    DAT: {DATVoltajeCGE1}     |     FD: {FDVoltajeCGE}    |   cos phi: {cosphiCGE}',fontdict=font)
+        ax.set_xlabel('Frecuencia (Hz)',fontdict=font)
+        #ax.set_ylabel('Pk-Pk',fontdict=font) 
+        imagenVoltaje = f'images/{st}.png'
+        plt.savefig(imagenVoltaje)
+        load = Image.open(imagenVoltaje)
+        render = ImageTk.PhotoImage(load)
+        Label(root, image=render).grid(column=2, row=1, rowspan=6)
+        
 
 
 a = datetime.datetime.now()  
@@ -693,16 +740,16 @@ def sin_wave(A, fs, N,phi):
 
 def received():   
     while True:
-            try:
-                esp32_bytes = esp32.readline()
-                decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
-            except:
-                print("Error en la codificación")
-                continue
-             
-            np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')
-            if (len(np_array) == 8402):
-                       if (np_array[0] == 11):
+            #try:
+            #    esp32_bytes = esp32.readline()
+            #    decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
+            #except:
+            #    print("Error en la codificación")
+            #    continue
+            # 
+            #np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')
+            #if (len(np_array) == 8402):
+             #          if (np_array[0] == 11):
                             global modamaximovoltaje11
                             global modamaximocorriente11
                             global vrms1
@@ -712,12 +759,12 @@ def received():
                             global modavoltaje
                             global modacorriente
                             global samplings
-                            #fs=30000 
-                            samplings = np_array[-1]
-                            list_FPVoltage3 = np_array[0:4200]
-                            list_FPCurrent3 = np_array[4201:8400]
-                            #list_FPVoltage3 = sin_wave(A=320, fs=fs, N=4200, phi=0)#np_array[0:4200]
-                            #list_FPCurrent3 = sin_wave(A=320, fs=fs,N=4200, phi=4.18) #np_array[4201:8400]
+                            samplings=30000 
+                            #samplings = np_array[-1]
+                            #list_FPVoltage3 = np_array[0:4200]
+                            #list_FPCurrent3 = np_array[4201:8400]
+                            list_FPVoltage3 = sin_wave(A=320, fs=samplings, N=4200, phi=0)#np_array[0:4200]
+                            list_FPCurrent3 = sin_wave(A=320, fs=samplings,N=4200, phi=4.18) #np_array[4201:8400]
                             #print(f'max inicio: {max(list_FPVoltage3)}')
                             sos = signal.butter(10, 2500, 'low', fs=samplings, output='sos')
                             list_FPVoltage2 = signal.sosfilt(sos, list_FPVoltage3)
@@ -726,7 +773,7 @@ def received():
                             list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
                             #print(f'max inicio con filtro: {max(list_FPVoltage2)}')
                             list_FPVoltage = list_FPVoltage2[104:4200]
-                            list_FPCurrent = list_FPCurrent2[103:4200]
+                            list_FPCurrent = list_FPCurrent2[104:4200]
                             #Valor dc de Voltaje
                             
                             valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 50)
@@ -776,17 +823,17 @@ def received():
                             else:
                                 modamaximocorriente11.append(irms1)
                             #    print(f'array corriente: {modamaximocorriente2}')
-            Label(root, text=round(vrms1,2),font=('Arial', 16)).grid(row=1, column=1)
-            Label(root, text=round(irms1,2),font=('Arial', 16)).grid(row=2, column=1)
-            Label(root, text=round(energyCGEFase11,2),font=('Arial', 16)).grid(row=3, column=1)
-            Label(root, text=round(ActivaCGEFase11,4),font=('Arial', 16)).grid(row=4, column=1)
-            Label(root, text=round(AparenteCGEFase11,2),font=('Arial', 16)).grid(row=5, column=1)
-            Label(root, text=round(ReactivaCGEFase11,2),font=('Arial', 16)).grid(row=6, column=1)
-            Label(root, text=round(FPCGE0,2),font=('Arial', 16)).grid(row=7, column=1)
-            Label(root, text=round(cosphiCGE,2),font=('Arial', 16)).grid(row=8, column=1)
+            #Label(root, text=round(vrms1,2),font=('Arial', 16)).grid(row=1, column=1)
+            #Label(root, text=round(irms1,2),font=('Arial', 16)).grid(row=2, column=1)
+            #Label(root, text=round(energyCGEFase11,2),font=('Arial', 16)).grid(row=3, column=1)
+            #Label(root, text=round(ActivaCGEFase11,4),font=('Arial', 16)).grid(row=4, column=1)
+            #Label(root, text=round(AparenteCGEFase11,2),font=('Arial', 16)).grid(row=5, column=1)
+            #Label(root, text=round(ReactivaCGEFase11,2),font=('Arial', 16)).grid(row=6, column=1)
+            #Label(root, text=round(FPCGE0,2),font=('Arial', 16)).grid(row=7, column=1)
+            #Label(root, text=round(cosphiCGE,2),font=('Arial', 16)).grid(row=8, column=1)
             
-            BorrarArchivos()
-            root.after(500, received) 
+                            BorrarArchivos()
+                            root.after(500, received) 
             
 
                 
@@ -811,14 +858,14 @@ selected = IntVar()
 #my_buttonCurrentFFT = Button(root, text="FFT Corriente", command=graphCurrentFFT)
 #my_buttonCurrentFFT.grid(row=4,column=2)
 
-Label(root, text="Voltaje",font=('Arial', 16)).grid(row=1, column=0)
-Label(root, text="Corriente",font=('Arial', 16)).grid(row=2, column=0)
-Label(root, text="Energia",font=('Arial', 16)).grid(row=3, column=0)
-Label(root, text="Activa",font=('Arial', 16)).grid(row=4, column=0)
-Label(root, text="Aparente",font=('Arial', 16)).grid(row=5, column=0)
-Label(root, text="Reactiva",font=('Arial', 16)).grid(row=6, column=0)
-Label(root, text="FP",font=('Arial', 16)).grid(row=7, column=0)
-Label(root, text="cos phi",font=('Arial', 16)).grid(row=8, column=0)
+#Label(root, text="Voltaje",font=('Arial', 16)).grid(row=1, column=0)
+#Label(root, text="Corriente",font=('Arial', 16)).grid(row=2, column=0)
+#Label(root, text="Energia",font=('Arial', 16)).grid(row=3, column=0)
+#Label(root, text="Activa",font=('Arial', 16)).grid(row=4, column=0)
+#Label(root, text="Aparente",font=('Arial', 16)).grid(row=5, column=0)
+#Label(root, text="Reactiva",font=('Arial', 16)).grid(row=6, column=0)
+#Label(root, text="FP",font=('Arial', 16)).grid(row=7, column=0)
+#Label(root, text="cos phi",font=('Arial', 16)).grid(row=8, column=0)
 
 
 
