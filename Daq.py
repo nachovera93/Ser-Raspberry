@@ -34,12 +34,12 @@ from os import remove
 
 
 root = Tk()
-root.geometry("1000x600")
+root.geometry("1000x1000")
 root.title("Medidor SER")
 
 
-#esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
-#esp32.flushInput()
+esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
+esp32.flushInput()
 
 
 if not os.path.exists('images/'):
@@ -108,12 +108,13 @@ def BorrarArchivos():
       count1=0
       for f in os.listdir("images/"):
                  #print(f)
+                 #print(count1)
                  count1=count1+1
       
       try:
-          if(count1>5):
+          if(count1>10):
                for i in os.listdir("images/"):
-                    print(i)
+                    #print(i)
                     os.remove(f'images/{i}')          
                        
       except OSError: 
@@ -567,7 +568,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
          #GradoArmonicoFundamentalCorriente=round(Grados,2)
          if(q=="1"):
              global sincvoltaje1
-             FDCorrienteCGE1 = round(irmsarmonico1prop/irms)
+             FDCorrienteCGE1 = round(irmsarmonico1prop/irms,2)
              print(f'FDCorrienteCGE : {round(FDCorrienteCGE1,2)}')
              DATCorrienteCGE1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
              print(f'DAT corriente CGE: {round(DATCorrienteCGE1,2)}')
@@ -618,7 +619,7 @@ def graphVoltage(list_fftVoltage,list_FPCurrent,samplings):
         plt.title(f'Voltaje y Corriente | V: {round(vrms1,2)}    |    I: {round(irms1,2)}     |     P-Activa: {round(ActivaCGEFase11,2)}   |    P-Aparente: {round(AparenteCGEFase11,2)}    |     P-Reactiva:{round(ReactivaCGEFase11,2)}    |    FP: {round(FPCGE0,2)}',fontdict=font)
         
         
-        ax = fig.add_subplot(5,1,3)
+        ax = fig.add_subplot(3,1,3)
         plt.title(f'FFT Corriente | DAT: {round(DATCorrienteCGE1,2)}, FD: {round(FDCorrienteCGE1,2)}',fontdict=font)
         ax.plot(xnew,ejeyabsolut)
         rangex = np.zeros(28)
@@ -648,7 +649,7 @@ def graphVoltage(list_fftVoltage,list_FPCurrent,samplings):
         oldepoch = time.time()
         st = datetime.datetime.fromtimestamp(oldepoch).strftime('%Y-%m-%d-%H:%M:%S') 
         #plt.xlabel("Tiempo(ms)",fontdict=font)
-        plt.title(f'FFT Voltaje |    DAT: {DATVoltajeCGE1}     |     FD: {FDVoltajeCGE}    |   cos phi: {cosphiCGE}',fontdict=font)
+        plt.title(f'FFT Voltaje |    DAT: {DATVoltajeCGE1}     |     FD: {FDVoltajeCGE}    |   cos phi: {round(cosphiCGE,2)}',fontdict=font)
         ax.set_xlabel('Frecuencia (Hz)',fontdict=font)
         #ax.set_ylabel('Pk-Pk',fontdict=font) 
         imagenVoltaje = f'images/{st}.png'
@@ -740,16 +741,18 @@ def sin_wave(A, fs, N,phi):
 
 def received():   
     while True:
-            #try:
-            #    esp32_bytes = esp32.readline()
-            #    decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
-            #except:
-            #    print("Error en la codificación")
-            #    continue
-            # 
-            #np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')
-            #if (len(np_array) == 8402):
-             #          if (np_array[0] == 11):
+            try:
+                esp32_bytes = esp32.readline()
+                decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
+            except:
+                print("Error en la codificación")
+                continue
+            
+            np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')
+            #print(f'{len(np_array)}')
+            if (len(np_array) == 8402):
+                       #print("..")
+                       if (np_array[0] == 11):
                             global modamaximovoltaje11
                             global modamaximocorriente11
                             global vrms1
@@ -759,12 +762,12 @@ def received():
                             global modavoltaje
                             global modacorriente
                             global samplings
-                            samplings=30000 
-                            #samplings = np_array[-1]
-                            #list_FPVoltage3 = np_array[0:4200]
-                            #list_FPCurrent3 = np_array[4201:8400]
-                            list_FPVoltage3 = sin_wave(A=320, fs=samplings, N=4200, phi=0)#np_array[0:4200]
-                            list_FPCurrent3 = sin_wave(A=320, fs=samplings,N=4200, phi=4.18) #np_array[4201:8400]
+                            #samplings=30000 
+                            samplings = np_array[-1]
+                            list_FPVoltage3 = np_array[0:4200]
+                            list_FPCurrent3 = np_array[4201:8400]
+                            #list_FPVoltage3 = sin_wave(A=320, fs=samplings, N=4200, phi=0)#np_array[0:4200]
+                            #list_FPCurrent3 = sin_wave(A=320, fs=samplings,N=4200, phi=4.18) #np_array[4201:8400]
                             #print(f'max inicio: {max(list_FPVoltage3)}')
                             sos = signal.butter(10, 2500, 'low', fs=samplings, output='sos')
                             list_FPVoltage2 = signal.sosfilt(sos, list_FPVoltage3)
@@ -773,7 +776,7 @@ def received():
                             list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
                             #print(f'max inicio con filtro: {max(list_FPVoltage2)}')
                             list_FPVoltage = list_FPVoltage2[104:4200]
-                            list_FPCurrent = list_FPCurrent2[104:4200]
+                            list_FPCurrent = list_FPCurrent2[103:4200]
                             #Valor dc de Voltaje
                             
                             valoresmaximovoltajesinmedia=getMaxValues(list_FPVoltage, 50)

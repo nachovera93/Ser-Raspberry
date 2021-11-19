@@ -2,6 +2,7 @@
 import requests
 import datetime
 import json
+import xlsxwriter
 import random
 import time
 import paho.mqtt.client as mqtt
@@ -29,6 +30,7 @@ import math
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font
+from openpyxl.chart import LineChart,Reference
 import openpyxl
 import smtplib, ssl
 import getpass
@@ -37,6 +39,8 @@ from email.mime.multipart import MIMEMultipart
 from email import encoders
 from email.mime.base import MIMEBase
 import datetime
+import matplotlib.pyplot as plt
+
 """
     0: connection succeeded
     1: connection failed - incorrect protocol version
@@ -48,6 +52,14 @@ import datetime
     """
 
 
+fecha=str(datetime.datetime.now())
+
+f = open('mi_fichero2.txt', 'w')
+try:
+    f.write(fecha)
+finally:
+    f.close()
+
 def BorrarArchivos():
 
       current_time = time.time()
@@ -57,10 +69,13 @@ def BorrarArchivos():
                 os.unlink(f)
 
 #BorrarArchivos()
-                            
-esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
-esp32.flushInput()
-
+try:                           
+     esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
+     esp32.flushInput()
+except:
+     esp32 = serial.Serial('/dev/ttyUSB1', 230400, timeout=0.5)
+     esp32.flushInput()
+     
 horasetup=datetime.datetime.now()
 print("Hora de comienzo:", horasetup)
 
@@ -296,12 +311,14 @@ FDVoltajePaneles=0.0
 DATVoltajeCarga=0.0
 phasevoltajeCarga=0.0
 FDVoltajeCarga=0.0
-
+FDVoltajeCGE1=0.0
 
 def VoltageFFT(list_fftVoltages, samplings,i):
     global j
     j = str(i)
     global DATVoltajeCGE
+    global ejeyabsolutv
+    global DATVoltajeCGE1
     global phasevoltajeCGE
     global FDVoltajeCGE
     global DATVoltajePaneles
@@ -310,7 +327,8 @@ def VoltageFFT(list_fftVoltages, samplings,i):
     global DATVoltajeCarga
     global phasevoltajeCarga
     global FDVoltajeCarga
-    
+    global xnewv
+    global FDVoltajeCGE1
     #global FaseArmonicoFundamentalVoltaje
     N = len(list_fftVoltages)
     T = 1 / samplings
@@ -327,10 +345,10 @@ def VoltageFFT(list_fftVoltages, samplings,i):
     if (samplings > 5100):
            #f = interpolate.interp1d(xf, ejey)
            f = interpolate.interp1d(xf, yf[:N//2] )
-           xnew = np.arange(0, 2575, 1)  # 2550
+           xnewv = np.arange(0, 2575, 1)  # 2550
            # print(f'largo xnew : {len(xnew)}')
-           ynew = f(xnew)
-           ejeyabsolut =  2.0/4096 * np.abs(ynew)#ynew
+           ynew = f(xnewv)
+           ejeyabsolutv =  2.0/4096 * np.abs(ynew)#ynew
            FD = []
            complejo = []
            real=[]
@@ -339,7 +357,7 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            z=0
            for i in range(45, 2575, 50):
                  a2 = max(ynew[i:i+10])
-                 arra = max(ejeyabsolut[i:i+10])
+                 arra = max(ejeyabsolutv[i:i+10])
                  complejo.append(a2)
                  #index_max = np.argmax(ejeyabsolut[i-10:i+20])
                  #print(f'a : {a}')
@@ -376,8 +394,8 @@ def VoltageFFT(list_fftVoltages, samplings,i):
                  global sincvoltaje1            
                  phasevoltajeCGE = np.arctan(real[0]/(imag[0]))
                  #FaseArmonicoFundamentalVoltaje1=round(np.angle(complejo[0]),2)
-                 FDVoltajeCGE = Magnitud1/SumMagnitudEficaz
-                 str_num = {"value":FDVoltajeCGE,"save":1}
+                 FDVoltajeCGE1 = Magnitud1/SumMagnitudEficaz
+                 str_num = {"value":FDVoltajeCGE1,"save":1}
                  FDVoltajeCGE = json.dumps(str_num)
                  DATVoltajeCGE1= np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
                  print(f'DAT Voltaje CGE: {round(DATVoltajeCGE1,2)}')
@@ -473,7 +491,13 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
     global FPPaneles1
     global FDCorrientePaneles1
     global DATCorrientePaneles1      
-
+    global real
+    global imag
+    global xnew
+    global ejeyabsolut
+    global desfaseCGE
+    global desfaseCarga
+    global desfasePaneles
    
     q = str(i)
     N = len(list_fftVoltages)
@@ -525,18 +549,22 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
          #print(f'FD2: {FD2}')
          #print(f'FD largo: {len(FD)}')
          SumMagnitudEficaz = (np.sum([FD[0:len(FD)]]))*0.01
-         
+         SumMagnitudEficaz2 = (np.sum([FD[0:len(FD)]]))
+         if (q=="1"):
+            print(f'Magnitud CGE Fundamental {SumMagnitudEficaz}-{SumMagnitudEficaz2}-{complejo[0]}')
+         if (q=="2"):
+            print(f'Magnitud Carga Fundamental {SumMagnitudEficaz}-{SumMagnitudEficaz2}- {complejo[0]}')
+         if (q=="3"):
+            print(f'Magnitud Paneles Fundamental {SumMagnitudEficaz}-{SumMagnitudEficaz2} - {complejo[0]}')
          Magnitud1 = FD[0]*0.01
          ArmonicosRestantes=SumMagnitudEficaz-Magnitud1
          #print(f'Irms armonico 1 {q}: {round(Magnitud1,2)}')
          proporcion = irms/(np.sqrt(Magnitud1**2+ArmonicosRestantes**2))
          irmsarmonico1prop=Magnitud1*proporcion
-         print(f'Irms armonico 1 proporcionado {q}: {round(irmsarmonico1prop,2)}')
+         #print(f'Irms armonico 1 proporcionado {q}: {round(irmsarmonico1prop,2)}')
          irmstotalproporcionado=np.sqrt((irmsarmonico1prop**2)+(ArmonicosRestantes*proporcion)**2)
-         print(f'Irms total proporcionado{q}: {round(irmstotalproporcionado,2)}')
-         #MagnitudArmonicoFundamentalCorriente=round(thd_array[0],3)
-         #fp2=round((armonico1corriente*np.cos(phasevoltaje-phasen))/valor1,2)
-         #FaseArmonicoFundamentalCorriente=round(np.angle(complejo[0]),2)
+         #print(f'Irms total proporcionado{q}: {round(irmstotalproporcionado,2)}')
+    
          
          #GradoArmonicoFundamentalCorriente=round(Grados,2)
          if(q=="1"):
@@ -550,17 +578,22 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
              DATCorrienteCGE = json.dumps(str_num2)
              #print(f'DAT corriente CGE: {DATCorrienteCGE}')
              phasecorrienteCGE = np.arctan(real[0]/(imag[0]))
+             print(f'phasecorrienteCGE  : {phasecorrienteCGE}')
              if (sincvoltaje1 == 1):
-                 FPCGE0=np.cos(phasevoltajeCGE-phasecorrienteCGE)*FDCorrienteCGE1+0.05
+                 if(phasevoltajeCGE-(phasecorrienteCGE)>=0):
+                     desfaseCGE = "Corriente Adelantada a Voltaje"
+                 else:
+                     desfaseCGE = "Voltaje Adelantado a Corriente"
+                 FPCGE0=np.cos(phasevoltajeCGE-phasecorrienteCGE)*FDCorrienteCGE1#+0.05
                  cosphiCGE=np.cos(phasevoltajeCGE-phasecorrienteCGE)
                  if(FPCGE0>0.0):
-                     FPCGE0=FPCGE0+0.05
+                     FPCGE0=FPCGE0#+0.05
                  else:
-                     FPCGE0=FPCGE0-0.05
-                 if(FPCGE0>=1.0):
-                     FPCGE0=0.99
-                 if(FPCGE0<=-1.0):
-                     FPCGE0=-0.99
+                     FPCGE0=FPCGE0#-0.05
+                 #if(FPCGE0>=1.0):
+                 #    FPCGE0=0.99
+                 #if(FPCGE0<=-1.0):
+                 #    FPCGE0=-0.99
                 
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
                  print(f'FP1 cge: {FPCGE0}')
@@ -582,15 +615,19 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
              DATCorrientePaneles = json.dumps(str_num2)
              phasecorrientePaneles = np.arctan(real[0]/(imag[0]))
              if (sincvoltaje2 == 1):
-                 FPPaneles1=np.cos(phasevoltajePaneles-phasecorrientePaneles)*FDCorrientePaneles1
-                 if (FPPaneles1>0.0):
-                     FPPaneles1 = FPPaneles1+0.05
+                 if(phasevoltajePaneles-(phasecorrientePaneles)>=0):
+                     desfasePaneles = "Corriente Adelantada a Voltaje"
                  else:
-                     FPPaneles1 = FPPaneles1-0.05
-                 if(FPPaneles1>=1.0):
-                     FPPaneles1=0.99
-                 if(FPPaneles1<=-1.0):
-                    FPPaneles1=-0.99
+                     desfasePaneles = "Voltaje Adelantado a Corriente"
+                 FPPaneles1=np.cos(phasevoltajePaneles-(phasecorrientePaneles))*FDCorrientePaneles1
+                 if (FPPaneles1>0.0):
+                     FPPaneles1 = FPPaneles1#+0.05
+                 else:
+                     FPPaneles1 = FPPaneles1#-0.05
+                 #if(FPPaneles1>=1.0):
+                  #   FPPaneles1=0.99
+                 #if(FPPaneles1<=-1.0):
+                  #  FPPaneles1=-0.99
                 
                  cosphiPaneles=np.cos(phasevoltajePaneles-phasecorrientePaneles)
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
@@ -614,17 +651,21 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
              print(f'DAT carga: {DATCorrienteCarga1}')
              phasecorrienteCarga = np.arctan(real[0]/(imag[0]))
              if (sincvoltaje3 == 1):
-                 FPCarga1 = np.cos(phasevoltajeCarga-phasecorrienteCarga)*FDCorrienteCarga1 + 0.05
+                 if(phasevoltajeCarga-(phasecorrienteCarga)>=0):
+                     desfaseCarga = "Corriente Adelantada a Voltaje"
+                 else:
+                     desfaseCarga = "Voltaje Adelantado a Corriente"
+                 FPCarga1 = np.cos(phasevoltajeCarga-phasecorrienteCarga)*FDCorrienteCarga1# + 0.05
                  cosphiCarga=np.cos(phasevoltajeCarga-phasecorrienteCarga)
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
                  if(FPCarga1>0.0):
-                     FPCarga1=FPCarga1+0.05
+                     FPCarga1=FPCarga1#+0.05
                  else:
-                     FPCarga1=FPCarga1-0.05
-                 if(FPCarga1>=1.0):
-                     FPCarga1=0.99
-                 if(FPCarga1<=-1.0):
-                     FPCarga1=-0.99
+                     FPCarga1=FPCarga1#-0.05
+                 #if(FPCarga1>=1.0):
+                 #    FPCarga1=0.99
+                 #if(FPCarga1<=-1.0):
+                 #    FPCarga1=-0.99
                 
                  print(f'FP carga : {FPCarga1}')
                  print(f'cos(phi) carga : {cosphiCarga}')
@@ -686,7 +727,7 @@ def Potencias(i,irms,vrms):
           global ReactivaCGEFase11
           AparenteCGEFase11 = vrms*irms
           print(f'Energia CGE: {AparenteCGEFase11}')
-          ActivaCGEFase11 = np.abs(vrms*irms*cosphiCGE)
+          ActivaCGEFase11 = vrms*irms*cosphiCGE
           print(f'Activa CGE: {ActivaCGEFase11}')
           ReactivaCGEFase11 = vrms*irms*np.sin(phasevoltajeCGE-phasecorrienteCGE)
           print(f'Reactiva CGE: {ReactivaCGEFase11}')
@@ -724,7 +765,7 @@ def Potencias(i,irms,vrms):
           global ReactivaPanelesFase12
           AparentePanelesFase12 = vrms*irms
           print(f'Aparente Paneles: {AparentePanelesFase12}')
-          ActivaPanelesFase12= np.abs(vrms*irms*cosphiPaneles)
+          ActivaPanelesFase12= vrms*irms*cosphiPaneles
           print(f'Activa Paneles: {ActivaPanelesFase12}')
           ReactivaPanelesFase12 = vrms*irms*np.sin(phasevoltajePaneles-phasecorrientePaneles)
           b2 = datetime.datetime.now()
@@ -760,7 +801,7 @@ def Potencias(i,irms,vrms):
           global ReactivaCargaFase13
           AparenteCargaFase13 = vrms*irms
           print(f'Aparente Carga: {AparenteCargaFase13}')
-          ActivaCargaFase13= np.abs(vrms*irms*cosphiCarga)
+          ActivaCargaFase13= vrms*irms*cosphiCarga
           print(f'Activa Carga: {ActivaCargaFase13}')
           ReactivaCargaFase13 = vrms*irms*np.sin(phasevoltajeCarga-phasecorrienteCarga)
           c2 = datetime.datetime.now()
@@ -784,7 +825,99 @@ def Potencias(i,irms,vrms):
           ReactivaCargaFase1 = json.dumps(str_num2)
           energyCargaFase1 = json.dumps(str_num4)
     
+font = {'family': 'serif',
+        'color':  'darkred',
+        'weight': 'normal',
+        'size': 8,
+        }
 
+def graphVoltage(list_fftVoltage,list_FPCurrent,samplings,i):
+        global ax
+        global imagenVoltaje
+        i = str(i)
+        #y = np.linspace(0,len(list_fftVoltage),1000)
+        #x = len(list_fftVoltage)
+        #print(f'largo : {x}') 
+        global render
+        #plt.figure(figsize=(12,2))
+        #plt.plot(list_fftVoltage)
+        fig=plt.figure(figsize=(8,6))
+        #plt.plot(list_fftVoltage, color="blue", label="Voltaje")
+        #plt.plot(list_FPCurrent, color="green", label="Corriente")
+        #plt.legend(loc='upper left')
+        tiempo = 1/(samplings*(0.001/4200))
+        tiempoms = np.arange(0,tiempo,tiempo/4096)
+
+
+        ax = fig.add_subplot(6,1,0)
+        ax.plot(tiempoms,list_FPCurrent,color="green", label="Corriente")
+        if(i=="1"):
+             plt.title(f'Corriente | I: {round(irms1,2)}  |  P-Activa: {round(ActivaCGEFase11,2)} | P-Aparente: {round(AparenteCGEFase11,2)}  |  P-Reactiva:{round(ReactivaCGEFase11,2)}  ',fontdict=font)
+        if(i=="2"):
+             plt.title(f'Corriente | I: {round(irms2,2)}  |  P-Activa: {round(ActivaCargaFase13,2)} | P-Aparente: {round(AparenteCargaFase13,2)}  |  P-Reactiva:{round(ReactivaCargaFase13,2)}  ',fontdict=font)
+        if(i=="3"):
+             plt.title(f'Corriente | I: {round(irms3,2)}  |  P-Activa: {round(ActivaPanelesFase12,2)} | P-Aparente: {round(AparentePanelesFase12,2)}  |  P-Reactiva:{round(ReactivaPanelesFase12,2)}  ',fontdict=font)
+             
+        ax.legend(loc='upper left')
+        ax.set_xlabel('Tiempo (mS)',fontdict=font)
+        ax = fig.add_subplot(6,1,2)
+        ax.plot(tiempoms,list_fftVoltage,color="blue", label="Voltaje")
+        if(i=="1"):
+             plt.title(f'Voltaje y Corriente | V: {round(vrms1,2)} |  FP: {round(FPCGE0,2)}',fontdict=font)
+        if(i=="2"):
+             plt.title(f'Voltaje y Corriente | V: {round(vrms2,2)} |  FP: {round(FPCarga1,2)}',fontdict=font)
+        if(i=="3"):
+             plt.title(f'Voltaje y Corriente | V: {round(vrms3,2)} |  FP: {round(FPPaneles1,2)}',fontdict=font)
+             
+        ax = fig.add_subplot(6,1,4)
+        if(i=="1"):
+            plt.title(f'FFT Corriente | DAT: {round(DATCorrienteCGE1,2)}, FD: {round(FDCorrienteCGE1,2)} |   cos phi: {round(cosphiCGE,2)} | phase voltaje CGE : {round(phasevoltajeCGE,2)} | phase Corriente CGE : {round(phasecorrienteCGE,2)}',fontdict=font)
+        if(i=="2"):
+            plt.title(f'FFT Corriente | DAT: {round(DATCorrienteCarga1,2)}, FD: {round(FDCorrienteCarga1,2)} |   cos phi: {round(cosphiCarga,2)} | phase voltaje Carga : {round(phasevoltajeCarga,2)} | phase Corriente Carga : {round(phasecorrienteCarga,2)} ',fontdict=font)
+        if(i=="3"):
+            plt.title(f'FFT Corriente | DAT: {round(DATCorrientePaneles1,2)}, FD: {round(FDCorrientePaneles1,2)}  |   cos phi: {round(cosphiPaneles,2)} | phase voltaje Paneles: {round(phasevoltajePaneles,2)} | phase Corriente Paneles : {round(phasecorrientePaneles,2)}',fontdict=font)
+
+        ax.plot(xnew,ejeyabsolut)
+        rangex = np.zeros(28)
+        n=0
+        for h in range(50, 2600, 100):
+           rangex[n]=h
+           n = n+1
+        ax.xaxis.set_ticks(rangex)  
+        ax.grid(True)
+        ax.set_xlabel('Frecuencia (Hz)',fontdict=font)
+        #ax.set_ylabel('|dB|',fontdict=font) 
+        
+        ax = fig.add_subplot(6,1,6)
+        if(i=="1"):
+            plt.title(f'{desfaseCGE}',fontdict=font)
+        if(i=="2"):
+            plt.title(f'{desfaseCarga}',fontdict=font)
+        if(i=="3"):
+            plt.title(f'{desfasePaneles} ',fontdict=font)
+
+        ax.plot(xnewv,ejeyabsolutv)
+        rangex = np.zeros(28)
+        n=0
+        for h in range(50, 2600, 100):
+           rangex[n]=h
+           n = n+1
+        ax.xaxis.set_ticks(rangex)  
+        ax.grid(True)
+        ax.set_xlabel('Frecuencia (Hz)',fontdict=font)
+        #ax.set_ylabel('|dB|',fontdict=font) 
+
+        oldepoch = time.time()
+        st = datetime.datetime.fromtimestamp(oldepoch).strftime('%Y-%m-%d-%H:%M:%S') 
+        #plt.xlabel("Tiempo(ms)",fontdict=font)
+        #plt.title(f'FFT Voltaje |    DAT: {DATVoltajeCGE1}     |     FD: {FDVoltajeCGE1}    |   cos phi: {round(cosphiCGE,2)}',fontdict=font)
+        ax.set_xlabel(f'Frecuencia (Hz)  |    fecha: {st} ',fontdict=font)
+        #ax.set_ylabel('Pk-Pk',fontdict=font) 
+        imagenVoltaje = f'images{i}/{st}.png'
+        plt.savefig(imagenVoltaje)
+        
+        
+        
 
 vrms1=0.0
 vrms2=0.0
@@ -838,6 +971,9 @@ def received():
                            global modavoltaje
                            global modacorriente
                            global samplings1
+                           global NoVoltageoffset1
+                           global NoCurrentoffset1
+                           global ListaIrmsPeak1
                            samplings1 = np_array[-1]
                            list_FPVoltage3 = np_array[0:4200]
                            list_FPCurrent3 = np_array[4201:8400]
@@ -858,11 +994,11 @@ def received():
                            minimovoltaje = np.median(valoresminimovoltajesinmedia)
                            mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                            # Valores maximo y minimos de voltaje sin componente continua
-                           NoVoltageoffset=list_FPVoltage-mediadcvoltaje
+                           NoVoltageoffset1=list_FPVoltage-mediadcvoltaje
                            #maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 50)
                            #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
                            #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
-                           vrms1=VoltajeRms(NoVoltageoffset)
+                           vrms1=VoltajeRms(NoVoltageoffset1)
                           
                            if (len(modamaximovoltaje11)>=5):
                                modavoltaje=np.median(modamaximovoltaje11)
@@ -874,7 +1010,7 @@ def received():
                                #print(f'minimo voltaje: {minimovoltaje2}')
                                #NoVoltageoffset2=NoVoltageoffset/1.90
                                #VoltajeRms(NoVoltageoffset2)
-                               VoltageFFT(NoVoltageoffset,samplings1,1)
+                               VoltageFFT(NoVoltageoffset1,samplings1,1)
                                #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
                                #graphFFTV1(NoVoltageoffset2,samplings)
                                #print(f'MODA VOLTAJE: {modavoltaje}')
@@ -894,12 +1030,13 @@ def received():
                            mediadccorriente = (maximocorriente+minimocorriente)/2
                            
                            # Valores maximo y minimos de corriente
-                           NoCurrentoffset=list_FPCurrent-mediadccorriente
-                           #maximocorriente2sinmedia=getMaxValues(NoCurrentoffset, 50)
+                           NoCurrentoffset1=list_FPCurrent-mediadccorriente
+                           maximocorriente2sinmedia=getMaxValues(NoCurrentoffset1, 50)
                            #minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 50)
-                           #maximocorriente2 = np.median(maximocorriente2sinmedia)
+                           maximocorriente2 = np.median(maximocorriente2sinmedia)
+                           print(f'maximocorriente2 CGE: {maximocorriente2}')
                            #minimocorriente2 = np.median(minimocorriente2sinmedia)
-                           irms1=CorrienteRms(NoCurrentoffset)
+                           irms1=CorrienteRms(NoCurrentoffset1)
                            
 
                            if (len(modamaximocorriente11)>=5):
@@ -912,12 +1049,21 @@ def received():
                                #print(f'corriente min: {minimocorriente2 }')
                                #NoCurrentoffset2 = NoCurrentoffset/125  #210 con res
                                #irms1 = CorrienteRms(NoCurrentoffset2)
-                               CurrentFFT(NoCurrentoffset,samplings1,1,irms1)
+                               proporción=maximocorriente2/(irms1*np.sqrt(2))
+                               ListaIrmsPeak1 = NoCurrentoffset1/proporción
+                               maximocorr=getMaxValues(ListaIrmsPeak1, 10)
+                               maximocorr = np.median(maximocorr)
+                               print(f'maximocorr CGE: {maximocorr}')
+                               CurrentFFT(ListaIrmsPeak1,samplings1,1,irms1)
                                #print(f'MODA CORRIENTE CGE: {modacorriente}')
                                Potencias(1,irms1,vrms1)
                                ExcelAllInsertCGE()
                                ExcelDataCGE()
-                               Maximo15minCGE()
+                               try:
+                                    Maximo15minCGE()
+                               except:
+                                    print("no habian promedios")
+                                    continue
                                modamaximocorriente11=[]
                                #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings1)
                            else:
@@ -937,6 +1083,9 @@ def received():
                            global modavoltaje22
                            global modacorriente22
                            global samplings2
+                           global NoVoltageoffset2
+                           global NoCurrentoffset2
+                           global ListaIrmsPeak2
                            samplings2 = np_array[-1]
                            list_FPVoltage3 = np_array[0:4200]
                            list_FPCurrent3 = np_array[4201:8400]
@@ -957,11 +1106,11 @@ def received():
                            minimovoltaje = np.median(valoresminimovoltajesinmedia)
                            mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                            # Valores maximo y minimos de voltaje sin componente continua
-                           NoVoltageoffset=list_FPVoltage-mediadcvoltaje
+                           NoVoltageoffset2=list_FPVoltage-mediadcvoltaje
                            #maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 50)
                            #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
                            #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
-                           vrms2=VoltajeRms(NoVoltageoffset)
+                           vrms2=VoltajeRms(NoVoltageoffset2)
                            
                            if (len(modamaximovoltaje22)>=5):
                                modavoltaje22=np.median(modamaximovoltaje22)
@@ -969,7 +1118,7 @@ def received():
                                str_num = {"value":vrms2,"save":1}
                                vrms22 = json.dumps(str_num)
                                print(f'Vrms Carga: {vrms2}')
-                               VoltageFFT(NoVoltageoffset,samplings2,2)
+                               VoltageFFT(NoVoltageoffset2,samplings2,2)
                                modamaximovoltaje22=[]
                            else:
                                modamaximovoltaje22.append(vrms2)
@@ -984,12 +1133,12 @@ def received():
                            mediadccorriente = (maximocorriente+minimocorriente)/2
                            
                            # Valores maximo y minimos de corriente
-                           NoCurrentoffset=list_FPCurrent-mediadccorriente
-                           #maximocorriente2sinmedia=getMaxValues(NoCurrentoffset, 50)
+                           NoCurrentoffset2=list_FPCurrent-mediadccorriente
+                           maximocorriente2sinmedia=getMaxValues(NoCurrentoffset2, 50)
                            #minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 50)
-                           #maximocorriente2 = np.median(maximocorriente2sinmedia)
+                           maximocorriente2 = np.median(maximocorriente2sinmedia)
                            #minimocorriente2 = np.median(minimocorriente2sinmedia)
-                           irms2=CorrienteRms(NoCurrentoffset)
+                           irms2=CorrienteRms(NoCurrentoffset2)
 
                            if (len(modamaximocorriente22)>=5):
                                modacorriente22=np.median(modamaximocorriente22)
@@ -997,12 +1146,22 @@ def received():
                                str_num = {"value":irms2,"save":1}
                                irms22 = json.dumps(str_num)
                                print(f'Irms Carga: {irms2}')
+                               proporción=maximocorriente2/(irms2*np.sqrt(2))
+                               ListaIrmsPeak2 = NoCurrentoffset2/proporción
+                               maximocorr=getMaxValues(ListaIrmsPeak2, 10)
+                               maximocorr = np.median(maximocorr)
+                               print(f'maximocorr Carga: {maximocorr}')
                                #print(f'MODA CORRIENTE Carga: {modacorriente22}')
-                               CurrentFFT(NoCurrentoffset,samplings2,2,irms2)
+                               #NoCurrentoffset2 = NoCurrentoffset2/(irms2*np.sqrt(2))
+                               CurrentFFT(ListaIrmsPeak2,samplings2,2,irms2)
                                Potencias(2,irms2,vrms2)
                                ExcelAllInsertCarga()
                                ExcelDataCarga()
-                               Maximo15minCarga()
+                               try:
+                                     Maximo15minCarga()
+                               except:
+                                    print("no habian promedios")
+                                    continue
                                modamaximocorriente22=[]
                                #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings2)
                            else:
@@ -1019,6 +1178,9 @@ def received():
                            global modavoltaje33
                            global modacorriente33
                            global samplings3
+                           global NoVoltageoffset3
+                           global NoCurrentoffset3
+                           global ListaIrmsPeak3
                            samplings3 = np_array[-1]
                            list_FPVoltage3 = np_array[0:4200]
                            list_FPCurrent3 = np_array[4201:8400]
@@ -1039,9 +1201,9 @@ def received():
                            minimovoltaje = np.median(valoresminimovoltajesinmedia)
                            mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                            # Valores maximo y minimos de voltaje sin componente continua
-                           NoVoltageoffset=list_FPVoltage-mediadcvoltaje  #Señal Voltaje 
+                           NoVoltageoffset3=list_FPVoltage-mediadcvoltaje  #Señal Voltaje 
                            
-                           vrms3=VoltajeRms(NoVoltageoffset)
+                           vrms3=VoltajeRms(NoVoltageoffset3)
                            
                            if (len(modamaximovoltaje33)>=5):
                                modavoltaje33=np.median(modamaximovoltaje33)
@@ -1055,7 +1217,7 @@ def received():
                                #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
                                #graphFFTV1(NoVoltageoffset2,samplings)
                                #print(f'MODA VOLTAJE: {modavoltaje}')
-                               VoltageFFT(NoVoltageoffset,samplings3,3)
+                               VoltageFFT(NoVoltageoffset3,samplings3,3)
                                modamaximovoltaje33=[]
                            else:
                                modamaximovoltaje33.append(vrms3)
@@ -1070,12 +1232,12 @@ def received():
                            mediadccorriente = (maximocorriente+minimocorriente)/2
                            
                            # Valores maximo y minimos de corriente
-                           NoCurrentoffset=list_FPCurrent-mediadccorriente
-                           maximocorriente2sinmedia=getMaxValues(NoCurrentoffset, 50)
+                           NoCurrentoffset3=list_FPCurrent-mediadccorriente
+                           maximocorriente2sinmedia=getMaxValues(NoCurrentoffset3, 50)
                            #minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 50)
                            maximocorriente2 = np.median(maximocorriente2sinmedia)
                            #minimocorriente2 = np.median(minimocorriente2sinmedia)
-                           irms3=CorrienteRms(NoCurrentoffset)
+                           irms3=CorrienteRms(NoCurrentoffset3)
                            
 
                            if (len(modamaximocorriente33)>=5):
@@ -1085,11 +1247,21 @@ def received():
                                irms33 = json.dumps(str_num)
                                #print(f'Irms Paneles : {irms3}')
                                #print(f'MODA CORRIENTE Paneles: {modacorriente33}')
-                               CurrentFFT(NoCurrentoffset,samplings3,3,irms3)
+                               proporción=maximocorriente2/(irms3*np.sqrt(2))
+                               ListaIrmsPeak3 = NoCurrentoffset3/proporción
+                               maximocorr=getMaxValues(ListaIrmsPeak3, 10)
+                               maximocorr = np.median(maximocorr)
+                               print(f'maximocorr CGE: {maximocorr}')
+                               #NoCurrentoffset3 = NoCurrentoffset3/(irms3*np.sqrt(2))
+                               CurrentFFT(ListaIrmsPeak3,samplings3,3,irms3)
                                Potencias(3,irms3,vrms3)
                                ExcelAllInsertPaneles()
                                ExcelDataPaneles()
-                               Maximo15minPaneles()
+                               try:
+                                    Maximo15minPaneles()
+                               except:
+                                    print("no habian promedios")
+                                    continue
                                modamaximocorriente33=[]
                                #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings3)
                            else:
@@ -1651,8 +1823,9 @@ def ExcelAllInsertCGE():
         dataCGEAll.insert(6,round(FPCGE0,2))
         dataCGEAll.insert(7,round(FDCorrienteCGE1,2))
         dataCGEAll.insert(8,round(DATCorrienteCGE1,2))
-        dataCGEAll.insert(9,round(energyCGEFase11,2))
-        dataCGEAll.insert(10,round(energyCGEFase11Hour,2))
+        dataCGEAll.insert(9,round(cosphiCGE,2))         
+        dataCGEAll.insert(10,round(energyCGEFase11,2))
+        dataCGEAll.insert(11,round(energyCGEFase11Hour,2))
         
 def ExcelAllInsertCarga():        
         dataCargaAll.insert(1,round(vrms2,2))
@@ -1663,8 +1836,9 @@ def ExcelAllInsertCarga():
         dataCargaAll.insert(6,round(FPCarga1,2))
         dataCargaAll.insert(7,round(FDCorrienteCarga1,2))
         dataCargaAll.insert(8,round(DATCorrienteCarga1,2))
-        dataCargaAll.insert(9,round(energyCargaFase13Hour,2))
+        dataCargaAll.insert(9,round(cosphiCarga,2))
         dataCargaAll.insert(10,round(energyCargaFase13Hour,2))
+        dataCargaAll.insert(11,round(energyCargaFase13Hour,2))
         
 def ExcelAllInsertPaneles():        
         dataPanelesAll.insert(1,round(vrms3,2))
@@ -1675,8 +1849,9 @@ def ExcelAllInsertPaneles():
         dataPanelesAll.insert(6,round(FPPaneles1,2))
         dataPanelesAll.insert(7,round(FDCorrientePaneles1,2))
         dataPanelesAll.insert(8,round(DATCorrientePaneles1,2))
-        dataPanelesAll.insert(9,round(energyPanelesFase12,2))
-        dataPanelesAll.insert(10,round(energyPanelesFase12Hour,2))
+        dataPanelesAll.insert(9,round(cosphiPaneles,2))
+        dataPanelesAll.insert(10,round(energyPanelesFase12,2))
+        dataPanelesAll.insert(11,round(energyPanelesFase12Hour,2))
 
            
 """
@@ -1727,6 +1902,7 @@ def Maximo15minCGE():
          print("paso if")
          if(acceso == 0):
               print("paso if 2")
+              graphVoltage(NoVoltageoffset1,ListaIrmsPeak1,samplings1,1)
               acceso = 1
               maximoVoltaje15CGE=max(Volt15CGE)
               maximoCorrienteCGE=max(Corriente15CGE)
@@ -1855,56 +2031,58 @@ def Maximo15minCarga():
     #print(f'Maximo Voltaje 15 Carga: {maximoVoltaje15Carga}')
     if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
          #print("paso if Carga")
-         if(accesoCarga == 0):
-              #print("paso if 2 Carga")
-              accesoCarga = 1
-              maximoVoltaje15Carga=max(Volt15Carga)
-              maximoCorrienteCarga=max(Corriente15Carga)
-              maximoPotActivaCarga=max(PotActiva15Carga)
-              maximoPotReactivaCarga=max(PotReactiva15Carga)
-              maximoPotAparenteCarga=max(PotAparente15Carga)
-              if(len(FP15CargaInductivo)>0):
-                     maximoFPCargaInductivo=max(FP15CargaInductivo)
-              else:
-                     maximoFPCargaInductivo=-0.99
-              if(len(FP15CargaReactivo)>0):
-                     maximoFPCargaReactivo=min(FP15CargaReactivo)
-              else:
-                     maximoFPCargaReactivo=0.99
-              maximoFDCarga=max(FD15Carga)
-              maximoDATCarga=max(DAT15Carga)
-              dataCarga.insert(1,maximoVoltaje15Carga)
-              dataCarga.insert(2,maximoCorrienteCarga)
-              dataCarga.insert(3,maximoPotActivaCarga)
-              dataCarga.insert(4,maximoPotReactivaCarga)
-              dataCarga.insert(5,maximoPotAparenteCarga)
-              dataCarga.insert(6,maximoFPCargaReactivo)
-              dataCarga.insert(7,maximoFPCargaInductivo)
-              dataCarga.insert(8,maximoFDCarga)
-              dataCarga.insert(9,maximoDATCarga)
-              dataCarga.insert(10,energyCargaFase13)
-              Volt15Carga=[]
-              Corriente15Carga=[]
-              PotActiva15Carga=[]
-              PotReactiva15Carga=[]
-              PotAparente15Carga=[]
-              FP15CargaReactivo=[]
-              FP15CargaInductivo=[]
-              FD15Carga=[]
-              DAT15Carga=[]
-         elif(accesoCarga==1):
-              #print("paso elif Carga")
-              Volt15Carga.append(vrms1)
-              Corriente15Carga.append(irms2)
-              PotActiva15Carga.append(ActivaCargaFase13)
-              PotReactiva15Carga.append(ReactivaCargaFase13)
-              PotAparente15Carga.append(AparenteCargaFase13)
-              if(FPCarga1>0.0):
-                    FP15CargaReactivo.append(FPCarga1)
-              else: 
-                    FP15CargaInductivo.append(FPCarga1)
-              FD15Carga.append(FDCorrienteCarga1)
-              DAT15Carga.append(DATCorrienteCarga1)
+         #if(len(PotAparente15Carga)>2):
+               if(accesoCarga == 0):
+                    #print("paso if 2 Carga")
+                    graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
+                    accesoCarga = 1
+                    maximoVoltaje15Carga=max(Volt15Carga)
+                    maximoCorrienteCarga=max(Corriente15Carga)
+                    maximoPotActivaCarga=max(PotActiva15Carga)
+                    maximoPotReactivaCarga=max(PotReactiva15Carga)
+                    maximoPotAparenteCarga=max(PotAparente15Carga)
+                    if(len(FP15CargaInductivo)>0):
+                           maximoFPCargaInductivo=max(FP15CargaInductivo)
+                    else:
+                           maximoFPCargaInductivo=-0.99
+                    if(len(FP15CargaReactivo)>0):
+                           maximoFPCargaReactivo=min(FP15CargaReactivo)
+                    else:
+                           maximoFPCargaReactivo=0.99
+                    maximoFDCarga=max(FD15Carga)
+                    maximoDATCarga=max(DAT15Carga)
+                    dataCarga.insert(1,maximoVoltaje15Carga)
+                    dataCarga.insert(2,maximoCorrienteCarga)
+                    dataCarga.insert(3,maximoPotActivaCarga)
+                    dataCarga.insert(4,maximoPotReactivaCarga)
+                    dataCarga.insert(5,maximoPotAparenteCarga)
+                    dataCarga.insert(6,maximoFPCargaReactivo)
+                    dataCarga.insert(7,maximoFPCargaInductivo)
+                    dataCarga.insert(8,maximoFDCarga)
+                    dataCarga.insert(9,maximoDATCarga)
+                    dataCarga.insert(10,energyCargaFase13)
+                    Volt15Carga=[]
+                    Corriente15Carga=[]
+                    PotActiva15Carga=[]
+                    PotReactiva15Carga=[]
+                    PotAparente15Carga=[]
+                    FP15CargaReactivo=[]
+                    FP15CargaInductivo=[]
+                    FD15Carga=[]
+                    DAT15Carga=[]
+               elif(accesoCarga==1):
+                    #print("paso elif Carga")
+                    Volt15Carga.append(vrms1)
+                    Corriente15Carga.append(irms2)
+                    PotActiva15Carga.append(ActivaCargaFase13)
+                    PotReactiva15Carga.append(ReactivaCargaFase13)
+                    PotAparente15Carga.append(AparenteCargaFase13)
+                    if(FPCarga1>0.0):
+                          FP15CargaReactivo.append(FPCarga1)
+                    else: 
+                          FP15CargaInductivo.append(FPCarga1)
+                    FD15Carga.append(FDCorrienteCarga1)
+                    DAT15Carga.append(DATCorrienteCarga1)
               
     else:
         Volt15Carga.append(vrms2)
@@ -1987,6 +2165,7 @@ def Maximo15minPaneles():
          #print("paso if Paneles")
          if(accesoPaneles == 0):
               #print("paso if 2 Paneles")
+              graphVoltage(NoVoltageoffset3,ListaIrmsPeak3,samplings3,3)
               accesoPaneles = 1
               maximoVoltaje15Paneles=max(Volt15Paneles)
               maximoCorrientePaneles=max(Corriente15Paneles)
@@ -2095,10 +2274,11 @@ def excelcreate():
     sheet5 = book.create_sheet("CGE")
     sheet6 = book.create_sheet("Carga")
     sheet7 = book.create_sheet("Paneles")
+    sheet8 = book.create_sheet("CGE Graphs")
     headings=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
     'FPReact','FPInduct','FD','DAT','Energia'])
     headings2=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
-    'FP','FD','DAT','Energia','Energia por Hora'])
+    'FP','FD','DAT','cos(phi)','Energia','Energia por Hora'])
     sheet2.append(headings)
     sheet3.append(headings)
     sheet4.append(headings)
@@ -2109,6 +2289,19 @@ def excelcreate():
 
 excelcreate()
 
+def ExcelGraphCGE():
+       workbook = xlsxwriter.Workbook('images.xlsx')
+       worksheet = workbook.add_worksheet()
+       image_width = 140.0
+       image_height = 182.0
+       cell_width = 64.0
+       cell_height = 20.0
+       x_scale = cell_width/image_width
+       y_scale = cell_height/image_height
+       worksheet.insert_image('B2', imagenVoltaje,{'x_scale': x_scale, 'y_scale': y_scale})
+       workbook.close()
+
+#ExcelGraphCGE()
 
 def ExcelDataCGE():
        global dataCGEAll                      
