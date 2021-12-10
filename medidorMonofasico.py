@@ -1,6 +1,7 @@
 #from pruebacsv.excelprueba import excelcreate
 import requests
-import datetime
+from datetime import date
+from datetime import datetime
 import json
 import xlsxwriter
 import random
@@ -40,7 +41,7 @@ from email import encoders
 from email.mime.base import MIMEBase
 import datetime
 import matplotlib.pyplot as plt
-
+import collections
 """
     0: connection succeeded
     1: connection failed - incorrect protocol version
@@ -286,6 +287,28 @@ def CorrienteRms(listCurrent):
     
     #print(f'Corriente RMS : {irms0}')
     return irms0
+
+#potrms=0.0
+def PotenciaRms(listCurrent,listVoltage):
+    global Squares
+    
+    N = len(listCurrent)
+    Squares = []
+
+    for i in range(0,N,1):    #elevamos al cuadrado cada termino y lo amacenamos
+         listsquare = listCurrent[i]*listVoltage[i]
+         Squares.append(listsquare)
+    
+    SumSquares=0
+    for i in range(0,N,1):    #Sumatoria de todos los terminos al cuadrado
+         SumSquares = SumSquares + Squares[i]
+
+    MeanSquares = (1/N)*SumSquares #Dividimos por N la sumatoria
+
+    #potrms=np.sqrt(MeanSquares)
+    
+    
+    return MeanSquares
 
 
 def CalculoDesfase(NoVoltageoffset,NoCurrentoffset,samplings):
@@ -547,17 +570,31 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
          #        FD2.append(FD[i])
                  
          #print(f'FD2: {FD2}')
-         #print(f'FD largo: {len(FD)}')
-         SumMagnitudEficaz = (np.sum([FD[0:len(FD)]]))*0.01
+         repite = list(ejeyabsolut)
+         """
+         xg = []
+         for i in repite:
+             z=round(i,0)
+             if(z!=0):
+                 xg.append(z)
+         print([xg[0:60]])
+         sumasinceros = np.sum(xg[0:len(xg)])
+         SumMagnitudEficaz = (np.sum([repite[0:len(repite)]]))
+         #repite2=np.nonzero(repite)
+         #print(f'lista sin ceros : {repite2}')
+         #sumasinceros=np.sum(repite2[0:len(repite2)])
+         print(f'suma sin ceros : {sumasinceros}')
+         """
+         #SumMagnitudEficaz = (np.sum([FD[0:len(FD)]]))*0.01
          SumMagnitudEficaz2 = (np.sum([FD[0:len(FD)]]))
          if (q=="1"):
-            print(f'Magnitud CGE Fundamental {SumMagnitudEficaz}-{SumMagnitudEficaz2}-{complejo[0]}')
+            print(f'Magnitud CGE Fundamental {SumMagnitudEficaz2}-{complejo[0]}')
          if (q=="2"):
-            print(f'Magnitud Carga Fundamental {SumMagnitudEficaz}-{SumMagnitudEficaz2}- {complejo[0]}')
+            print(f'Magnitud Carga Fundamental {SumMagnitudEficaz2}- {complejo[0]}')
          if (q=="3"):
-            print(f'Magnitud Paneles Fundamental {SumMagnitudEficaz}-{SumMagnitudEficaz2} - {complejo[0]}')
-         Magnitud1 = FD[0]*0.01
-         ArmonicosRestantes=SumMagnitudEficaz-Magnitud1
+            print(f'Magnitud Paneles Fundamental {SumMagnitudEficaz2} - {complejo[0]}')
+         Magnitud1 = FD[0]#*0.01
+         ArmonicosRestantes=SumMagnitudEficaz2-Magnitud1
          #print(f'Irms armonico 1 {q}: {round(Magnitud1,2)}')
          proporcion = irms/(np.sqrt(Magnitud1**2+ArmonicosRestantes**2))
          irmsarmonico1prop=Magnitud1*proporcion
@@ -573,7 +610,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
              print(f'FDCorrienteCGE : {FDCorrienteCGE1 }')
              str_num = {"value":FDCorrienteCGE1,"save":0}
              FDCorrienteCGE = json.dumps(str_num)
-             DATCorrienteCGE1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
+             DATCorrienteCGE1 = np.sqrt((SumMagnitudEficaz2**2-Magnitud1**2)/(Magnitud1**2))
              str_num2 = {"value":DATCorrienteCGE1,"save":0}
              DATCorrienteCGE = json.dumps(str_num2)
              #print(f'DAT corriente CGE: {DATCorrienteCGE}')
@@ -610,7 +647,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
              str_num = {"value":FDCorrientePaneles1,"save":0}
              FDCorrientePaneles = json.dumps(str_num)
              print(f'FDCorrientePaneles : {FDCorrientePaneles1 }')
-             DATCorrientePaneles1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
+             DATCorrientePaneles1 = np.sqrt((SumMagnitudEficaz2**2-Magnitud1**2)/(Magnitud1**2))
              str_num2 = {"value":DATCorrientePaneles1,"save":0}
              DATCorrientePaneles = json.dumps(str_num2)
              phasecorrientePaneles = np.arctan(real[0]/(imag[0]))
@@ -645,7 +682,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
              print(f'FD Corriente Carga : {FDCorrienteCarga1}')
              str_num = {"value":FDCorrienteCarga1,"save":0}
              FDCorrienteCarga = json.dumps(str_num)
-             DATCorrienteCarga1 = np.sqrt((SumMagnitudEficaz**2-Magnitud1**2)/(Magnitud1**2))
+             DATCorrienteCarga1 = np.sqrt((SumMagnitudEficaz2**2-Magnitud1**2)/(Magnitud1**2))
              str_num2 = {"value":DATCorrienteCarga1,"save":0}
              DATCorrienteCarga = json.dumps(str_num2)
              print(f'DAT carga: {DATCorrienteCarga1}')
@@ -727,14 +764,20 @@ def Potencias(i,irms,vrms):
           global ReactivaCGEFase11
           AparenteCGEFase11 = vrms*irms
           print(f'Energia CGE: {AparenteCGEFase11}')
-          ActivaCGEFase11 = vrms*irms*cosphiCGE
+          if (potrmsCGE>=0):
+                ActivaCGEFase11 = vrms*irms*cosphiCGE
+                ActivaCGEFase11 = np.abs(ActivaCGEFase11)
+          else:
+                ActivaCGEFase11 = vrms*irms*cosphiCGE
+                ActivaCGEFase11 = np.abs(ActivaCGEFase11)
+                ActivaCGEFase11 = ActivaCGEFase11*(-1)
           print(f'Activa CGE: {ActivaCGEFase11}')
           ReactivaCGEFase11 = vrms*irms*np.sin(phasevoltajeCGE-phasecorrienteCGE)
           print(f'Reactiva CGE: {ReactivaCGEFase11}')
           a2 = datetime.datetime.now()
           delta=(((a2 - a).microseconds)/1000+((a2 - a).seconds)*1000)/10000000000
-          energyCGEFase11 += ActivaCGEFase11*delta*2.9
-          energyCGEFase11Hour += ActivaCGEFase11*delta*2.9
+          energyCGEFase11 += np.abs(ActivaCGEFase11*delta*2.9)
+          energyCGEFase11Hour += np.abs(ActivaCGEFase11*delta*2.9)
           a = datetime.datetime.now()
           if(a2.minute==0):
               energyCGEFase11Hour=0
@@ -765,14 +808,20 @@ def Potencias(i,irms,vrms):
           global ReactivaPanelesFase12
           AparentePanelesFase12 = vrms*irms
           print(f'Aparente Paneles: {AparentePanelesFase12}')
-          ActivaPanelesFase12= vrms*irms*cosphiPaneles
+          if(potrmsPaneles>=0):
+                ActivaPanelesFase12= vrms*irms*cosphiPaneles
+                ActivaPanelesFase12=np.abs(ActivaPanelesFase12)
+          else:
+                ActivaPanelesFase12= vrms*irms*cosphiPaneles
+                ActivaPanelesFase12= np.abs(ActivaPanelesFase12)
+                ActivaPanelesFase12= ActivaPanelesFase12*(-1)
           print(f'Activa Paneles: {ActivaPanelesFase12}')
           ReactivaPanelesFase12 = vrms*irms*np.sin(phasevoltajePaneles-phasecorrientePaneles)
           b2 = datetime.datetime.now()
           print(f'Reactiva Paneles: {ReactivaPanelesFase12}')
           delta=(((b2 - b).microseconds)/1000+((b2 - b).seconds)*1000)/10000000000
-          energyPanelesFase12Hour += ActivaPanelesFase12*delta*2.9
-          energyPanelesFase12 += ActivaPanelesFase12*delta*2.9
+          energyPanelesFase12Hour += np.abs(ActivaPanelesFase12*delta*2.9)
+          energyPanelesFase12 += np.abs(ActivaPanelesFase12*delta*2.9)
           b = datetime.datetime.now()
           if(b2.minute==0):
               energyPanelesFase12Hour=0
@@ -801,14 +850,21 @@ def Potencias(i,irms,vrms):
           global ReactivaCargaFase13
           AparenteCargaFase13 = vrms*irms
           print(f'Aparente Carga: {AparenteCargaFase13}')
-          ActivaCargaFase13= vrms*irms*cosphiCarga
+          if(potrmsCarga>=0):
+              ActivaCargaFase13= vrms*irms*cosphiCarga
+              ActivaCargaFase13=np.abs(ActivaCargaFase13)
+          else:
+              ActivaCargaFase13= vrms*irms*cosphiCarga
+              ActivaCargaFase13=np.abs(ActivaCargaFase13)
+              ActivaCargaFase13=ActivaCargaFase13*(-1)
+           
           print(f'Activa Carga: {ActivaCargaFase13}')
           ReactivaCargaFase13 = vrms*irms*np.sin(phasevoltajeCarga-phasecorrienteCarga)
           c2 = datetime.datetime.now()
           print(f'Reactiva Carga: {ReactivaCargaFase13}')
           delta=(((c2 - c).microseconds)/1000+((c2 - c).seconds)*1000)/10000000000
-          energyCargaFase13 += ActivaCargaFase13*delta*2.9
-          energyCargaFase13Hour += ActivaCargaFase13*delta*2.9
+          energyCargaFase13 += np.abs(ActivaCargaFase13*delta*2.9)
+          energyCargaFase13Hour += np.abs(ActivaCargaFase13*delta*2.9)
           c = datetime.datetime.now()
           if(c2.minute==0):
               energyCargaFase13Hour=0
@@ -849,7 +905,7 @@ def graphVoltage(list_fftVoltage,list_FPCurrent,samplings,i):
         tiempoms = np.arange(0,tiempo,tiempo/4096)
 
 
-        ax = fig.add_subplot(6,1,0)
+        ax = fig.add_subplot(9,1,1)
         ax.plot(tiempoms,list_FPCurrent,color="green", label="Corriente")
         if(i=="1"):
              plt.title(f'Corriente | I: {round(irms1,2)}  |  P-Activa: {round(ActivaCGEFase11,2)} | P-Aparente: {round(AparenteCGEFase11,2)}  |  P-Reactiva:{round(ReactivaCGEFase11,2)}  ',fontdict=font)
@@ -860,16 +916,19 @@ def graphVoltage(list_fftVoltage,list_FPCurrent,samplings,i):
              
         ax.legend(loc='upper left')
         ax.set_xlabel('Tiempo (mS)',fontdict=font)
-        ax = fig.add_subplot(6,1,2)
+        ax = fig.add_subplot(9,1,3)
         ax.plot(tiempoms,list_fftVoltage,color="blue", label="Voltaje")
         if(i=="1"):
-             plt.title(f'Voltaje y Corriente | V: {round(vrms1,2)} |  FP: {round(FPCGE0,2)}',fontdict=font)
+             plt.title(f'Voltaje | V: {round(vrms1,2)} |  FP: {round(FPCGE0,2)}',fontdict=font)
         if(i=="2"):
-             plt.title(f'Voltaje y Corriente | V: {round(vrms2,2)} |  FP: {round(FPCarga1,2)}',fontdict=font)
+             plt.title(f'Voltaje | V: {round(vrms2,2)} |  FP: {round(FPCarga1,2)}',fontdict=font)
         if(i=="3"):
-             plt.title(f'Voltaje y Corriente | V: {round(vrms3,2)} |  FP: {round(FPPaneles1,2)}',fontdict=font)
-             
-        ax = fig.add_subplot(6,1,4)
+             plt.title(f'Voltaje | V: {round(vrms3,2)} |  FP: {round(FPPaneles1,2)}',fontdict=font)
+        
+        ax = fig.add_subplot(9,1,5)
+        ax.plot(tiempoms,Squares,color="red", label="Pot-Activa")
+
+        ax = fig.add_subplot(9,1,7)
         if(i=="1"):
             plt.title(f'FFT Corriente | DAT: {round(DATCorrienteCGE1,2)}, FD: {round(FDCorrienteCGE1,2)} |   cos phi: {round(cosphiCGE,2)} | phase voltaje CGE : {round(phasevoltajeCGE,2)} | phase Corriente CGE : {round(phasecorrienteCGE,2)}',fontdict=font)
         if(i=="2"):
@@ -888,7 +947,7 @@ def graphVoltage(list_fftVoltage,list_FPCurrent,samplings,i):
         ax.set_xlabel('Frecuencia (Hz)',fontdict=font)
         #ax.set_ylabel('|dB|',fontdict=font) 
         
-        ax = fig.add_subplot(6,1,6)
+        ax = fig.add_subplot(9,1,9)
         if(i=="1"):
             plt.title(f'{desfaseCGE}',fontdict=font)
         if(i=="2"):
@@ -974,6 +1033,7 @@ def received():
                            global NoVoltageoffset1
                            global NoCurrentoffset1
                            global ListaIrmsPeak1
+                           global potrmsCGE
                            samplings1 = np_array[-1]
                            list_FPVoltage3 = np_array[0:4200]
                            list_FPCurrent3 = np_array[4201:8400]
@@ -1052,17 +1112,25 @@ def received():
                                proporción=maximocorriente2/(irms1*np.sqrt(2))
                                ListaIrmsPeak1 = NoCurrentoffset1/proporción
                                maximocorr=getMaxValues(ListaIrmsPeak1, 10)
-                               maximocorr = np.median(maximocorr)
-                               print(f'maximocorr CGE: {maximocorr}')
+                               maximocorrCGE = np.median(maximocorr)
+                               print(f'maximocorr CGE: {maximocorrCGE}')
+
                                CurrentFFT(ListaIrmsPeak1,samplings1,1,irms1)
                                #print(f'MODA CORRIENTE CGE: {modacorriente}')
+                               potrmsCGE = PotenciaRms(ListaIrmsPeak1,NoVoltageoffset1)
                                Potencias(1,irms1,vrms1)
                                ExcelAllInsertCGE()
                                ExcelDataCGE()
                                try:
                                     Maximo15minCGE()
-                               except:
-                                    print("no habian promedios")
+                               #except:
+                               except OSError as err:
+                                    print("OS error: {0}".format(err))
+                               #except ValueError:
+                               #     print("Could not convert data to an integer.")
+                               #except BaseException as err:
+                               #     print(f"Unexpected {err=}, {type(err)=}")
+                               #     raise
                                     continue
                                modamaximocorriente11=[]
                                #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings1)
@@ -1086,6 +1154,7 @@ def received():
                            global NoVoltageoffset2
                            global NoCurrentoffset2
                            global ListaIrmsPeak2
+                           global potrmsCarga
                            samplings2 = np_array[-1]
                            list_FPVoltage3 = np_array[0:4200]
                            list_FPCurrent3 = np_array[4201:8400]
@@ -1154,13 +1223,20 @@ def received():
                                #print(f'MODA CORRIENTE Carga: {modacorriente22}')
                                #NoCurrentoffset2 = NoCurrentoffset2/(irms2*np.sqrt(2))
                                CurrentFFT(ListaIrmsPeak2,samplings2,2,irms2)
+                               potrmsCarga=PotenciaRms(ListaIrmsPeak2,NoVoltageoffset2)
                                Potencias(2,irms2,vrms2)
                                ExcelAllInsertCarga()
                                ExcelDataCarga()
                                try:
                                      Maximo15minCarga()
-                               except:
-                                    print("no habian promedios")
+                               #except:
+                               except OSError as err:
+                                    print("OS error: {0}".format(err))
+                               #except ValueError:
+                               #     print("Could not convert data to an integer.")
+                               #except BaseException as err:
+                               #     print(f"Unexpected {err=}, {type(err)=}")
+                               #     raise
                                     continue
                                modamaximocorriente22=[]
                                #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings2)
@@ -1181,6 +1257,7 @@ def received():
                            global NoVoltageoffset3
                            global NoCurrentoffset3
                            global ListaIrmsPeak3
+                           global potrmsPaneles
                            samplings3 = np_array[-1]
                            list_FPVoltage3 = np_array[0:4200]
                            list_FPCurrent3 = np_array[4201:8400]
@@ -1251,17 +1328,25 @@ def received():
                                ListaIrmsPeak3 = NoCurrentoffset3/proporción
                                maximocorr=getMaxValues(ListaIrmsPeak3, 10)
                                maximocorr = np.median(maximocorr)
-                               print(f'maximocorr CGE: {maximocorr}')
+                               print(f'maximocorr Paneles: {maximocorr}')
                                #NoCurrentoffset3 = NoCurrentoffset3/(irms3*np.sqrt(2))
                                CurrentFFT(ListaIrmsPeak3,samplings3,3,irms3)
+                               potrmsPaneles=PotenciaRms(ListaIrmsPeak3,NoVoltageoffset3)
                                Potencias(3,irms3,vrms3)
+                               print(f'Pot Rms3 : {potrmsPaneles}')
                                ExcelAllInsertPaneles()
                                ExcelDataPaneles()
                                try:
                                     Maximo15minPaneles()
-                               except:
-                                    print("no habian promedios")
+                               #except:
+                               except OSError as err:
+                                    print("OS error: {0}".format(err))
                                     continue
+                               #except ValueError:
+                                #    print("Could not convert data to an integer.")
+                               #except BaseException as err:
+                                #    print(f"Unexpected {err=}, {type(err)=}")
+                                 #   raise
                                modamaximocorriente33=[]
                                #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings3)
                            else:
@@ -1837,7 +1922,7 @@ def ExcelAllInsertCarga():
         dataCargaAll.insert(7,round(FDCorrienteCarga1,2))
         dataCargaAll.insert(8,round(DATCorrienteCarga1,2))
         dataCargaAll.insert(9,round(cosphiCarga,2))
-        dataCargaAll.insert(10,round(energyCargaFase13Hour,2))
+        dataCargaAll.insert(10,round(energyCargaFase13,2))
         dataCargaAll.insert(11,round(energyCargaFase13Hour,2))
         
 def ExcelAllInsertPaneles():        
@@ -2165,33 +2250,36 @@ def Maximo15minPaneles():
          #print("paso if Paneles")
          if(accesoPaneles == 0):
               #print("paso if 2 Paneles")
-              graphVoltage(NoVoltageoffset3,ListaIrmsPeak3,samplings3,3)
-              accesoPaneles = 1
-              maximoVoltaje15Paneles=max(Volt15Paneles)
-              maximoCorrientePaneles=max(Corriente15Paneles)
-              maximoPotActivaPaneles=max(PotActiva15Paneles)
-              maximoPotReactivaPaneles=max(PotReactiva15Paneles)
-              maximoPotAparentePaneles=max(PotAparente15Paneles)
-              if(len(FP15PanelesInductivo)>0):
-                     maximoFPPanelesInductivo=max(FP15PanelesInductivo)
-              else:
-                     maximoFPPanelesInductivo=-0.99
-              if(len(FP15PanelesReactivo)>0):
-                     maximoFPPanelesReactivo=min(FP15PanelesReactivo)
-              else:
-                     maximoFPPanelesReactivo=0.99
-              maximoFDPaneles=max(FD15Paneles)
-              maximoDATPaneles=max(DAT15Paneles)
-              dataPaneles.insert(1,maximoVoltaje15Paneles)
-              dataPaneles.insert(2,maximoCorrientePaneles)
-              dataPaneles.insert(3,maximoPotActivaPaneles)
-              dataPaneles.insert(4,maximoPotReactivaPaneles)
-              dataPaneles.insert(5,maximoPotAparentePaneles)
-              dataPaneles.insert(6,maximoFPPanelesReactivo)
-              dataPaneles.insert(7,maximoFPPanelesInductivo)
-              dataPaneles.insert(8,maximoFDPaneles)
-              dataPaneles.insert(9,maximoDATPaneles)
-              dataPaneles.insert(10,energyPanelesFase12)
+              try:
+                     graphVoltage(NoVoltageoffset3,ListaIrmsPeak3,samplings3,3)
+                     accesoPaneles = 1
+                     maximoVoltaje15Paneles=max(Volt15Paneles)
+                     maximoCorrientePaneles=max(Corriente15Paneles)
+                     maximoPotActivaPaneles=max(PotActiva15Paneles)
+                     maximoPotReactivaPaneles=max(PotReactiva15Paneles)
+                     maximoPotAparentePaneles=max(PotAparente15Paneles)
+                     if(len(FP15PanelesInductivo)>0):
+                            maximoFPPanelesInductivo=max(FP15PanelesInductivo)
+                     else:
+                            maximoFPPanelesInductivo=-0.99
+                     if(len(FP15PanelesReactivo)>0):
+                            maximoFPPanelesReactivo=min(FP15PanelesReactivo)
+                     else:
+                            maximoFPPanelesReactivo=0.99
+                     maximoFDPaneles=max(FD15Paneles)
+                     maximoDATPaneles=max(DAT15Paneles)
+                     dataPaneles.insert(1,maximoVoltaje15Paneles)
+                     dataPaneles.insert(2,maximoCorrientePaneles)
+                     dataPaneles.insert(3,maximoPotActivaPaneles)
+                     dataPaneles.insert(4,maximoPotReactivaPaneles)
+                     dataPaneles.insert(5,maximoPotAparentePaneles)
+                     dataPaneles.insert(6,maximoFPPanelesReactivo)
+                     dataPaneles.insert(7,maximoFPPanelesInductivo)
+                     dataPaneles.insert(8,maximoFDPaneles)
+                     dataPaneles.insert(9,maximoDATPaneles)
+                     dataPaneles.insert(10,energyPanelesFase12)
+              except:
+                  print("no hay maximos")
               Volt15Paneles=[]
               Corriente15Paneles=[]
               PotActiva15Paneles=[]
@@ -2256,16 +2344,16 @@ def Maximo15minPaneles():
             DAT15Paneles.pop(indice)
 
 def excelcreate():
-    global dest_filename
     global sheet2
+    global dest_filename
     global sheet3
     global sheet4
     global sheet5
     global sheet6
     global sheet7
-    exceltime=datetime.datetime.now()
+    exceltime=date.today()
     book = Workbook()
-    dest_filename = f'Reportes_csv: {exceltime}.xlsx'
+    dest_filename = f'{exceltime}.xlsx'
     sheet = book.active
     sheet.title = "Resumen Reportes"
     sheet2 = book.create_sheet("CGE Maximos 15 Min")
@@ -2279,29 +2367,54 @@ def excelcreate():
     'FPReact','FPInduct','FD','DAT','Energia'])
     headings2=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
     'FP','FD','DAT','cos(phi)','Energia','Energia por Hora'])
+    ceros=list([0,0,0,0,0,0,0,0,0,0,0])
     sheet2.append(headings)
     sheet3.append(headings)
     sheet4.append(headings)
     sheet5.append(headings2)
     sheet6.append(headings2)
     sheet7.append(headings2)
+    sheet2.append(ceros)
+    sheet3.append(ceros)
+    sheet4.append(ceros)
+    sheet5.append(ceros)
+    sheet6.append(ceros)
+    sheet7.append(ceros)
+
     book.save(filename = dest_filename)
 
-excelcreate()
 
-def ExcelGraphCGE():
-       workbook = xlsxwriter.Workbook('images.xlsx')
-       worksheet = workbook.add_worksheet()
-       image_width = 140.0
-       image_height = 182.0
-       cell_width = 64.0
-       cell_height = 20.0
-       x_scale = cell_width/image_width
-       y_scale = cell_height/image_height
-       worksheet.insert_image('B2', imagenVoltaje,{'x_scale': x_scale, 'y_scale': y_scale})
-       workbook.close()
 
-#ExcelGraphCGE()
+def AbrirExcel():
+    global dest_filename
+    global energyCGEFase11
+    global energyCargaFase13
+    global energyPanelesFase12
+    dia=date.today()
+    if(os.path.exists(f'{dia}.xlsx')):
+            dest_filename = f'{dia}.xlsx'
+            print("Existe")
+            workbook=openpyxl.load_workbook(filename = dest_filename)
+            sheet5 = workbook["CGE"]
+            sheet6 = workbook["Carga"]
+            sheet7 = workbook["Paneles"]
+            largoexcelCGE=len(sheet5["FP"])
+            largoexcelCarga=len(sheet6["FP"])
+            largoexcelPaneles=len(sheet7["FP"])
+            print(f'Numero de filas de paneles: {largoexcelPaneles} ')
+            energyCGEFase11 = float(sheet5[f'k{largoexcelCGE}'].value)
+            energyCargaFase13 = float(sheet6[f'k{largoexcelCarga}'].value)
+            energyPanelesFase12 = float(sheet7[f'k{largoexcelPaneles}'].value)
+            #energyCGEFase11=float(energyCGEFase11)
+            #energyCargaFase13=float(energyCargaFase13)
+            #energyPanelesFase12=float(energyPanelesFase12)
+            print(f'Valor Energia Paneles Acumulado: {energyPanelesFase12} ')
+    else:
+            excelcreate()
+            print("No Existe")
+
+AbrirExcel()
+
 
 def ExcelDataCGE():
        global dataCGEAll                      
@@ -2356,6 +2469,7 @@ def ExcelDataPaneles():
        sheet7 = workbook["Paneles"]
        dataPanelesAll.insert(0,datetime.datetime.now())
        sheet7.append(list(dataPanelesAll))
+       print(f'Numero de filas de paneles: {len(sheet7["FP"])} ')
        #print(f'Data paneles: {dataPaneles}')
        #print("Datos Insertados Correctamente!")
        workbook.save(filename = dest_filename)
