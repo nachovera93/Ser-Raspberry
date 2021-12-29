@@ -16,7 +16,6 @@ from scipy.interpolate import lagrange
 from scipy import signal
 from scipy.signal import savgol_filter
 import numpy as np
-from flask import Flask,render_template, redirect, request
 import subprocess
 from time import sleep
 import sys
@@ -42,6 +41,8 @@ from email.mime.base import MIMEBase
 import datetime
 import matplotlib.pyplot as plt
 import collections
+import psutil
+import gzip
 """
     0: connection succeeded
     1: connection failed - incorrect protocol version
@@ -181,6 +182,9 @@ def setup():
 
 setup()
 
+def get_cpuload():
+    cpuload = psutil.cpu_percent(interval=1, percpu=False)
+    return str(cpuload)
 
 def cpu_temp():
 	thermal_zone = subprocess.Popen(
@@ -201,13 +205,13 @@ def Ventilador():
         #print("Ventilador on")
         GPIO.output(23, True)
         #EstateVentilador0="ON"
-        str_num = {"value":"ON","save":1}
+        str_num = {"value":"ON","save":0}
         EstateVentilador = json.dumps(str_num)
     elif CPU_temp <= 38:
         #print("Ventilador off")
         GPIO.output(23, False)
         #EstateVentilador0="OFF"
-        str_num = {"value":"OFF","save":1}
+        str_num = {"value":"OFF","save":0}
         EstateVentilador = json.dumps(str_num)
 
 def getMaxValues(myList, quantity):
@@ -421,7 +425,7 @@ def VoltageFFT(list_fftVoltages, samplings,i):
                  str_num = {"value":FDVoltajeCGE1,"save":1}
                  FDVoltajeCGE = json.dumps(str_num)
                  DATVoltajeCGE1= np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
-                 print(f'DAT Voltaje CGE: {round(DATVoltajeCGE1,2)}')
+                 #print(f'DAT Voltaje CGE: {round(DATVoltajeCGE1,2)}')
                  str_num = {"value":DATVoltajeCGE1,"save":1}
                  DATVoltajeCGE = json.dumps(str_num)
                  sincvoltaje1 = 1
@@ -432,13 +436,13 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            if(j=="3"):
                  global sincvoltaje2              
                  phasevoltajePaneles = np.arctan(real[0]/(imag[0]))
-                 print(f'phase voltaje paneles: {round(phasevoltajePaneles,2)}')
+                 #print(f'phase voltaje paneles: {round(phasevoltajePaneles,2)}')
                  #FaseArmonicoFundamentalVoltaje1=round(np.angle(complejo[0]),2)
                  FDVoltajePaneles = Magnitud1/SumMagnitudEficaz
                  str_num = {"value":FDVoltajePaneles,"save":1}
                  FDVoltajePaneles = json.dumps(str_num)
                  DATVoltajePaneles1 = np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
-                 print(f'DAT Voltaje Paneles: {round(DATVoltajePaneles1,2)}')
+                 #print(f'DAT Voltaje Paneles: {round(DATVoltajePaneles1,2)}')
                  str_num = {"value":DATVoltajePaneles1,"save":1}
                  DATVoltajePaneles = json.dumps(str_num)
                  sincvoltaje2 = 1
@@ -587,12 +591,14 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
          """
          #SumMagnitudEficaz = (np.sum([FD[0:len(FD)]]))*0.01
          SumMagnitudEficaz2 = (np.sum([FD[0:len(FD)]]))
+         """
          if (q=="1"):
             print(f'Magnitud CGE Fundamental {SumMagnitudEficaz2}-{complejo[0]}')
          if (q=="2"):
             print(f'Magnitud Carga Fundamental {SumMagnitudEficaz2}- {complejo[0]}')
          if (q=="3"):
             print(f'Magnitud Paneles Fundamental {SumMagnitudEficaz2} - {complejo[0]}')
+         """
          Magnitud1 = FD[0]#*0.01
          ArmonicosRestantes=SumMagnitudEficaz2-Magnitud1
          #print(f'Irms armonico 1 {q}: {round(Magnitud1,2)}')
@@ -607,7 +613,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
          if(q=="1"):
              global sincvoltaje1
              FDCorrienteCGE1 = irmsarmonico1prop/irms
-             print(f'FDCorrienteCGE : {FDCorrienteCGE1 }')
+             #print(f'FDCorrienteCGE : {FDCorrienteCGE1 }')
              str_num = {"value":FDCorrienteCGE1,"save":0}
              FDCorrienteCGE = json.dumps(str_num)
              DATCorrienteCGE1 = np.sqrt((SumMagnitudEficaz2**2-Magnitud1**2)/(Magnitud1**2))
@@ -615,7 +621,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
              DATCorrienteCGE = json.dumps(str_num2)
              #print(f'DAT corriente CGE: {DATCorrienteCGE}')
              phasecorrienteCGE = np.arctan(real[0]/(imag[0]))
-             print(f'phasecorrienteCGE  : {phasecorrienteCGE}')
+             #print(f'phasecorrienteCGE  : {phasecorrienteCGE}')
              if (sincvoltaje1 == 1):
                  if(phasevoltajeCGE-(phasecorrienteCGE)>=0):
                      desfaseCGE = "Corriente Adelantada a Voltaje"
@@ -633,10 +639,10 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
                  #    FPCGE0=-0.99
                 
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
-                 print(f'FP1 cge: {FPCGE0}')
+                 #print(f'FP1 cge: {FPCGE0}')
                  str_num3 = {"value":FPCGE0,"save":0}
                  FPCGE = json.dumps(str_num3)
-                 print(f'cos(phi) cge : {cosphiCGE}')
+                 #print(f'cos(phi) cge : {cosphiCGE}')
                  sincvoltaje1=0  
                  #return FPCGE
          #sincvolaje1=0 
@@ -646,7 +652,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
              FDCorrientePaneles1 = irmsarmonico1prop/irms
              str_num = {"value":FDCorrientePaneles1,"save":0}
              FDCorrientePaneles = json.dumps(str_num)
-             print(f'FDCorrientePaneles : {FDCorrientePaneles1 }')
+             #print(f'FDCorrientePaneles : {FDCorrientePaneles1 }')
              DATCorrientePaneles1 = np.sqrt((SumMagnitudEficaz2**2-Magnitud1**2)/(Magnitud1**2))
              str_num2 = {"value":DATCorrientePaneles1,"save":0}
              DATCorrientePaneles = json.dumps(str_num2)
@@ -668,8 +674,8 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
                 
                  cosphiPaneles=np.cos(phasevoltajePaneles-phasecorrientePaneles)
                  #FP=np.cos(FaseArmonicoFundamentalVoltaje-FaseArmonicoFundamentalCorriente)
-                 print(f'FP1 paneles: {FPPaneles1}')
-                 print(f'cos(phi) paneles : {cosphiPaneles}')
+                 #print(f'FP1 paneles: {FPPaneles1}')
+                 #print(f'cos(phi) paneles : {cosphiPaneles}')
                  str_num = {"value":FPPaneles1,"save":0}
                  FPPaneles = json.dumps(str_num)
                  sincvoltaje2=0  
@@ -679,13 +685,13 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
              global sincvoltaje3
              #print("paso fase 3")
              FDCorrienteCarga1=irmsarmonico1prop/irms
-             print(f'FD Corriente Carga : {FDCorrienteCarga1}')
+             #print(f'FD Corriente Carga : {FDCorrienteCarga1}')
              str_num = {"value":FDCorrienteCarga1,"save":0}
              FDCorrienteCarga = json.dumps(str_num)
              DATCorrienteCarga1 = np.sqrt((SumMagnitudEficaz2**2-Magnitud1**2)/(Magnitud1**2))
              str_num2 = {"value":DATCorrienteCarga1,"save":0}
              DATCorrienteCarga = json.dumps(str_num2)
-             print(f'DAT carga: {DATCorrienteCarga1}')
+             #print(f'DAT carga: {DATCorrienteCarga1}')
              phasecorrienteCarga = np.arctan(real[0]/(imag[0]))
              if (sincvoltaje3 == 1):
                  if(phasevoltajeCarga-(phasecorrienteCarga)>=0):
@@ -704,8 +710,8 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
                  #if(FPCarga1<=-1.0):
                  #    FPCarga1=-0.99
                 
-                 print(f'FP carga : {FPCarga1}')
-                 print(f'cos(phi) carga : {cosphiCarga}')
+                 #print(f'FP carga : {FPCarga1}')
+                 #print(f'cos(phi) carga : {cosphiCarga}')
                  str_num = {"value":FPCarga1,"save":0}
                  FPCarga = json.dumps(str_num)
                  sincvoltaje3=0
@@ -763,7 +769,7 @@ def Potencias(i,irms,vrms):
           global ActivaCGEFase11
           global ReactivaCGEFase11
           AparenteCGEFase11 = vrms*irms
-          print(f'Energia CGE: {AparenteCGEFase11}')
+          #print(f'Energia CGE: {AparenteCGEFase11}')
           if (potrmsCGE>=0):
                 ActivaCGEFase11 = vrms*irms*cosphiCGE
                 ActivaCGEFase11 = np.abs(ActivaCGEFase11)
@@ -771,9 +777,9 @@ def Potencias(i,irms,vrms):
                 ActivaCGEFase11 = vrms*irms*cosphiCGE
                 ActivaCGEFase11 = np.abs(ActivaCGEFase11)
                 ActivaCGEFase11 = ActivaCGEFase11*(-1)
-          print(f'Activa CGE: {ActivaCGEFase11}')
+          #print(f'Activa CGE: {ActivaCGEFase11}')
           ReactivaCGEFase11 = vrms*irms*np.sin(phasevoltajeCGE-phasecorrienteCGE)
-          print(f'Reactiva CGE: {ReactivaCGEFase11}')
+          #print(f'Reactiva CGE: {ReactivaCGEFase11}')
           a2 = datetime.datetime.now()
           delta=(((a2 - a).microseconds)/1000+((a2 - a).seconds)*1000)/10000000000
           energyCGEFase11 += np.abs(ActivaCGEFase11*delta*2.9)
@@ -785,7 +791,7 @@ def Potencias(i,irms,vrms):
               energyCGEFase11=0
           if(a2.hour==0 and a2.minute==1):
               energyCGEFase11=0
-          print(f'Energia CGE: {energyCGEFase11}')
+          #print(f'Energia CGE: {energyCGEFase11}')
           #print(f'Aparente Fase 1: {round(AparenteCGEFase1,2)}')
           str_num = {"value":ActivaCGEFase11,"save":1}
           str_num2 = {"value":ReactivaCGEFase11,"save":0}
@@ -807,7 +813,7 @@ def Potencias(i,irms,vrms):
           global ActivaPanelesFase12
           global ReactivaPanelesFase12
           AparentePanelesFase12 = vrms*irms
-          print(f'Aparente Paneles: {AparentePanelesFase12}')
+          #print(f'Aparente Paneles: {AparentePanelesFase12}')
           if(potrmsPaneles>=0):
                 ActivaPanelesFase12= vrms*irms*cosphiPaneles
                 ActivaPanelesFase12=np.abs(ActivaPanelesFase12)
@@ -815,10 +821,10 @@ def Potencias(i,irms,vrms):
                 ActivaPanelesFase12= vrms*irms*cosphiPaneles
                 ActivaPanelesFase12= np.abs(ActivaPanelesFase12)
                 ActivaPanelesFase12= ActivaPanelesFase12*(-1)
-          print(f'Activa Paneles: {ActivaPanelesFase12}')
+          #print(f'Activa Paneles: {ActivaPanelesFase12}')
           ReactivaPanelesFase12 = vrms*irms*np.sin(phasevoltajePaneles-phasecorrientePaneles)
           b2 = datetime.datetime.now()
-          print(f'Reactiva Paneles: {ReactivaPanelesFase12}')
+          #print(f'Reactiva Paneles: {ReactivaPanelesFase12}')
           delta=(((b2 - b).microseconds)/1000+((b2 - b).seconds)*1000)/10000000000
           energyPanelesFase12Hour += np.abs(ActivaPanelesFase12*delta*2.9)
           energyPanelesFase12 += np.abs(ActivaPanelesFase12*delta*2.9)
@@ -849,7 +855,7 @@ def Potencias(i,irms,vrms):
           global ActivaCargaFase13
           global ReactivaCargaFase13
           AparenteCargaFase13 = vrms*irms
-          print(f'Aparente Carga: {AparenteCargaFase13}')
+          #print(f'Aparente Carga: {AparenteCargaFase13}')
           if(potrmsCarga>=0):
               ActivaCargaFase13= vrms*irms*cosphiCarga
               ActivaCargaFase13=np.abs(ActivaCargaFase13)
@@ -858,10 +864,10 @@ def Potencias(i,irms,vrms):
               ActivaCargaFase13=np.abs(ActivaCargaFase13)
               ActivaCargaFase13=ActivaCargaFase13*(-1)
            
-          print(f'Activa Carga: {ActivaCargaFase13}')
+          #print(f'Activa Carga: {ActivaCargaFase13}')
           ReactivaCargaFase13 = vrms*irms*np.sin(phasevoltajeCarga-phasecorrienteCarga)
           c2 = datetime.datetime.now()
-          print(f'Reactiva Carga: {ReactivaCargaFase13}')
+          #print(f'Reactiva Carga: {ReactivaCargaFase13}')
           delta=(((c2 - c).microseconds)/1000+((c2 - c).seconds)*1000)/10000000000
           energyCargaFase13 += np.abs(ActivaCargaFase13*delta*2.9)
           energyCargaFase13Hour += np.abs(ActivaCargaFase13*delta*2.9)
@@ -976,7 +982,99 @@ def graphVoltage(list_fftVoltage,list_FPCurrent,samplings,i):
         plt.savefig(imagenVoltaje)
         
         
+"""        
+def EnviarImagenes():
+    #oldepoch = time.time()
+    current_time = time.time()
+    #st = datetime.datetime.fromtimestamp(oldepoch).strftime('%Y-%m-%d')
+    #print(f' st Enviar Imagenes: {st}')
+    for f in os.listdir('/home/pi/Desktop/IOTSER/images1/'):
+            creation_time = os.path.getctime(f)
+            if (((current_time - creation_time) // (24 * 3600)) >= 7):
+                os.unlink(f)
+
+EnviarImagenes()
+"""
+folder = "/home/pi/Desktop/IOTSER/images1/"
+compress_older_days = 5
+
+now = time.time()
+ 
+ 
+def sanitize_files():
+    # Loop through all the folder
+    for file in os.listdir(folder): 
+        f = os.path.join(folder,file)
+        if not f.endswith('.gz'):
+            if os.stat(f).st_mtime < now - (60*60*24*compress_older_days) and os.path.isfile(f):
+                print ("...Compressing file "+f)
+                out_filename = f + ".gz"
+                 
+                f_in = open(f, 'rb')
+                s = f_in.read()
+                f_in.close()
+ 
+                f_out = gzip.GzipFile(out_filename, 'wb')
+                f_out.write(s)
+                f_out.close()
+                # Remove original uncompressed file
+                os.remove(f)     
+        # We ensure that the file we are going to delete has been compressed before
         
+
+def sanitize_files2():
+    delete_older_days = 10
+    # Loop through all the folder
+    for file in os.listdir(folder): 
+        f = os.path.join(folder,file)
+        print ("...estrando"+f)
+        if os.stat(f).st_mtime < now - (60*60*24*delete_older_days) and os.path.isfile(f):
+                print ("...eliminando file "+f)
+                # Remove original uncompressed file
+                #os.remove(f) 
+                os.system(f"sudo rm {f}")    
+
+def sanitize_files3():
+     
+     path = f"/home/pi/Desktop/IOTSER/images1/"
+     now = time.time()
+     for i in path:
+         for f in os.listdir(path):
+            f = os.path.join(path, f)
+            print(f"paso for {f}")
+            if os.stat(os.path.join(path,f)).st_mtime < now - 4 * 86400:
+                 #print("paso if")
+                 if os.path.isfile(f):
+                     print("paso if 2")
+                     os.remove(f)
+
+     path = f"/home/pi/Desktop/IOTSER/images2/"
+     now = time.time()
+     for i in path:
+         for f in os.listdir(path):
+            f = os.path.join(path, f)
+            print(f"paso for {f}")
+            if os.stat(os.path.join(path,f)).st_mtime < now - 4 * 86400:
+                 #print("paso if")
+                 if os.path.isfile(f):
+                     print("paso if 2")
+                     os.remove(f)
+     path = f"/home/pi/Desktop/IOTSER/images3/"
+     now = time.time()
+     for i in path:
+         for f in os.listdir(path):
+            f = os.path.join(path, f)
+            print(f"paso for {f}")
+            if os.stat(os.path.join(path,f)).st_mtime < now - 4 * 86400:
+                 #print("paso if")
+                 if os.path.isfile(f):
+                     print("paso if 2")
+                     os.remove(f)
+    
+
+#sanitize_files()
+#sanitize_files2()
+sanitize_files3()
 
 vrms1=0.0
 vrms2=0.0
@@ -1054,23 +1152,28 @@ def received():
                            minimovoltaje = np.median(valoresminimovoltajesinmedia)
                            mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                            # Valores maximo y minimos de voltaje sin componente continua
-                           NoVoltageoffset1=list_FPVoltage-mediadcvoltaje
-                           #maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 50)
-                           #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
-                           #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
-                           vrms1=VoltajeRms(NoVoltageoffset1)
-                          
+                           NoVoltageoffset1=(list_FPVoltage-mediadcvoltaje)
+                           maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset1, 50)
+                           #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset1, 50)
+                           maximovoltaje2 = np.median(maximovoltaje2sinmedia)
+                           #minimovoltaje2 = np.median(minimovoltaje2sinmedia)
+                           print(f'maximo voltaje sin loop: {maximovoltaje2}')
+                           print(f'maximo voltaje sin loop dividido: {maximovoltaje2/1.6}')
+                           calibrar = NoVoltageoffset1/1.6
+                           vrms1=VoltajeRms(calibrar)
+                           print(f'RMS CGE: {vrms1}')
                            if (len(modamaximovoltaje11)>=5):
                                modavoltaje=np.median(modamaximovoltaje11)
-                               vrms1=VoltRms(modavoltaje)
+                               #vrms1=VoltRms(modavoltaje)
+                               vrms1=modavoltaje
                                print(f'Vrms CGE: {vrms1}')
                                str_num = {"value":vrms1,"save":1}
                                vrms11 = json.dumps(str_num)
-                               #print(f'maximo voltaje: {maximovoltaje2}')
+                               print(f'moda voltaje: {modavoltaje}')
                                #print(f'minimo voltaje: {minimovoltaje2}')
                                #NoVoltageoffset2=NoVoltageoffset/1.90
                                #VoltajeRms(NoVoltageoffset2)
-                               VoltageFFT(NoVoltageoffset1,samplings1,1)
+                               VoltageFFT(calibrar,samplings1,1)
                                #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
                                #graphFFTV1(NoVoltageoffset2,samplings)
                                #print(f'MODA VOLTAJE: {modavoltaje}')
@@ -1094,7 +1197,7 @@ def received():
                            maximocorriente2sinmedia=getMaxValues(NoCurrentoffset1, 50)
                            #minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 50)
                            maximocorriente2 = np.median(maximocorriente2sinmedia)
-                           print(f'maximocorriente2 CGE: {maximocorriente2}')
+                           #print(f'maximocorriente2 CGE: {maximocorriente2}')
                            #minimocorriente2 = np.median(minimocorriente2sinmedia)
                            irms1=CorrienteRms(NoCurrentoffset1)
                            
@@ -1113,7 +1216,7 @@ def received():
                                ListaIrmsPeak1 = NoCurrentoffset1/proporción
                                maximocorr=getMaxValues(ListaIrmsPeak1, 10)
                                maximocorrCGE = np.median(maximocorr)
-                               print(f'maximocorr CGE: {maximocorrCGE}')
+                               #print(f'maximocorr CGE: {maximocorrCGE}')
 
                                CurrentFFT(ListaIrmsPeak1,samplings1,1,irms1)
                                #print(f'MODA CORRIENTE CGE: {modacorriente}')
@@ -1176,14 +1279,15 @@ def received():
                            mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                            # Valores maximo y minimos de voltaje sin componente continua
                            NoVoltageoffset2=list_FPVoltage-mediadcvoltaje
-                           #maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset, 50)
+                           maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset2, 50)
                            #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
-                           #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
+                           maximovoltaje2 = np.median(maximovoltaje2sinmedia)
                            vrms2=VoltajeRms(NoVoltageoffset2)
                            
                            if (len(modamaximovoltaje22)>=5):
                                modavoltaje22=np.median(modamaximovoltaje22)
                                vrms2=VoltRms(modavoltaje22)
+                               print(f'maximo voltaje carga: {maximovoltaje2}')
                                str_num = {"value":vrms2,"save":1}
                                vrms22 = json.dumps(str_num)
                                print(f'Vrms Carga: {vrms2}')
@@ -1219,7 +1323,7 @@ def received():
                                ListaIrmsPeak2 = NoCurrentoffset2/proporción
                                maximocorr=getMaxValues(ListaIrmsPeak2, 10)
                                maximocorr = np.median(maximocorr)
-                               print(f'maximocorr Carga: {maximocorr}')
+                               #print(f'maximocorr Carga: {maximocorr}')
                                #print(f'MODA CORRIENTE Carga: {modacorriente22}')
                                #NoCurrentoffset2 = NoCurrentoffset2/(irms2*np.sqrt(2))
                                CurrentFFT(ListaIrmsPeak2,samplings2,2,irms2)
@@ -1328,12 +1432,12 @@ def received():
                                ListaIrmsPeak3 = NoCurrentoffset3/proporción
                                maximocorr=getMaxValues(ListaIrmsPeak3, 10)
                                maximocorr = np.median(maximocorr)
-                               print(f'maximocorr Paneles: {maximocorr}')
+                               #print(f'maximocorr Paneles: {maximocorr}')
                                #NoCurrentoffset3 = NoCurrentoffset3/(irms3*np.sqrt(2))
                                CurrentFFT(ListaIrmsPeak3,samplings3,3,irms3)
                                potrmsPaneles=PotenciaRms(ListaIrmsPeak3,NoVoltageoffset3)
                                Potencias(3,irms3,vrms3)
-                               print(f'Pot Rms3 : {potrmsPaneles}')
+                               #print(f'Pot Rms3 : {potrmsPaneles}')
                                ExcelAllInsertPaneles()
                                ExcelDataPaneles()
                                try:
@@ -1355,34 +1459,41 @@ def received():
                  if (len(np_array)>0 and len(np_array)<=2):
                          global tempESP32
                          global Temp_Raspberry
+                         global Temp_Raspberry0
+                         global cpu_uso
+                         global RAM
+                         global RAM1
+                         global reinicio
                          #global EstateVentilador
                          Temp_Raspberry0=cpu_temp()
-                         print("Temperatura Raspberry:  ",Temp_Raspberry0)
+                         cpu_uso=get_cpuload()
+                         
                          str_num = {"value":Temp_Raspberry0,"save":0}
                          Temp_Raspberry = json.dumps(str_num)
                          Ventilador()
+                         
+
+                         total_memory,used_memory,free_memory = map( int, os.popen('free -t -m').readlines()[-1].split()[1:]) 
+                         RAM1 = round((used_memory/total_memory) * 100, 2)
+  
+                         print(f'RAM memory 1: {RAM1}%') 
+
+                         RAM = psutil.virtual_memory()[2]
+                         print(f'RAM memory 2:  {RAM}%') 
+                         dataAllVariables()
+                         VariablesExcel()
+                         if (RAM > 85):
+                              os.system("sudo reboot")
                          #temphum()
                          #distance()
                          tempESP320 = round(np_array[0],0)
                          str_num2 = {"value":tempESP320,"save":0}
                          tempESP32 = json.dumps(str_num2)
                          #print(f'array: {np_array}')
-                 #Maximo15minCGE()
-                 #Maximo15minCarga()
-                 #Maximo15minPaneles()
-                 excel=datetime.datetime.now()
-                 
 
-                 #print(f'excel hour : {excel.hour}')
-                 #print(f'excel minute : {excel.minute}')
+                 excel=datetime.datetime.now()
+               
                  
-                 #if(excel.hour==9 and excel.minute==33):
-                 #         if(accesoemail==0):
-                 #                accesoemail=1
-                 #                print("Entro a SendEmail")
-                 #                SendEmail()
-                 #else:
-                 #    accesoemail=0
                  """
                  if(excel.hour==13 and excel.minute==3):
                           if(accesoemail2==0):
@@ -1417,7 +1528,6 @@ def received():
 
                  try:  
                        if(client.connected_flag==True): 
-                             #print("paso")
                              publish(client)
                  except:
                      global countbroker
@@ -1481,8 +1591,7 @@ def publish(client):
                      str_variable = i["variable"]
                      topic1 = topicmqtt + str_variable + "/sdata"
                      result = client.publish(topic1, irms11)
-                     status = result[0]
-                     
+                     status = result[0]            
                      if status == 0:
                          print(f"Send irms1: `{irms11}` to topic `{topic1}` con freq: {freq}")
                      else:
@@ -1497,11 +1606,11 @@ def publish(client):
                      str_variable2 = i["variable"]
                      topic2 = topicmqtt + str_variable2 + "/sdata"
                      result = client.publish(topic2, vrms11)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send vrms1: `{vrms11}` to topic `{topic2}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic2}")
+                #     status = result[0]
+                #     if status == 0:
+                #         print(f"Send vrms1: `{vrms11}` to topic `{topic2}` con freq: {freq}")
+                #     else:
+                #         print(f"Failed to send message to topic {topic2}")
             """
             if(i["variableFullName"]=="Potencia-Reactiva-CGE"):
                 freq = i["variableSendFreq"]
@@ -1525,11 +1634,11 @@ def publish(client):
                      str_variable4 = i["variable"]
                      topic4 = topicmqtt + str_variable4 + "/sdata"
                      result = client.publish(topic4, ActivaCGEFase1)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Pot-Activa CGE: `{ActivaCGEFase1}` to topic `{topic4}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic4}")
+               #      status = result[0]
+               #      if status == 0:
+               #          print(f"Send Pot-Activa CGE: `{ActivaCGEFase1}` to topic `{topic4}` con freq: {freq}")
+               #      else:
+               #          print(f"Failed to send message to topic {topic4}")
             
             if(i["variableFullName"]=="Energia-CGE"):
                 freq = i["variableSendFreq"]
@@ -1539,11 +1648,11 @@ def publish(client):
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
                      result = client.publish(topic5, energyCGEFase1)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send energia CGE: `{energyCGEFase1}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
+               #      status = result[0]
+               #      if status == 0:
+               #          print(f"Send energia CGE: `{energyCGEFase1}` to topic `{topic5}` con freq: {freq}")
+               #      else:
+               #          print(f"Failed to send message to topic {topic5}")
             
             if(i["variableFullName"]=="FP-CGE"):
                 freq = i["variableSendFreq"]
@@ -1553,11 +1662,11 @@ def publish(client):
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
                      result = client.publish(topic5, FPCGE)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send FP-CGE: `{FPCGE}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
+               #     status = result[0]
+               #     if status == 0:
+               #         print(f"Send FP-CGE: `{FPCGE}` to topic `{topic5}` con freq: {freq}")
+               #     else:
+               #         print(f"Failed to send message to topic {topic5}")
             """
             if(i["variableFullName"]=="FD-CGE"):
                 freq = i["variableSendFreq"]
@@ -1607,12 +1716,12 @@ def publish(client):
                      str_variable = i["variable"]
                      topic = topicmqtt + str_variable + "/sdata"
                      result = client.publish(topic, irms22)
-                     status = result[0]
-                     
-                     if status == 0:
-                         print(f"Send Corriente-Carga: `{irms22}` to topic `{topic}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic}")
+              #       status = result[0]
+              #       
+              #       if status == 0:
+              #           print(f"Send Corriente-Carga: `{irms22}` to topic `{topic}` con freq: {freq}")
+              #       else:
+              #           print(f"Failed to send message to topic {topic}")
         
                    
             if(i["variableFullName"]=="Voltaje-Carga"):
@@ -1623,11 +1732,11 @@ def publish(client):
                      str_variable2 = i["variable"]
                      topic2 = topicmqtt + str_variable2 + "/sdata"
                      result = client.publish(topic2, vrms22)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Voltaje-Carga: `{vrms22}` to topic `{topic2}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic2}")
+              #       status = result[0]
+              #       if status == 0:
+              #           print(f"Send Voltaje-Carga: `{vrms22}` to topic `{topic2}` con freq: {freq}")
+              #       else:
+              #           print(f"Failed to send message to topic {topic2}")
             """
             if(i["variableFullName"]=="Potencia-Reactiva-Carga"):
                 freq = i["variableSendFreq"]
@@ -1651,11 +1760,11 @@ def publish(client):
                      str_variable4 = i["variable"]
                      topic4 = topicmqtt + str_variable4 + "/sdata"
                      result = client.publish(topic4, ActivaCargaFase1)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Pot-Activa-Carga: `{ActivaCargaFase1}` to topic `{topic4}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic4}")
+               #      status = result[0]
+               #      if status == 0:
+               #          print(f"Send Pot-Activa-Carga: `{ActivaCargaFase1}` to topic `{topic4}` con freq: {freq}")
+               #      else:
+               #          print(f"Failed to send message to topic {topic4}")
             
             if(i["variableFullName"]=="Energia-Carga"):
                 freq = i["variableSendFreq"]
@@ -1665,11 +1774,11 @@ def publish(client):
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
                      result = client.publish(topic5, energyCargaFase1)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Energia-Carga: `{energyCargaFase1}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
+                 #    status = result[0]
+                 #    if status == 0:
+                 #        print(f"Send Energia-Carga: `{energyCargaFase1}` to topic `{topic5}` con freq: {freq}")
+                 #    else:
+                 #        print(f"Failed to send message to topic {topic5}")
             
             if(i["variableFullName"]=="FP-Carga"):
                 freq = i["variableSendFreq"]
@@ -1679,11 +1788,11 @@ def publish(client):
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
                      result = client.publish(topic5, FPCarga)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send FP-Carga: `{FPCarga}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
+               #      status = result[0]
+               #      if status == 0:
+               #          print(f"Send FP-Carga: `{FPCarga}` to topic `{topic5}` con freq: {freq}")
+               #      else:
+               #          print(f"Failed to send message to topic {topic5}")
             """
             if(i["variableFullName"]=="FD-Carga"):
                 freq = i["variableSendFreq"]
@@ -1733,12 +1842,12 @@ def publish(client):
                      str_variable = i["variable"]
                      topic = topicmqtt + str_variable + "/sdata"
                      result = client.publish(topic, irms33)
-                     status = result[0]
-                     
-                     if status == 0:
-                         print(f"Send Corriente-Paneles: `{irms33}` to topic `{topic}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic}")
+               #      status = result[0]
+               #      
+               #      if status == 0:
+               #          print(f"Send Corriente-Paneles: `{irms33}` to topic `{topic}` con freq: {freq}")
+               #      else:
+               #          print(f"Failed to send message to topic {topic}")
         
                    
             if(i["variableFullName"]=="Voltaje-Paneles"):
@@ -1749,11 +1858,11 @@ def publish(client):
                      str_variable2 = i["variable"]
                      topic2 = topicmqtt + str_variable2 + "/sdata"
                      result = client.publish(topic2, vrms33)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Voltaje-Paneles: `{vrms33}` to topic `{topic2}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic2}")
+                #     status = result[0]
+                #     if status == 0:
+                #         print(f"Send Voltaje-Paneles: `{vrms33}` to topic `{topic2}` con freq: {freq}")
+                #     else:
+                #         print(f"Failed to send message to topic {topic2}")
             """
             if(i["variableFullName"]=="Potencia-Reactiva-Paneles"):
                 freq = i["variableSendFreq"]
@@ -1777,11 +1886,11 @@ def publish(client):
                      str_variable4 = i["variable"]
                      topic4 = topicmqtt + str_variable4 + "/sdata"
                      result = client.publish(topic4, ActivaPanelesFase1)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Pot-Activa-Paneles: `{ActivaPanelesFase1}` to topic `{topic4}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic4}")
+                 #    status = result[0]
+                 #    if status == 0:
+                 #        print(f"Send Pot-Activa-Paneles: `{ActivaPanelesFase1}` to topic `{topic4}` con freq: {freq}")
+                 #    else:
+                 #        print(f"Failed to send message to topic {topic4}")
             
             if(i["variableFullName"]=="Energia-Paneles"):
                 freq = i["variableSendFreq"]
@@ -1791,11 +1900,11 @@ def publish(client):
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
                      result = client.publish(topic5, energyPanelesFase1)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Energia-Paneles: `{energyPanelesFase1}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
+                  #   status = result[0]
+                  #   if status == 0:
+                  #       print(f"Send Energia-Paneles: `{energyPanelesFase1}` to topic `{topic5}` con freq: {freq}")
+                  #   else:
+                  #       print(f"Failed to send message to topic {topic5}")
             
             if(i["variableFullName"]=="FP-Paneles"):
                 freq = i["variableSendFreq"]
@@ -1805,11 +1914,11 @@ def publish(client):
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
                      result = client.publish(topic5, FPPaneles)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send FP-Paneles: `{FPPaneles}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
+                  #   status = result[0]
+                  #   if status == 0:
+                  #       print(f"Send FP-Paneles: `{FPPaneles}` to topic `{topic5}` con freq: {freq}")
+                  #   else:
+                  #       print(f"Failed to send message to topic {topic5}")
             """
             if(i["variableFullName"]=="FD-Paneles"):
                 freq = i["variableSendFreq"]
@@ -1895,10 +2004,20 @@ def publish(client):
                          print(f"Failed to send message to topic {topic}")
  
 
-
+dataVariablesAll=[]
 dataCGEAll=[]
 dataCargaAll=[]
 dataPanelesAll=[]
+
+def dataAllVariables():
+        #print(f'Guardando lista')
+        print("Temperatura Raspberry:  ",Temp_Raspberry0)
+        print("Uso de CPU Raspberry:  ",cpu_uso)
+        dataVariablesAll.insert(1,Temp_Raspberry0)
+        dataVariablesAll.insert(2,cpu_uso)
+        dataVariablesAll.insert(3,RAM1)
+        dataVariablesAll.insert(4,RAM)
+
 def ExcelAllInsertCGE():
         dataCGEAll.insert(1,round(vrms1,2))
         dataCGEAll.insert(2,round(irms1,2))
@@ -2119,7 +2238,7 @@ def Maximo15minCarga():
          #if(len(PotAparente15Carga)>2):
                if(accesoCarga == 0):
                     #print("paso if 2 Carga")
-                    graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
+                    #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     accesoCarga = 1
                     maximoVoltaje15Carga=max(Volt15Carga)
                     maximoCorrienteCarga=max(Corriente15Carga)
@@ -2251,7 +2370,7 @@ def Maximo15minPaneles():
          if(accesoPaneles == 0):
               #print("paso if 2 Paneles")
               try:
-                     graphVoltage(NoVoltageoffset3,ListaIrmsPeak3,samplings3,3)
+                     #graphVoltage(NoVoltageoffset3,ListaIrmsPeak3,samplings3,3)
                      accesoPaneles = 1
                      maximoVoltaje15Paneles=max(Volt15Paneles)
                      maximoCorrientePaneles=max(Corriente15Paneles)
@@ -2354,26 +2473,28 @@ def excelcreate():
     exceltime=date.today()
     book = Workbook()
     dest_filename = f'{exceltime}.xlsx'
-    sheet = book.active
-    sheet.title = "Resumen Reportes"
+    #sheet1 = book.active
+    sheet1  = book.create_sheet("Variables Raspberry")
     sheet2 = book.create_sheet("CGE Maximos 15 Min")
     sheet3 = book.create_sheet("Carga Maximos 15 Min")
     sheet4 = book.create_sheet("Paneles Maximos 15 Min")
     sheet5 = book.create_sheet("CGE")
     sheet6 = book.create_sheet("Carga")
     sheet7 = book.create_sheet("Paneles")
-    sheet8 = book.create_sheet("CGE Graphs")
+    headings0 = ['Fecha y Hora'] + list(['T° Raspberry','Uso CPU %','RAM1','RAM2'])
     headings=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
     'FPReact','FPInduct','FD','DAT','Energia'])
     headings2=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
     'FP','FD','DAT','cos(phi)','Energia','Energia por Hora'])
     ceros=list([0,0,0,0,0,0,0,0,0,0,0])
+    sheet1.append(headings0)
     sheet2.append(headings)
     sheet3.append(headings)
     sheet4.append(headings)
     sheet5.append(headings2)
     sheet6.append(headings2)
     sheet7.append(headings2)
+    sheet1.append(list([0,0,0]))
     sheet2.append(ceros)
     sheet3.append(ceros)
     sheet4.append(ceros)
@@ -2405,9 +2526,6 @@ def AbrirExcel():
             energyCGEFase11 = float(sheet5[f'k{largoexcelCGE}'].value)
             energyCargaFase13 = float(sheet6[f'k{largoexcelCarga}'].value)
             energyPanelesFase12 = float(sheet7[f'k{largoexcelPaneles}'].value)
-            #energyCGEFase11=float(energyCGEFase11)
-            #energyCargaFase13=float(energyCargaFase13)
-            #energyPanelesFase12=float(energyPanelesFase12)
             print(f'Valor Energia Paneles Acumulado: {energyPanelesFase12} ')
     else:
             excelcreate()
@@ -2415,6 +2533,15 @@ def AbrirExcel():
 
 AbrirExcel()
 
+
+def VariablesExcel():
+       global dataVariablesAll                      
+       workbook=openpyxl.load_workbook(filename = dest_filename)
+       sheet1 = workbook["Variables Raspberry"]
+       dataVariablesAll.insert(0,datetime.datetime.now())
+       sheet1.append(list(dataVariablesAll))
+       workbook.save(filename = dest_filename)
+       dataVariablesAll=[]
 
 def ExcelDataCGE():
        global dataCGEAll                      
