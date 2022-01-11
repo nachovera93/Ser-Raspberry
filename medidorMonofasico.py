@@ -53,14 +53,32 @@ import gzip
     6-255: undefined
     """
 
+from board import SCL, SDA
+import busio
+from PIL import Image, ImageDraw, ImageFont
+import adafruit_ssd1306
+import time
 
-fecha=str(datetime.datetime.now())
+i2c = busio.I2C(SCL, SDA)
+disp = adafruit_ssd1306.SSD1306_I2C(128, 64, i2c)
 
-f = open('mi_fichero2.txt', 'w')
-try:
-    f.write(fecha)
-finally:
-    f.close()
+disp.fill(0)
+disp.show()
+
+image = Image.new('1', (128, 64))
+
+draw = ImageDraw.Draw(image)
+
+font = ImageFont.load_default()
+
+#  Escribe 2 lineas texto
+draw.text((50, 16),    'Iniciando ..',  font=font, fill=255)
+disp.image(image)
+disp.show()
+#import pywhatkit
+#pywhatkit.sendwhatmsg("+56945959125", "Hi",15,36)
+
+
 
 def BorrarArchivos():
 
@@ -1133,7 +1151,7 @@ def received():
                            global ListaIrmsPeak1
                            global potrmsCGE
                            samplings1 = np_array[-1]
-                           list_FPVoltage3 = np_array[0:4200]
+                           list_FPVoltage3 = (np_array[0:4200]) #/1.65
                            list_FPCurrent3 = np_array[4201:8400]
                            #print(f'max inicio: {max(list_FPVoltage3)}')
                            sos = signal.butter(10, 2500, 'low', fs=samplings1, output='sos')
@@ -1153,27 +1171,36 @@ def received():
                            mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                            # Valores maximo y minimos de voltaje sin componente continua
                            NoVoltageoffset1=(list_FPVoltage-mediadcvoltaje)
-                           maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset1, 50)
+                           #maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset1, 50)
                            #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset1, 50)
-                           maximovoltaje2 = np.median(maximovoltaje2sinmedia)
+                           #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
                            #minimovoltaje2 = np.median(minimovoltaje2sinmedia)
-                           print(f'maximo voltaje sin loop: {maximovoltaje2}')
-                           print(f'maximo voltaje sin loop dividido: {maximovoltaje2/1.6}')
-                           calibrar = NoVoltageoffset1/1.6
-                           vrms1=VoltajeRms(calibrar)
-                           print(f'RMS CGE: {vrms1}')
+                           #print(f'maximo voltaje sin loop: {maximovoltaje2}')
+                           #calibrar = NoVoltageoffset1/1.6
+                           vrms1=VoltajeRms(NoVoltageoffset1)*0.92
+                           image = Image.new('1', (128, 64))
+                           draw = ImageDraw.Draw(image)
+                           font = ImageFont.load_default()
+                           #disp.fill(0)
+                           #disp.show()
+                           draw.text((10, 46), f'V CGE:{vrms1}', font=font, fill=255)
+                          # draw.text((50, 26), vrms1, font=font, fill=255)
+                           disp.image(image)
+                           disp.show()
+                           #print(f'RMS CGE: {vrms1}')
                            if (len(modamaximovoltaje11)>=5):
                                modavoltaje=np.median(modamaximovoltaje11)
-                               #vrms1=VoltRms(modavoltaje)
-                               vrms1=modavoltaje
-                               print(f'Vrms CGE: {vrms1}')
+                               modavoltaje1=modavoltaje
+                               vrms1=VoltRms(modavoltaje1)
+                               #vrms1=modavoltaje
+                               print(f'Vrms CGE: {modavoltaje1}')
                                str_num = {"value":vrms1,"save":1}
                                vrms11 = json.dumps(str_num)
-                               print(f'moda voltaje: {modavoltaje}')
+                               #print(f'moda voltaje: {modavoltaje}')
                                #print(f'minimo voltaje: {minimovoltaje2}')
                                #NoVoltageoffset2=NoVoltageoffset/1.90
                                #VoltajeRms(NoVoltageoffset2)
-                               VoltageFFT(calibrar,samplings1,1)
+                               VoltageFFT(NoVoltageoffset1,samplings1,1)
                                #graphVoltage1(NoVoltageoffset2,maximovoltaje2,minimovoltaje2,samplings)
                                #graphFFTV1(NoVoltageoffset2,samplings)
                                #print(f'MODA VOLTAJE: {modavoltaje}')
@@ -1279,15 +1306,24 @@ def received():
                            mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                            # Valores maximo y minimos de voltaje sin componente continua
                            NoVoltageoffset2=list_FPVoltage-mediadcvoltaje
-                           maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset2, 50)
+                           #maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset2, 50)
                            #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
-                           maximovoltaje2 = np.median(maximovoltaje2sinmedia)
-                           vrms2=VoltajeRms(NoVoltageoffset2)
-                           
+                           #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
+                           vrms2=VoltajeRms(NoVoltageoffset2)*0.92
+                           image = Image.new('1', (128, 64))
+                           draw = ImageDraw.Draw(image)
+                           font = ImageFont.load_default()
+                           #disp.fill(0)
+                           #disp.show()
+                           draw.text((10, 46), f'V Carga:{vrms2}', font=font, fill=255)
+                          # draw.text((50, 26), vrms1, font=font, fill=255)
+                           disp.image(image)
+                           disp.show()
                            if (len(modamaximovoltaje22)>=5):
                                modavoltaje22=np.median(modamaximovoltaje22)
-                               vrms2=VoltRms(modavoltaje22)
-                               print(f'maximo voltaje carga: {maximovoltaje2}')
+                               modavoltaje221=modavoltaje22
+                               vrms2=VoltRms(modavoltaje221)
+                               print(f'moda voltaje carga: {modavoltaje221}')
                                str_num = {"value":vrms2,"save":1}
                                vrms22 = json.dumps(str_num)
                                print(f'Vrms Carga: {vrms2}')
@@ -1319,6 +1355,14 @@ def received():
                                str_num = {"value":irms2,"save":1}
                                irms22 = json.dumps(str_num)
                                print(f'Irms Carga: {irms2}')
+                               image = Image.new('1', (128, 64))
+                               draw = ImageDraw.Draw(image)
+                               font = ImageFont.load_default()
+                         
+                               draw.text((10, 46), f'I Carga:{irms2}', font=font, fill=255)
+                          
+                               disp.image(image)
+                               disp.show()
                                proporción=maximocorriente2/(irms2*np.sqrt(2))
                                ListaIrmsPeak2 = NoCurrentoffset2/proporción
                                maximocorr=getMaxValues(ListaIrmsPeak2, 10)
@@ -1492,8 +1536,8 @@ def received():
                          #print(f'array: {np_array}')
 
                  excel=datetime.datetime.now()
-               
                  
+                 #display.show()
                  """
                  if(excel.hour==13 and excel.minute==3):
                           if(accesoemail2==0):
@@ -2238,7 +2282,7 @@ def Maximo15minCarga():
          #if(len(PotAparente15Carga)>2):
                if(accesoCarga == 0):
                     #print("paso if 2 Carga")
-                    #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
+                    graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     accesoCarga = 1
                     maximoVoltaje15Carga=max(Volt15Carga)
                     maximoCorrienteCarga=max(Corriente15Carga)
@@ -2370,7 +2414,7 @@ def Maximo15minPaneles():
          if(accesoPaneles == 0):
               #print("paso if 2 Paneles")
               try:
-                     #graphVoltage(NoVoltageoffset3,ListaIrmsPeak3,samplings3,3)
+                     graphVoltage(NoVoltageoffset3,ListaIrmsPeak3,samplings3,3)
                      accesoPaneles = 1
                      maximoVoltaje15Paneles=max(Volt15Paneles)
                      maximoCorrientePaneles=max(Corriente15Paneles)
@@ -2678,6 +2722,14 @@ while client.connected_flag:
     #time.sleep(5)
 """   
 
+
+fecha=str(datetime.datetime.now())
+
+f = open('mi_fichero2.txt', 'w')
+try:
+    f.write(fecha)
+finally:
+    f.close()
 
 if __name__ == '__main__':
     received()
