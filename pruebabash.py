@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 fecha=str(datetime.now())
-time.sleep(40)
+time.sleep(10)
 
 print("Hello Bash")
 

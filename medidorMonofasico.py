@@ -1,4 +1,3 @@
-#from pruebacsv.excelprueba import excelcreate
 import requests
 from datetime import date
 from datetime import datetime
@@ -52,7 +51,7 @@ import gzip
     5: connection failed - unauthorized
     6-255: undefined
     """
-
+"""
 from board import SCL, SDA
 import busio
 from PIL import Image, ImageDraw, ImageFont
@@ -77,7 +76,7 @@ disp.image(image)
 disp.show()
 #import pywhatkit
 #pywhatkit.sendwhatmsg("+56945959125", "Hi",15,36)
-
+"""
 
 
 def BorrarArchivos():
@@ -101,8 +100,8 @@ print("Hora de comienzo:", horasetup)
 
 broker = '18.228.175.193'    #mqtt server
 port = 1883
-dId = '123321'
-passw = 'xuZbIoq5EQ'
+dId = '123454321'
+passw = '25ebiBqWgR'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
@@ -1054,7 +1053,7 @@ def sanitize_files2():
 
 def sanitize_files3():
      
-     path = f"/home/pi/Desktop/IOTSER/images1/"
+     path = f"/home/pi/Desktop/MedidorMonofasico/Ser-Raspberry/images1/"
      now = time.time()
      for i in path:
          for f in os.listdir(path):
@@ -1066,7 +1065,7 @@ def sanitize_files3():
                      print("paso if 2")
                      os.remove(f)
 
-     path = f"/home/pi/Desktop/IOTSER/images2/"
+     path = f"/home/pi/Desktop/MedidorMonofasico/Ser-Raspberry/images2/"
      now = time.time()
      for i in path:
          for f in os.listdir(path):
@@ -1077,7 +1076,7 @@ def sanitize_files3():
                  if os.path.isfile(f):
                      print("paso if 2")
                      os.remove(f)
-     path = f"/home/pi/Desktop/IOTSER/images3/"
+     path = f"/home/pi/Desktop/MedidorMonofasico/Ser-Raspberry/images3/"
      now = time.time()
      for i in path:
          for f in os.listdir(path):
@@ -1092,7 +1091,7 @@ def sanitize_files3():
 
 #sanitize_files()
 #sanitize_files2()
-sanitize_files3()
+#sanitize_files3()
 
 vrms1=0.0
 vrms2=0.0
@@ -1177,23 +1176,23 @@ def received():
                            #minimovoltaje2 = np.median(minimovoltaje2sinmedia)
                            #print(f'maximo voltaje sin loop: {maximovoltaje2}')
                            #calibrar = NoVoltageoffset1/1.6
-                           vrms1=VoltajeRms(NoVoltageoffset1)*0.92
-                           image = Image.new('1', (128, 64))
-                           draw = ImageDraw.Draw(image)
-                           font = ImageFont.load_default()
+                           vrms1=VoltajeRms(NoVoltageoffset1)*0.94
+                          # image = Image.new('1', (128, 64))
+                          # draw = ImageDraw.Draw(image)
+                          # font = ImageFont.load_default()
                            #disp.fill(0)
                            #disp.show()
-                           draw.text((10, 46), f'V CGE:{vrms1}', font=font, fill=255)
+                          # draw.text((10, 46), f'V CGE:{vrms1}', font=font, fill=255)
                           # draw.text((50, 26), vrms1, font=font, fill=255)
-                           disp.image(image)
-                           disp.show()
+                          # disp.image(image)
+                          # disp.show()
                            #print(f'RMS CGE: {vrms1}')
                            if (len(modamaximovoltaje11)>=5):
                                modavoltaje=np.median(modamaximovoltaje11)
                                modavoltaje1=modavoltaje
                                vrms1=VoltRms(modavoltaje1)
                                #vrms1=modavoltaje
-                               print(f'Vrms CGE: {modavoltaje1}')
+                               print(f'Vrms CGE: {vrms1}')
                                str_num = {"value":vrms1,"save":1}
                                vrms11 = json.dumps(str_num)
                                #print(f'moda voltaje: {modavoltaje}')
@@ -1256,12 +1255,14 @@ def received():
                                #except:
                                except OSError as err:
                                     print("OS error: {0}".format(err))
-                               #except ValueError:
-                               #     print("Could not convert data to an integer.")
+                                    continue
+                               except ValueError:
+                                    print("Could not convert data to an integer.")
+                                    continue
                                #except BaseException as err:
                                #     print(f"Unexpected {err=}, {type(err)=}")
                                #     raise
-                                    continue
+                                    #continue
                                modamaximocorriente11=[]
                                #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings1)
                            else:
@@ -1309,21 +1310,21 @@ def received():
                            #maximovoltaje2sinmedia=getMaxValues(NoVoltageoffset2, 50)
                            #minimovoltaje2sinmedia=getMinValues(NoVoltageoffset, 50)
                            #maximovoltaje2 = np.median(maximovoltaje2sinmedia)
-                           vrms2=VoltajeRms(NoVoltageoffset2)*0.92
-                           image = Image.new('1', (128, 64))
-                           draw = ImageDraw.Draw(image)
-                           font = ImageFont.load_default()
+                           vrms2=VoltajeRms(NoVoltageoffset2)*0.94
+                           #image = Image.new('1', (128, 64))
+                           #draw = ImageDraw.Draw(image)
+                           #font = ImageFont.load_default()
                            #disp.fill(0)
                            #disp.show()
-                           draw.text((10, 46), f'V Carga:{vrms2}', font=font, fill=255)
+                           #draw.text((10, 46), f'V Carga:{vrms2}', font=font, fill=255)
                           # draw.text((50, 26), vrms1, font=font, fill=255)
-                           disp.image(image)
-                           disp.show()
+                           #disp.image(image)
+                           #disp.show()
                            if (len(modamaximovoltaje22)>=5):
                                modavoltaje22=np.median(modamaximovoltaje22)
                                modavoltaje221=modavoltaje22
                                vrms2=VoltRms(modavoltaje221)
-                               print(f'moda voltaje carga: {modavoltaje221}')
+                               print(f'moda voltaje carga: {vrms2}')
                                str_num = {"value":vrms2,"save":1}
                                vrms22 = json.dumps(str_num)
                                print(f'Vrms Carga: {vrms2}')
@@ -1355,14 +1356,14 @@ def received():
                                str_num = {"value":irms2,"save":1}
                                irms22 = json.dumps(str_num)
                                print(f'Irms Carga: {irms2}')
-                               image = Image.new('1', (128, 64))
-                               draw = ImageDraw.Draw(image)
-                               font = ImageFont.load_default()
+                               #image = Image.new('1', (128, 64))
+                               #draw = ImageDraw.Draw(image)
+                               #font = ImageFont.load_default()
                          
-                               draw.text((10, 46), f'I Carga:{irms2}', font=font, fill=255)
+                               #draw.text((10, 46), f'I Carga:{irms2}', font=font, fill=255)
                           
-                               disp.image(image)
-                               disp.show()
+                               #disp.image(image)
+                               #disp.show()
                                proporción=maximocorriente2/(irms2*np.sqrt(2))
                                ListaIrmsPeak2 = NoCurrentoffset2/proporción
                                maximocorr=getMaxValues(ListaIrmsPeak2, 10)
@@ -1380,12 +1381,14 @@ def received():
                                #except:
                                except OSError as err:
                                     print("OS error: {0}".format(err))
-                               #except ValueError:
-                               #     print("Could not convert data to an integer.")
+                                    continue
+                               except ValueError:
+                                    print("Could not convert data to an integer.")
+                                    continue
                                #except BaseException as err:
                                #     print(f"Unexpected {err=}, {type(err)=}")
                                #     raise
-                                    continue
+                                    #continue
                                modamaximocorriente22=[]
                                #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings2)
                            else:
@@ -1428,7 +1431,7 @@ def received():
                            # Valores maximo y minimos de voltaje sin componente continua
                            NoVoltageoffset3=list_FPVoltage-mediadcvoltaje  #Señal Voltaje 
                            
-                           vrms3=VoltajeRms(NoVoltageoffset3)
+                           vrms3=VoltajeRms(NoVoltageoffset3)*0.94
                            
                            if (len(modamaximovoltaje33)>=5):
                                modavoltaje33=np.median(modamaximovoltaje33)
@@ -1470,7 +1473,7 @@ def received():
                                irms3=CurrentRms(modacorriente33)
                                str_num = {"value":irms3,"save":1}
                                irms33 = json.dumps(str_num)
-                               #print(f'Irms Paneles : {irms3}')
+                               print(f'Irms Paneles : {irms3}')
                                #print(f'MODA CORRIENTE Paneles: {modacorriente33}')
                                proporción=maximocorriente2/(irms3*np.sqrt(2))
                                ListaIrmsPeak3 = NoCurrentoffset3/proporción
@@ -1490,16 +1493,83 @@ def received():
                                except OSError as err:
                                     print("OS error: {0}".format(err))
                                     continue
-                               #except ValueError:
-                                #    print("Could not convert data to an integer.")
+                               except ValueError:
+                                    print("Could not convert data to an integer.")
                                #except BaseException as err:
-                                #    print(f"Unexpected {err=}, {type(err)=}")
-                                 #   raise
+                               #     print(f"Unexpected {err=}, {type(err)=}")
+                               #     raise
                                modamaximocorriente33=[]
                                #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings3)
                            else:
                                modamaximocorriente33.append(irms3)
-                   
+
+                       if (np_array[0] == 55):
+                           global modamaximovoltajeBateria
+                           global modamaximocorrienteBaterias
+                           global modavoltajeBateria
+                           global modacorrienteBateria
+                           samplings2 = np_array[-1]
+                           list_FPVoltage3 = np_array[0:4200]
+                           list_FPCurrent3 = np_array[4201:8400]
+                           sos = signal.butter(10, 2500, 'low', fs=samplings2, output='sos')
+                           list_FPVoltage2 = signal.sosfilt(sos, list_FPVoltage3)
+                           list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
+                           list_FPVoltage = list_FPVoltage2[104:4200]
+                           list_FPCurrent = list_FPCurrent2 [103:4200]
+
+                           #Valor dc de Voltaje
+                           valoresmaximovoltajeBateria=getMaxValues(list_FPVoltage, 50)
+                           valoresminimovoltajeBateria=getMinValues(list_FPVoltage, 50)
+                           maximovoltaje = np.median(valoresmaximovoltajeBateria)
+                           minimovoltaje = np.median(valoresminimovoltajeBateria)
+                           mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
+                           # Valores maximo y minimos de voltaje sin componente continua
+                           NoVoltageoffset2=list_FPVoltage-mediadcvoltaje
+                           print("Valor Voltaje Batería: ", NoVoltageoffset2)
+                           if (len(modamaximovoltajeBateria)>=5):
+                               modavoltajeBateria=np.median(modamaximovoltajeBatería)
+                               print(f'moda voltaje Bateria: {modavoltajeBateria}')
+                               #str_num = {"value":vrms2,"save":1}
+                               #vrms22 = json.dumps(str_num)
+                               #print(f'Vrms Carga: {vrms2}')
+                               #VoltageFFT(NoVoltageoffset2,samplings2,2)
+                               modamaximovoltajeBateria=[]
+                           else:
+                               modamaximovoltajeBateria.append(vrms2)
+                            
+
+                           #Valor dc de corriente Baterias
+                           valoresmaxcorrienteBateria=getMaxValues(list_FPCurrent, 50)
+                           valoresmincorrienteBateria=getMinValues(list_FPCurrent, 50)
+                           maximocorrientebateria = np.median(valoresmaxcorrienteBateria)
+                           minimocorrientebateria = np.median(valoresmincorrienteBateria)
+       
+                           mediadccorriente = (maximocorriente+minimocorriente)/2
+                           
+                           # Valores maximo y minimos de corriente
+                           NoCurrentoffset2=list_FPCurrent-mediadccorriente
+                           maximocorriente2sinmedia=getMaxValues(NoCurrentoffset2, 50)
+                           #minimocorriente2sinmedia=getMinValues(NoCurrentoffset, 50)
+                           maximocorriente2 = np.median(maximocorriente2sinmedia)
+                           #minimocorriente2 = np.median(minimocorriente2sinmedia)
+                           irms2=CorrienteRms(NoCurrentoffset2)
+
+                           if (len(modamaximocorrientebateria)>=5):
+                               modacorrientebateria=np.median(modamaximocorrientebateria)
+                               irmsbateria=CurrentRms(modacorrientebateria)
+                               #str_num = {"value":irms2,"save":1}
+                               #irms22 = json.dumps(str_num)
+                               print(f'Irms Carga: {irmsbateria}')
+                               modamaximocorriente22=[]
+                               #CalculoDesfase(list_FPVoltage,list_FPCurrent,samplings2)
+                           else:
+                               modamaximocorriente22.append(irmsbateria)
+
+                 #if (np_array[0] == 44):
+                 #    global VDC
+                 #    list_VDC = np_array[1:10]
+                 #    mediavoltaje = np.median(list_VDC)
+                 #    print("VDC: ",mediavoltaje)
                  if (len(np_array)>0 and len(np_array)<=2):
                          global tempESP32
                          global Temp_Raspberry
@@ -1517,16 +1587,16 @@ def received():
                          Ventilador()
                          
 
-                         total_memory,used_memory,free_memory = map( int, os.popen('free -t -m').readlines()[-1].split()[1:]) 
-                         RAM1 = round((used_memory/total_memory) * 100, 2)
+                         #total_memory,used_memory,free_memory = map( int, os.popen('free -t -m').readlines()[-1].split()[1:]) 
+                         #RAM1 = round((used_memory/total_memory) * 100, 2)
   
-                         print(f'RAM memory 1: {RAM1}%') 
+                         #print(f'RAM memory 1: {RAM1}%') 
 
                          RAM = psutil.virtual_memory()[2]
                          print(f'RAM memory 2:  {RAM}%') 
                          dataAllVariables()
                          VariablesExcel()
-                         if (RAM > 85):
+                         if (RAM > 93):
                               os.system("sudo reboot")
                          #temphum()
                          #distance()
@@ -1552,7 +1622,7 @@ def received():
                           if(accesoemail3==0):
                                  accesoemail3=1
                                  print("Entro a SendEmail")
-                                 SendEmail()
+                                 #SendEmail()
                                  time.sleep(5)
                                  #os.remove(dest_filename)
                                  excelcreate()
@@ -2059,8 +2129,8 @@ def dataAllVariables():
         print("Uso de CPU Raspberry:  ",cpu_uso)
         dataVariablesAll.insert(1,Temp_Raspberry0)
         dataVariablesAll.insert(2,cpu_uso)
-        dataVariablesAll.insert(3,RAM1)
-        dataVariablesAll.insert(4,RAM)
+        dataVariablesAll.insert(3,RAM)
+        #dataVariablesAll.insert(4,RAM)
 
 def ExcelAllInsertCGE():
         dataCGEAll.insert(1,round(vrms1,2))
@@ -2525,7 +2595,7 @@ def excelcreate():
     sheet5 = book.create_sheet("CGE")
     sheet6 = book.create_sheet("Carga")
     sheet7 = book.create_sheet("Paneles")
-    headings0 = ['Fecha y Hora'] + list(['T° Raspberry','Uso CPU %','RAM1','RAM2'])
+    headings0 = ['Fecha y Hora'] + list(['T° Raspberry','Uso CPU %','RAM2'])
     headings=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
     'FPReact','FPInduct','FD','DAT','Energia'])
     headings2=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
@@ -2566,7 +2636,7 @@ def AbrirExcel():
             largoexcelCGE=len(sheet5["FP"])
             largoexcelCarga=len(sheet6["FP"])
             largoexcelPaneles=len(sheet7["FP"])
-            print(f'Numero de filas de paneles: {largoexcelPaneles} ')
+            #print(f'Numero de filas de paneles: {largoexcelPaneles} ')
             energyCGEFase11 = float(sheet5[f'k{largoexcelCGE}'].value)
             energyCargaFase13 = float(sheet6[f'k{largoexcelCarga}'].value)
             energyPanelesFase12 = float(sheet7[f'k{largoexcelPaneles}'].value)
@@ -2640,7 +2710,7 @@ def ExcelDataPaneles():
        sheet7 = workbook["Paneles"]
        dataPanelesAll.insert(0,datetime.datetime.now())
        sheet7.append(list(dataPanelesAll))
-       print(f'Numero de filas de paneles: {len(sheet7["FP"])} ')
+       #print(f'Numero de filas de paneles: {len(sheet7["FP"])} ')
        #print(f'Data paneles: {dataPaneles}')
        #print("Datos Insertados Correctamente!")
        workbook.save(filename = dest_filename)
