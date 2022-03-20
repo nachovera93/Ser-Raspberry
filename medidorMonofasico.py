@@ -240,7 +240,7 @@ vrms=0.0
 def VoltRms(maximovoltaje2):
     if(maximovoltaje2<13):
         vrms=0
-        print(f'vrms : {vrms}')
+        #print(f'vrms : {vrms}')
         return vrms
     vrms=maximovoltaje2*0.65
     #vrms=(-1.16 + 0.179*(maximovoltaje2) +  -0.00718*(maximovoltaje2**2) + 0.000155*(maximovoltaje2**3) + -0.00000203*(maximovoltaje2**4) + 0.0000000168*(maximovoltaje2**5) + -0.0000000000912*(maximovoltaje2**6) + 0.00000000000032*(maximovoltaje2**7) + -0.000000000000000703*(maximovoltaje2**8) + 0.000000000000000000875*(maximovoltaje2**9) + -0.000000000000000000000472*(maximovoltaje2**10))*maximovoltaje2
@@ -960,8 +960,14 @@ global accesoemail3
 accesoemail3=0
 global accesoexcel
 accesoxcel=0
-
+modamaximovoltajeBateria=[]
+modamaximocorrientebateria=[]
+modamaximovoltajePaneles=[]
+modamaximocorrientePaneles=[]
 countbroker=0
+global mediadccorrienteCarga
+global mediadccorrienteCGE
+
 
 def received():
     while True:
@@ -990,6 +996,7 @@ def received():
                            global NoCurrentoffset1
                            global ListaIrmsPeak1
                            global potrmsCGE
+                           
                            samplings1 = np_array[-1]
                            list_FPVoltage3 = (np_array[0:4200]) #/1.65
                            list_FPCurrent3 = np_array[4201:8400]
@@ -1014,7 +1021,7 @@ def received():
                                modavoltaje1=modavoltaje
                                vrms1=VoltRms(modavoltaje1)
                                #vrms1=modavoltaje
-                               print(f'Vrms CGE: {vrms1}')
+                               #print(f'Vrms CGE: {vrms1}')
                                str_num = {"value":vrms1,"save":1}
                                vrms11 = json.dumps(str_num)
                                VoltageFFT(NoVoltageoffset1,samplings1,1)
@@ -1029,10 +1036,10 @@ def received():
                            maximocorriente = np.median(valoresmaxcorriente)
                            minimocorriente = np.median(valoresmincorriente)
        
-                           mediadccorriente = (maximocorriente+minimocorriente)/2
-                           
+                           mediadccorrienteCGE = (maximocorriente+minimocorriente)/2
+                           #print("mediadccorriente : ",mediadccorrienteCGE)
                            # Valores maximo y minimos de corriente
-                           NoCurrentoffset1=list_FPCurrent-mediadccorriente
+                           NoCurrentoffset1=list_FPCurrent-mediadccorrienteCGE
                            maximocorriente2sinmedia=getMaxValues(NoCurrentoffset1, 50)
                            maximocorriente2 = np.median(maximocorriente2sinmedia)
                            irms1=CorrienteRms(NoCurrentoffset1)
@@ -1041,7 +1048,7 @@ def received():
                            if (len(modamaximocorriente11)>=5):
                                modacorriente=np.median(modamaximocorriente11)
                                irms1=CurrentRms(modacorriente)
-                               print(f'Irms CGE: {irms1}')
+                               #print(f'Irms CGE: {irms1}')
                                str_num = {"value":irms1,"save":1}
                                irms11 = json.dumps(str_num)
                                proporción=maximocorriente2/(irms1*np.sqrt(2))
@@ -1085,6 +1092,7 @@ def received():
                            global NoCurrentoffset2
                            global ListaIrmsPeak2
                            global potrmsCarga
+                           
                            samplings2 = np_array[-1]
                            list_FPVoltage3 = np_array[0:4200]
                            list_FPCurrent3 = np_array[4201:8400]
@@ -1107,10 +1115,10 @@ def received():
                                modavoltaje22=np.median(modamaximovoltaje22)
                                modavoltaje221=modavoltaje22
                                vrms2=VoltRms(modavoltaje221)
-                               print(f'moda voltaje carga: {vrms2}')
+                               #print(f'moda voltaje carga: {vrms2}')
                                str_num = {"value":vrms2,"save":1}
                                vrms22 = json.dumps(str_num)
-                               print(f'Vrms Carga: {vrms2}')
+                               #print(f'Vrms Carga: {vrms2}')
                                VoltageFFT(NoVoltageoffset2,samplings2,2)
                                modamaximovoltaje22=[]
                            else:
@@ -1122,10 +1130,10 @@ def received():
                            maximocorriente = np.median(valoresmaxcorriente)
                            minimocorriente = np.median(valoresmincorriente)
        
-                           mediadccorriente = (maximocorriente+minimocorriente)/2
-                           
+                           mediadccorrienteCarga = (maximocorriente+minimocorriente)/2
+                           #print("mediadccorriente 2: ",mediadccorrienteCarga)
                            # Valores maximo y minimos de corriente
-                           NoCurrentoffset2=list_FPCurrent-mediadccorriente
+                           NoCurrentoffset2=list_FPCurrent-mediadccorrienteCarga
                            maximocorriente2sinmedia=getMaxValues(NoCurrentoffset2, 50)
                            maximocorriente2 = np.median(maximocorriente2sinmedia)
                            irms2=CorrienteRms(NoCurrentoffset2)
@@ -1135,7 +1143,7 @@ def received():
                                irms2=CurrentRms(modacorriente22)
                                str_num = {"value":irms2,"save":1}
                                irms22 = json.dumps(str_num)
-                               print(f'Irms Carga: {irms2}')
+                               #print(f'Irms Carga: {irms2}')
                 
                                proporción=maximocorriente2/(irms2*np.sqrt(2))
                                ListaIrmsPeak2 = NoCurrentoffset2/proporción
@@ -1197,7 +1205,7 @@ def received():
                                vrms3=VoltRms(modavoltaje33)
                                str_num = {"value":vrms3,"save":1}
                                vrms33 = json.dumps(str_num)
-                               print(f'Vrms Paneles: {vrms3}')
+                               #print(f'Vrms Paneles: {vrms3}')
                                VoltageFFT(NoVoltageoffset3,samplings3,3)
                                modamaximovoltaje33=[]
                            else:
@@ -1223,7 +1231,7 @@ def received():
                                irms3=CurrentRms(modacorriente33)
                                str_num = {"value":irms3,"save":1}
                                irms33 = json.dumps(str_num)
-                               print(f'Irms Paneles : {irms3}')
+                               #print(f'Irms Paneles : {irms3}')
                                proporción=maximocorriente2/(irms3*np.sqrt(2))
                                ListaIrmsPeak3 = NoCurrentoffset3/proporción
                                maximocorr=getMaxValues(ListaIrmsPeak3, 10)
@@ -1246,31 +1254,40 @@ def received():
 
                        if (np_array[0] == 44):
                            global modamaximovoltajeBateria
-                           global modamaximocorrienteBaterias
+                           global modamaximocorrientebateria
                            global modavoltajeBateria
                            global modacorrienteBateria
                            global NoVoltageoffsetBateria
                            samplings = np_array[-1]
+                           #print(f'samplings: {samplings}')
                            list_FPVoltage3 = np_array[0:4200]
                            list_FPCurrent3 = np_array[4201:8400]
-                           sos = signal.butter(10, 2500, 'low', fs=samplings, output='sos')
+                           sos = signal.butter(10, 500, 'low', fs=samplings, output='sos')
                            list_FPVoltage2 = signal.sosfilt(sos, list_FPVoltage3)
                            list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
                            list_FPVoltage = list_FPVoltage2[104:4200]
                            list_FPCurrent = list_FPCurrent2 [103:4200]
 
                            #Valor dc de Voltaje
+                           """
                            valoresmaximovoltajeBateria=getMaxValues(list_FPVoltage, 50)
                            valoresminimovoltajeBateria=getMinValues(list_FPVoltage, 50)
                            maximovoltaje = np.median(valoresmaximovoltajeBateria)
                            minimovoltaje = np.median(valoresminimovoltajeBateria)
                            mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
+                           """
+                           try:
+                               mediapotenciometro=(mediadccorrienteCGE+mediadccorrienteCarga)/2
+                           except:
+                               continue
                            # Valores maximo y minimos de voltaje sin componente continua
-                           NoVoltageoffsetBateria=list_FPVoltage-mediadcvoltaje
-                           MediaVoltageBaterias=np.median(NoVoltageoffsetBateria[500:1000])
+                           NoVoltageoffsetBateria=list_FPVoltage-mediapotenciometro
+                           MediaVoltageBaterias=np.median(NoVoltageoffsetBateria)
+                           #print(f'Voltaje Moda Baterias1: {MediaVoltageBaterias}')
                            if (len(modamaximovoltajeBateria)>=5):
                                modavoltajeBateria=np.median(modamaximovoltajeBateria)
                                print(f'Voltaje Moda Baterias: {modavoltajeBateria}')
+                               print(f'Voltaje Baterias: {modavoltajeBateria/27}')
                                modamaximovoltajeBateria=[]
                            else:
                                modamaximovoltajeBateria.append(MediaVoltageBaterias)
@@ -1286,14 +1303,63 @@ def received():
                            # Valores maximo y minimos de corriente
                            NoCurrentoffsetCorrienteBaterias=list_FPCurrent-mediadccorrientebateria
                            mediaCorrienteBaterias = np.median(NoCurrentoffsetCorrienteBaterias)
-                
+                           print(f'Corriente Moda Baterias1: {mediaCorrienteBaterias}')
                            if (len(modamaximocorrientebateria)>=5):
                                modacorrientebateria=np.median(modamaximocorrientebateria)
-                               print(f'Corrriente Moda Baterias: {modacorrientebateria}')
+                               print(f'Corriente Moda Baterias: {modacorrientebateria}')
+                               print(f'Corriente Baterias: {modacorrientebateria/475}')
                                modamaximocorrientebateria=[]
                            else:
                                modamaximocorrientebateria.append(mediaCorrienteBaterias)
+                       if (np_array[0] == 55):
+                           global modamaximovoltajePaneles
+                           global modamaximocorrientePaneles
+                           global modavoltajePaneles
+                           global modacorrientePaneles
+                           global NoVoltageoffsetPaneles
+                           samplings = np_array[-1]
+                           print(f'samplings Paneles: {samplings}')
+                           list_FPCurrent3 = np_array[0:4200]
+                           list_FPVoltage3 = np_array[4201:8400]
+                           sos = signal.butter(10, 500, 'low', fs=samplings, output='sos')
+                           list_FPVoltage2 = signal.sosfilt(sos, list_FPVoltage3)
+                           list_FPCurrent2 = signal.sosfilt(sos, list_FPCurrent3)
+                           list_FPVoltage = list_FPVoltage2[104:4200]
+                           list_FPCurrent = list_FPCurrent2 [103:4200]
 
+                           try:
+                               mediapotenciometro=(mediadccorrienteCGE+mediadccorrienteCarga)/2
+                               NoCorrienteoffsetPaneles=list_FPCurrent-mediapotenciometro
+                               MediaCorrientePaneles=np.median(NoCorrienteoffsetPaneles)
+                               #print(f'Voltaje Moda Baterias1: {MediaVoltageBaterias}')
+                               if (len(modamaximocorrientePaneles)>=5):
+                                   modacorrientePaneles=np.median(modamaximocorrientePaneles)
+                                   print(f'Corriente Moda Paneles Directa: {modacorrientePaneles}')
+                                   print(f'Corriente Paneles Directa: {modacorrientePaneles/85}')
+                                   modamaximocorrientePaneles=[]
+                               else:
+                                   modamaximocorrientePaneles.append(MediaCorrientePaneles)
+                           except:
+                               continue
+                           # Valores maximo y minimos de voltaje sin componente continua
+                           
+                           
+                           #Valor dc de corriente Baterias
+                           try:
+                               mediapotenciometro=(mediadccorrienteCGE+mediadccorrienteCarga)/2
+                               NoVoltageoffsetPaneles=list_FPVoltage-mediapotenciometro
+                               MediaVoltagePaneles=np.median(NoVoltageoffsetPaneles)
+                               #print(f'Voltaje Moda Baterias1: {MediaVoltageBaterias}')
+                               if (len(modamaximovoltajePaneles)>=5):
+                                   modavoltajePaneles=np.median(modamaximovoltajePaneles)
+                                   print(f'Voltaje Moda Paneles Directa: {modavoltajePaneles}')
+                                   print(f'Voltaje Paneles Directa: {modavoltajePaneles/4.97}')
+                                   modamaximovoltajePaneles=[]
+                               else:
+                                   modamaximovoltajePaneles.append(MediaVoltagePaneles)
+                           except:
+                               continue
+                            
                  #if (np_array[0] == 44):
                  #    global VDC
                  #    list_VDC = np_array[1:10]
@@ -1322,7 +1388,7 @@ def received():
                          #print(f'RAM memory 1: {RAM1}%') 
 
                          RAM = psutil.virtual_memory()[2]
-                         print(f'RAM memory 2:  {RAM}%') 
+                         #print(f'RAM memory 2:  {RAM}%') 
                          dataAllVariables()
                          VariablesExcel()
                          if (RAM > 93):
