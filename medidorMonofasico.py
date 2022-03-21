@@ -1303,7 +1303,7 @@ def received():
                            # Valores maximo y minimos de corriente
                            NoCurrentoffsetCorrienteBaterias=list_FPCurrent-mediadccorrientebateria
                            mediaCorrienteBaterias = np.median(NoCurrentoffsetCorrienteBaterias)
-                           print(f'Corriente Moda Baterias1: {mediaCorrienteBaterias}')
+                           #print(f'Corriente Moda Baterias1: {mediaCorrienteBaterias}')
                            if (len(modamaximocorrientebateria)>=5):
                                modacorrientebateria=np.median(modamaximocorrientebateria)
                                print(f'Corriente Moda Baterias: {modacorrientebateria}')
@@ -1318,7 +1318,7 @@ def received():
                            global modacorrientePaneles
                            global NoVoltageoffsetPaneles
                            samplings = np_array[-1]
-                           print(f'samplings Paneles: {samplings}')
+                           #print(f'samplings Paneles: {samplings}')
                            list_FPCurrent3 = np_array[0:4200]
                            list_FPVoltage3 = np_array[4201:8400]
                            sos = signal.butter(10, 500, 'low', fs=samplings, output='sos')
