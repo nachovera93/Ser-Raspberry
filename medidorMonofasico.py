@@ -946,6 +946,9 @@ vrms33=0.0
 irms11=0.0
 irms22=0.0
 irms33=0.0
+tiempo2Bateria = datetime.datetime.now()  
+energyBateria = 0.0
+energyBateriaHour = 0.0
 modamaximovoltaje11=[]
 modamaximocorriente11=[]
 modamaximovoltaje22=[]
@@ -1268,14 +1271,6 @@ def received():
                            list_FPVoltage = list_FPVoltage2[104:4200]
                            list_FPCurrent = list_FPCurrent2 [103:4200]
 
-                           #Valor dc de Voltaje
-                           """
-                           valoresmaximovoltajeBateria=getMaxValues(list_FPVoltage, 50)
-                           valoresminimovoltajeBateria=getMinValues(list_FPVoltage, 50)
-                           maximovoltaje = np.median(valoresmaximovoltajeBateria)
-                           minimovoltaje = np.median(valoresminimovoltajeBateria)
-                           mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
-                           """
                            try:
                                mediapotenciometro=(mediadccorrienteCGE+mediadccorrienteCarga)/2
                            except:
@@ -1308,6 +1303,18 @@ def received():
                                modacorrientebateria=np.median(modamaximocorrientebateria)
                                print(f'Corriente Moda Baterias: {modacorrientebateria}')
                                print(f'Corriente Baterias: {modacorrientebateria/475}')
+                               potenciaBaterias=(modacorrientebateria/475)*(modavoltajeBateria/27)
+                               tiempo1Bateria = datetime.datetime.now()
+                               delta=(((tiempo1Bateria - tiempo2Bateria).microseconds)/1000+((tiempo1Bateria - tiempo2Bateria).seconds)*1000)/10000000000
+                               energyBateria += np.abs(potenciaBaterias*delta*2.9)
+                               energyBateriaHour += np.abs(potenciaBaterias*delta*2.9)
+                               tiempo2Bateria = datetime.datetime.now()
+                               if(a2.minute==0):
+                                    energyCGEFase11Hour=0
+                               if(a2.hour==0 and a2.minute==0):
+                                    energyCGEFase11=0
+                               if(a2.hour==0 and a2.minute==1):
+                                    energyCGEFase11=0
                                modamaximocorrientebateria=[]
                            else:
                                modamaximocorrientebateria.append(mediaCorrienteBaterias)
@@ -1341,10 +1348,7 @@ def received():
                                    modamaximocorrientePaneles.append(MediaCorrientePaneles)
                            except:
                                continue
-                           # Valores maximo y minimos de voltaje sin componente continua
                            
-                           
-                           #Valor dc de corriente Baterias
                            try:
                                mediapotenciometro=(mediadccorrienteCGE+mediadccorrienteCarga)/2
                                NoVoltageoffsetPaneles=list_FPVoltage-mediapotenciometro
@@ -1360,11 +1364,7 @@ def received():
                            except:
                                continue
                             
-                 #if (np_array[0] == 44):
-                 #    global VDC
-                 #    list_VDC = np_array[1:10]
-                 #    mediavoltaje = np.median(list_VDC)
-                 #    print("VDC: ",mediavoltaje)
+                 
                  if (len(np_array)>0 and len(np_array)<=2):
                          global tempESP32
                          global Temp_Raspberry
@@ -1380,13 +1380,6 @@ def received():
                          str_num = {"value":Temp_Raspberry0,"save":0}
                          Temp_Raspberry = json.dumps(str_num)
                          Ventilador()
-                         
-
-                         #total_memory,used_memory,free_memory = map( int, os.popen('free -t -m').readlines()[-1].split()[1:]) 
-                         #RAM1 = round((used_memory/total_memory) * 100, 2)
-  
-                         #print(f'RAM memory 1: {RAM1}%') 
-
                          RAM = psutil.virtual_memory()[2]
                          #print(f'RAM memory 2:  {RAM}%') 
                          dataAllVariables()
@@ -1398,7 +1391,7 @@ def received():
                          tempESP320 = round(np_array[0],0)
                          str_num2 = {"value":tempESP320,"save":0}
                          tempESP32 = json.dumps(str_num2)
-                         #print(f'array: {np_array}')
+                         
 
                  excel=datetime.datetime.now()
                  
