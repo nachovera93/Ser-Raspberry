@@ -947,8 +947,11 @@ irms11=0.0
 irms22=0.0
 irms33=0.0
 tiempo2Bateria = datetime.datetime.now()  
+tiempo2Paneles = datetime.datetime.now()  
 energyBateria = 0.0
-energyBateriaHour = 0.0
+energyBateriaHora = 0.0
+energyPaneles=0.0
+energyPanelesHora=0.0
 modamaximovoltaje11=[]
 modamaximocorriente11=[]
 modamaximovoltaje22=[]
@@ -1261,6 +1264,9 @@ def received():
                            global modavoltajeBateria
                            global modacorrienteBateria
                            global NoVoltageoffsetBateria
+                           global energyBateria
+                           global energyBateriaHora
+                           global tiempo2Bateria
                            samplings = np_array[-1]
                            #print(f'samplings: {samplings}')
                            list_FPVoltage3 = np_array[0:4200]
@@ -1307,14 +1313,15 @@ def received():
                                tiempo1Bateria = datetime.datetime.now()
                                delta=(((tiempo1Bateria - tiempo2Bateria).microseconds)/1000+((tiempo1Bateria - tiempo2Bateria).seconds)*1000)/10000000000
                                energyBateria += np.abs(potenciaBaterias*delta*2.9)
-                               energyBateriaHour += np.abs(potenciaBaterias*delta*2.9)
+                               energyBateriaHora += np.abs(potenciaBaterias*delta*2.9)
+                               print(f'Energia Baterias: {energyBateria}')
                                tiempo2Bateria = datetime.datetime.now()
-                               if(a2.minute==0):
-                                    energyCGEFase11Hour=0
-                               if(a2.hour==0 and a2.minute==0):
-                                    energyCGEFase11=0
-                               if(a2.hour==0 and a2.minute==1):
-                                    energyCGEFase11=0
+                               if(tiempo2Bateria.minute==0):
+                                    energyBateriaHora=0
+                               if(tiempo2Bateria.hour==0 and tiempo2Bateria.minute==0):
+                                    energyBateria=0
+                               if(tiempo2Bateria.hour==0 and tiempo2Bateria.minute==1):
+                                    energyBateria=0
                                modamaximocorrientebateria=[]
                            else:
                                modamaximocorrientebateria.append(mediaCorrienteBaterias)
@@ -1324,6 +1331,9 @@ def received():
                            global modavoltajePaneles
                            global modacorrientePaneles
                            global NoVoltageoffsetPaneles
+                           global energyPaneles
+                           global energyPanelesHora
+                           global tiempo2Paneles
                            samplings = np_array[-1]
                            #print(f'samplings Paneles: {samplings}')
                            list_FPCurrent3 = np_array[0:4200]
@@ -1358,6 +1368,19 @@ def received():
                                    modavoltajePaneles=np.median(modamaximovoltajePaneles)
                                    print(f'Voltaje Moda Paneles Directa: {modavoltajePaneles}')
                                    print(f'Voltaje Paneles Directa: {modavoltajePaneles/4.97}')
+                                   potenciaPaneles=(modacorrientePaneles/85)*(modavoltajePaneles/4.97)
+                                   tiempo1Paneles = datetime.datetime.now()
+                                   delta=(((tiempo1Paneles - tiempo2Paneles).microseconds)/1000+((tiempo1Paneles - tiempo2Paneles).seconds)*1000)/10000000000
+                                   energyPaneles += np.abs(potenciaPaneles*delta*2.9)
+                                   energyPanelesHora += np.abs(potenciaPaneles*delta*2.9)
+                                   print(f'Energia Paneles: {energyPaneles}')
+                                   tiempo2Paneles = datetime.datetime.now()
+                                   if(tiempo2Paneles.minute==0):
+                                        energyPanelesHora=0
+                                   if(tiempo2Paneles.hour==0 and tiempo2Paneles.minute==0):
+                                        energyPaneles=0
+                                   if(tiempo2Paneles.hour==0 and tiempo2Paneles.minute==1):
+                                        energyPaneles=0
                                    modamaximovoltajePaneles=[]
                                else:
                                    modamaximovoltajePaneles.append(MediaVoltagePaneles)
@@ -1913,8 +1936,8 @@ dataPanelesAll=[]
 
 def dataAllVariables():
         #print(f'Guardando lista')
-        print("Temperatura Raspberry:  ",Temp_Raspberry0)
-        print("Uso de CPU Raspberry:  ",cpu_uso)
+        #print("Temperatura Raspberry:  ",Temp_Raspberry0)
+        #print("Uso de CPU Raspberry:  ",cpu_uso)
         dataVariablesAll.insert(1,Temp_Raspberry0)
         dataVariablesAll.insert(2,cpu_uso)
         dataVariablesAll.insert(3,RAM)
@@ -2514,7 +2537,43 @@ def ExcelDataPaneles15():
        #print("Datos Insertados Correctamente!")
        workbook.save(filename = dest_filename)
        dataPaneles=[]
+
+def ExcelDataBaterias():
+       global dataBateriasAll       
+       workbook=openpyxl.load_workbook(filename = dest_filename)
+       sheet8 = workbook["Baterias"]
+       dataBateriasAll.insert(0,datetime.datetime.now())
+       sheet8.append(list(dataBateriasAll))
+       workbook.save(filename = dest_filename)
+       dataBateriasAll=[]
+
+def ExcelDataBaterias15():
+       global dataBaterias       
+       workbook=openpyxl.load_workbook(filename = dest_filename)
+       sheet9 = workbook["Baterias M/P/M 15 Min"]
+       dataBaterias.insert(0,datetime.datetime.now())
+       sheet9.append(list(dataBaterias))
+       workbook.save(filename = dest_filename)
+       dataBaterias=[]
   
+
+def ExcelDataPanelesDirecta():
+       global dataPanelesDirectaAll       
+       workbook=openpyxl.load_workbook(filename = dest_filename)
+       sheet10 = workbook["Paneles DC"]
+       dataPanelesDirectaAll.insert(0,datetime.datetime.now())
+       sheet10.append(list(dataPanelesDirectaAll))
+       workbook.save(filename = dest_filename)
+       dataPanelesDirectaAll=[]
+
+def ExcelDataPanelesDirecta15():
+       global dataPanelesDirecta15      
+       workbook=openpyxl.load_workbook(filename = dest_filename)
+       sheet11 = workbook["Paneles DC M/P/M 15 Min"]
+       dataPanelesDirecta15.insert(0,datetime.datetime.now())
+       sheet11.append(list(dataPanelesDirecta15))
+       workbook.save(filename = dest_filename)
+       dataPanelesDirecta15=[]
 
 
 
