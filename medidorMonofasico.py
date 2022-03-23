@@ -2406,11 +2406,16 @@ def excelcreate():
     sheet5 = book.create_sheet("CGE")
     sheet6 = book.create_sheet("Carga")
     sheet7 = book.create_sheet("Paneles")
+    sheet8 = book.create_sheet("Bateria ")
+    sheet7 = book.create_sheet("Bateria 15")
+    sheet8 = book.create_sheet("Paneles DC")
+    sheet7 = book.create_sheet("Paneles 15 DC")
     headings0 = ['Fecha y Hora'] + list(['T° Raspberry','Uso CPU %','RAM2'])
     headings=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
     'FPReact','FPInduct','FD','DAT','Energia'])
     headings2=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
     'FP','FD','DAT','cos(phi)','Energia','Energia por Hora'])
+    headings3=['Fecha y Hora'] + list(['Voltaje Bateria DC', 'Corriente Bateria DC','Potencia','Energia','Energia por Hora'])
     ceros=list([0,0,0,0,0,0,0,0,0,0,0])
     sheet1.append(headings0)
     sheet2.append(headings)
@@ -2419,6 +2424,10 @@ def excelcreate():
     sheet5.append(headings2)
     sheet6.append(headings2)
     sheet7.append(headings2)
+    sheet8.append(headings3)
+    sheet9.append(headings3)
+    sheet10.append(headings3)
+    sheet11.append(headings3)
     sheet1.append(list([0,0,0]))
     sheet2.append(ceros)
     sheet3.append(ceros)
@@ -2426,6 +2435,10 @@ def excelcreate():
     sheet5.append(ceros)
     sheet6.append(ceros)
     sheet7.append(ceros)
+    sheet8.append(ceros)
+    sheet9.append(ceros)
+    sheet10.append(ceros)
+    sheet11.append(ceros)
 
     book.save(filename = dest_filename)
 
