@@ -946,12 +946,18 @@ vrms33=0.0
 irms11=0.0
 irms22=0.0
 irms33=0.0
+VoltajeBaterias=0.0
+CorrienteBaterias=0.0
 tiempo2Bateria = datetime.datetime.now()  
 tiempo2Paneles = datetime.datetime.now()  
 energyBateria = 0.0
 energyBateriaHora = 0.0
 energyPanelesDC=0.0
 energyPanelesHoraDC=0.0
+VoltajePanelesDC=0.0
+CorrientePanelesDC=0.0
+PotenciaBaterias=0.0
+PotenciaPanelesDC=0.0
 modamaximovoltaje11=[]
 modamaximocorriente11=[]
 modamaximovoltaje22=[]
@@ -1267,6 +1273,7 @@ def received():
                            global energyBateria
                            global energyBateriaHora
                            global tiempo2Bateria
+                           global potenciaBaterias
                            samplings = np_array[-1]
                            #print(f'samplings: {samplings}')
                            list_FPVoltage3 = np_array[0:4200]
@@ -1288,7 +1295,8 @@ def received():
                            if (len(modamaximovoltajeBateria)>=5):
                                modavoltajeBateria=np.median(modamaximovoltajeBateria)
                                print(f'Voltaje Moda Baterias: {modavoltajeBateria}')
-                               print(f'Voltaje Baterias: {modavoltajeBateria/27}')
+                               VoltajeBaterias=modavoltajeBateria/27
+                               print(f'Voltaje Baterias: {VoltajeBaterias}')
                                modamaximovoltajeBateria=[]
                            else:
                                modamaximovoltajeBateria.append(MediaVoltageBaterias)
@@ -1308,7 +1316,8 @@ def received():
                            if (len(modamaximocorrientebateria)>=5):
                                modacorrientebateria=np.median(modamaximocorrientebateria)
                                print(f'Corriente Moda Baterias: {modacorrientebateria}')
-                               print(f'Corriente Baterias: {modacorrientebateria/475}')
+                               CorrienteBaterias = modacorrientebateria/475
+                               print(f'Corriente Baterias: {CorrienteBaterias}')
                                potenciaBaterias=(modacorrientebateria/475)*(modavoltajeBateria/27)
                                tiempo1Bateria = datetime.datetime.now()
                                delta=(((tiempo1Bateria - tiempo2Bateria).microseconds)/1000+((tiempo1Bateria - tiempo2Bateria).seconds)*1000)/10000000000
@@ -1322,9 +1331,18 @@ def received():
                                     energyBateria=0
                                if(tiempo2Bateria.hour==0 and tiempo2Bateria.minute==1):
                                     energyBateria=0
+                               try:
+                                    Maximo15minBateriasDC()
+                               except OSError as err:
+                                    print("OS error: {0}".format(err))
+                                    continue
+                               except ValueError:
+                                    print("Could not convert data to an integer.")
                                modamaximocorrientebateria=[]
                            else:
                                modamaximocorrientebateria.append(mediaCorrienteBaterias)
+
+                              
                        if (np_array[0] == 55):
                            global modamaximovoltajePaneles
                            global modamaximocorrientePaneles
@@ -1373,7 +1391,7 @@ def received():
                                    print(f'Voltaje Moda Paneles Directa: {modavoltajePaneles}')
                                    VoltajePanelesDC=modavoltajePaneles/4.97
                                    print(f'Voltaje Paneles Directa: {VoltajePanelesDC}')
-                                   PotenciaPanelesDC=(modacorrientePaneles/85)*(modavoltajePaneles/4.97)
+                                   PotenciaPanelesDC=(CorrientePanelesDC)*(VoltajePanelesDC)
                                    tiempo1Paneles = datetime.datetime.now()
                                    delta=(((tiempo1Paneles - tiempo2Paneles).microseconds)/1000+((tiempo1Paneles - tiempo2Paneles).seconds)*1000)/10000000000
                                    energyPanelesDC += np.abs(PotenciaPanelesDC*delta*2.9)
@@ -1386,12 +1404,19 @@ def received():
                                         energyPanelesDC=0
                                    if(tiempo2Paneles.hour==0 and tiempo2Paneles.minute==1):
                                         energyPanelesDC=0
+                                   try:
+                                       Maximo15minPanelesDC()
+                                   except OSError as err:
+                                       print("OS error: {0}".format(err))
+                                       continue
+                                   except ValueError:
+                                       print("Could not convert data to an integer.")  
                                    modamaximovoltajePaneles=[]
                                else:
                                    modamaximovoltajePaneles.append(MediaVoltagePaneles)
                            except:
                                continue
-                            
+                           
                  
                  if (len(np_array)>0 and len(np_array)<=2):
                          global tempESP32
@@ -1450,6 +1475,8 @@ def received():
                                    ExcelDataCGE15()
                                    ExcelDataCarga15()
                                    ExcelDataPaneles15()
+                                   ExcelDataBaterias15()
+                                   ExcelDataPanelesDirecta15()
                                    accesoexcel=1
                        else:
                                accesoexcel=0
@@ -1938,6 +1965,8 @@ dataVariablesAll=[]
 dataCGEAll=[]
 dataCargaAll=[]
 dataPanelesAll=[]
+dataBaterias=[]
+dataPanelesDirectaAll=[]
 
 def dataAllVariables():
         #print(f'Guardando lista')
@@ -1987,6 +2016,21 @@ def ExcelAllInsertPaneles():
         dataPanelesAll.insert(10,round(energyPanelesFase12,2))
         dataPanelesAll.insert(11,round(energyPanelesFase12Hour,2))
 
+
+ def ExcelAllInsertBaterias():        
+        dataBaterias.insert(1,round(VoltajeBaterias,2))
+        dataBaterias.insert(2,round(CorrienteBaterias,2))
+        dataBaterias.insert(3,round(PotenciaBaterias,2))
+        dataBaterias.insert(4,round(energyBateria,2))
+        dataBaterias.insert(5,round(energyBateriaHora,2))
+        
+  
+def ExcelAllInsertPanelesDC():        
+        dataPanelesDirectaAll.insert(1,round(VoltajePanelesDC,2))
+        dataPanelesDirectaAll.insert(2,round(CorrientePanelesDC,2))
+        dataPanelesDirectaAll.insert(3,round(PotenciaPanelesDC,2))
+        dataPanelesDirectaAll.insert(4,round(energyPanelesDC,2))
+        dataPanelesDirectaAll.insert(5,round(energyPanelesHoraDC,2)) 
            
 """
 'Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
@@ -2401,7 +2445,7 @@ accesoBateriasDC = 0
 maximoVoltaje15BateriasDC=0
 maximoCorrienteBateriasDC=0
 maximoPotBateriasDC=0
-def Maximo15minPaneles():
+def Maximo15minBateriasDC():
     global maximoBaterias15PanelesDC
     global maximoBateriasPanelesDC
     global maximoPotBateriasDC
@@ -2458,7 +2502,7 @@ accesoPanelesDC = 0
 maximoVoltaje15PanelesDC=0
 maximoCorrientePanelesDC=0
 maximoPotPanelesDC=0
-def Maximo15minPaneles():
+def Maximo15minPanelesDC():
     global maximoVoltaje15PanelesDC
     global maximoCorrientePanelesDC
     global maximoPotPanelesDC
