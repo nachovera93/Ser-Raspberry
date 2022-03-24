@@ -2564,6 +2564,10 @@ def excelcreate():
     global sheet5
     global sheet6
     global sheet7
+    global sheet8
+    global sheet9
+    global sheet10
+    global sheet11
     exceltime=date.today()
     book = Workbook()
     dest_filename = f'{exceltime}.xlsx'
@@ -2584,7 +2588,7 @@ def excelcreate():
     'FPReact','FPInduct','FD','DAT','Energia'])
     headings2=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
     'FP','FD','DAT','cos(phi)','Energia','Energia por Hora'])
-    headings3=['Fecha y Hora'] + list(['Voltaje Bateria DC', 'Corriente Bateria DC','Potencia','Energia','Energia por Hora'])
+    headings3=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia','Energia','Energia por Hora'])
     ceros=list([0,0,0,0,0,0,0,0,0,0,0])
     sheet1.append(headings0)
     sheet2.append(headings)
