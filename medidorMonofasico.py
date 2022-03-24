@@ -1341,7 +1341,7 @@ def received():
                                     print("OS error: {0}".format(err))
                                     continue
                                except ValueError:
-                                    print("Could not convert data to an integer.")
+                                    print("Error en Baterias")
                                modamaximocorrientebateria=[]
                            else:
                                modamaximocorrientebateria.append(mediaCorrienteBaterias)
@@ -1416,7 +1416,7 @@ def received():
                                        print("OS error: {0}".format(err))
                                        continue
                                    except ValueError:
-                                       print("Could not convert data to an integer.")  
+                                       print("Error en Paneles DC")  
                                    modamaximovoltajePaneles=[]
                                else:
                                    modamaximovoltajePaneles.append(MediaVoltagePaneles)
@@ -2748,7 +2748,6 @@ def ExcelDataBaterias15():
        sheet9.append(list(dataBateriasDC))
        workbook.save(filename = dest_filename)
        dataBateriasDC=[]
-  
 
 def ExcelDataPanelesDirecta():
        global dataPanelesDirectaAll       
