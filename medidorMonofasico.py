@@ -2483,7 +2483,7 @@ def Maximo15minBateriasDC():
     else:
         VoltMax15PanelesDC.append(VoltajePanelesDC)
         CorrienteMax15PanelesDC.append(CorrientePanelesDC)
-        PotMax15PanelesDC.append(PotenciaPanelesDC)     
+        PotMax15BateriasDC.append(PotenciaPanelesDC)     
         accesoPanelesDC = 0
         if(len(VoltMax15PanelesDC)>4):
             indice=np.argmin(VoltMax15BateriasDC)
