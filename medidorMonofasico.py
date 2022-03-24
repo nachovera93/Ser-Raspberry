@@ -100,8 +100,8 @@ print("Hora de comienzo:", horasetup)
 
 broker = '18.228.175.193'    #mqtt server
 port = 1883
-dId = '123454321'
-passw = '25ebiBqWgR'
+dId = '1234565432'
+passw = 'dpmLWoLIHB'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
@@ -1541,7 +1541,7 @@ y1=time.time()
 
 def publish(client): 
         global b1, c1 ,d1, e21, f1 ,g1 ,h1 , j1, k1, l1, m1, n1, o21 ,p1, q1, r1, s1, t1, u1, v1 
-        global v12, v13, v14, v15, v16, v17, w1, x1, y1, z1
+        global v12, v13, v14, v15, v16, v17,v18,v19,v20,v21,v22,v23, w1, x1, y1, z1
         a1=time.time()
         for i in data["variables"]:
 
@@ -1657,7 +1657,8 @@ def publish(client):
                          print(f"Send DAT-CGE: `{DATCorrienteCGE}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
-            if(i["variableFullName"]=="Pot-Aparente-CGE"):
+            """
+            if(i["variableFullName"]=="Pot-CGE"):
                 freq = i["variableSendFreq"]
                 if(a1 - k1 > float(freq)):
                      #print("varlastsend 1: ",varsLastSend[i])
@@ -1670,7 +1671,7 @@ def publish(client):
                          print(f"Send Pot-Aparente-CGE : `{AparenteCGEFase1}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
-            """
+            
             #SEGUNDA TOMA
             if(i["variableFullName"]=="Corriente-Carga"):
                 freq = i["variableSendFreq"]
@@ -1783,7 +1784,9 @@ def publish(client):
                          print(f"Send DAT-Carga: `{DATCorrienteCarga}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
-            if(i["variableFullName"]=="Pot-Aparente-Carga"):
+            
+            """
+            if(i["variableFullName"]=="Pot-Carga"):
                 freq = i["variableSendFreq"]
                 if(a1 - t1 > float(freq)):
                      #print("varlastsend 1: ",varsLastSend[i])
@@ -1792,11 +1795,11 @@ def publish(client):
                      topic5= topicmqtt + str_variable + "/sdata"
                      result = client.publish(topic5, AparenteCargaFase1)
                      status = result[0]
-                     if status == 0:
+              #       if status == 0:
                          print(f"Send Pot-Aparente-Carga: `{AparenteCargaFase1}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
-            """
+            
             #Tercera Toma
             if(i["variableFullName"]=="Corriente-Paneles"):
                 freq = i["variableSendFreq"]
@@ -1924,6 +1927,74 @@ def publish(client):
                          print(f"Failed to send message to topic {topic5}")
             
             """
+            if(i["variableFullName"]=="Voltaje-Baterias"):
+                freq = i["variableSendFreq"]
+                if(a1 - v16 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v16=time.time()
+                     str_variable4 = i["variable"]
+                     topic4 = topicmqtt + str_variable4 + "/sdata"
+                     result = client.publish(topic4, VoltajeBaterias)      
+            if(i["variableFullName"]=="Corriente-Baterias"):
+                freq = i["variableSendFreq"]
+                if(a1 - v17 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v17=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, CorrienteBaterias)     
+            if(i["variableFullName"]=="Potencia-Baterias"):
+                freq = i["variableSendFreq"]
+                if(a1 - v18 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v18=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, PotenciaBaterias)
+            if(i["variableFullName"]=="Energia-Baterias"):
+                freq = i["variableSendFreq"]
+                if(a1 - v19 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v19=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, energyBateria)
+
+            if(i["variableFullName"]=="Voltaje-PanelesDC"):
+                freq = i["variableSendFreq"]
+                if(a1 - v20 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v20=time.time()
+                     str_variable4 = i["variable"]
+                     topic4 = topicmqtt + str_variable4 + "/sdata"
+                     result = client.publish(topic4, VoltajePanelesDC)
+
+            if(i["variableFullName"]=="Corriente-PanelesDC"):
+                freq = i["variableSendFreq"]
+                if(a1 - v21 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v21=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, CorrientePanelesDC)    
+
+            if(i["variableFullName"]=="Potencia-PanelesDC"):
+                freq = i["variableSendFreq"]
+                if(a1 - v22 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v22=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, PotenciaPanelesDC)
+            if(i["variableFullName"]=="Energia-PanelesDC"):
+                freq = i["variableSendFreq"]
+                if(a1 - v23 > float(freq)):
+                     #print("varlastsend 1: ",varsLastSend[i])
+                     v23=time.time()
+                     str_variable = i["variable"]
+                     topic5 = topicmqtt + str_variable + "/sdata"
+                     result = client.publish(topic5, energyPanelesDC)
+
             if(i["variableFullName"]=="Temperatura-ESP32"):
                 freq = i["variableSendFreq"]
                 if(a1 - x1 > float(freq)):
@@ -1933,10 +2004,10 @@ def publish(client):
                      topic= topicmqtt + str_variable + "/sdata"
                      result = client.publish(topic, tempESP32)
                      status = result[0]
-                     if status == 0:
-                         print(f"Send Temperatura-ESP32: `{tempESP32}` to topic `{topic}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic}")
+                     #if status == 0:
+                         #print(f"Send Temperatura-ESP32: `{tempESP32}` to topic `{topic}` con freq: {freq}")
+                     #else:
+                       #    print(f"Failed to send message to topic {topic}")
 
             if(i["variableFullName"]=="Ventilador-Raspberry"):
                 freq = i["variableSendFreq"]
