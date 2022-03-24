@@ -1969,7 +1969,7 @@ dataVariablesAll=[]
 dataCGEAll=[]
 dataCargaAll=[]
 dataPanelesAll=[]
-dataBaterias=[]
+dataBateriasAll=[]
 dataPanelesDirectaAll=[]
 
 def dataAllVariables():
@@ -2022,11 +2022,11 @@ def ExcelAllInsertPaneles():
 
 
 def ExcelAllInsertBaterias():        
-        dataBaterias.insert(1,round(VoltajeBaterias,2))
-        dataBaterias.insert(2,round(CorrienteBaterias,2))
-        dataBaterias.insert(3,round(PotenciaBaterias,2))
-        dataBaterias.insert(4,round(energyBateria,2))
-        dataBaterias.insert(5,round(energyBateriaHora,2))
+        dataBateriasAll.insert(1,round(VoltajeBaterias,2))
+        dataBateriasAll.insert(2,round(CorrienteBaterias,2))
+        dataBateriasAll.insert(3,round(PotenciaBaterias,2))
+        dataBateriasAll.insert(4,round(energyBateria,2))
+        dataBateriasAll.insert(5,round(energyBateriaHora,2))
         
   
 def ExcelAllInsertPanelesDC():        
@@ -2501,7 +2501,7 @@ def Maximo15minBateriasDC():
 VoltMax15PanelesDC=[]
 CorrienteMax15PanelesDC=[]
 PotMax15PanelesDC=[]
-dataPanelesDC=[]
+dataPanelesDirecta15=[]
 accesoPanelesDC = 0
 maximoVoltaje15PanelesDC=0
 maximoCorrientePanelesDC=0
@@ -2526,10 +2526,10 @@ def Maximo15minPanelesDC():
                      maximoVoltaje15PanelesDC=max(VoltMax15PanelesDC)
                      maximoCorrientePanelesDC=max(CorrienteMax15PanelesDC)
                      maximoPotActivaPanelesDC=max(PotMax15PanelesDC)
-                     dataPanelesDC.insert(1,maximoVoltaje15PanelesDC)
-                     dataPanelesDC.insert(2,maximoCorrientePanelesDC)
-                     dataPanelesDC.insert(3,maximoPotActivaPanelesDC)
-                     dataPanelesDC.insert(4,energyPanelesDC)
+                     dataPanelesDirecta15.insert(1,maximoVoltaje15PanelesDC)
+                     dataPanelesDirecta15.insert(2,maximoCorrientePanelesDC)
+                     dataPanelesDirecta15.insert(3,maximoPotActivaPanelesDC)
+                     dataPanelesDirecta15.insert(4,energyPanelesDC)
               except:
                   print("no hay maximos")
               VoltMax15PanelesDC=[]
@@ -2628,7 +2628,7 @@ def AbrirExcel():
             sheet5 = workbook["CGE"]
             sheet6 = workbook["Carga"]
             sheet7 = workbook["Paneles"]
-            sheet8 = workbook["Bateria"]
+            sheet8 = workbook["Baterias"]
             sheet10 = workbook["PanelesDC"]
             largoexcelCGE=len(sheet5["FP"])
             largoexcelCarga=len(sheet6["FP"])
@@ -2738,13 +2738,13 @@ def ExcelDataBaterias():
        dataBateriasAll=[]
 
 def ExcelDataBaterias15():
-       global dataBaterias       
+       global dataBateriasDC       
        workbook=openpyxl.load_workbook(filename = dest_filename)
        sheet9 = workbook["Baterias15Min"]
-       dataBaterias.insert(0,datetime.datetime.now())
-       sheet9.append(list(dataBaterias))
+       dataBateriasDC.insert(0,datetime.datetime.now())
+       sheet9.append(list(dataBateriasDC))
        workbook.save(filename = dest_filename)
-       dataBaterias=[]
+       dataBateriasDC=[]
   
 
 def ExcelDataPanelesDirecta():
@@ -2759,7 +2759,7 @@ def ExcelDataPanelesDirecta():
 def ExcelDataPanelesDirecta15():
        global dataPanelesDirecta15      
        workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet11 = workbook["Paneles DC M/P/M 15 Min"]
+       sheet11 = workbook["Paneles15DC"]
        dataPanelesDirecta15.insert(0,datetime.datetime.now())
        sheet11.append(list(dataPanelesDirecta15))
        workbook.save(filename = dest_filename)
