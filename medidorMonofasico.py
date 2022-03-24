@@ -2017,7 +2017,7 @@ def ExcelAllInsertPaneles():
         dataPanelesAll.insert(11,round(energyPanelesFase12Hour,2))
 
 
- def ExcelAllInsertBaterias():        
+def ExcelAllInsertBaterias():        
         dataBaterias.insert(1,round(VoltajeBaterias,2))
         dataBaterias.insert(2,round(CorrienteBaterias,2))
         dataBaterias.insert(3,round(PotenciaBaterias,2))
