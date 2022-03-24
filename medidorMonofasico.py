@@ -1334,6 +1334,7 @@ def received():
                                if(tiempo2Bateria.hour==0 and tiempo2Bateria.minute==1):
                                     energyBateria=0
                                ExcelAllInsertBaterias()
+                               ExcelDataBaterias()
                                try:
                                     Maximo15minBateriasDC()
                                except OSError as err:
@@ -1408,6 +1409,7 @@ def received():
                                    if(tiempo2Paneles.hour==0 and tiempo2Paneles.minute==1):
                                         energyPanelesDC=0
                                    ExcelAllInsertPanelesDC()
+                                   ExcelDataPanelesDirecta()
                                    try:
                                        Maximo15minPanelesDC()
                                    except OSError as err:
@@ -2684,8 +2686,6 @@ def ExcelDataCGE15():
        workbook.save(filename = dest_filename)
        dataCGE=[]
       
-
-
 def ExcelDataCarga():
        global dataCargaAll
        workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -2708,7 +2708,6 @@ def ExcelDataCarga15():
        workbook.save(filename = dest_filename)
        dataCarga=[]
      
-
 def ExcelDataPaneles():
        global dataPanelesAll       
        workbook=openpyxl.load_workbook(filename = dest_filename)
