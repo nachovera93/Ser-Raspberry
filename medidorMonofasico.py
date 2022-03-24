@@ -1274,6 +1274,8 @@ def received():
                            global energyBateriaHora
                            global tiempo2Bateria
                            global potenciaBaterias
+                           global VoltajeBaterias
+                           global CorrienteBaterias
                            samplings = np_array[-1]
                            #print(f'samplings: {samplings}')
                            list_FPVoltage3 = np_array[0:4200]
@@ -1331,6 +1333,7 @@ def received():
                                     energyBateria=0
                                if(tiempo2Bateria.hour==0 and tiempo2Bateria.minute==1):
                                     energyBateria=0
+                               ExcelAllInsertBaterias()
                                try:
                                     Maximo15minBateriasDC()
                                except OSError as err:
@@ -1404,6 +1407,7 @@ def received():
                                         energyPanelesDC=0
                                    if(tiempo2Paneles.hour==0 and tiempo2Paneles.minute==1):
                                         energyPanelesDC=0
+                                   ExcelAllInsertPanelesDC()
                                    try:
                                        Maximo15minPanelesDC()
                                    except OSError as err:
