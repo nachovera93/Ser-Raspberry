@@ -1273,7 +1273,7 @@ def received():
                            global energyBateria
                            global energyBateriaHora
                            global tiempo2Bateria
-                           global potenciaBaterias
+                           global PotenciaBaterias
                            global VoltajeBaterias
                            global CorrienteBaterias
                            samplings = np_array[-1]
@@ -1320,11 +1320,11 @@ def received():
                                print(f'Corriente Moda Baterias: {modacorrientebateria}')
                                CorrienteBaterias = modacorrientebateria/475
                                print(f'Corriente Baterias: {CorrienteBaterias}')
-                               potenciaBaterias=(modacorrientebateria/475)*(modavoltajeBateria/27)
+                               PotenciaBaterias=(modacorrientebateria/475)*(modavoltajeBateria/27)
                                tiempo1Bateria = datetime.datetime.now()
                                delta=(((tiempo1Bateria - tiempo2Bateria).microseconds)/1000+((tiempo1Bateria - tiempo2Bateria).seconds)*1000)/10000000000
-                               energyBateria += np.abs(potenciaBaterias*delta*2.9)
-                               energyBateriaHora += np.abs(potenciaBaterias*delta*2.9)
+                               energyBateria += np.abs(PotenciaBaterias*delta*2.9)
+                               energyBateriaHora += np.abs(PotenciaBaterias*delta*2.9)
                                print(f'Energia Baterias: {energyBateria}')
                                tiempo2Bateria = datetime.datetime.now()
                                if(tiempo2Bateria.minute==0):
