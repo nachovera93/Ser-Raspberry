@@ -2113,18 +2113,37 @@ def ExcelAllInsertPanelesDC():
 'Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
 'FP','FD','DAT',
 """
-Volt15CGE=[]
-dataCGE=[]
+
 acceso = 0
 maximoVoltaje15CGE=0
+promedioVoltaje15CGE=0
+minimoVoltaje15CGE=0
 maximoCorrienteCGE=0
+promedioCorrienteCGE=0
+minimoCorrienteCGE
 maximoPotActivaCGE=0
+promedioPotActivaCGE=0
+minimoPotActivaCGE=0
 maximoPotReactivaCGE=0
+promedioPotReactivaCGE=0
+minimoPotReactivaCGE=0
 maximoPotAparenteCGE=0
+promedioPotAparenteCGE=0
+minimoPotAparenteCGE=0
 maximoFPCGEInductivo=-0.99
+promedioFPCGEInductivo = -0.99
+minimoFPCGEInductivo= -0.99
 maximoFPCGEReactivo=0.99
+promedioFPCGEReactivo=0.99
+minimoFPCGEReactivo=0.99
 maximoFDCGE=0
+promedioFDCGE=0
+minimoFDCGE=0
 maximoDATCGE=0
+promedioDATCGE=0
+minimoDATCGE=0
+Volt15CGE=[]
+dataCGE=[]
 Corriente15CGE=[]
 PotActiva15CGE=[]
 PotReactiva15CGE=[]
@@ -2135,12 +2154,26 @@ FD15CGE=[]
 DAT15CGE=[]
 def Maximo15minCGE():
     global maximoVoltaje15CGE
+    global promedioVoltaje15CGE
+    global minimoVoltaje15CGE
     global maximoCorrienteCGE
+    global promedioCorrienteCGE
+    global minimoCorrienteCGE
     global maximoPotActivaCGE
+    global promedioPotActivaCGE
+    global minimoPotActivaCGE
     global maximoPotReactivaCGE
+    global promedioPotReactivaCGE
+    global minimoPotReactivaCGE
     global maximoPotAparenteCGE
+    global promedioPotAparenteCGE
+    global minimoPotAparenteCGE
     global maximoFDCGE
+    global promedioFDCGE
+    global minimoFDCGE
     global maximoDATCGE
+    global promedioDATCGE
+    global minimoDATCGE
     global Corriente15CGE
     global PotActiva15CGE
     global PotReactiva15CGE
@@ -2150,11 +2183,6 @@ def Maximo15minCGE():
     global FD15CGE
     global DAT15CGE
     global Volt15CGE
-    global minimoVoltaje15CGE
-    global minimoCorrienteCGE
-    global minimoPotActivaCGE
-    global minimoPotReactivaCGE
-    global minimoPotAparenteCGE
     global acceso
     basea = datetime.datetime.now()
     #print(f'Maximo Voltaje 15 CGE: {maximoVoltaje15CGE}')
@@ -2185,12 +2213,16 @@ def Maximo15minCGE():
                      minimoFPCGEInductivo=min(FP15CGEInductivo)
               else:
                      maximoFPCGEInductivo=-0.99
+                     promedioFPCGEInductivo=-0.99
+                     minimoFPCGEInductivo=-0.99
               if(len(FP15CGEReactivo)>0):
                      minimoFPCGEReactivo=min(FP15CGEReactivo)
                      promedioFPCGEReactivo=np.median(FP15CGEReactivo)
                      maximoFPCGEReactivo=max(FP15CGEReactivo)
               else:
                      maximoFPCGEReactivo=0.99
+                     promedioFPCGEReactivo=0.99
+                     minimoFPCGEReactivo=0.99
               maximoFDCGE=max(FD15CGE)
               promedioFDCGE=np.median(FD15CGE)
               minimoFDCGE=min(FD15CGE)
@@ -2289,18 +2321,37 @@ def Maximo15minCGE():
             DAT15CGE.pop(indice)
 """     
 
-Volt15Carga=[]
-dataCarga=[]
+
 accesoCarga = 0
 maximoVoltaje15Carga=0
+promedioVoltaje15Carga=0
+minimoVoltaje15Carga=0
 maximoCorrienteCarga=0
+promedioCorrienteCarga=0
+minimoCorrienteCarga=0
 maximoPotActivaCarga=0
+promedioPotActivaCarga=0
+minimoPotActivaCarga=0
 maximoPotReactivaCarga=0
+promedioPotReactivaCarga=0
+minimoPotReactivaCarga=0
 maximoPotAparenteCarga=0
+promedioPotAparenteCarga=0
+minimoPotAparenteCarga=0
 maximoFPCargaInductivo=-0.99
+promedioFPCargaInductivo=-0.99
+minimoFPCargaInductivo=-0.99
 maximoFPCargaReactivo=0.99
+promedioFPCargaReactivo=0.99
+minimoFPCargaReactivo=0.99
 maximoFDCarga=0
+promedioFDCarga=0
+minimoFDCarga=0
 maximoDATCarga=0
+promedioDATCarga=0
+minimoDATCarga=0
+Volt15Carga=[]
+dataCarga=[]
 Corriente15Carga=[]
 PotActiva15Carga=[]
 PotReactiva15Carga=[]
@@ -2311,14 +2362,33 @@ FD15Carga=[]
 DAT15Carga=[]
 def Maximo15minCarga():
     global maximoVoltaje15Carga
+    global promedioVoltaje15Carga
+    global minimoVoltaje15Carga
     global maximoCorrienteCarga
+    global promedioCorrienteCarga
+    global minimoCorrienteCarga
+    global minimoPotActivaCarga
+    global promedioPotActivaCarga
     global maximoPotActivaCarga
     global maximoPotReactivaCarga
+    global promedioPotReactivaCarga
+    global minimoPotReactivaCarga
     global maximoPotAparenteCarga
+    global promedioPotAparenteCarga
+    global minimoPotAparenteCarga
     global maximoFDCarga
+    global promedioFDCarga
+    global minimoFDCarga
     global maximoDATCarga
+    global promedioDATCarga
+    global minimoDATCarga
+    global maximoFPCargaInductivo
+    global minimoFPCargaInductivo
+    global promedioFPCargaInductivo
+    global maximoFPCargaCapacitivo
+    global minimoFPCargaCapacitivo
+    global promedioFPCargaCapacitivo
     global Corriente15Carga
-    global PotActiva15Carga
     global PotReactiva15Carga
     global PotAparente15Carga
     global FP15CargaReactivo
@@ -2337,30 +2407,71 @@ def Maximo15minCarga():
                     graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     accesoCarga = 1
                     maximoVoltaje15Carga=max(Volt15Carga)
+                    promedioVoltaje15Carga=np.median(Volt15Carga)
+                    minimoVoltaje15Carga=min(Volt15Carga)
                     maximoCorrienteCarga=max(Corriente15Carga)
+                    promedioCorrienteCarga=np.median(Corriente15Carga)
+                    minimoCorrienteCarga=min(Corriente15Carga)
                     maximoPotActivaCarga=max(PotActiva15Carga)
+                    promedioPotActivaCarga=np.median(PotActiva15Carga)
+                    minimoPotActivaCarga=min(PotActiva15Carga)
                     maximoPotReactivaCarga=max(PotReactiva15Carga)
+                    promedioPotReactivaCarga=np.median(PotReactiva15Carga)
+                    minimoPotReactivaCarga=min(PotReactiva15Carga)
                     maximoPotAparenteCarga=max(PotAparente15Carga)
+                    promedioPotAparenteCarga=np.median(PotAparente15Carga)
+                    minimoPotAparenteCarga=min(PotAparente15Carga)
                     if(len(FP15CargaInductivo)>0):
                            maximoFPCargaInductivo=max(FP15CargaInductivo)
+                           promedioFPCargaInductivo=np.median(FP15CargaInductivo)
+                           minimoFPCargaInductivo=min(FP15CargaInductivo)
                     else:
                            maximoFPCargaInductivo=-0.99
+                           promedioFPCargaInductivo=-0.99
+                           minimoFPCargaInductivo=-0.99
                     if(len(FP15CargaReactivo)>0):
                            maximoFPCargaReactivo=min(FP15CargaReactivo)
+                           promedioFPCargaReactivo=min(FP15CargaReactivo)
+                           minimoFPCargaReactivo=min(FP15CargaReactivo)
                     else:
                            maximoFPCargaReactivo=0.99
+                           promedioFPCargaReactivo=0.99
+                           minimoFPCargaReactivo=0.99
                     maximoFDCarga=max(FD15Carga)
+                    promedioFDCarga=np.median(FD15Carga)
+                    minimoFDCarga=min(FD15Carga)
                     maximoDATCarga=max(DAT15Carga)
+                    promedioDATCarga=np.median(DAT15Carga)
+                    minimoDATCarga=min(DAT15Carga)
                     dataCarga.insert(1,maximoVoltaje15Carga)
-                    dataCarga.insert(2,maximoCorrienteCarga)
-                    dataCarga.insert(3,maximoPotActivaCarga)
-                    dataCarga.insert(4,maximoPotReactivaCarga)
-                    dataCarga.insert(5,maximoPotAparenteCarga)
-                    dataCarga.insert(6,maximoFPCargaReactivo)
-                    dataCarga.insert(7,maximoFPCargaInductivo)
-                    dataCarga.insert(8,maximoFDCarga)
-                    dataCarga.insert(9,maximoDATCarga)
-                    dataCarga.insert(10,energyCargaFase13)
+                    dataCarga.insert(2,promedioVoltaje15Carga)
+                    dataCarga.insert(3,minimoVoltaje15Carga)
+                    dataCarga.insert(4,maximoCorrienteCarga)
+                    dataCarga.insert(5,promedioCorrienteCarga)
+                    dataCarga.insert(6,minimoCorrienteCarga)
+                    dataCarga.insert(7,maximoPotActivaCarga)
+                    dataCarga.insert(8,promedioPotActivaCarga)
+                    dataCarga.insert(9,minimoPotActivaCarga)
+                    dataCarga.insert(10,maximoPotReactivaCarga)
+                    dataCarga.insert(11),promedioPotReactivaCarga)
+                    dataCarga.insert(12,minimoPotReactivaCarga)
+                    dataCarga.insert(13,maximoPotAparenteCarga)
+                    dataCarga.insert(14,promedioPotAparenteCarga)
+                    dataCarga.insert(15,minimoPotAparenteCarga)
+                    dataCarga.insert(16,maximoFPCargaReactivo)
+                    dataCarga.insert(17,promedioFPCargaReactivo)
+                    dataCarga.insert(18,minimoFPCargaReactivo)
+                    dataCarga.insert(19,maximoFPCargaInductivo)
+                    dataCarga.insert(20,promedioFPCargaInductivo)
+                    dataCarga.insert(21,minimoFPCargaInductivo)
+                    dataCarga.insert(22,maximoFDCarga)
+                    dataCarga.insert(23,promedioFDCarga)
+                    dataCarga.insert(24,minimoFDCarga)
+                    dataCarga.insert(25,maximoDATCarga)
+                    dataCarga.insert(26,promedioDATCarga)
+                    dataCarga.insert(27,minimoDATCarga)
+                    dataCarga.insert(28,energyCargaFase13)
+                    dataCarga.insert(29,energyCargaFase13Hour)
                     Volt15Carga=[]
                     Corriente15Carga=[]
                     PotActiva15Carga=[]
@@ -2397,6 +2508,7 @@ def Maximo15minCarga():
         FD15Carga.append(FDCorrienteCarga1)
         DAT15Carga.append(DATCorrienteCarga1)
         accesoCarga = 0
+        """
         if(len(Volt15Carga)>4):
             indice=np.argmin(Volt15Carga)
             Volt15Carga.pop(indice)
@@ -2419,20 +2531,39 @@ def Maximo15minCarga():
             FD15Carga.pop(indice)
             indice=np.argmin(DAT15Carga)
             DAT15Carga.pop(indice)
+        """
 
 
-Volt15Paneles=[]
-dataPaneles=[]
 accesoPaneles = 0
 maximoVoltaje15Paneles=0
+promedioVoltaje15Paneles=0
+minimoVoltaje15Paneles=0
 maximoCorrientePaneles=0
+promedioCorrientePaneles=0
+minimoCorrientePaneles=0
 maximoPotActivaPaneles=0
+promedioPotActivaPaneles=0
+minimoPotActivaPaneles=0
 maximoPotReactivaPaneles=0
+promedioPotReactivaPaneles=0
+minimoPotReactivaPaneles=0
 maximoPotAparentePaneles=0
+promedioPotAparentePaneles=0
+minimoPotAparentePaneles=0
 maximoFPPanelesInductivo=-0.99
+promedioFPPanelesInductivo=-0.99
+minimoFPPanelesInductivo=-0.99
 maximoFPPanelesReactivo=0.99
+promedioFPPanelesReactivo=0.99
+minimoFPPanelesReactivo=0.99
 maximoFDPaneles=0
+promedioFDPaneles=0
+minimoFDPaneles=0
 maximoDATPaneles=0
+promedioDATPaneles=0
+minimoDATPaneles=0
+Volt15Paneles=[]
+dataPaneles=[]
 Corriente15Paneles=[]
 PotActiva15Paneles=[]
 PotReactiva15Paneles=[]
@@ -2443,12 +2574,26 @@ FD15Paneles=[]
 DAT15Paneles=[]
 def Maximo15minPaneles():
     global maximoVoltaje15Paneles
+    global promedioVoltaje15Paneles
+    global minimoVoltaje15Paneles
     global maximoCorrientePaneles
+    global promedioCorrientePaneles
+    global minimoCorrientePaneles
     global maximoPotActivaPaneles
+    global promedioPotActivaPaneles
+    global minimoPotActivaPaneles
     global maximoPotReactivaPaneles
+    global promedioPotReactivaPaneles
+    global minimoPotReactivaPaneles
     global maximoPotAparentePaneles
+    global promedioPotAparentePaneles
+    global minimoPotAparentePaneles
     global maximoFDPaneles
+    global promedioFDPaneles
+    global minimoFDPaneles
     global maximoDATPaneles
+    global promedioDATPaneles
+    global minimoDATPaneles
     global Corriente15Paneles
     global PotActiva15Paneles
     global PotReactiva15Paneles
@@ -2469,30 +2614,71 @@ def Maximo15minPaneles():
                      graphVoltage(NoVoltageoffset3,ListaIrmsPeak3,samplings3,3)
                      accesoPaneles = 1
                      maximoVoltaje15Paneles=max(Volt15Paneles)
+                     promedioVoltaje15Paneles=np.median(Volt15Paneles)
+                     minimoVoltaje15Paneles=min(Volt15Paneles)
                      maximoCorrientePaneles=max(Corriente15Paneles)
+                     promedioCorrientePaneles=np.median(Corriente15Paneles)
+                     minimoCorrientePaneles=min(Corriente15Paneles)
                      maximoPotActivaPaneles=max(PotActiva15Paneles)
+                     promedioPotActivaPaneles=np.median(PotActiva15Paneles)
+                     minimoPotActivaPaneles=min(PotActiva15Paneles)
                      maximoPotReactivaPaneles=max(PotReactiva15Paneles)
+                     promedioPotReactivaPaneles=min(PotReactiva15Paneles)
+                     minimoPotReactivaPaneles=np.median(PotReactiva15Paneles)
                      maximoPotAparentePaneles=max(PotAparente15Paneles)
+                     promedioPotAparentePaneles=np.median(PotAparente15Paneles)
+                     minimoPotAparentePaneles=min(PotAparente15Paneles)
                      if(len(FP15PanelesInductivo)>0):
                             maximoFPPanelesInductivo=max(FP15PanelesInductivo)
+                            promedioFPPanelesInductivo=np.median(FP15PanelesInductivo)
+                            minimoFPPanelesInductivo=min(FP15PanelesInductivo)
                      else:
                             maximoFPPanelesInductivo=-0.99
+                            promedioFPPanelesInductivo=-0.99
+                            minimoFPPanelesInductivo=-0.99
                      if(len(FP15PanelesReactivo)>0):
                             maximoFPPanelesReactivo=min(FP15PanelesReactivo)
+                            promedioFPPanelesReactivo=np.median(FP15PanelesReactivo)
+                            minimoFPPanelesReactivo=min(FP15PanelesReactivo)
                      else:
                             maximoFPPanelesReactivo=0.99
+                            promedioFPPanelesReactivo=0.99
+                            minimoFPPanelesReactivo=0.99
                      maximoFDPaneles=max(FD15Paneles)
+                     promedioFDPaneles=np.median(FD15Paneles)
+                     minimoFDPaneles=min(FD15Paneles)
                      maximoDATPaneles=max(DAT15Paneles)
+                     promedioDATPaneles=np.median(DAT15Paneles)
+                     minimoDATPaneles=min(DAT15Paneles)
                      dataPaneles.insert(1,maximoVoltaje15Paneles)
+                     dataPaneles.insert(1,promedioVoltaje15Paneles)
+                     dataPaneles.insert(1,minimoVoltaje15Paneles)
                      dataPaneles.insert(2,maximoCorrientePaneles)
+                     dataPaneles.insert(2,promedioCorrientePaneles)
+                     dataPaneles.insert(2,minimoCorrientePaneles)
                      dataPaneles.insert(3,maximoPotActivaPaneles)
+                     dataPaneles.insert(3,promedioPotActivaPaneles)
+                     dataPaneles.insert(3,minimoPotActivaPaneles)
                      dataPaneles.insert(4,maximoPotReactivaPaneles)
+                     dataPaneles.insert(4,promedioPotReactivaPaneles)
+                     dataPaneles.insert(4,minimoPotReactivaPaneles)
                      dataPaneles.insert(5,maximoPotAparentePaneles)
+                     dataPaneles.insert(5,promedioPotAparentePaneles)
+                     dataPaneles.insert(5,minimoPotAparentePaneles)
                      dataPaneles.insert(6,maximoFPPanelesReactivo)
+                     dataPaneles.insert(6,promedioFPPanelesReactivo)
+                     dataPaneles.insert(6,minimoFPPanelesReactivo)
                      dataPaneles.insert(7,maximoFPPanelesInductivo)
+                     dataPaneles.insert(7,promedioFPPanelesInductivo)
+                     dataPaneles.insert(7,minimoFPPanelesInductivo)
                      dataPaneles.insert(8,maximoFDPaneles)
+                     dataPaneles.insert(8,promedioFDPaneles)
+                     dataPaneles.insert(8,minimoFDPaneles)
                      dataPaneles.insert(9,maximoDATPaneles)
+                     dataPaneles.insert(9,promedioDATPaneles)
+                     dataPaneles.insert(9,minimoDATPaneles)
                      dataPaneles.insert(10,energyPanelesFase12)
+                     dataPaneles.insert(10,energyPanelesFase12Hour)
               except:
                   print("no hay maximos")
               Volt15Paneles=[]
@@ -2534,6 +2720,7 @@ def Maximo15minPaneles():
         FD15Paneles.append(FDCorrientePaneles1)
         DAT15Paneles.append(DATCorrientePaneles1)      
         accesoPaneles = 0
+        """
         if(len(Volt15Paneles)>4):
             indice=np.argmin(Volt15Paneles)
             Volt15Paneles.pop(indice)
@@ -2557,7 +2744,7 @@ def Maximo15minPaneles():
             FD15Paneles.pop(indice)
             indice=np.argmin(DAT15Paneles)
             DAT15Paneles.pop(indice)
-
+        """
 
 VoltMax15BateriasDC=[]
 CorrienteMax15BateriasDC=[]
@@ -2565,10 +2752,18 @@ PotMax15BateriasDC=[]
 dataBateriasDC=[]
 accesoBateriasDC = 0
 maximoVoltaje15BateriasDC=0
+promedioVoltaje15BateriasDC=0
+minimoVoltaje15BateriasDC=0
 maximoCorrienteBateriasDC=0
+promedioCorrienteBateriasDC=0
+minimoCorrienteBateriasDC=0
 maximoPotBateriasDC=0
+promedioPotBateriasDC=0
+minimoPotBateriasDC=0
 def Maximo15minBateriasDC():
-    global maximoBaterias15PanelesDC
+    global maximoVoltaje15BateriasDC
+    global promedioVoltaje15BateriasDC
+    global minimoVoltaje15BateriasDC
     global maximoBateriasPanelesDC
     global maximoPotBateriasDC
     global CorrienteMax15BateriasDC
@@ -2585,12 +2780,25 @@ def Maximo15minBateriasDC():
               try:
                      accesoPanelesDC = 1
                      maximoVoltaje15BateriasDC=max(VoltMax15BateriasDC)
+                     promedioVoltaje15BateriasDC=np.median(VoltMax15BateriasDC)
+                     minimoVoltaje15BateriasDC=min(VoltMax15BateriasDC)
                      maximoCorrienteBateriasDC=max(CorrienteMax15BateriasDC)
+                     promedioCorrienteBateriasDC=np.median(CorrienteMax15BateriasDC)
+                     minimoCorrienteBateriasDC=mainCorrienteMax15BateriasDC)
                      maximoPotBateriasDC=max(PotMax15BateriasDC)
+                     promedioPotBateriasDC=np.median(PotMax15BateriasDC)
+                     minimoPotBateriasDC=min(PotMax15BateriasDC)
                      dataBateriasDC.insert(1,maximoVoltaje15BateriasDC)
-                     dataBateriasDC.insert(2,maximoCorrienteBateriasDC)
-                     dataBateriasDC.insert(3,maximoPotBateriasDC)
-                     dataBateriasDC.insert(4,energyBateria)
+                     dataBateriasDC.insert(2,promedioVoltaje15BateriasDC)
+                     dataBateriasDC.insert(3,minimoVoltaje15BateriasDC)
+                     dataBateriasDC.insert(4,maximoCorrienteBateriasDC)
+                     dataBateriasDC.insert(5,promedioCorrienteBateriasDC)
+                     dataBateriasDC.insert(6,minimoCorrienteBateriasDC)
+                     dataBateriasDC.insert(7,maximoPotBateriasDC)
+                     dataBateriasDC.insert(8,promedioPotBateriasDC)
+                     dataBateriasDC.insert(10,minimoPotBateriasDC)
+                     dataBateriasDC.insert(11,energyBateria)
+                     dataBateriasDC.insert(12,energyBateriaHora)
               except:
                   print("no hay maximos")
               VoltMax15BateriasDC=[]
@@ -2603,10 +2811,11 @@ def Maximo15minBateriasDC():
               PotMax15BateriasDC.append(PotenciaPanelesDC)
  
     else:
-        VoltMax15PanelesDC.append(VoltajePanelesDC)
-        CorrienteMax15PanelesDC.append(CorrientePanelesDC)
+        VoltMax15BateriasDC.append(VoltajePanelesDC)
+        CorrienteMax15BateriasDC.append(CorrientePanelesDC)
         PotMax15BateriasDC.append(PotenciaPanelesDC)     
         accesoPanelesDC = 0
+        """
         if(len(VoltMax15PanelesDC)>4):
             indice=np.argmin(VoltMax15BateriasDC)
             VoltMax15BateriasDC.pop(indice)
@@ -2614,7 +2823,7 @@ def Maximo15minBateriasDC():
             CorrienteMax15PanelesDC.pop(indice)
             indice=np.argmin(PotMax15BateriasDC)
             PotMax15BateriasDC.pop(indice)
-
+        """
 
 VoltMax15PanelesDC=[]
 CorrienteMax15PanelesDC=[]
@@ -2622,14 +2831,25 @@ PotMax15PanelesDC=[]
 dataPanelesDirecta15=[]
 accesoPanelesDC = 0
 maximoVoltaje15PanelesDC=0
+promedioVoltaje15PanelesDC=0
+minimoVoltaje15PanelesDC=0
 maximoCorrientePanelesDC=0
+promedioCorrientePanelesDC=0
+minimoCorrientePanelesDC=0
 maximoPotPanelesDC=0
+promedioPotPanelesDC=0
+minimoPotPanelesDC=0
 def Maximo15minPanelesDC():
     global maximoVoltaje15PanelesDC
+    global promedioVoltaje15PanelesDC
+    global minimoVoltaje15PanelesDC
     global maximoCorrientePanelesDC
+    global promedioCorrientePanelesDC
+    global minimoCorrientePanelesDC
     global maximoPotPanelesDC
-    global Corriente15PanelesDC
-    global PotActiva15PanelesDC
+    global promedioPotPanelesDC
+    global minimoPotPanelesDC
+    global CorrienteMax15PanelesDC
     global VoltMax15PanelesDC
     global accesoPanelesDC
     global PotMax15PanelesDC
@@ -2642,12 +2862,25 @@ def Maximo15minPanelesDC():
               try:
                      accesoPanelesDC = 1
                      maximoVoltaje15PanelesDC=max(VoltMax15PanelesDC)
+                     promedioVoltaje15PanelesDC=np.median(VoltMax15PanelesDC)
+                     minimoVoltaje15PanelesDC=min(VoltMax15PanelesDC)
                      maximoCorrientePanelesDC=max(CorrienteMax15PanelesDC)
+                     promedioCorrientePanelesDC=np.median(CorrienteMax15PanelesDC)
+                     minimoCorrientePanelesDC=min(CorrienteMax15PanelesDC)
                      maximoPotActivaPanelesDC=max(PotMax15PanelesDC)
+                     promedioPotActivaPanelesDC=np.median(PotMax15PanelesDC)
+                     minimoPotActivaPanelesDC=min(PotMax15PanelesDC)
                      dataPanelesDirecta15.insert(1,maximoVoltaje15PanelesDC)
-                     dataPanelesDirecta15.insert(2,maximoCorrientePanelesDC)
-                     dataPanelesDirecta15.insert(3,maximoPotActivaPanelesDC)
-                     dataPanelesDirecta15.insert(4,energyPanelesDC)
+                     dataPanelesDirecta15.insert(2,promedioVoltaje15PanelesDC)
+                     dataPanelesDirecta15.insert(3,minimoVoltaje15PanelesDC)
+                     dataPanelesDirecta15.insert(4,maximoCorrientePanelesDC)
+                     dataPanelesDirecta15.insert(5,promedioCorrientePanelesDC)
+                     dataPanelesDirecta15.insert(6,minimoCorrientePanelesDC)
+                     dataPanelesDirecta15.insert(7,maximoPotActivaPanelesDC)
+                     dataPanelesDirecta15.insert(8,promedioPotActivaPanelesDC)
+                     dataPanelesDirecta15.insert(9,minimoPotActivaPanelesDC)
+                     dataPanelesDirecta15.insert(10,energyPanelesDC)
+                     dataPanelesDirecta15.insert(10,energyPanelesHoraDC)
               except:
                   print("no hay maximos")
               VoltMax15PanelesDC=[]
@@ -2664,6 +2897,7 @@ def Maximo15minPanelesDC():
         CorrienteMax15PanelesDC.append(CorrientePanelesDC)
         PotMax15PanelesDC.append(PotenciaPanelesDC)     
         accesoPanelesDC = 0
+        """
         if(len(VoltMax15PanelesDC)>4):
             indice=np.argmin(VoltMax15PanelesDC)
             VoltMax15PanelesDC.pop(indice)
@@ -2671,7 +2905,7 @@ def Maximo15minPanelesDC():
             CorrienteMax15PanelesDC.pop(indice)
             indice=np.argmin(PotMax15PanelesDC)
             PotMax15PanelesDC.pop(indice)
-            
+        """
            
 
 def excelcreate():
@@ -2702,8 +2936,7 @@ def excelcreate():
     sheet10 = book.create_sheet("PanelesDC")
     sheet11 = book.create_sheet("Paneles15DC")
     headings0 = ['Fecha y Hora'] + list(['T° Raspberry','Uso CPU %','RAM2'])
-    headings=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
-    'FPReact','FPInduct','FD','DAT','Energia'])
+    headings=['Fecha y Hora'] + list(['Voltaje Maximo','Voltaje Promedio','Voltaje Minimo', 'Corriente Maximo','Corriente Promedio','Corriente Minimo','Potencia Activa Maxima','Potencia Activa Promedio','Potencia Activa Minima','Potencia Reactiva Maxima','Potencia Reactiva Promedio','Potencia Reactiva Minima','Potencia Aparente Maxima','Potencia Aparente Promedio','Potencia Aparente Minima','FPReact Maxima','FPReact Promedio','FPReact Minima','FPInduct Maxima','FPInduct Promedio','FPInduct Minima','FD Maximo''FD Promedio','FD Minima','DAT Maximo','DAT Promedio','DAT Minimo','Energia'])
     headings2=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
     'FP','FD','DAT','cos(phi)','Energia','Energia por Hora'])
     headings3=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia','Energia','Energia por Hora'])
@@ -2716,9 +2949,9 @@ def excelcreate():
     sheet6.append(headings2)
     sheet7.append(headings2)
     sheet8.append(headings3)
-    sheet9.append(headings3)
-    sheet10.append(headings3)
-    sheet11.append(headings3)
+    sheet9.append(headings2)
+    sheet10.append(headings2)
+    sheet11.append(headings2)
     sheet1.append(list([0,0,0]))
     sheet2.append(ceros)
     sheet3.append(ceros)
