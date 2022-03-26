@@ -1796,9 +1796,9 @@ def publish(client):
                      result = client.publish(topic5, AparenteCargaFase1)
                      status = result[0]
               #       if status == 0:
-                         print(f"Send Pot-Aparente-Carga: `{AparenteCargaFase1}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
+               #          print(f"Send Pot-Aparente-Carga: `{AparenteCargaFase1}` to topic `{topic5}` con freq: {freq}")
+                #     else:
+                 #        print(f"Failed to send message to topic {topic5}")
             
             #Tercera Toma
             if(i["variableFullName"]=="Corriente-Paneles"):
