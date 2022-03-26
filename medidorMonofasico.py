@@ -2150,6 +2150,11 @@ def Maximo15minCGE():
     global FD15CGE
     global DAT15CGE
     global Volt15CGE
+    global minimoVoltaje15CGE
+    global minimoCorrienteCGE
+    global minimoPotActivaCGE
+    global minimoPotReactivaCGE
+    global minimoPotAparenteCGE
     global acceso
     basea = datetime.datetime.now()
     #print(f'Maximo Voltaje 15 CGE: {maximoVoltaje15CGE}')
@@ -2160,30 +2165,69 @@ def Maximo15minCGE():
               graphVoltage(NoVoltageoffset1,ListaIrmsPeak1,samplings1,1)
               acceso = 1
               maximoVoltaje15CGE=max(Volt15CGE)
+              promedioVoltaje15CGE=np.median(Volt15CGE)
+              minimoVoltaje15CGE=min(Volt15CGE)
               maximoCorrienteCGE=max(Corriente15CGE)
+              promedioCorriente15CGE=np.median(Corriente15CGE)
+              minimoCorrienteCGE=min(Corriente15CGE)
               maximoPotActivaCGE=max(PotActiva15CGE)
+              promedioPotActivaCGE=np.median(PotActiva15CGE)
+              minimoPotActivaCGE=min(PotActiva15CGE)
               maximoPotReactivaCGE=max(PotReactiva15CGE)
+              promedioPotReactivaCGE=np.median(PotReactiva15CGE)
+              minimoPotReactivaCGE=min(PotReactiva15CGE)
               maximoPotAparenteCGE=max(PotAparente15CGE)
+              promedioPotAparenteCGE=np.median(PotAparente15CGE)
+              minimoPotAparenteCGE=min(PotAparente15CGE)
               if(len(FP15CGEInductivo)>0):
                      maximoFPCGEInductivo=max(FP15CGEInductivo)
+                     promedioFPCGEInductivo=np.median(FP15CGEInductivo)
+                     minimoFPCGEInductivo=min(FP15CGEInductivo)
               else:
                      maximoFPCGEInductivo=-0.99
               if(len(FP15CGEReactivo)>0):
-                     maximoFPCGEReactivo=min(FP15CGEReactivo)
+                     minimoFPCGEReactivo=min(FP15CGEReactivo)
+                     promedioFPCGEReactivo=np.median(FP15CGEReactivo)
+                     maximoFPCGEReactivo=max(FP15CGEReactivo)
               else:
                      maximoFPCGEReactivo=0.99
               maximoFDCGE=max(FD15CGE)
+              promedioFDCGE=np.median(FD15CGE)
+              minimoFDCGE=min(FD15CGE)
               maximoDATCGE=max(DAT15CGE)
+              promedioDATCGE=np.median(DAT15CGE)
+              minimoDATCGE=min(DAT15CGE)
               dataCGE.insert(1,maximoVoltaje15CGE)
-              dataCGE.insert(2,maximoCorrienteCGE)
-              dataCGE.insert(3,maximoPotActivaCGE)
-              dataCGE.insert(4,maximoPotReactivaCGE)
-              dataCGE.insert(5,maximoPotAparenteCGE)
-              dataCGE.insert(6,maximoFPCGEReactivo)
-              dataCGE.insert(7,maximoFPCGEInductivo)
-              dataCGE.insert(8,maximoFDCGE)
-              dataCGE.insert(9,maximoDATCGE)
-              dataCGE.insert(10,energyCGEFase11)
+              dataCGE.insert(2,promedioVoltaje15CGE)
+              dataCGE.insert(3,minimoVoltaje15CGE)
+              dataCGE.insert(4,maximoCorrienteCGE)
+              dataCGE.insert(5,promedioCorriente15CGE)
+              dataCGE.insert(6,minimoCorrienteCGE)
+              dataCGE.insert(7,maximoPotActivaCGE)
+              dataCGE.insert(8,promedioPotActivaCGE)
+              dataCGE.insert(9,minimoPotActivaCGE)
+              dataCGE.insert(10,maximoPotReactivaCGE)
+              dataCGE.insert(11,promedioPotReactivaCGE)
+              dataCGE.insert(12,minimoPotReactivaCGE)
+              dataCGE.insert(13,maximoPotAparenteCGE)
+              dataCGE.insert(14,promedioPotAparenteCGE)
+              dataCGE.insert(15,minimoPotAparenteCGE)
+              dataCGE.insert(16,maximoFPCGEReactivo)
+              dataCGE.insert(17,promedioFPCGEReactivo)
+              dataCGE.insert(18,minimoFPCGEReactivo)
+              dataCGE.insert(19,maximoFPCGEInductivo)
+              dataCGE.insert(20,promedioFPCGEInductivo)
+              dataCGE.insert(21,minimoFPCGEInductivo)
+              dataCGE.insert(22,maximoFDCGE)
+              dataCGE.insert(23,promedioFDCGE)
+              dataCGE.insert(24,minimoFDCGE)
+              dataCGE.insert(25,maximoDATCGE)
+              dataCGE.insert(26,promedioDATCGE)
+              dataCGE.insert(27,maximoDATCGE)
+              dataCGE.insert(28,promedioDATCGE)
+              dataCGE.insert(29,minimoDATCGE)
+              dataCGE.insert(30,energyCGEFase11)
+              dataCGE.insert(31,energyCGEFase11Hour)
               Volt15CGE=[]
               Corriente15CGE=[]
               PotActiva15CGE=[]
@@ -2220,17 +2264,18 @@ def Maximo15minCGE():
         FD15CGE.append(FDCorrienteCGE1)
         DAT15CGE.append(DATCorrienteCGE1)
         acceso = 0
-        if(len(Volt15CGE)>4):
-            indice=np.argmin(Volt15CGE)
+"""
+        if(len(Volt15CGE)>5):
+            indice=np.median(Volt15CGE)
             Volt15CGE.pop(indice)
             #print(f'Volt15CGE Despúes: {Volt15CGE}')
-            indice=np.argmin(Corriente15CGE)
+            indice=np.median(Corriente15CGE)
             Corriente15CGE.pop(indice)
-            indice=np.argmin(PotActiva15CGE)
+            indice=np.median(PotActiva15CGE)
             PotActiva15CGE.pop(indice)
-            indice=np.argmin(PotReactiva15CGE)
+            indice=np.median(PotReactiva15CGE)
             PotReactiva15CGE.pop(indice)
-            indice=np.argmin(PotAparente15CGE)
+            indice=np.median(PotAparente15CGE)
             PotAparente15CGE.pop(indice)
             if(len(FP15CGEReactivo)>=2):
                 indice=np.argmax(FP15CGEReactivo)
@@ -2238,11 +2283,11 @@ def Maximo15minCGE():
             if(len(FP15CGEInductivo)>=2):
                 indice=np.argmin(FP15CGEInductivo)
                 FP15CGEInductivo.pop(indice)
-            indice=np.argmin(FD15CGE)
+            indice=np.median(FD15CGE)
             FD15CGE.pop(indice)
-            indice=np.argmin(DAT15CGE)
+            indice=np.median(DAT15CGE)
             DAT15CGE.pop(indice)
-             
+"""     
 
 Volt15Carga=[]
 dataCarga=[]
