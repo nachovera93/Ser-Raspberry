@@ -100,10 +100,9 @@ print("Hora de comienzo:", horasetup)
 
 broker = '18.228.175.193'    #mqtt server
 port = 1883
-dId = '1234565432'
-passw = 'dpmLWoLIHB'
+dId = '123454321'
+passw = '25ebiBqWgR'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
-
 
 
 def get_mqtt_credentials():
@@ -665,7 +664,7 @@ def Potencias(i,irms,vrms):
               energyCGEFase11=0
           str_num = {"value":ActivaCGEFase11,"save":1}
           str_num2 = {"value":ReactivaCGEFase11,"save":0}
-          str_num3 = {"value":AparenteCGEFase11,"save":0}
+          str_num3 = {"value":AparenteCGEFase11,"save":1}
           str_num4 = {"value":energyCGEFase11 ,"save":0}
           ActivaCGEFase1 = json.dumps(str_num)
           AparenteCGEFase1 = json.dumps(str_num3)
@@ -704,7 +703,7 @@ def Potencias(i,irms,vrms):
               energyPanelesFase12=0
           str_num = {"value":ActivaPanelesFase12,"save":1}
           str_num2 = {"value":ReactivaPanelesFase12,"save":0}
-          str_num3 = {"value":AparentePanelesFase12,"save":0}
+          str_num3 = {"value":AparentePanelesFase12,"save":1}
           str_num4 = {"value":energyPanelesFase12,"save":0}
           ActivaPanelesFase1 = json.dumps(str_num)
           AparentePanelesFase1 = json.dumps(str_num3)
@@ -747,7 +746,7 @@ def Potencias(i,irms,vrms):
               energyCargaFase13=0
           str_num = {"value":ActivaCargaFase13,"save":1}
           str_num2 = {"value":ReactivaCargaFase13,"save":0}
-          str_num3 = {"value":AparenteCargaFase13,"save":0}
+          str_num3 = {"value":AparenteCargaFase13,"save":1}
           str_num4 = {"value":energyCargaFase13,"save":0}
           ActivaCargaFase1 = json.dumps(str_num)
           AparenteCargaFase1 = json.dumps(str_num3)
@@ -950,7 +949,7 @@ VoltajeBaterias=0.0
 CorrienteBaterias=0.0
 tiempo2Bateria = datetime.datetime.now()  
 tiempo2Paneles = datetime.datetime.now()  
-energyBateria = 0.0
+energyBaterias = 0.0
 energyBateriaHora = 0.0
 energyPanelesDC=0.0
 energyPanelesHoraDC=0.0
@@ -958,6 +957,14 @@ VoltajePanelesDC=0.0
 CorrientePanelesDC=0.0
 PotenciaBaterias=0.0
 PotenciaPanelesDC=0.0
+energyPanelesDCSend=0
+VoltajePanelesDCSend=0
+CorrientePanelesDCSend=0
+PotenciaPanelesDCSend=0
+energyBateriaSend=0          
+PotenciaBateriaSend=0
+VoltajeBateriaSend=0
+CorrienteBateriaSend=0
 modamaximovoltaje11=[]
 modamaximocorriente11=[]
 modamaximovoltaje22=[]
@@ -1270,12 +1277,16 @@ def received():
                            global modavoltajeBateria
                            global modacorrienteBateria
                            global NoVoltageoffsetBateria
-                           global energyBateria
+                           global energyBateriaSend
                            global energyBateriaHora
                            global tiempo2Bateria
                            global PotenciaBaterias
                            global VoltajeBaterias
                            global CorrienteBaterias
+                           global PotenciaBateriaSend
+                           global VoltajeBateriaSend
+                           global CorrienteBateriaSend
+                           global energyBaterias
                            samplings = np_array[-1]
                            #print(f'samplings: {samplings}')
                            list_FPVoltage3 = np_array[0:4200]
@@ -1299,6 +1310,8 @@ def received():
                                print(f'Voltaje Moda Baterias: {modavoltajeBateria}')
                                VoltajeBaterias=modavoltajeBateria/27
                                print(f'Voltaje Baterias: {VoltajeBaterias}')
+                               str_num = {"value":VoltajeBaterias,"save":1}
+                               VoltajeBateriaSend = json.dumps(str_num)
                                modamaximovoltajeBateria=[]
                            else:
                                modamaximovoltajeBateria.append(MediaVoltageBaterias)
@@ -1320,19 +1333,25 @@ def received():
                                print(f'Corriente Moda Baterias: {modacorrientebateria}')
                                CorrienteBaterias = modacorrientebateria/475
                                print(f'Corriente Baterias: {CorrienteBaterias}')
+                               str_num = {"value":CorrienteBaterias,"save":1}
+                               CorrienteBateriaSend = json.dumps(str_num)
                                PotenciaBaterias=(modacorrientebateria/475)*(modavoltajeBateria/27)
+                               str_num = {"value":PotenciaBaterias,"save":1}
+                               PotenciaBateriaSend = json.dumps(str_num)
                                tiempo1Bateria = datetime.datetime.now()
                                delta=(((tiempo1Bateria - tiempo2Bateria).microseconds)/1000+((tiempo1Bateria - tiempo2Bateria).seconds)*1000)/10000000000
-                               energyBateria += np.abs(PotenciaBaterias*delta*2.9)
+                               energyBaterias += np.abs(PotenciaBaterias*delta*2.9)
+                               str_num = {"value":energyBaterias,"save":1}
+                               energyBateriaSend = json.dumps(str_num)
                                energyBateriaHora += np.abs(PotenciaBaterias*delta*2.9)
-                               print(f'Energia Baterias: {energyBateria}')
+                               print(f'Energia Baterias: {energyBaterias}')
                                tiempo2Bateria = datetime.datetime.now()
                                if(tiempo2Bateria.minute==0):
                                     energyBateriaHora=0
                                if(tiempo2Bateria.hour==0 and tiempo2Bateria.minute==0):
-                                    energyBateria=0
+                                    energyBaterias=0
                                if(tiempo2Bateria.hour==0 and tiempo2Bateria.minute==1):
-                                    energyBateria=0
+                                    energyBaterias=0
                                ExcelAllInsertBaterias()
                                ExcelDataBaterias()
                                try:
@@ -1354,11 +1373,15 @@ def received():
                            global modacorrientePaneles
                            global NoVoltageoffsetPaneles
                            global energyPanelesDC
+                           global energyPanelesDCSend
                            global energyPanelesHoraDC
                            global tiempo2Paneles
                            global VoltajePanelesDC
+                           global VoltajePanelesDCSend
                            global CorrientePanelesDC
                            global PotenciaPanelesDC
+                           global CorrientePanelesDCSend
+                           global PotenciaPanelesDCSend
                            samplings = np_array[-1]
                            #print(f'samplings Paneles: {samplings}')
                            list_FPCurrent3 = np_array[0:4200]
@@ -1379,6 +1402,8 @@ def received():
                                    print(f'Corriente Moda Paneles Directa: {modacorrientePaneles}')
                                    CorrientePanelesDC=modacorrientePaneles/85
                                    print(f'Corriente Paneles Directa: {CorrientePanelesDC}')
+                                   str_num = {"value":CorrientePanelesDC,"save":1}
+                                   CorrientePanelesDCSend = json.dumps(str_num)
                                    modamaximocorrientePaneles=[]
                                else:
                                    modamaximocorrientePaneles.append(MediaCorrientePaneles)
@@ -1395,10 +1420,16 @@ def received():
                                    print(f'Voltaje Moda Paneles Directa: {modavoltajePaneles}')
                                    VoltajePanelesDC=modavoltajePaneles/4.97
                                    print(f'Voltaje Paneles Directa: {VoltajePanelesDC}')
+                                   str_num = {"value":VoltajePanelesDC,"save":1}
+                                   VoltajePanelesDCSend = json.dumps(str_num)
                                    PotenciaPanelesDC=(CorrientePanelesDC)*(VoltajePanelesDC)
+                                   str_num = {"value":PotenciaPanelesDC,"save":1}
+                                   PotenciaPanelesDCSend = json.dumps(str_num)
                                    tiempo1Paneles = datetime.datetime.now()
                                    delta=(((tiempo1Paneles - tiempo2Paneles).microseconds)/1000+((tiempo1Paneles - tiempo2Paneles).seconds)*1000)/10000000000
                                    energyPanelesDC += np.abs(PotenciaPanelesDC*delta*2.9)
+                                   str_num = {"value":energyPanelesDC,"save":1}
+                                   energyPanelesDCSend = json.dumps(str_num)
                                    energyPanelesHoraDC += np.abs(PotenciaPanelesDC*delta*2.9)
                                    print(f'Energia Paneles: {energyPanelesDC}')
                                    tiempo2Paneles = datetime.datetime.now()
@@ -1934,7 +1965,12 @@ def publish(client):
                      v16=time.time()
                      str_variable4 = i["variable"]
                      topic4 = topicmqtt + str_variable4 + "/sdata"
-                     result = client.publish(topic4, VoltajeBaterias)      
+                     result = client.publish(topic4, VoltajeBateriaSend)  
+                     status = result[0]
+                     if status == 0:
+                         print(f"Send Voltaje-Baterias: `{VoltajeBateriaSend}` to topic `{topic4}` ")
+                     else:
+                         print(f"Failed to send message to topic {topic4}")    
             if(i["variableFullName"]=="Corriente-Baterias"):
                 freq = i["variableSendFreq"]
                 if(a1 - v17 > float(freq)):
@@ -1942,7 +1978,7 @@ def publish(client):
                      v17=time.time()
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, CorrienteBaterias)     
+                     result = client.publish(topic5, CorrienteBateriaSend)     
             if(i["variableFullName"]=="Potencia-Baterias"):
                 freq = i["variableSendFreq"]
                 if(a1 - v18 > float(freq)):
@@ -1950,7 +1986,7 @@ def publish(client):
                      v18=time.time()
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, PotenciaBaterias)
+                     result = client.publish(topic5, PotenciaBateriaSend)
             if(i["variableFullName"]=="Energia-Baterias"):
                 freq = i["variableSendFreq"]
                 if(a1 - v19 > float(freq)):
@@ -1958,7 +1994,7 @@ def publish(client):
                      v19=time.time()
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, energyBateria)
+                     result = client.publish(topic5, energyBateriaSend)
 
             if(i["variableFullName"]=="Voltaje-PanelesDC"):
                 freq = i["variableSendFreq"]
@@ -1967,7 +2003,7 @@ def publish(client):
                      v20=time.time()
                      str_variable4 = i["variable"]
                      topic4 = topicmqtt + str_variable4 + "/sdata"
-                     result = client.publish(topic4, VoltajePanelesDC)
+                     result = client.publish(topic4, VoltajePanelesDCSend)
 
             if(i["variableFullName"]=="Corriente-PanelesDC"):
                 freq = i["variableSendFreq"]
@@ -1976,7 +2012,7 @@ def publish(client):
                      v21=time.time()
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, CorrientePanelesDC)    
+                     result = client.publish(topic5, CorrientePanelesDCSend)    
 
             if(i["variableFullName"]=="Potencia-PanelesDC"):
                 freq = i["variableSendFreq"]
@@ -1985,7 +2021,7 @@ def publish(client):
                      v22=time.time()
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, PotenciaPanelesDC)
+                     result = client.publish(topic5, PotenciaPanelesDCSend)
             if(i["variableFullName"]=="Energia-PanelesDC"):
                 freq = i["variableSendFreq"]
                 if(a1 - v23 > float(freq)):
@@ -1993,7 +2029,7 @@ def publish(client):
                      v23=time.time()
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, energyPanelesDC)
+                     result = client.publish(topic5, energyPanelesDCSend)
 
             if(i["variableFullName"]=="Temperatura-ESP32"):
                 freq = i["variableSendFreq"]
@@ -2098,7 +2134,7 @@ def ExcelAllInsertBaterias():
         dataBateriasAll.insert(1,round(VoltajeBaterias,2))
         dataBateriasAll.insert(2,round(CorrienteBaterias,2))
         dataBateriasAll.insert(3,round(PotenciaBaterias,2))
-        dataBateriasAll.insert(4,round(energyBateria,2))
+        dataBateriasAll.insert(4,round(energyBaterias,2))
         dataBateriasAll.insert(5,round(energyBateriaHora,2))
         
   
@@ -2120,7 +2156,7 @@ promedioVoltaje15CGE=0
 minimoVoltaje15CGE=0
 maximoCorrienteCGE=0
 promedioCorrienteCGE=0
-minimoCorrienteCGE
+minimoCorrienteCGE=0
 maximoPotActivaCGE=0
 promedioPotActivaCGE=0
 minimoPotActivaCGE=0
@@ -2385,10 +2421,11 @@ def Maximo15minCarga():
     global maximoFPCargaInductivo
     global minimoFPCargaInductivo
     global promedioFPCargaInductivo
-    global maximoFPCargaCapacitivo
-    global minimoFPCargaCapacitivo
-    global promedioFPCargaCapacitivo
+    global maximoFPCargaReactivo
+    global minimoFPCargaReactivo
+    global promedioFPCargaReactivo
     global Corriente15Carga
+    global PotActiva15Carga
     global PotReactiva15Carga
     global PotAparente15Carga
     global FP15CargaReactivo
@@ -2453,7 +2490,7 @@ def Maximo15minCarga():
                     dataCarga.insert(8,promedioPotActivaCarga)
                     dataCarga.insert(9,minimoPotActivaCarga)
                     dataCarga.insert(10,maximoPotReactivaCarga)
-                    dataCarga.insert(11),promedioPotReactivaCarga)
+                    dataCarga.insert(11,promedioPotReactivaCarga)
                     dataCarga.insert(12,minimoPotReactivaCarga)
                     dataCarga.insert(13,maximoPotAparenteCarga)
                     dataCarga.insert(14,promedioPotAparenteCarga)
@@ -2784,7 +2821,7 @@ def Maximo15minBateriasDC():
                      minimoVoltaje15BateriasDC=min(VoltMax15BateriasDC)
                      maximoCorrienteBateriasDC=max(CorrienteMax15BateriasDC)
                      promedioCorrienteBateriasDC=np.median(CorrienteMax15BateriasDC)
-                     minimoCorrienteBateriasDC=mainCorrienteMax15BateriasDC)
+                     minimoCorrienteBateriasDC=min(CorrienteMax15BateriasDC)
                      maximoPotBateriasDC=max(PotMax15BateriasDC)
                      promedioPotBateriasDC=np.median(PotMax15BateriasDC)
                      minimoPotBateriasDC=min(PotMax15BateriasDC)
@@ -2806,15 +2843,18 @@ def Maximo15minBateriasDC():
               PotMax15BateriasDC=[]
          elif(accesoPanelesDC==1):
               #print("paso elif Paneles")
-              VoltMax15BateriasDC.append(VoltajePanelesDC)
-              CorrienteMax15BateriasDC.append(CorrientePanelesDC)
-              PotMax15BateriasDC.append(PotenciaPanelesDC)
+              VoltMax15BateriasDC.append(VoltajeBaterias)
+              CorrienteMax15BateriasDC.append(CorrienteBaterias)
+              PotMax15BateriasDC.append(PotenciaBaterias)
  
     else:
-        VoltMax15BateriasDC.append(VoltajePanelesDC)
-        CorrienteMax15BateriasDC.append(CorrientePanelesDC)
-        PotMax15BateriasDC.append(PotenciaPanelesDC)     
+        VoltMax15BateriasDC.append(VoltajeBaterias)
+        CorrienteMax15BateriasDC.append(CorrienteBaterias)
+        PotMax15BateriasDC.append(PotenciaBaterias)     
         accesoPanelesDC = 0
+
+
+ 
         """
         if(len(VoltMax15PanelesDC)>4):
             indice=np.argmin(VoltMax15BateriasDC)
@@ -2897,6 +2937,7 @@ def Maximo15minPanelesDC():
         CorrienteMax15PanelesDC.append(CorrientePanelesDC)
         PotMax15PanelesDC.append(PotenciaPanelesDC)     
         accesoPanelesDC = 0
+        print("VoltMax15PanelesDC: " , VoltMax15PanelesDC)
         """
         if(len(VoltMax15PanelesDC)>4):
             indice=np.argmin(VoltMax15PanelesDC)
@@ -2906,7 +2947,8 @@ def Maximo15minPanelesDC():
             indice=np.argmin(PotMax15PanelesDC)
             PotMax15PanelesDC.pop(indice)
         """
-           
+        
+    
 
 def excelcreate():
     global sheet2
