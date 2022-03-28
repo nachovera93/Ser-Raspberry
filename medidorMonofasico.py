@@ -2951,6 +2951,7 @@ def Maximo15minPanelesDC():
     
 
 def excelcreate():
+    global sheet1
     global sheet2
     global dest_filename
     global sheet3
@@ -2982,6 +2983,7 @@ def excelcreate():
     headings2=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
     'FP','FD','DAT','cos(phi)','Energia','Energia por Hora'])
     headings3=['Fecha y Hora'] + list(['Voltaje', 'Corriente','Potencia','Energia','Energia por Hora'])
+    headings4=['Fecha y Hora'] + list(['Voltaje Maximo', 'Voltaje promedio', 'Voltaje minimo', 'Corriente Maxima','Corriente Promedio', 'Corriente Minima','Potencia Maxima','Potencia Promedio', 'Potencia Maxima','Energia total','Energia acumulada en 15'])
     ceros=list([0,0,0,0,0,0,0,0,0,0,0])
     sheet1.append(headings0)
     sheet2.append(headings)
@@ -2989,11 +2991,11 @@ def excelcreate():
     sheet4.append(headings)
     sheet5.append(headings2)
     sheet6.append(headings2)
-    sheet7.append(headings2)
+    sheet7.append(headings3)
     sheet8.append(headings3)
-    sheet9.append(headings2)
-    sheet10.append(headings2)
-    sheet11.append(headings2)
+    sheet9.append(headings4)
+    sheet10.append(headings3)
+    sheet11.append(headings4)
     sheet1.append(list([0,0,0]))
     sheet2.append(ceros)
     sheet3.append(ceros)
@@ -3134,7 +3136,7 @@ def ExcelDataBaterias():
 def ExcelDataBaterias15():
        global dataBateriasDC       
        workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet9 = workbook["Baterias15Min"]
+       sheet9 = workbook["Baterias15"]
        dataBateriasDC.insert(0,datetime.datetime.now())
        sheet9.append(list(dataBateriasDC))
        workbook.save(filename = dest_filename)
