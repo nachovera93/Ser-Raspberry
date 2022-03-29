@@ -1506,6 +1506,7 @@ def received():
                                  excelcreate()
                  else:
                      accesoemail3=0
+                 """
                  try:
                        if(excel.minute==1 or excel.minute==16 or excel.minute==31 or excel.minute==46):
                             if(accesoexcel==0): 
@@ -1519,7 +1520,7 @@ def received():
                                accesoexcel=0
                  except:
                      continue
-
+                 """
                  try:  
                        if(client.connected_flag==True): 
                              publish(client)
@@ -2292,10 +2293,10 @@ def Maximo15minCGE():
               dataCGE.insert(25,maximoDATCGE)
               dataCGE.insert(26,promedioDATCGE)
               dataCGE.insert(27,maximoDATCGE)
-              dataCGE.insert(28,promedioDATCGE)
-              dataCGE.insert(29,minimoDATCGE)
               dataCGE.insert(30,energyCGEFase11)
-              dataCGE.insert(31,energyCGEFase11Hour)
+              print("Data CGE: ", dataCGE)
+              ExcelDataCGE15()
+              #dataCGE.insert(31,energyCGEFase11Hour)
               Volt15CGE=[]
               Corriente15CGE=[]
               PotActiva15CGE=[]
@@ -2437,10 +2438,10 @@ def Maximo15minCarga():
     basea = datetime.datetime.now()
     #print(f'Maximo Voltaje 15 Carga: {maximoVoltaje15Carga}')
     if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
-         #print("paso if Carga")
+               print("paso if Carga")
          #if(len(PotAparente15Carga)>2):
                if(accesoCarga == 0):
-                    #print("paso if 2 Carga")
+                    print("paso if 2 Carga")
                     graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     accesoCarga = 1
                     maximoVoltaje15Carga=max(Volt15Carga)
@@ -2508,7 +2509,8 @@ def Maximo15minCarga():
                     dataCarga.insert(26,promedioDATCarga)
                     dataCarga.insert(27,minimoDATCarga)
                     dataCarga.insert(28,energyCargaFase13)
-                    dataCarga.insert(29,energyCargaFase13Hour)
+                    ExcelDataCarga15()
+                    #dataCarga.insert(29,energyCargaFase13Hour)
                     Volt15Carga=[]
                     Corriente15Carga=[]
                     PotActiva15Carga=[]
@@ -2534,6 +2536,8 @@ def Maximo15minCarga():
               
     else:
         Volt15Carga.append(vrms2)
+        Volt15Carga.append(vrms2)
+        print("Volt15Carga: ", Volt15Carga)
         Corriente15Carga.append(irms2)
         PotActiva15Carga.append(ActivaCargaFase13)
         PotReactiva15Carga.append(ReactivaCargaFase13)
@@ -2716,6 +2720,7 @@ def Maximo15minPaneles():
                      dataPaneles.insert(9,minimoDATPaneles)
                      dataPaneles.insert(10,energyPanelesFase12)
                      dataPaneles.insert(10,energyPanelesFase12Hour)
+                     ExcelDataPaneles15()
               except:
                   print("no hay maximos")
               Volt15Paneles=[]
@@ -2801,22 +2806,26 @@ def Maximo15minBateriasDC():
     global maximoVoltaje15BateriasDC
     global promedioVoltaje15BateriasDC
     global minimoVoltaje15BateriasDC
-    global maximoBateriasPanelesDC
+    global maximoCorrienteBateriasDC
+    global promedioCorrienteBateriasDC
+    global minimoCorrienteBateriasDC
     global maximoPotBateriasDC
+    global minimoPotBateriasDC
+    global promedioPotBateriasDC
     global CorrienteMax15BateriasDC
     global PotMax15BateriasDC
     global VoltMax15BateriasDC
     global accesoBateriasDC
-    global PotMax15BateriasDC
     basea = datetime.datetime.now()
     #print(f'Maximo Voltaje 15 Paneles: {maximoVoltaje15Paneles}')
     if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45):  
-         #print("paso if Paneles")
+         print("paso if Baterias")
          if(accesoBateriasDC == 0):
-              #print("paso if 2 Paneles")
+              print("paso if 2 Baterias")
               try:
-                     accesoPanelesDC = 1
+                     accesoBateriasDC = 1
                      maximoVoltaje15BateriasDC=max(VoltMax15BateriasDC)
+                     print("maximoVoltaje15BateriasDC: ",maximoVoltaje15BateriasDC)
                      promedioVoltaje15BateriasDC=np.median(VoltMax15BateriasDC)
                      minimoVoltaje15BateriasDC=min(VoltMax15BateriasDC)
                      maximoCorrienteBateriasDC=max(CorrienteMax15BateriasDC)
@@ -2836,12 +2845,14 @@ def Maximo15minBateriasDC():
                      dataBateriasDC.insert(10,minimoPotBateriasDC)
                      dataBateriasDC.insert(11,energyBateria)
                      dataBateriasDC.insert(12,energyBateriaHora)
+                     print("Data Baterias: ", dataBateriasDC)
+                     ExcelDataBaterias15()
               except:
                   print("no hay maximos")
               VoltMax15BateriasDC=[]
               CorrienteMax15BateriasDC=[]
               PotMax15BateriasDC=[]
-         elif(accesoPanelesDC==1):
+         elif(accesoBateriasDC==1):
               #print("paso elif Paneles")
               VoltMax15BateriasDC.append(VoltajeBaterias)
               CorrienteMax15BateriasDC.append(CorrienteBaterias)
@@ -2849,9 +2860,10 @@ def Maximo15minBateriasDC():
  
     else:
         VoltMax15BateriasDC.append(VoltajeBaterias)
+        print("Vltje15BateriasDC: ",VoltMax15BateriasDC)
         CorrienteMax15BateriasDC.append(CorrienteBaterias)
         PotMax15BateriasDC.append(PotenciaBaterias)     
-        accesoPanelesDC = 0
+        accesoBateriasDC = 0
 
 
  
@@ -2896,9 +2908,9 @@ def Maximo15minPanelesDC():
     basea = datetime.datetime.now()
     #print(f'Maximo Voltaje 15 Paneles: {maximoVoltaje15Paneles}')
     if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45):  
-         #print("paso if Paneles")
+         print("paso if Paneles DC")
          if(accesoPanelesDC == 0):
-              #print("paso if 2 Paneles")
+              print("paso if 2 Paneles DC")
               try:
                      accesoPanelesDC = 1
                      maximoVoltaje15PanelesDC=max(VoltMax15PanelesDC)
@@ -2920,7 +2932,10 @@ def Maximo15minPanelesDC():
                      dataPanelesDirecta15.insert(8,promedioPotActivaPanelesDC)
                      dataPanelesDirecta15.insert(9,minimoPotActivaPanelesDC)
                      dataPanelesDirecta15.insert(10,energyPanelesDC)
-                     dataPanelesDirecta15.insert(10,energyPanelesHoraDC)
+                     #dataPanelesDirecta15.insert(10,energyPanelesHoraDC)
+                     print("dataPanelesDirecta15: ", dataPanelesDirecta15)
+                     ExcelDataPanelesDirecta15()
+                    
               except:
                   print("no hay maximos")
               VoltMax15PanelesDC=[]
@@ -3017,7 +3032,7 @@ def AbrirExcel():
     global energyCGEFase11
     global energyCargaFase13
     global energyPanelesFase12
-    global energyBateria
+    global energyBaterias
     global energyPaneles
     dia=date.today()
     if(os.path.exists(f'{dia}.xlsx')):
@@ -3030,17 +3045,21 @@ def AbrirExcel():
             sheet8 = workbook["Baterias"]
             sheet10 = workbook["PanelesDC"]
             largoexcelCGE=len(sheet5["FP"])
+            print("sheet 5: ", sheet5)
+            print("sheet 8: ", sheet8)
+            print("Largo excel CGE: ",largoexcelCGE)
             largoexcelCarga=len(sheet6["FP"])
             largoexcelPaneles=len(sheet7["FP"])
-            largoExcelBateria=len(sheet8["Voltaje"])
-            largoExcelPanelesDC=len(sheet10["Voltaje"])
+            #print("Largo excel Bateria: ",len(sheet8["Energia"]))
+            #largoExcelBateria=len(sheet8["Voltaje"])
+            #largoExcelPanelesDC=len(sheet10["Voltaje"])
             #print(f'Numero de filas de paneles: {largoexcelPaneles} ')
             energyCGEFase11 = float(sheet5[f'k{largoexcelCGE}'].value)
             energyCargaFase13 = float(sheet6[f'k{largoexcelCarga}'].value)
             energyPanelesFase12 = float(sheet7[f'k{largoexcelPaneles}'].value)
-            energyBateria = float(sheet8[f'k{largoExcelBateria}'].value)
-            energyPaneles = float(sheet10[f'k{largoExcelPanelesDC}'].value)
-            print(f'Valor Energia Paneles Acumulado: {energyPaneles} ')
+            #energyBaterias = float(sheet8[f'k{largoexcelCGE-2}'].value)
+            #energyPanelesDC = float(sheet10[f'k{largoexcelCGE-2}'].value)
+            print(f'Valor Energia Carga Acumulado: {energyCargaFase13} ')
     else:
             excelcreate()
             print("No Existe")
