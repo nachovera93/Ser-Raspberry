@@ -241,7 +241,7 @@ def VoltRms(maximovoltaje2):
         vrms=0
         #print(f'vrms : {vrms}')
         return vrms
-    vrms=maximovoltaje2*0.65
+    vrms=maximovoltaje2*0.71
     #vrms=(-1.16 + 0.179*(maximovoltaje2) +  -0.00718*(maximovoltaje2**2) + 0.000155*(maximovoltaje2**3) + -0.00000203*(maximovoltaje2**4) + 0.0000000168*(maximovoltaje2**5) + -0.0000000000912*(maximovoltaje2**6) + 0.00000000000032*(maximovoltaje2**7) + -0.000000000000000703*(maximovoltaje2**8) + 0.000000000000000000875*(maximovoltaje2**9) + -0.000000000000000000000472*(maximovoltaje2**10))*maximovoltaje2
     #print(f'vrms : {vrms}')
     return vrms
@@ -1040,7 +1040,7 @@ def received():
                                modavoltaje1=modavoltaje
                                vrms1=VoltRms(modavoltaje1)
                                #vrms1=modavoltaje
-                               #print(f'Vrms CGE: {vrms1}')
+                               print(f'Vrms CGE: {vrms1}')
                                str_num = {"value":vrms1,"save":1}
                                vrms11 = json.dumps(str_num)
                                VoltageFFT(NoVoltageoffset1,samplings1,1)
@@ -1067,7 +1067,7 @@ def received():
                            if (len(modamaximocorriente11)>=5):
                                modacorriente=np.median(modamaximocorriente11)
                                irms1=CurrentRms(modacorriente)
-                               #print(f'Irms CGE: {irms1}')
+                               print(f'Irms CGE: {irms1}')
                                str_num = {"value":irms1,"save":1}
                                irms11 = json.dumps(str_num)
                                proporción=maximocorriente2/(irms1*np.sqrt(2))
@@ -1134,7 +1134,7 @@ def received():
                                modavoltaje22=np.median(modamaximovoltaje22)
                                modavoltaje221=modavoltaje22
                                vrms2=VoltRms(modavoltaje221)
-                               #print(f'moda voltaje carga: {vrms2}')
+                               print(f'Voltaje carga: {vrms2}')
                                str_num = {"value":vrms2,"save":1}
                                vrms22 = json.dumps(str_num)
                                #print(f'Vrms Carga: {vrms2}')
@@ -1162,7 +1162,7 @@ def received():
                                irms2=CurrentRms(modacorriente22)
                                str_num = {"value":irms2,"save":1}
                                irms22 = json.dumps(str_num)
-                               #print(f'Irms Carga: {irms2}')
+                               print(f'Irms Carga: {irms2}')
                 
                                proporción=maximocorriente2/(irms2*np.sqrt(2))
                                ListaIrmsPeak2 = NoCurrentoffset2/proporción
@@ -1344,7 +1344,7 @@ def received():
                                str_num = {"value":energyBaterias,"save":1}
                                energyBateriaSend = json.dumps(str_num)
                                energyBateriaHora += np.abs(PotenciaBaterias*delta*2.9)
-                               print(f'Energia Baterias: {energyBaterias}')
+                               #print(f'Energia Baterias: {energyBaterias}')
                                tiempo2Bateria = datetime.datetime.now()
                                if(tiempo2Bateria.minute==0):
                                     energyBateriaHora=0
@@ -1431,7 +1431,7 @@ def received():
                                    str_num = {"value":energyPanelesDC,"save":1}
                                    energyPanelesDCSend = json.dumps(str_num)
                                    energyPanelesHoraDC += np.abs(PotenciaPanelesDC*delta*2.9)
-                                   print(f'Energia Paneles: {energyPanelesDC}')
+                                   #print(f'Energia Paneles: {energyPanelesDC}')
                                    tiempo2Paneles = datetime.datetime.now()
                                    if(tiempo2Paneles.minute==0):
                                         energyPanelesHoraDC=0
@@ -2294,7 +2294,7 @@ def Maximo15minCGE():
               dataCGE.insert(26,promedioDATCGE)
               dataCGE.insert(27,maximoDATCGE)
               dataCGE.insert(30,energyCGEFase11)
-              print("Data CGE: ", dataCGE)
+              #print("Data CGE: ", dataCGE)
               ExcelDataCGE15()
               #dataCGE.insert(31,energyCGEFase11Hour)
               Volt15CGE=[]
@@ -2537,7 +2537,7 @@ def Maximo15minCarga():
     else:
         Volt15Carga.append(vrms2)
         Volt15Carga.append(vrms2)
-        print("Volt15Carga: ", Volt15Carga)
+        #print("Volt15Carga: ", Volt15Carga)
         Corriente15Carga.append(irms2)
         PotActiva15Carga.append(ActivaCargaFase13)
         PotReactiva15Carga.append(ReactivaCargaFase13)
@@ -2750,7 +2750,7 @@ def Maximo15minPaneles():
  
     else:
         Volt15Paneles.append(vrms3)
-        print(f'Irms Paneles : {irms3}') 
+        #print(f'Irms Paneles : {irms3}') 
         Corriente15Paneles.append(irms3)
         PotActiva15Paneles.append(ActivaPanelesFase12)
         PotReactiva15Paneles.append(ReactivaPanelesFase12)
@@ -2792,7 +2792,7 @@ VoltMax15BateriasDC=[]
 CorrienteMax15BateriasDC=[]
 PotMax15BateriasDC=[]
 dataBateriasDC=[]
-accesoBateriasDC = 0
+accesoBateriasDC=0
 maximoVoltaje15BateriasDC=0
 promedioVoltaje15BateriasDC=0
 minimoVoltaje15BateriasDC=0
@@ -2843,12 +2843,17 @@ def Maximo15minBateriasDC():
                      dataBateriasDC.insert(7,maximoPotBateriasDC)
                      dataBateriasDC.insert(8,promedioPotBateriasDC)
                      dataBateriasDC.insert(10,minimoPotBateriasDC)
-                     dataBateriasDC.insert(11,energyBateria)
-                     dataBateriasDC.insert(12,energyBateriaHora)
-                     print("Data Baterias: ", dataBateriasDC)
+                     dataBateriasDC.insert(11,energyBaterias)
+                     #dataBateriasDC.insert(12,energyBateriaHora)
+                     #print("Data Baterias: ", dataBateriasDC)
                      ExcelDataBaterias15()
-              except:
-                  print("no hay maximos")
+              #except:
+              except OSError as err:
+                    print("OS error: {0}".format(err))
+                    #continue
+              except ValueError:
+                    print(ValueError)
+                    print("no hay maximos")
               VoltMax15BateriasDC=[]
               CorrienteMax15BateriasDC=[]
               PotMax15BateriasDC=[]
@@ -2860,7 +2865,7 @@ def Maximo15minBateriasDC():
  
     else:
         VoltMax15BateriasDC.append(VoltajeBaterias)
-        print("Vltje15BateriasDC: ",VoltMax15BateriasDC)
+        #print("Vltje15BateriasDC: ",VoltMax15BateriasDC)
         CorrienteMax15BateriasDC.append(CorrienteBaterias)
         PotMax15BateriasDC.append(PotenciaBaterias)     
         accesoBateriasDC = 0
@@ -2933,7 +2938,7 @@ def Maximo15minPanelesDC():
                      dataPanelesDirecta15.insert(9,minimoPotActivaPanelesDC)
                      dataPanelesDirecta15.insert(10,energyPanelesDC)
                      #dataPanelesDirecta15.insert(10,energyPanelesHoraDC)
-                     print("dataPanelesDirecta15: ", dataPanelesDirecta15)
+                     #print("dataPanelesDirecta15: ", dataPanelesDirecta15)
                      ExcelDataPanelesDirecta15()
                     
               except:
@@ -2952,7 +2957,7 @@ def Maximo15minPanelesDC():
         CorrienteMax15PanelesDC.append(CorrientePanelesDC)
         PotMax15PanelesDC.append(PotenciaPanelesDC)     
         accesoPanelesDC = 0
-        print("VoltMax15PanelesDC: " , VoltMax15PanelesDC)
+        #print("VoltMax15PanelesDC: " , VoltMax15PanelesDC)
         """
         if(len(VoltMax15PanelesDC)>4):
             indice=np.argmin(VoltMax15PanelesDC)
