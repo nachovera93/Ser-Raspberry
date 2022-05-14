@@ -1033,7 +1033,7 @@ def received():
                            mediadcvoltaje = (maximovoltaje+minimovoltaje)/2
                            NoVoltageoffset1=(list_FPVoltage-mediadcvoltaje)
                            
-                           vrms1=VoltajeRms(NoVoltageoffset1)*0.94
+                           vrms1=VoltajeRms(NoVoltageoffset1)*0.92
                           
                            if (len(modamaximovoltaje11)>=5):
                                modavoltaje=np.median(modamaximovoltaje11)
@@ -1066,8 +1066,8 @@ def received():
 
                            if (len(modamaximocorriente11)>=5):
                                modacorriente=np.median(modamaximocorriente11)
-                               irms1=CurrentRms(modacorriente)
-                               print(f'Irms CGE: {irms1}')
+                               irms1=CurrentRms(modacorriente)*0.885
+                               print(f'Irms Red: {irms1}')
                                str_num = {"value":irms1,"save":1}
                                irms11 = json.dumps(str_num)
                                proporción=maximocorriente2/(irms1*np.sqrt(2))
