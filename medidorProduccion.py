@@ -138,7 +138,7 @@ def on_connected(client, userdata, flags, rc):
         client.bad_connection_flag=False
 
    
-
+"""
 get_mqtt_credentials()     
 client = mqtt.Client(str_client_id)   #Creación cliente
 client.connect(broker, port)     #Conexión al broker
@@ -155,7 +155,7 @@ def reconnectmqtt():
     client.username_pw_set(usernamemqtt, passwordmqtt)
     client.on_connect = on_connected
     client.loop_start()
-  
+"""
 
 def get_cpuload():
     cpuload = psutil.cpu_percent(interval=1, percpu=False)
@@ -2329,7 +2329,7 @@ def AbrirExcel():
             excelcreate()
             print("No Existe")
 
-AbrirExcel()
+#AbrirExcel()
 
 
 def VariablesExcel():
@@ -2535,14 +2535,11 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     global Irms
     global MediaBufferVoltaje
     global MediaBufferCurrent
-    global samplings
     global NoVoltageOffset
     global NoCurrentoffset
     global ListaIrmsPeak1
     global potrmsCGE
                            
-    list_Voltage = (np_array[0:4200]) #/1.65
-    list_Current = np_array[4201:8400]
     sos = signal.butter(10, 2500, 'low', fs=samplings, output='sos')
     list_VoltageFilterComplete = signal.sosfilt(sos, list_Voltage)
     list_CurrentFilterComplete = signal.sosfilt(sos, list_Current)
@@ -2587,7 +2584,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         #str_num = {"value":Irms,"save":1}
         #Irms1 = json.dumps(str_num)
         CurrentFFT(NoCurrentoffset,samplings,i,Irms)
-        #potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
+        potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
         Potencias(i,Irms,Vrms)
         """
         ExcelAllInsertCGE()
@@ -2615,8 +2612,7 @@ def received():
                      continue
                  np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')   
                  if (len(np_array) == 8402):
-                       if (np_array[0] == 11 or np_array[0] == 22 or np_array[0] == 33 or np_array[0] == 44 or np_array[0] == 55 or np_array[0] == 66
-                          np_array[0] == 77 or np_array[0] == 88 or np_array[0] == 99):
+                       if (np_array[0] == 11):
                            
                            samplings = np_array[-1]
                            list_Voltage = (np_array[0:4200])
@@ -2660,7 +2656,7 @@ def received():
                                  excelcreate()
                  else:
                      accesoemail=0
-                 
+                 """
                  try:  
                        if(client.connected_flag==True): 
                              publish(client)
@@ -2674,6 +2670,7 @@ def received():
                          countbroker=countbroker+1
                          
                      continue
+                 """
 
         
 if __name__ == '__main__':
