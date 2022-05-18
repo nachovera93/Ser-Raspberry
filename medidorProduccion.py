@@ -325,7 +325,7 @@ def VoltageFFT(list_fftVoltages, samplings,i):
     global FDVoltage_9 
     global DATVoltage_9
     global sincvoltaje1
-    j = str(i)
+    p = i
     N = len(list_fftVoltages)
     T = 1 / samplings
     list_fftVoltages -= np.mean(list_fftVoltages)
@@ -366,7 +366,8 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            sincvoltaje1 = 1
            str_num_FD = {"value":FDVoltage,"save":1}
            str_num_DAT = {"value":DATVoltage,"save":1}
-           if (i == 1):
+           print("SincVoltaje Voltage: ", sincvoltaje1)
+           if (p == 1):
                print("FD: ",FDVoltage)
                FDVoltage_1 = FDVoltage
                DATVoltage_1= DATVoltage
@@ -493,7 +494,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
     global FDCurrent_9
     global PhaseCurrent
     global sincvoltaje1
-    q = str(i)
+    q = i
     N = len(list_fftVoltages)
     T = 1 / samplings
     list_fftVoltages -= np.mean(list_fftVoltages)
@@ -536,7 +537,9 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
          str_num_DAT_Current = {"value":DATCurrent,"save":0}
          JsonDATCurrent = json.dumps(str_num_DAT_Current)
          PhaseCurrent = np.arctan(real[0]/(imag[0]))
+         print("SincVoltaje: ",sincvoltaje1)
          if (sincvoltaje1 == 1):
+             print("Paso sincvoltaje")
              if(PhaseVoltage-(PhaseCurrent)>=0):
                  desfaseCGE = "Corriente Adelantada a Voltaje"
              else:
@@ -546,14 +549,17 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
              str_num_FP = {"value":FP,"save":0}
              JsonFP = json.dumps(str_num_FP)
              sincvoltaje1=0  
-             if (i == "1"):
+             print("SincVoltaje .. : ",sincvoltaje1)
+             print("p : ",p)
+             print("type : ",type(p))
+             if (p == 1):
                  print("FP: ",FP)
                  CosPhi_1=CosPhi
                  FP_1=FP
                  DATCurrent_1=DATCurrent
                  FDCurrent_1=FDCurrent
-                 FDCurrentJson1 = json.dumps(str_num_FD)  
-                 DATCurrentJson1 = json.dumps(str_num_DAT)
+                 FDCurrentJson1 = json.dumps(str_num_FD_Current)  
+                 DATCurrentJson1 = json.dumps(str_num_DAT_Current)
                  FPCurrentJson1 = json.dumps(str_num_FP) 
              elif (i == "2"):
                  CosPhi_2=CosPhi
@@ -726,7 +732,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_1 = AparentPower
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
-        print("2")
         SaveDataCsv_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1)
         #Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1):
     elif (i == 2):
