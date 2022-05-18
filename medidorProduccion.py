@@ -545,7 +545,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
              str_num_FP = {"value":FP,"save":0}
              JsonFP = json.dumps(str_num_FP)
              sincvoltaje1=0  
-             if (i == 1):
+             if (i == "1"):
                  CosPhi_1=CosPhi
                  FP_1=FP
                  DATCurrent_1=DATCurrent
@@ -553,7 +553,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FDCurrentJson1 = json.dumps(str_num_FD)  
                  DATCurrentJson1 = json.dumps(str_num_DAT)
                  FPCurrentJson1 = json.dumps(str_num_FP) 
-             elif (i == 2):
+             elif (i == ""2"):
                  CosPhi_2=CosPhi
                  FP_2=FP
                  DATCurrent_2=DATCurrent
@@ -561,7 +561,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FDCurrentJson2 = json.dumps(str_num_FD)  
                  DATCurrentJson2 = json.dumps(str_num_DAT)  
                  FPCurrentJson2 = json.dumps(str_num_FP)            
-             elif (i == 3):
+             elif (i == "3"):
                  CosPhi_3=CosPhi
                  FP_3=FP
                  DATCurrent_3=DATCurrent
@@ -569,7 +569,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FDCurrentJson3 = json.dumps(str_num_FD)  
                  DATCurrentJson3 = json.dumps(str_num_DAT)
                  FPCurrentJson3 = json.dumps(str_num_FP)              
-             elif (i == 4):
+             elif (i == "4"):
                  CosPhi_4=CosPhi
                  FP_4=FP
                  DATCurrent_4=DATCurrent
@@ -577,7 +577,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FDCurrentJson4 = json.dumps(str_num_FD)  
                  DATCurrentJson4 = json.dumps(str_num_DAT)
                  FPCurrentJson4 = json.dumps(str_num_FP)              
-             elif (i == 5):
+             elif (i == "5"):
                  CosPhi_5=CosPhi
                  FP_5=FP
                  DATCurrent_5=DATCurrent
@@ -585,7 +585,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FDCurrentJson5 = json.dumps(str_num_FD)  
                  DATCurrentJson5 = json.dumps(str_num_DAT)
                  FPCurrentJson5 = json.dumps(str_num_FP)              
-             elif (i == 6):
+             elif (i == "6"):
                  CosPhi_6=CosPhi
                  FP_6=FP
                  DATCurrent_6=DATCurrent
@@ -593,7 +593,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FDCurrentJson6 = json.dumps(str_num_FD)  
                  DATCurrentJson6 = json.dumps(str_num_DAT)
                  FPCurrentJson6 = json.dumps(str_num_FP)             
-             elif (i == 7):
+             elif (i == "7"):
                  CosPhi_7=CosPhi
                  FP_7=FP
                  DATCurrent_7=DATCurrent
@@ -601,7 +601,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FDCurrentJson7 = json.dumps(str_num_FD)  
                  DATCurrentJson7 = json.dumps(str_num_DAT)
                  FPCurrentJson7 = json.dumps(str_num_FP)              
-             elif (i == 8):
+             elif (i == "8"):
                  CosPhi_8=CosPhi
                  FP_8=FP
                  DATCurrent_8=DATCurrent
@@ -609,7 +609,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FDCurrentJson8 = json.dumps(str_num_FD)  
                  DATCurrent8son8 = json.dumps(str_num_DAT)
                  FPCurrentJson8 = json.dumps(str_num_FP)              
-             elif (i == 9):
+             elif (i == "9"):
                  CosPhi_9=CosPhi
                  FP_9=FP
                  DATCurrent_9=DATCurrent
@@ -1872,7 +1872,7 @@ def VariablesExcel():
        dataVariablesAll=[]
 
 def SaveDataCsv_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1):
-       Data_1 = [datetime.datetime.now(),round(Vrms,2), round(Irms, round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1, round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,2), round(OneHourEnergy_1,2)]                    
+       Data_1 = [datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,2), round(OneHourEnergy_1,2)]                    
        workbook=openpyxl.load_workbook(filename = dest_filename)
        print(Data_1)
        sheet11 = workbook["Var 1"]
