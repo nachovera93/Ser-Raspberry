@@ -301,7 +301,7 @@ FDVoltage_8 = 0.0
 DATVoltage_8= 0.0
 FDVoltage_9 = 0.0
 DATVoltage_9= 0.0
-
+sincvoltaje=0
 PhaseVoltage=0.0
 def VoltageFFT(list_fftVoltages, samplings,i):
     global PhaseVoltage
@@ -324,12 +324,13 @@ def VoltageFFT(list_fftVoltages, samplings,i):
     global DATVoltage_8
     global FDVoltage_9 
     global DATVoltage_9
+    global sincvoltaje1
     j = str(i)
     N = len(list_fftVoltages)
     T = 1 / samplings
     list_fftVoltages -= np.mean(list_fftVoltages)
     datosfft = list_fftVoltages * np.hamming(4096)
-    
+    print("Samplings: ", samplings)
     yf = np.fft.rfft(datosfft)
     xf = fftfreq(N, T)[:N//2] 
     if (samplings > 5100):
@@ -358,8 +359,7 @@ def VoltageFFT(list_fftVoltages, samplings,i):
                    FD2.append(FD[i])
                    
            SumMagnitudEficaz = (np.sum([FD[0:len(FD)]]))
-           Magnitud1 = FD[0]
-           global sincvoltaje1            
+           Magnitud1 = FD[0]            
            PhaseVoltage = np.arctan(real[0]/(imag[0]))
            FDVoltage = Magnitud1/SumMagnitudEficaz
            DATVoltage= np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
@@ -367,7 +367,7 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            str_num_FD = {"value":FDVoltage,"save":1}
            str_num_DAT = {"value":DATVoltage,"save":1}
            if (i == "1"):
-               print(FDVoltage)
+               print("FD: ",FDVoltage)
                FDVoltage_1 = FDVoltage
                DATVoltage_1= DATVoltage
                FDVoltage_1_JSON = json.dumps(str_num_FD)  
@@ -492,6 +492,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
     global DATCurrent_9
     global FDCurrent_9
     global PhaseCurrent
+    global sincvoltaje1
     q = str(i)
     N = len(list_fftVoltages)
     T = 1 / samplings
@@ -528,7 +529,6 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
          proporcion = Irms/(np.sqrt(Magnitud1**2+ArmonicosRestantes**2))
          Irmsarmonico1prop=Magnitud1*proporcion
          Irmstotalproporcionado=np.sqrt((Irmsarmonico1prop**2)+(ArmonicosRestantes*proporcion)**2)
-         global sincvoltaje1
          FDCurrent = Irmsarmonico1prop/Irms
          str_num_FD_Current = {"value":FDCurrent,"save":0}
          JsonFDCurrent = json.dumps(str_num_FD_Current)
@@ -547,7 +547,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
              JsonFP = json.dumps(str_num_FP)
              sincvoltaje1=0  
              if (i == "1"):
-                 print(CosPhi,FP)
+                 print("FP: ",FP)
                  CosPhi_1=CosPhi
                  FP_1=FP
                  DATCurrent_1=DATCurrent
