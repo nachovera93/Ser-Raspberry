@@ -191,33 +191,33 @@ def getMinValues(myList, quantity):
         return(sorted(list(set(myList)))[:quantity]) 
         #print(f'max : {max(myList)}')
 
-vrms=0.0
+Vrms=0.0
 def VoltRms(MaxVoltage2):
     if(MaxVoltage2<13):
-        vrms=0
-        #print(f'vrms : {vrms}')
-        return vrms
-    vrms=MaxVoltage2*0.71
-    #vrms=(-1.16 + 0.179*(MaxVoltage2) +  -0.00718*(MaxVoltage2**2) + 0.000155*(MaxVoltage2**3) + -0.00000203*(MaxVoltage2**4) + 0.0000000168*(MaxVoltage2**5) + -0.0000000000912*(MaxVoltage2**6) + 0.00000000000032*(MaxVoltage2**7) + -0.000000000000000703*(MaxVoltage2**8) + 0.000000000000000000875*(MaxVoltage2**9) + -0.000000000000000000000472*(MaxVoltage2**10))*MaxVoltage2
-    #print(f'vrms : {vrms}')
-    return vrms
+        Vrms=0
+        #print(f'Vrms : {Vrms}')
+        return Vrms
+    Vrms=MaxVoltage2*0.71
+    #Vrms=(-1.16 + 0.179*(MaxVoltage2) +  -0.00718*(MaxVoltage2**2) + 0.000155*(MaxVoltage2**3) + -0.00000203*(MaxVoltage2**4) + 0.0000000168*(MaxVoltage2**5) + -0.0000000000912*(MaxVoltage2**6) + 0.00000000000032*(MaxVoltage2**7) + -0.000000000000000703*(MaxVoltage2**8) + 0.000000000000000000875*(MaxVoltage2**9) + -0.000000000000000000000472*(MaxVoltage2**10))*MaxVoltage2
+    #print(f'Vrms : {Vrms}')
+    return Vrms
 
-irms=0.0
+Irms=0.0
 def CurrentRms(MaxCurrent2):
-    #irms=(-0.0248 + 0.00402*MaxCurrent2 - 0.000176*(MaxCurrent2**2) + 0.00000392*(MaxCurrent2**3) - 0.000000046*(MaxCurrent2**4) + 0.000000000284*(MaxCurrent2**5) - 0.00000000000069*(MaxCurrent2**6))*MaxCurrent2
-    #print(f'irms : {irms}')
+    #Irms=(-0.0248 + 0.00402*MaxCurrent2 - 0.000176*(MaxCurrent2**2) + 0.00000392*(MaxCurrent2**3) - 0.000000046*(MaxCurrent2**4) + 0.000000000284*(MaxCurrent2**5) - 0.00000000000069*(MaxCurrent2**6))*MaxCurrent2
+    #print(f'Irms : {Irms}')
     if(MaxCurrent2>430):
-         irms = MaxCurrent2*0.0133
+         Irms = MaxCurrent2*0.0133
     else:
-         irms=(0.0046 + 0.000282*MaxCurrent2 - 0.00000328*(MaxCurrent2**2) + 0.0000000167*(MaxCurrent2**3) - 0.0000000000382*(MaxCurrent2**4) + 0.0000000000000322*(MaxCurrent2**5))*MaxCurrent2
+         Irms=(0.0046 + 0.000282*MaxCurrent2 - 0.00000328*(MaxCurrent2**2) + 0.0000000167*(MaxCurrent2**3) - 0.0000000000382*(MaxCurrent2**4) + 0.0000000000000322*(MaxCurrent2**5))*MaxCurrent2
     
-    return irms
+    return Irms
 
 
 
-vrms0=0.0
+Vrms0=0.0
 def VoltajeRms(listVoltage):
-    global vrms0
+    global Vrms0
     N = len(listVoltage)
     Squares = []
 
@@ -231,15 +231,15 @@ def VoltajeRms(listVoltage):
 
     MeanSquares = (1/N)*SumSquares #Dividimos por N la sumatoria
 
-    vrms0=np.sqrt(MeanSquares)
+    Vrms0=np.sqrt(MeanSquares)
    
-    #print(f'Voltaje RMS : {vrms0}')
-    return vrms0
+    #print(f'Voltaje RMS : {Vrms0}')
+    return Vrms0
 
 
-irms0=0.0
+Irms0=0.0
 def CorrienteRms(listCurrent):
-    global irms0
+    global Irms0
     
     N = len(listCurrent)
     Squares = []
@@ -254,10 +254,10 @@ def CorrienteRms(listCurrent):
 
     MeanSquares = (1/N)*SumSquares #Dividimos por N la sumatoria
 
-    irms0=np.sqrt(MeanSquares)
+    Irms0=np.sqrt(MeanSquares)
     
-    #print(f'Corriente RMS : {irms0}')
-    return irms0
+    #print(f'Corriente RMS : {Irms0}')
+    return Irms0
 
 #potrms=0.0
 def PotenciaRms(listCurrent,listVoltage):
@@ -284,32 +284,32 @@ def PotenciaRms(listCurrent,listVoltage):
     
 
 DATVoltajeCGE=0.0
-phasevoltajeCGE=0.0
+PhaseVoltage=0.0
 FDVoltajeCGE=0.0
 DATVoltajePaneles=0.0
 phasevoltajePaneles=0.0
 FDVoltajePaneles=0.0
-DATVoltajeCarga=0.0
-phasevoltajeCarga=0.0
-FDVoltajeCarga=0.0
-FDVoltajeCGE1=0.0
+DATVoltaje2=0.0
+phasevoltaje2=0.0
+FDVoltaje2=0.0
+FDVoltage=0.0
 
 def VoltageFFT(list_fftVoltages, samplings,i):
     global j
     j = str(i)
     global DATVoltajeCGE
     global ejeyabsolutv
-    global DATVoltajeCGE1
-    global phasevoltajeCGE
+    global DATVoltage
+    global PhaseVoltage
     global FDVoltajeCGE
     global DATVoltajePaneles
     global phasevoltajePaneles
     global FDVoltajePaneles
-    global DATVoltajeCarga
-    global phasevoltajeCarga
-    global FDVoltajeCarga
+    global DATVoltaje2
+    global phasevoltaje2
+    global FDVoltaje2
     global xnewv
-    global FDVoltajeCGE1
+    global FDVoltage
     N = len(list_fftVoltages)
     T = 1 / samplings
     list_fftVoltages -= np.mean(list_fftVoltages)
@@ -328,12 +328,12 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            imag=[]
            z=0
            for i in range(45, 2575, 50):
-                 a2 = max(ynew[i:i+10])
+                 Time1b = max(ynew[i:i+10])
                  arra = max(ejeyabsolutv[i:i+10])
-                 complejo.append(a2)
-                 real1 = a2.real
+                 complejo.append(Time1b)
+                 real1 = Time1b.real
                  real.append(real1)
-                 imag1 = a2.imag
+                 imag1 = Time1b.imag
                  imag.append(imag1)
                  z=z+1
                  FD.append(arra)
@@ -344,90 +344,94 @@ def VoltageFFT(list_fftVoltages, samplings,i):
                    
            SumMagnitudEficaz = (np.sum([FD[0:len(FD)]]))
            Magnitud1 = FD[0]
-           if(j=="1"):
-                 global sincvoltaje1            
-                 phasevoltajeCGE = np.arctan(real[0]/(imag[0]))
-                 FDVoltajeCGE1 = Magnitud1/SumMagnitudEficaz
-                 #str_num = {"value":FDVoltajeCGE1,"save":1}
-                 #FDVoltajeCGE = json.dumps(str_num)
-                 DATVoltajeCGE1= np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
-                 #str_num = {"value":DATVoltajeCGE1,"save":1}
-                 #DATVoltajeCGE = json.dumps(str_num)
-                 sincvoltaje1 = 1
-           if(j=="3"):
-                 global sincvoltaje2              
-                 phasevoltajePaneles = np.arctan(real[0]/(imag[0]))
-                 FDVoltajePaneles = Magnitud1/SumMagnitudEficaz
-                 str_num = {"value":FDVoltajePaneles,"save":1}
-                 FDVoltajePaneles = json.dumps(str_num)
-                 DATVoltajePaneles1 = np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
-                 str_num = {"value":DATVoltajePaneles1,"save":1}
-                 DATVoltajePaneles = json.dumps(str_num)
-                 sincvoltaje2 = 1
-           if(j=="2"):
-                 global sincvoltaje3
-                 phasevoltajeCarga = np.arctan(real[0]/(imag[0]))
-                 #FaseArmonicoFundamentalVoltaje1=round(np.angle(complejo[0]),2)
-                 FDVoltajeCarga = Magnitud1/SumMagnitudEficaz
-                 str_num = {"value":FDVoltajeCarga,"save":1}
-                 FDVoltajeCarga = json.dumps(str_num)
-                 DATVoltajeCarga = np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
-                 str_num = {"value":DATVoltajeCarga,"save":1}
-                 DATVoltajeCarga = json.dumps(str_num)
-                 sincvoltaje3 = 1
+           global sincvoltaje1            
+           PhaseVoltage = np.arctan(real[0]/(imag[0]))
+           FDVoltage = Magnitud1/SumMagnitudEficaz
+           DATVoltage= np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
+           sincvoltaje1 = 1
+           str_num_FD = {"value":FDVoltage,"save":1}
+           str_num_DAT = {"value":DATVoltage,"save":1}
+           if (i == 1):
+               FDVoltage1 = json.dumps(str_num_FD)  
+               DATVoltage1 = json.dumps(str_num_DAT)
+           elif (i == 2):
+               FDVoltage2 = json.dumps(str_num_FD)  
+               DATVoltage2 = json.dumps(str_num_DAT)             
+           elif (i == 3:
+               FDVoltage3 = json.dumps(str_num_FD)  
+               DATVoltage3 = json.dumps(str_num_DAT)             
+           elif (i == 4):
+               FDVoltage4 = json.dumps(str_num_FD)  
+               DATVoltage4 = json.dumps(str_num_DAT)             
+           elif (i == 5):
+               FDVoltage5 = json.dumps(str_num_FD)  
+               DATVoltage5 = json.dumps(str_num_DAT)             
+           elif (i == 6):
+               FDVoltage6 = json.dumps(str_num_FD)  
+               DATVoltage6 = json.dumps(str_num_DAT)             
+           elif (i == 7):
+               FDVoltage7 = json.dumps(str_num_FD)  
+               DATVoltage7 = json.dumps(str_num_DAT)             
+           elif (i == 8):
+               FDVoltage8 = json.dumps(str_num_FD)  
+               DATVoltage8 = json.dumps(str_num_DAT)             
+           elif (i == 9):
+               FDVoltage9 = json.dumps(str_num_FD)  
+               DATVoltage9 = json.dumps(str_num_DAT)             
+           
 
 
 DATCorrienteCGE = 0.0
 DATCorrientePaneles= 0.0
-DATCorrienteCarga= 0.0
-FDCorrienteCGE= 0.0
-FDCorrienteCarga=0.0
-DATCorrienteCarga=0.0
+DATCorriente2= 0.0
+JsonFDCurrent= 0.0
+FDCorriente2=0.0
+DATCorriente2=0.0
 FDCorrientePaneles= 0.0
-FDCorrienteCarga= 0.0
-FDCorrienteCGE= 0.0
-phasecorrienteCGE= 0.0
+FDCorriente2= 0.0
+JsonFDCurrent= 0.0
+PhaseCurrent= 0.0
 phasecorrientePaneles= 0.0
-phasecorrienteCarga= 0.0
+phasecorriente2= 0.0
 FPCGE= 0.99
-FPCGE0= 0.99
-cosphiCGE= 0.0
+FP= 0.99
+CosPhi= 0.0
 FPPaneles= 0.0
 cosphiPaneles= 0.0
-FPCarga= 0.0
-cosphiCarga= 0.0
-FDCorrienteCGE1=0.0
-DATCorrienteCGE1=0.0
-FPCarga1=0.99
+FP2= 0.0
+cosphi2= 0.0
+FDCurrent=0.0
+DATCurrent=0.0
+FP21=0.99
 FPPaneles1 = 0.99
 FDCorrientePaneles1 = 0.0
 DATCorrientePaneles1 = 0.0 
-FDCorrienteCarga1=0.0 
-DATCorrienteCarga1=0.0
+FDCorriente21=0.0 
+DATCorriente21=0.0
 
-def CurrentFFT(list_fftVoltages, samplings, i,irms):
+def CurrentFFT(list_fftVoltages, samplings, i,Irms):
     global DATCorrienteCGE
-    global DATCorrienteCGE1
-    global a2
-    global FDCorrienteCGE 
-    global FDCorrienteCGE1
-    global phasecorrienteCGE
+    global DATCurrent
+    global Time1b
+    global JsonFDCurrent 
+    global FDCurrent
+    global PhaseCurrent
     global FDCorrientePaneles
     global DATCorrientePaneles
     global phasecorrientePaneles
-    global FDCorrienteCarga
-    global DATCorrienteCarga
-    global FDCorrienteCarga1
-    global DATCorrienteCarga1
-    global phasecorrienteCarga
+    global FDCorriente2
+    global DATCorriente2
+    global FDCorriente21
+    global DATCorriente21
+    global phasecorriente2
     global FPCGE
-    global FPCarga1
-    global FPCGE0
-    global cosphiCGE
+    global FP21
+    global FP
+    global CosPhi
     global FPPaneles
     global cosphiPaneles
-    global FPCarga
-    global cosphiCarga
+    global FP2
+    global cosphi2
     global q
     global FPPaneles1
     global FDCorrientePaneles1
@@ -437,7 +441,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
     global xnew
     global ejeyabsolut
     global desfaseCGE
-    global desfaseCarga
+    global desfase2
     global desfasePaneles
    
     q = str(i)
@@ -460,12 +464,12 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
          real=[]
          imag=[]
          for i in range(45, 2575, 50):
-               a2 = max(ynew[i:i+10])
+               Time1b = max(ynew[i:i+10])
                arra = max(ejeyabsolut[i:i+10])
-               complejo.append(a2)
-               real1 = a2.real
+               complejo.append(Time1b)
+               real1 = Time1b.real
                real.append(real1)
-               imag1 = a2.imag
+               imag1 = Time1b.imag
                imag.append(imag1)
                FD.append(arra)
          repite = list(ejeyabsolut)
@@ -473,243 +477,264 @@ def CurrentFFT(list_fftVoltages, samplings, i,irms):
          SumMagnitudEficaz2 = (np.sum([FD[0:len(FD)]]))
          Magnitud1 = FD[0]#*0.01
          ArmonicosRestantes=SumMagnitudEficaz2-Magnitud1
-         proporcion = irms/(np.sqrt(Magnitud1**2+ArmonicosRestantes**2))
-         irmsarmonico1prop=Magnitud1*proporcion
-         irmstotalproporcionado=np.sqrt((irmsarmonico1prop**2)+(ArmonicosRestantes*proporcion)**2)
-         if(q=="1"):
-             global sincvoltaje1
-             FDCorrienteCGE1 = irmsarmonico1prop/irms
-             #str_num = {"value":FDCorrienteCGE1,"save":0}
-             #FDCorrienteCGE = json.dumps(str_num)
-             DATCorrienteCGE1 = np.sqrt((SumMagnitudEficaz2**2-Magnitud1**2)/(Magnitud1**2))
-             #str_num2 = {"value":DATCorrienteCGE1,"save":0}
-             #DATCorrienteCGE = json.dumps(str_num2)
-             phasecorrienteCGE = np.arctan(real[0]/(imag[0]))
-             if (sincvoltaje1 == 1):
-                 if(phasevoltajeCGE-(phasecorrienteCGE)>=0):
-                     desfaseCGE = "Corriente Adelantada a Voltaje"
-                 else:
-                     desfaseCGE = "Voltaje Adelantado a Corriente"
-                 FPCGE0=np.cos(phasevoltajeCGE-phasecorrienteCGE)*FDCorrienteCGE1#+0.05
-                 cosphiCGE=np.cos(phasevoltajeCGE-phasecorrienteCGE)
-                 if(FPCGE0>0.0):
-                     FPCGE0=FPCGE0#+0.05
-                 else:
-                     FPCGE0=FPCGE0#-0.05
-                 
-                 #str_num3 = {"value":FPCGE0,"save":0}
-                 #FPCGE = json.dumps(str_num3)
-                 sincvoltaje1=0  
-                 
-         if(q=="3"):
-             global sincvoltaje2
-             FDCorrientePaneles1 = irmsarmonico1prop/irms
-             str_num = {"value":FDCorrientePaneles1,"save":0}
-             FDCorrientePaneles = json.dumps(str_num)
-             DATCorrientePaneles1 = np.sqrt((SumMagnitudEficaz2**2-Magnitud1**2)/(Magnitud1**2))
-             str_num2 = {"value":DATCorrientePaneles1,"save":0}
-             DATCorrientePaneles = json.dumps(str_num2)
-             phasecorrientePaneles = np.arctan(real[0]/(imag[0]))
-             if (sincvoltaje2 == 1):
-                 if(phasevoltajePaneles-(phasecorrientePaneles)>=0):
-                     desfasePaneles = "Corriente Adelantada a Voltaje"
-                 else:
-                     desfasePaneles = "Voltaje Adelantado a Corriente"
-                 FPPaneles1=np.cos(phasevoltajePaneles-(phasecorrientePaneles))*FDCorrientePaneles1
-                 if (FPPaneles1>0.0):
-                     FPPaneles1 = FPPaneles1#+0.05
-                 else:
-                     FPPaneles1 = FPPaneles1#-0.05
-                
-                 cosphiPaneles=np.cos(phasevoltajePaneles-phasecorrientePaneles)
-                 str_num = {"value":FPPaneles1,"save":0}
-                 FPPaneles = json.dumps(str_num)
-                 sincvoltaje2=0  
-         if(q=="2"):
-             global sincvoltaje3
-             FDCorrienteCarga1=irmsarmonico1prop/irms
-             str_num = {"value":FDCorrienteCarga1,"save":0}
-             FDCorrienteCarga = json.dumps(str_num)
-             DATCorrienteCarga1 = np.sqrt((SumMagnitudEficaz2**2-Magnitud1**2)/(Magnitud1**2))
-             str_num2 = {"value":DATCorrienteCarga1,"save":0}
-             DATCorrienteCarga = json.dumps(str_num2)
-             phasecorrienteCarga = np.arctan(real[0]/(imag[0]))
-             if (sincvoltaje3 == 1):
-                 if(phasevoltajeCarga-(phasecorrienteCarga)>=0):
-                     desfaseCarga = "Corriente Adelantada a Voltaje"
-                 else:
-                     desfaseCarga = "Voltaje Adelantado a Corriente"
-                 FPCarga1 = np.cos(phasevoltajeCarga-phasecorrienteCarga)*FDCorrienteCarga1# + 0.05
-                 cosphiCarga=np.cos(phasevoltajeCarga-phasecorrienteCarga)
-                 if(FPCarga1>0.0):
-                     FPCarga1=FPCarga1#+0.05
-                 else:
-                     FPCarga1=FPCarga1#-0.05
-                 str_num = {"value":FPCarga1,"save":0}
-                 FPCarga = json.dumps(str_num)
-                 sincvoltaje3=0
+         proporcion = Irms/(np.sqrt(Magnitud1**2+ArmonicosRestantes**2))
+         Irmsarmonico1prop=Magnitud1*proporcion
+         Irmstotalproporcionado=np.sqrt((Irmsarmonico1prop**2)+(ArmonicosRestantes*proporcion)**2)
+         global sincvoltaje1
+         FDCurrent = Irmsarmonico1prop/Irms
+         str_num_FD = {"value":FDCurrent,"save":0}
+         JsonFDCurrent = json.dumps(str_num_FD_Current)
+         DATCurrent = np.sqrt((SumMagnitudEficaz2**2-Magnitud1**2)/(Magnitud1**2))
+         str_num_DAT = {"value":DATCurrent,"save":0}
+         JsonDATCurrent = json.dumps(str_num_DAT_Current)
+         PhaseCurrent = np.arctan(real[0]/(imag[0]))
+         if (sincvoltaje1 == 1):
+             if(PhaseVoltage-(PhaseCurrent)>=0):
+                 desfaseCGE = "Corriente Adelantada a Voltaje"
+             else:
+                 desfaseCGE = "Voltaje Adelantado a Corriente"
+             FP=np.cos(PhaseVoltage-PhaseCurrent)*FDCurrent
+             CosPhi=np.cos(PhaseVoltage-PhaseCurrent)
+             str_num_FP = {"value":FP,"save":0}
+             JsonFP = json.dumps(str_num_FP)
+             sincvoltaje1=0  
+             if (i == 1):
+                 CosPhi1=CosPhi
+                 FP1=FP
+                 DATCurrent1=DATCurrent
+                 FDCurrent1=FDCurrent
+                 FDCurrentJson1 = json.dumps(str_num_FD)  
+                 DATCurrentJson1 = json.dumps(str_num_DAT)
+                 FPCurrentJson1 = json.dumps(str_num_FP) 
+             elif (i == 2):
+                 CosPhi2=CosPhi
+                 FP2=FP
+                 DATCurrent2=DATCurrent
+                 FDCurrent2=FDCurrent
+                 FDCurrentJson2 = json.dumps(str_num_FD)  
+                 DATCurrentJson2 = json.dumps(str_num_DAT)  
+                 FPCurrentJson2 = json.dumps(str_num_FP)            
+             elif (i == 3:
+                 CosPhi3=CosPhi
+                 FP3=FP
+                 DATCurrent3=DATCurrent
+                 FDCurrent3=FDCurrent
+                 FDCurrentJson3 = json.dumps(str_num_FD)  
+                 DATCurrentJson3 = json.dumps(str_num_DAT)
+                 FPCurrentJson3 = json.dumps(str_num_FP)              
+             elif (i == 4):
+                 CosPhi4=CosPhi
+                 FP4=FP
+                 DATCurrent4=DATCurrent
+                 FDCurrent4=FDCurrent
+                 FDCurrentJson4 = json.dumps(str_num_FD)  
+                 DATCurrentJson4 = json.dumps(str_num_DAT)
+                 FPCurrentJson4 = json.dumps(str_num_FP)              
+             elif (i == 5):
+                 CosPhi5=CosPhi
+                 FP5=FP
+                 DATCurrent5=DATCurrent
+                 FDCurrent5=FDCurrent
+                 FDCurrentJson5 = json.dumps(str_num_FD)  
+                 DATCurrentJson5 = json.dumps(str_num_DAT)
+                 FPCurrentJson5 = json.dumps(str_num_FP)              
+             elif (i == 6):
+                 CosPhi6=CosPhi
+                 FP6=FP
+                 DATCurrent6=DATCurrent
+                 FDCurrent6=FDCurrent
+                 FDCurrentJson6 = json.dumps(str_num_FD)  
+                 DATCurrentJson6 = json.dumps(str_num_DAT)
+                 FPCurrentJson6 = json.dumps(str_num_FP)             
+             elif (i == 7):
+                 CosPhi7=CosPhi
+                 FP7=FP
+                 DATCurrent7=DATCurrent
+                 FDCurrent7=FDCurrent
+                 FDCurrentJson7 = json.dumps(str_num_FD)  
+                 DATCurrentJson7 = json.dumps(str_num_DAT)
+                 FPCurrentJson7 = json.dumps(str_num_FP)              
+             elif (i == 8):
+                 CosPhi8=CosPhi
+                 FP8=FP
+                 DATCurrent8=DATCurrent
+                 FDCurrent8=FDCurrent
+                 FDCurrentJson8 = json.dumps(str_num_FD)  
+                 DATCurrent8son8 = json.dumps(str_num_DAT)
+                 FPCurrentJson8 = json.dumps(str_num_FP)              
+             elif (i == 9):
+                 CosPhi9=CosPhi
+                 FP9=FP
+                 DATCurrent9=DATCurrent
+                 FDCurrent9=FDCurren9
+                 FDCurrentJson9 = json.dumps(str_num_FD)  
+                 DATCurrentJson9 = json.dumps(str_num_DAT)
+                 FPCurrentJson9 = json.dumps(str_num_FP)        
 
 
-a = datetime.datetime.now()
-b = datetime.datetime.now() 
-c = datetime.datetime.now()  
-#energyCGEFase11 = 0.0
-energyCGEFase11 = 0.0
-energyCGEFase11Hour = 0.0
-energyCargaFase13 = 0.0
-energyCargaFase13Hour = 0.0
-AparenteCGEFase11 = 0.0
-ActivaCGEFase11 = 0.0
-ReactivaCGEFase11 = 0.0
-AparentePanelesFase12 = 0.0
-ActivaPanelesFase12 = 0.0
-ReactivaPanelesFase12 = 0.0
-AparenteCargaFase13 = 0.0
-ActivaCargaFase13 = 0.0
-ReactivaCargaFase13 = 0.0
-energyCGEFase1 = 0.0
-energyPanelesFase1 = 0.0
-energyPanelesFase12Hour = 0.0
-energyPanelesFase12 = 0.0
-energyCargaFase1 = 0.0
-AparenteCGEFase1 = 0.0
-ActivaCGEFase1 = 0.0
-ReactivaCGEFase1 = 0.0
-AparentePanelesFase1 = 0.0
-ActivaPanelesFase1 = 0.0
-ReactivaPanelesFase1 = 0.0
-AparenteCargaFase1 = 0.0
-ActivaCargaFase1 = 0.0
-ReactivaCargaFase1 = 0.0
+Time1a = datetime.datetime.now()
+Time2a = datetime.datetime.now()
+Time3a = datetime.datetime.now()
+Time4a = datetime.datetime.now()
+Time5a = datetime.datetime.now()
+Time6a = datetime.datetime.now()
+Time7a = datetime.datetime.now()
+Time8a = datetime.datetime.now()
+Time9a = datetime.datetime.now()
+Energy1 = 0.0
+Energy2 = 0.0
+Energy3 = 0.0
+Energy4 = 0.0
+Energy5 = 0.0
+Energy6 = 0.0
+Energy7 = 0.0
+Energy8 = 0.0
+Energy9 = 0.0
+OneHourEnergy1 = 0.0
+OneHourEnergy2 = 0.0
+OneHourEnergy3 = 0.0
+OneHourEnergy4 = 0.0
+OneHourEnergy5 = 0.0
+OneHourEnergy6 = 0.0
+OneHourEnergy7 = 0.0
+OneHourEnergy8 = 0.0
+OneHourEnergy9 = 0.0
+AparentPower = 0.0
+ActivePower = 0.0
+ReactivePower = 0.0
 
 
-
-def Potencias(i,irms,vrms):
+def Potencias(i,Irms,Vrms,potrmsCGE):
     i = str(i)
+    global a
+    global Energy
+    global ActivePower
+    global AparentPower
+    global ReactivePower
+    global OneHourEnergy1
+    TimeEnergy = datetime.datetime.now()
+    if(TimeEnergy.minute==0):
+            OneHourEnergy1=0
+            OneHourEnergy2=0
+            OneHourEnergy3=0
+            OneHourEnergy4=0
+            OneHourEnergy5=0
+            OneHourEnergy6=0
+            OneHourEnergy7=0
+            OneHourEnergy8=0
+            OneHourEnergy9=0
+    if(TimeEnergy.hour==0 and TimeEnergy.minute==0):
+            Energy1=0
+            Energy2=0
+            Energy3=0
+            Energy4=0
+            Energy5=0
+            Energy6=0
+            Energy7=0
+            Energy8=0
+            Energy9=0
+    AparentPower = Vrms*Irms
+    if (potrmsCGE>=0):
+          ActivePower = Vrms*Irms*CosPhi
+          ActivePower = np.abs(ActivePower)
+    else:
+          ActivePower = Vrms*Irms*CosPhi
+          ActivePower = np.abs(ActivePower)
+          ActivePower = ActivePower*(-1)
+    ReactivePower = Vrms*Irms*np.sin(PhaseVoltage-PhaseCurrent)
     
-    if(i=="1"):
-          global a
-          global energyCGEFase1
-          global ActivaCGEFase1
-          global AparenteCGEFase1
-          global ReactivaCGEFase1
-          global energyCGEFase11
-          global energyCGEFase11Hour
-          global AparenteCGEFase11
-          global ActivaCGEFase11
-          global ReactivaCGEFase11
-          AparenteCGEFase11 = vrms*irms
-          if (potrmsCGE>=0):
-                ActivaCGEFase11 = vrms*irms*cosphiCGE
-                ActivaCGEFase11 = np.abs(ActivaCGEFase11)
-          else:
-                ActivaCGEFase11 = vrms*irms*cosphiCGE
-                ActivaCGEFase11 = np.abs(ActivaCGEFase11)
-                ActivaCGEFase11 = ActivaCGEFase11*(-1)
-          ReactivaCGEFase11 = vrms*irms*np.sin(phasevoltajeCGE-phasecorrienteCGE)
-          a2 = datetime.datetime.now()
-          delta=(((a2 - a).microseconds)/1000+((a2 - a).seconds)*1000)/10000000000
-          energyCGEFase11 += np.abs(ActivaCGEFase11*delta*2.9)
-          energyCGEFase11Hour += np.abs(ActivaCGEFase11*delta*2.9)
-          a = datetime.datetime.now()
-          if(a2.minute==0):
-              energyCGEFase11Hour=0
-          if(a2.hour==0 and a2.minute==0):
-              energyCGEFase11=0
-          if(a2.hour==0 and a2.minute==1):
-              energyCGEFase11=0
+    if (i == 1):
+        Time1b = datetime.datetime.now()
+        delta=(((Time1b - Time1a).microseconds)/1000+((Time1b - Time1a).seconds)*1000)/10000000000
+        Energy1 += np.abs(ActivePower*delta*2.9)
+        OneHourEnergy1 += np.abs(ActivePower*delta*2.9)
+        Time1a = datetime.datetime.now()
+        AparentPower1 = AparentPower
+        ActivePower1 = ActivePower
+        ReactivePower1 = ReactivePower
+    elif (i == 2):
+        Time2b = datetime.datetime.now()
+        delta=(((Time2b - Time2a).microseconds)/1000+((Time2b - Time2a).seconds)*1000)/10000000000
+        Energy2 += np.abs(ActivePower*delta*2.9)
+        OneHourEnergy2 += np.abs(ActivePower*delta*2.9)
+        Time2a = datetime.datetime.now()
+        AparentPower2 = AparentPower
+        ActivePower2 = ActivePower
+        ReactivePower2 = ReactivePower        
+    elif (i == 3):
+        Time3b = datetime.datetime.now()
+        delta=(((Time3b - Time3a).microseconds)/1000+((Time3b - Time3a).seconds)*1000)/10000000000
+        Energy3 += np.abs(ActivePower*delta*2.9)
+        OneHourEnergy3 += np.abs(ActivePower*delta*2.9)
+        Time3a = datetime.datetime.now()
+        AparentPower3 = AparentPower
+        ActivePower3 = ActivePower
+        ReactivePower3 = ReactivePower            
+    elif (i == 4):
+        Time4b = datetime.datetime.now()
+        delta=(((Time4b - Time4a).microseconds)/1000+((Time4b - Time4a).seconds)*1000)/10000000000
+        Energy4 += np.abs(ActivePower*delta*2.9)
+        OneHourEnergy4 += np.abs(ActivePower*delta*2.9)
+        Time4a = datetime.datetime.now()
+        AparentPower4 = AparentPower
+        ActivePower4 = ActivePower
+        ReactivePower4 = ReactivePower             
+    elif (i == 5):
+        Time5b = datetime.datetime.now()
+        delta=(((Time5b - Time5a).microseconds)/1000+((Time5b - Time5a).seconds)*1000)/10000000000
+        Energy5 += np.abs(ActivePower*delta*2.9)
+        OneHourEnergy5 += np.abs(ActivePower*delta*2.9)
+        Time5a = datetime.datetime.now()
+        AparentPower5 = AparentPower
+        ActivePower5 = ActivePower
+        ReactivePower5 = ReactivePower             
+    elif (i == 6):
+        Time6b = datetime.datetime.now()
+        delta=(((Time6b - Time6a).microseconds)/1000+((Time6b - Time6a).seconds)*1000)/10000000000
+        Energy6 += np.abs(ActivePower*delta*2.9)
+        OneHourEnergy6 += np.abs(ActivePower*delta*2.9)
+        Time6a = datetime.datetime.now()
+        AparentPower6 = AparentPower
+        ActivePower6 = ActivePower
+        ReactivePower6 = ReactivePower          
+    elif (i == 7):
+        Time7b = datetime.datetime.now()
+        delta=(((Time7b - Time7a).microseconds)/1000+((Time7b - Time7a).seconds)*1000)/10000000000
+        Energy7 += np.abs(ActivePower*delta*2.9)
+        OneHourEnergy7 += np.abs(ActivePower*delta*2.9)
+        Time7a = datetime.datetime.now()
+        AparentPower7 = AparentPower
+        ActivePower7 = ActivePower
+        ReactivePower7 = ReactivePower            
+    elif (i == 8):
+        Time8b = datetime.datetime.now()
+        delta=(((Time8b - Time8a).microseconds)/1000+((Time8b - Time8a).seconds)*1000)/10000000000
+        Energy8 += np.abs(ActivePower*delta*2.9)
+        OneHourEnergy8 += np.abs(ActivePower*delta*2.9)
+        Time8a = datetime.datetime.now()
+        AparentPower8 = AparentPower
+        ActivePower8 = ActivePower
+        ReactivePower8 = ReactivePower           
+    elif (i == 9):
+        Time9b = datetime.datetime.now()
+        delta=(((Time9b - Time9a).microseconds)/1000+((Time9b - Time9a).seconds)*1000)/10000000000
+        Energy9 += np.abs(ActivePower*delta*2.9)
+        OneHourEnergy9 += np.abs(ActivePower*delta*2.9)
+        Time9a = datetime.datetime.now()
+        AparentPower9 = AparentPower
+        ActivePower9 = ActivePower
+        ReactivePower9 = ReactivePower
           """
-          str_num = {"value":ActivaCGEFase11,"save":1}
-          str_num2 = {"value":ReactivaCGEFase11,"save":0}
-          str_num3 = {"value":AparenteCGEFase11,"save":1}
-          str_num4 = {"value":energyCGEFase11 ,"save":0}
-          ActivaCGEFase1 = json.dumps(str_num)
-          AparenteCGEFase1 = json.dumps(str_num3)
-          ReactivaCGEFase1 = json.dumps(str_num2)
-          energyCGEFase1 = json.dumps(str_num4)
+          str_num = {"value":ActivePower,"save":1}
+          str_num2 = {"value":ReactivePower,"save":0}
+          str_num3 = {"value":AparentPower1,"save":1}
+          str_num4 = {"value":Energy1 ,"save":0}
+          ActivePower = json.dumps(str_num)
+          AparentPower = json.dumps(str_num3)
+          ReactivePower = json.dumps(str_num2)
+          Energy = json.dumps(str_num4)
           """
-    if(i=="3"):
-          global b
-          global energyPanelesFase1
-          global AparentePanelesFase1
-          global ActivaPanelesFase1
-          global ReactivaPanelesFase1
-          global energyPanelesFase12
-          global energyPanelesFase12Hour
-          global AparentePanelesFase12
-          global ActivaPanelesFase12
-          global ReactivaPanelesFase12
-          AparentePanelesFase12 = vrms*irms
-          if(potrmsPaneles>=0):
-                ActivaPanelesFase12= vrms*irms*cosphiPaneles
-                ActivaPanelesFase12=np.abs(ActivaPanelesFase12)
-          else:
-                ActivaPanelesFase12= vrms*irms*cosphiPaneles
-                ActivaPanelesFase12= np.abs(ActivaPanelesFase12)
-                ActivaPanelesFase12= ActivaPanelesFase12*(-1)
-          ReactivaPanelesFase12 = vrms*irms*np.sin(phasevoltajePaneles-phasecorrientePaneles)
-          b2 = datetime.datetime.now()
-          delta=(((b2 - b).microseconds)/1000+((b2 - b).seconds)*1000)/10000000000
-          energyPanelesFase12Hour += np.abs(ActivaPanelesFase12*delta*2.9)
-          energyPanelesFase12 += np.abs(ActivaPanelesFase12*delta*2.9)
-          b = datetime.datetime.now()
-          if(b2.minute==0):
-              energyPanelesFase12Hour=0
-          if(b2.hour==0 and b2.minute==0):
-              energyPanelesFase12=0
-          if(b2.hour==0 and b2.minute==1):
-              energyPanelesFase12=0
-          str_num = {"value":ActivaPanelesFase12,"save":1}
-          str_num2 = {"value":ReactivaPanelesFase12,"save":0}
-          str_num3 = {"value":AparentePanelesFase12,"save":1}
-          str_num4 = {"value":energyPanelesFase12,"save":0}
-          ActivaPanelesFase1 = json.dumps(str_num)
-          AparentePanelesFase1 = json.dumps(str_num3)
-          ReactivaPanelesFase1 = json.dumps(str_num2)
-          energyPanelesFase1 = json.dumps(str_num4)
-    if(i=="2"):
-          global c
-          global energyCargaFase1 
-          global AparenteCargaFase1
-          global ActivaCargaFase1
-          global ReactivaCargaFase1
-          global energyCargaFase13
-          global energyCargaFase13Hour
-          global AparenteCargaFase13
-          global ActivaCargaFase13
-          global ReactivaCargaFase13
-          AparenteCargaFase13 = vrms*irms
-          #print(f'Aparente Carga: {AparenteCargaFase13}')
-          if(potrmsCarga>=0):
-              ActivaCargaFase13= vrms*irms*cosphiCarga
-              ActivaCargaFase13=np.abs(ActivaCargaFase13)
-          else:
-              ActivaCargaFase13= vrms*irms*cosphiCarga
-              ActivaCargaFase13=np.abs(ActivaCargaFase13)
-              ActivaCargaFase13=ActivaCargaFase13*(-1)
-           
-          #print(f'Activa Carga: {ActivaCargaFase13}')
-          ReactivaCargaFase13 = vrms*irms*np.sin(phasevoltajeCarga-phasecorrienteCarga)
-          c2 = datetime.datetime.now()
-          #print(f'Reactiva Carga: {ReactivaCargaFase13}')
-          delta=(((c2 - c).microseconds)/1000+((c2 - c).seconds)*1000)/10000000000
-          energyCargaFase13 += np.abs(ActivaCargaFase13*delta*2.9)
-          energyCargaFase13Hour += np.abs(ActivaCargaFase13*delta*2.9)
-          c = datetime.datetime.now()
-          if(c2.minute==0):
-              energyCargaFase13Hour=0
-          if(c2.hour==0 and c2.minute==0):
-              energyCargaFase13=0
-          if(c2.hour==0 and c2.minute==1):
-              energyCargaFase13=0
-          str_num = {"value":ActivaCargaFase13,"save":1}
-          str_num2 = {"value":ReactivaCargaFase13,"save":0}
-          str_num3 = {"value":AparenteCargaFase13,"save":1}
-          str_num4 = {"value":energyCargaFase13,"save":0}
-          ActivaCargaFase1 = json.dumps(str_num)
-          AparenteCargaFase1 = json.dumps(str_num3)
-          ReactivaCargaFase1 = json.dumps(str_num2)
-          energyCargaFase1 = json.dumps(str_num4)
+    
     
 font = {'family': 'serif',
         'color':  'darkred',
@@ -730,31 +755,32 @@ def graphVoltage(list_fftVoltage,list_FinalCurrent,samplings,i):
         ax = fig.add_subplot(9,1,1)
         ax.plot(tiempoms,list_FinalCurrent,color="green", label="Corriente")
         if(i=="1"):
-             plt.title(f'Corriente | I: {round(Irms,2)}  |  P-Activa: {round(ActivaCGEFase11,2)} | P-Aparente: {round(AparenteCGEFase11,2)}  |  P-Reactiva:{round(ReactivaCGEFase11,2)}  ',fontdict=font)
+             plt.title(f'Corriente | I: {round(Irms,2)}  |  P-Activa: {round(ActivePower,2)} | P-Aparente: {round(AparentPower1,2)}  |  P-Reactiva:{round(ReactivePower1,2)}  ',fontdict=font)
         if(i=="2"):
-             plt.title(f'Corriente | I: {round(irms2,2)}  |  P-Activa: {round(ActivaCargaFase13,2)} | P-Aparente: {round(AparenteCargaFase13,2)}  |  P-Reactiva:{round(ReactivaCargaFase13,2)}  ',fontdict=font)
+             plt.title(f'Corriente | I: {round(Irms2,2)}  |  P-Activa: {round(Activa2Fase13,2)} | P-Aparente: {round(Aparente2Fase13,2)}  |  P-Reactiva:{round(Reactiva2Fase13,2)}  ',fontdict=font)
         if(i=="3"):
-             plt.title(f'Corriente | I: {round(irms3,2)}  |  P-Activa: {round(ActivaPanelesFase12,2)} | P-Aparente: {round(AparentePanelesFase12,2)}  |  P-Reactiva:{round(ReactivaPanelesFase12,2)}  ',fontdict=font)
+             plt.title(f'Corriente | I: {round(Irms3,2)}  |  P-Activa: {round(ActivaPanelesFase12,2)} | P-Aparente: {round(AparentePanelesFase12,2)}  |  P-Reactiva:{round(ReactivaPanelesFase12,2)}  ',fontdict=font)
              
         ax.legend(loc='upper left')
         ax.set_xlabel('Tiempo (mS)',fontdict=font)
         ax = fig.add_subplot(9,1,3)
         ax.plot(tiempoms,list_fftVoltage,color="blue", label="Voltaje")
         if(i=="1"):
-             plt.title(f'Voltaje | V: {round(Vrms,2)} |  FP: {round(FPCGE0,2)}',fontdict=font)
+             plt.title(f'Voltaje | V: {round(Vrms,2)} |  FP: {round(FP,2)}',fontdict=font)
         if(i=="2"):
-             plt.title(f'Voltaje | V: {round(vrms2,2)} |  FP: {round(FPCarga1,2)}',fontdict=font)
+             plt.title(f'Voltaje | V: {round(Vrms2,2)} |  FP: {round(FP21,2)}',fontdict=font)
         if(i=="3"):
-             plt.title(f'Voltaje | V: {round(vrms3,2)} |  FP: {round(FPPaneles1,2)}',fontdict=font)
+             plt.title(f'Voltaje | V: {round(Vrms3,2)} |  FP: {round(FPPaneles1,2)}',fontdict=font)
         
         ax = fig.add_subplot(9,1,5)
         ax.plot(tiempoms,Squares,color="red", label="Pot-Activa")
 
         ax = fig.add_subplot(9,1,7)
         if(i=="1"):
-            plt.title(f'FFT Corriente | DAT: {round(DATCorrienteCGE1,2)}, FD: {round(FDCorrienteCGE1,2)} |   cos phi: {round(cosphiCGE,2)} | phase voltaje CGE : {round(phasevoltajeCGE,2)} | phase Corriente CGE : {round(phasecorrienteCGE,2)}',fontdict=font)
+            plt.title(f'FFT Corriente | DAT: {round(DATCurrent,2)}, FD: {round(FDCurrent
+            ,2)} |   cos phi: {round(CosPhi,2)} | phase voltaje CGE : {round(PhaseVoltage,2)} | phase Corriente CGE : {round(PhaseCurrent,2)}',fontdict=font)
         if(i=="2"):
-            plt.title(f'FFT Corriente | DAT: {round(DATCorrienteCarga1,2)}, FD: {round(FDCorrienteCarga1,2)} |   cos phi: {round(cosphiCarga,2)} | phase voltaje Carga : {round(phasevoltajeCarga,2)} | phase Corriente Carga : {round(phasecorrienteCarga,2)} ',fontdict=font)
+            plt.title(f'FFT Corriente | DAT: {round(DATCorriente21,2)}, FD: {round(FDCorriente21,2)} |   cos phi: {round(cosphi2,2)} | phase voltaje 2 : {round(phasevoltaje2,2)} | phase Corriente 2 : {round(phasecorriente2,2)} ',fontdict=font)
         if(i=="3"):
             plt.title(f'FFT Corriente | DAT: {round(DATCorrientePaneles1,2)}, FD: {round(FDCorrientePaneles1,2)}  |   cos phi: {round(cosphiPaneles,2)} | phase voltaje Paneles: {round(phasevoltajePaneles,2)} | phase Corriente Paneles : {round(phasecorrientePaneles,2)}',fontdict=font)
 
@@ -772,7 +798,7 @@ def graphVoltage(list_fftVoltage,list_FinalCurrent,samplings,i):
         if(i=="1"):
             plt.title(f'{desfaseCGE}',fontdict=font)
         if(i=="2"):
-            plt.title(f'{desfaseCarga}',fontdict=font)
+            plt.title(f'{desfase2}',fontdict=font)
         if(i=="3"):
             plt.title(f'{desfasePaneles} ',fontdict=font)
 
@@ -790,7 +816,7 @@ def graphVoltage(list_fftVoltage,list_FinalCurrent,samplings,i):
         oldepoch = time.time()
         st = datetime.datetime.fromtimestamp(oldepoch).strftime('%Y-%m-%d-%H:%M:%S') 
         #plt.xlabel("Tiempo(ms)",fontdict=font)
-        #plt.title(f'FFT Voltaje |    DAT: {DATVoltajeCGE1}     |     FD: {FDVoltajeCGE1}    |   cos phi: {round(cosphiCGE,2)}',fontdict=font)
+        #plt.title(f'FFT Voltaje |    DAT: {DATVoltage}     |     FD: {FDVoltage}    |   cos phi: {round(CosPhi,2)}',fontdict=font)
         ax.set_xlabel(f'Frecuencia (Hz)  |    fecha: {st} ',fontdict=font)
         #ax.set_ylabel('Pk-Pk',fontdict=font) 
         imagenVoltaje = f'images{i}/{st}.png'
@@ -874,10 +900,10 @@ def publish(client):
                      d1=time.time()
                      str_variable3 = i["variable"]
                      topic3 = topicmqtt + str_variable3 + "/sdata"
-                     result = client.publish(topic3, ReactivaCGEFase1)
+                     result = client.publish(topic3, ReactivePower)
                      status = result[0]
                      if status == 0:
-                         print(f"Send Pot-Reactiva-CGE: `{ReactivaCGEFase1}` to topic `{topic3}` con freq: {freq}")
+                         print(f"Send Pot-Reactiva-CGE: `{ReactivePower}` to topic `{topic3}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic3}")
             """
@@ -888,10 +914,10 @@ def publish(client):
                      e21=time.time()
                      str_variable4 = i["variable"]
                      topic4 = topicmqtt + str_variable4 + "/sdata"
-                     result = client.publish(topic4, ActivaCGEFase1)
+                     result = client.publish(topic4, ActivePower)
                #      status = result[0]
                #      if status == 0:
-               #          print(f"Send Pot-Activa CGE: `{ActivaCGEFase1}` to topic `{topic4}` con freq: {freq}")
+               #          print(f"Send Pot-Activa CGE: `{ActivePower}` to topic `{topic4}` con freq: {freq}")
                #      else:
                #          print(f"Failed to send message to topic {topic4}")
             
@@ -902,10 +928,10 @@ def publish(client):
                      f1=time.time()
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, energyCGEFase1)
+                     result = client.publish(topic5, Energy)
                #      status = result[0]
                #      if status == 0:
-               #          print(f"Send energia CGE: `{energyCGEFase1}` to topic `{topic5}` con freq: {freq}")
+               #          print(f"Send energia CGE: `{Energy}` to topic `{topic5}` con freq: {freq}")
                #      else:
                #          print(f"Failed to send message to topic {topic5}")
             
@@ -930,10 +956,10 @@ def publish(client):
                      h1=time.time()
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, FDCorrienteCGE)
+                     result = client.publish(topic5, JsonFDCurrent)
                      status = result[0]
                      if status == 0:
-                         print(f"Send FD-CGE: `{FDCorrienteCGE}` to topic `{topic5}` con freq: {freq}")
+                         print(f"Send FD-CGE: `{JsonFDCurrent}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
             if(i["variableFullName"]=="DAT-CGE"):
@@ -957,138 +983,138 @@ def publish(client):
                      k1=time.time()
                      str_variable = i["variable"]
                      topic5= topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, AparenteCGEFase1)
+                     result = client.publish(topic5, AparentPower)
                      status = result[0]
                      if status == 0:
-                         print(f"Send Pot-Aparente-CGE : `{AparenteCGEFase1}` to topic `{topic5}` con freq: {freq}")
+                         print(f"Send Pot-Aparente-CGE : `{AparentPower}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
             
             #SEGUNDA TOMA
-            if(i["variableFullName"]=="Corriente-Carga"):
+            if(i["variableFullName"]=="Corriente-2"):
                 freq = i["variableSendFreq"]
                 if(a1 - l1 > float(freq)):
                      l1=time.time()
                      str_variable = i["variable"]
                      topic = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic, irms22)
+                     result = client.publish(topic, Irms22)
               #       status = result[0]
               #       
               #       if status == 0:
-              #           print(f"Send Corriente-Carga: `{irms22}` to topic `{topic}` con freq: {freq}")
+              #           print(f"Send Corriente-2: `{Irms22}` to topic `{topic}` con freq: {freq}")
               #       else:
               #           print(f"Failed to send message to topic {topic}")
         
                    
-            if(i["variableFullName"]=="Voltaje-Carga"):
+            if(i["variableFullName"]=="Voltaje-2"):
                 freq = i["variableSendFreq"]
                 if(a1 - m1 > float(freq)):
                      #print("varlastsend 1: ",varsLastSend[i])
                      m1=time.time()
                      str_variable2 = i["variable"]
                      topic2 = topicmqtt + str_variable2 + "/sdata"
-                     result = client.publish(topic2, vrms22)
+                     result = client.publish(topic2, Vrms22)
               #       status = result[0]
               #       if status == 0:
-              #           print(f"Send Voltaje-Carga: `{vrms22}` to topic `{topic2}` con freq: {freq}")
+              #           print(f"Send Voltaje-2: `{Vrms22}` to topic `{topic2}` con freq: {freq}")
               #       else:
               #           print(f"Failed to send message to topic {topic2}")
             """
-            if(i["variableFullName"]=="Potencia-Reactiva-Carga"):
+            if(i["variableFullName"]=="Potencia-Reactiva-2"):
                 freq = i["variableSendFreq"]
                 if(a1 - n1 > float(freq)):
                      #print("varlastsend 1: ",varsLastSend[i])
                      n1=time.time()
                      str_variable3 = i["variable"]
                      topic3 = topicmqtt + str_variable3 + "/sdata"
-                     result = client.publish(topic3, ReactivaCargaFase1)
+                     result = client.publish(topic3, Reactiva2Fase1)
                      status = result[0]
                      if status == 0:
-                         print(f"Send Potencia-Reactiva-Carga: `{ReactivaCargaFase1}` to topic `{topic3}` con freq: {freq}")
+                         print(f"Send Potencia-Reactiva-2: `{Reactiva2Fase1}` to topic `{topic3}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic3}")
             """
-            if(i["variableFullName"]=="Pot-Activa-Carga"):
+            if(i["variableFullName"]=="Pot-Activa-2"):
                 freq = i["variableSendFreq"]
                 if(a1 - o21 > float(freq)):
                      #print("varlastsend 1: ",varsLastSend[i])
                      o21=time.time()
                      str_variable4 = i["variable"]
                      topic4 = topicmqtt + str_variable4 + "/sdata"
-                     result = client.publish(topic4, ActivaCargaFase1)
+                     result = client.publish(topic4, Activa2Fase1)
                #      status = result[0]
                #      if status == 0:
-               #          print(f"Send Pot-Activa-Carga: `{ActivaCargaFase1}` to topic `{topic4}` con freq: {freq}")
+               #          print(f"Send Pot-Activa-2: `{Activa2Fase1}` to topic `{topic4}` con freq: {freq}")
                #      else:
                #          print(f"Failed to send message to topic {topic4}")
             
-            if(i["variableFullName"]=="Energia-Carga"):
+            if(i["variableFullName"]=="Energia-2"):
                 freq = i["variableSendFreq"]
                 if(a1 - p1 > float(freq)):
                      #print("varlastsend 1: ",varsLastSend[i])
                      p1=time.time()
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, energyCargaFase1)
+                     result = client.publish(topic5, energy2Fase1)
                  #    status = result[0]
                  #    if status == 0:
-                 #        print(f"Send Energia-Carga: `{energyCargaFase1}` to topic `{topic5}` con freq: {freq}")
+                 #        print(f"Send Energia-2: `{energy2Fase1}` to topic `{topic5}` con freq: {freq}")
                  #    else:
                  #        print(f"Failed to send message to topic {topic5}")
             
-            if(i["variableFullName"]=="FP-Carga"):
+            if(i["variableFullName"]=="FP-2"):
                 freq = i["variableSendFreq"]
                 if(a1 - q1 > float(freq)):
                      #print("varlastsend 1: ",varsLastSend[i])
                      q1=time.time()
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, FPCarga)
+                     result = client.publish(topic5, FP2)
                #      status = result[0]
                #      if status == 0:
-               #          print(f"Send FP-Carga: `{FPCarga}` to topic `{topic5}` con freq: {freq}")
+               #          print(f"Send FP-2: `{FP2}` to topic `{topic5}` con freq: {freq}")
                #      else:
                #          print(f"Failed to send message to topic {topic5}")
             """
-            if(i["variableFullName"]=="FD-Carga"):
+            if(i["variableFullName"]=="FD-2"):
                 freq = i["variableSendFreq"]
                 if(a1 - r1 > float(freq)):
                      #print("varlastsend 1: ",varsLastSend[i])
                      r1=time.time()
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, FDCorrienteCarga)
+                     result = client.publish(topic5, FDCorriente2)
                      status = result[0]
                      if status == 0:
-                         print(f"Send FD-Carga: `{FDCorrienteCarga}` to topic `{topic5}` con freq: {freq}")
+                         print(f"Send FD-2: `{FDCorriente2}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
-            if(i["variableFullName"]=="DAT-Carga"):
+            if(i["variableFullName"]=="DAT-2"):
                 freq = i["variableSendFreq"]
                 if(a1 - s1 > float(freq)):
                      #print("varlastsend 1: ",varsLastSend[i])
                      s1=time.time()
                      str_variable = i["variable"]
                      topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, DATCorrienteCarga)
+                     result = client.publish(topic5, DATCorriente2)
                      status = result[0]
                      if status == 0:
-                         print(f"Send DAT-Carga: `{DATCorrienteCarga}` to topic `{topic5}` con freq: {freq}")
+                         print(f"Send DAT-2: `{DATCorriente2}` to topic `{topic5}` con freq: {freq}")
                      else:
                          print(f"Failed to send message to topic {topic5}")
             
             """
-            if(i["variableFullName"]=="Pot-Carga"):
+            if(i["variableFullName"]=="Pot-2"):
                 freq = i["variableSendFreq"]
                 if(a1 - t1 > float(freq)):
                      #print("varlastsend 1: ",varsLastSend[i])
                      t1=time.time()
                      str_variable = i["variable"]
                      topic5= topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, AparenteCargaFase1)
+                     result = client.publish(topic5, Aparente2Fase1)
                      status = result[0]
               #       if status == 0:
-               #          print(f"Send Pot-Aparente-Carga: `{AparenteCargaFase1}` to topic `{topic5}` con freq: {freq}")
+               #          print(f"Send Pot-Aparente-2: `{Aparente2Fase1}` to topic `{topic5}` con freq: {freq}")
                 #     else:
                  #        print(f"Failed to send message to topic {topic5}")
             
@@ -1099,11 +1125,11 @@ def publish(client):
                      u1=time.time()
                      str_variable = i["variable"]
                      topic = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic, irms33)
+                     result = client.publish(topic, Irms33)
                #      status = result[0]
                #      
                #      if status == 0:
-               #          print(f"Send Corriente-Paneles: `{irms33}` to topic `{topic}` con freq: {freq}")
+               #          print(f"Send Corriente-Paneles: `{Irms33}` to topic `{topic}` con freq: {freq}")
                #      else:
                #          print(f"Failed to send message to topic {topic}")
         
@@ -1115,10 +1141,10 @@ def publish(client):
                      v1=time.time()
                      str_variable2 = i["variable"]
                      topic2 = topicmqtt + str_variable2 + "/sdata"
-                     result = client.publish(topic2, vrms33)
+                     result = client.publish(topic2, Vrms33)
                 #     status = result[0]
                 #     if status == 0:
-                #         print(f"Send Voltaje-Paneles: `{vrms33}` to topic `{topic2}` con freq: {freq}")
+                #         print(f"Send Voltaje-Paneles: `{Vrms33}` to topic `{topic2}` con freq: {freq}")
                 #     else:
                 #         print(f"Failed to send message to topic {topic2}")
             """
@@ -1337,7 +1363,7 @@ def publish(client):
 
 dataVariablesAll=[]
 dataCGEAll=[]
-dataCargaAll=[]
+data15_1All=[]
 dataPanelesAll=[]
 dataBateriasAll=[]
 dataPanelesDirectaAll=[]
@@ -1354,32 +1380,32 @@ def dataAllVariables():
 def ExcelAllInsertCGE():
         dataCGEAll.insert(1,round(Vrms,2))
         dataCGEAll.insert(2,round(Irms,2))
-        dataCGEAll.insert(3,round(ActivaCGEFase11,2))
-        dataCGEAll.insert(4,round(ReactivaCGEFase11,2))
-        dataCGEAll.insert(5,round(AparenteCGEFase11,2))
-        dataCGEAll.insert(6,round(FPCGE0,2))
-        dataCGEAll.insert(7,round(FDCorrienteCGE1,2))
-        dataCGEAll.insert(8,round(DATCorrienteCGE1,2))
-        dataCGEAll.insert(9,round(cosphiCGE,2))         
-        dataCGEAll.insert(10,round(energyCGEFase11,2))
-        dataCGEAll.insert(11,round(energyCGEFase11Hour,2))
+        dataCGEAll.insert(3,round(ActivePower,2))
+        dataCGEAll.insert(4,round(ReactivePower,2))
+        dataCGEAll.insert(5,round(AparentPower1,2))
+        dataCGEAll.insert(6,round(FP,2))
+        dataCGEAll.insert(7,round(FDCurrent,2))
+        dataCGEAll.insert(8,round(DATCurrent,2))
+        dataCGEAll.insert(9,round(CosPhi,2))         
+        dataCGEAll.insert(10,round(Energy1,2))
+        dataCGEAll.insert(11,round(OneHourEnergy1,2))
         
-def ExcelAllInsertCarga():        
-        dataCargaAll.insert(1,round(vrms2,2))
-        dataCargaAll.insert(2,round(irms2,2))
-        dataCargaAll.insert(3,round(ActivaCargaFase13,2))
-        dataCargaAll.insert(4,round(ReactivaCargaFase13,2))
-        dataCargaAll.insert(5,round(AparenteCargaFase13,2))
-        dataCargaAll.insert(6,round(FPCarga1,2))
-        dataCargaAll.insert(7,round(FDCorrienteCarga1,2))
-        dataCargaAll.insert(8,round(DATCorrienteCarga1,2))
-        dataCargaAll.insert(9,round(cosphiCarga,2))
-        dataCargaAll.insert(10,round(energyCargaFase13,2))
-        dataCargaAll.insert(11,round(energyCargaFase13Hour,2))
+def ExcelAllInsert2():        
+        data15_1All.insert(1,round(Vrms2,2))
+        data15_1All.insert(2,round(Irms2,2))
+        data15_1All.insert(3,round(Activa2Fase13,2))
+        data15_1All.insert(4,round(Reactiva2Fase13,2))
+        data15_1All.insert(5,round(Aparente2Fase13,2))
+        data15_1All.insert(6,round(FP21,2))
+        data15_1All.insert(7,round(FDCorriente21,2))
+        data15_1All.insert(8,round(DATCorriente21,2))
+        data15_1All.insert(9,round(cosphi2,2))
+        data15_1All.insert(10,round(energy2Fase13,2))
+        data15_1All.insert(11,round(energy2Fase13Hour,2))
         
 def ExcelAllInsertPaneles():        
-        dataPanelesAll.insert(1,round(vrms3,2))
-        dataPanelesAll.insert(2,round(irms3,2))
+        dataPanelesAll.insert(1,round(Vrms3,2))
+        dataPanelesAll.insert(2,round(Irms3,2))
         dataPanelesAll.insert(3,round(ActivaPanelesFase12,2))
         dataPanelesAll.insert(4,round(ReactivaPanelesFase12,2))
         dataPanelesAll.insert(5,round(AparentePanelesFase12,2))
@@ -1411,829 +1437,187 @@ def ExcelAllInsertPanelesDC():
 'FP','FD','DAT',
 """
 
-acceso = 0
-MaxVoltage15CGE=0
-promedioVoltaje15CGE=0
-MinVoltage15CGE=0
-MaxCurrentCGE=0
-promedioCorrienteCGE=0
-MincurrentCGE=0
-maximoPotActivaCGE=0
-promedioPotActivaCGE=0
-minimoPotActivaCGE=0
-maximoPotReactivaCGE=0
-promedioPotReactivaCGE=0
-minimoPotReactivaCGE=0
-maximoPotAparenteCGE=0
-promedioPotAparenteCGE=0
-minimoPotAparenteCGE=0
-maximoFPCGEInductivo=-0.99
-promedioFPCGEInductivo = -0.99
-minimoFPCGEInductivo= -0.99
-maximoFPCGEReactivo=0.99
-promedioFPCGEReactivo=0.99
-minimoFPCGEReactivo=0.99
-maximoFDCGE=0
-promedioFDCGE=0
-minimoFDCGE=0
-maximoDATCGE=0
-promedioDATCGE=0
-minimoDATCGE=0
-Volt15CGE=[]
-dataCGE=[]
-Corriente15CGE=[]
-PotActiva15CGE=[]
-PotReactiva15CGE=[]
-PotAparente15CGE=[]
-FP15CGEReactivo=[]
-FP15CGEInductivo=[]
-FD15CGE=[]
-DAT15CGE=[]
-def Maximo15minCGE():
-    global MaxVoltage15CGE
-    global promedioVoltaje15CGE
-    global MinVoltage15CGE
-    global MaxCurrentCGE
-    global promedioCorrienteCGE
-    global MincurrentCGE
-    global maximoPotActivaCGE
-    global promedioPotActivaCGE
-    global minimoPotActivaCGE
-    global maximoPotReactivaCGE
-    global promedioPotReactivaCGE
-    global minimoPotReactivaCGE
-    global maximoPotAparenteCGE
-    global promedioPotAparenteCGE
-    global minimoPotAparenteCGE
-    global maximoFDCGE
-    global promedioFDCGE
-    global minimoFDCGE
-    global maximoDATCGE
-    global promedioDATCGE
-    global minimoDATCGE
-    global Corriente15CGE
-    global PotActiva15CGE
-    global PotReactiva15CGE
-    global PotAparente15CGE
-    global FP15CGEReactivo
-    global FP15CGEInductivo
-    global FD15CGE
-    global DAT15CGE
-    global Volt15CGE
-    global acceso
-    basea = datetime.datetime.now()
-    #print(f'Maximo Voltaje 15 CGE: {MaxVoltage15CGE}')
-    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
-         print("paso if")
-         if(acceso == 0):
-              print("paso if 2")
-              #graphVoltage(NoVoltageOffset,ListaIrmsPeak1,samplings1,1)
-              acceso = 1
-              MaxVoltage15CGE=max(Volt15CGE)
-              promedioVoltaje15CGE=np.median(Volt15CGE)
-              MinVoltage15CGE=min(Volt15CGE)
-              MaxCurrentCGE=max(Corriente15CGE)
-              promedioCorriente15CGE=np.median(Corriente15CGE)
-              MincurrentCGE=min(Corriente15CGE)
-              maximoPotActivaCGE=max(PotActiva15CGE)
-              promedioPotActivaCGE=np.median(PotActiva15CGE)
-              minimoPotActivaCGE=min(PotActiva15CGE)
-              maximoPotReactivaCGE=max(PotReactiva15CGE)
-              promedioPotReactivaCGE=np.median(PotReactiva15CGE)
-              minimoPotReactivaCGE=min(PotReactiva15CGE)
-              maximoPotAparenteCGE=max(PotAparente15CGE)
-              promedioPotAparenteCGE=np.median(PotAparente15CGE)
-              minimoPotAparenteCGE=min(PotAparente15CGE)
-              if(len(FP15CGEInductivo)>0):
-                     maximoFPCGEInductivo=max(FP15CGEInductivo)
-                     promedioFPCGEInductivo=np.median(FP15CGEInductivo)
-                     minimoFPCGEInductivo=min(FP15CGEInductivo)
-              else:
-                     maximoFPCGEInductivo=-0.99
-                     promedioFPCGEInductivo=-0.99
-                     minimoFPCGEInductivo=-0.99
-              if(len(FP15CGEReactivo)>0):
-                     minimoFPCGEReactivo=min(FP15CGEReactivo)
-                     promedioFPCGEReactivo=np.median(FP15CGEReactivo)
-                     maximoFPCGEReactivo=max(FP15CGEReactivo)
-              else:
-                     maximoFPCGEReactivo=0.99
-                     promedioFPCGEReactivo=0.99
-                     minimoFPCGEReactivo=0.99
-              maximoFDCGE=max(FD15CGE)
-              promedioFDCGE=np.median(FD15CGE)
-              minimoFDCGE=min(FD15CGE)
-              maximoDATCGE=max(DAT15CGE)
-              promedioDATCGE=np.median(DAT15CGE)
-              minimoDATCGE=min(DAT15CGE)
-              dataCGE.insert(1,MaxVoltage15CGE)
-              dataCGE.insert(2,promedioVoltaje15CGE)
-              dataCGE.insert(3,MinVoltage15CGE)
-              dataCGE.insert(4,MaxCurrentCGE)
-              dataCGE.insert(5,promedioCorriente15CGE)
-              dataCGE.insert(6,MincurrentCGE)
-              dataCGE.insert(7,maximoPotActivaCGE)
-              dataCGE.insert(8,promedioPotActivaCGE)
-              dataCGE.insert(9,minimoPotActivaCGE)
-              dataCGE.insert(10,maximoPotReactivaCGE)
-              dataCGE.insert(11,promedioPotReactivaCGE)
-              dataCGE.insert(12,minimoPotReactivaCGE)
-              dataCGE.insert(13,maximoPotAparenteCGE)
-              dataCGE.insert(14,promedioPotAparenteCGE)
-              dataCGE.insert(15,minimoPotAparenteCGE)
-              dataCGE.insert(16,maximoFPCGEReactivo)
-              dataCGE.insert(17,promedioFPCGEReactivo)
-              dataCGE.insert(18,minimoFPCGEReactivo)
-              dataCGE.insert(19,maximoFPCGEInductivo)
-              dataCGE.insert(20,promedioFPCGEInductivo)
-              dataCGE.insert(21,minimoFPCGEInductivo)
-              dataCGE.insert(22,maximoFDCGE)
-              dataCGE.insert(23,promedioFDCGE)
-              dataCGE.insert(24,minimoFDCGE)
-              dataCGE.insert(25,maximoDATCGE)
-              dataCGE.insert(26,promedioDATCGE)
-              dataCGE.insert(27,maximoDATCGE)
-              dataCGE.insert(30,energyCGEFase11)
-              #print("Data CGE: ", dataCGE)
-              ExcelDataCGE15()
-              #dataCGE.insert(31,energyCGEFase11Hour)
-              Volt15CGE=[]
-              Corriente15CGE=[]
-              PotActiva15CGE=[]
-              PotReactiva15CGE=[]
-              PotAparente15CGE=[]
-              FP15CGEReactivo=[]
-              FP15CGEInductivo=[]
-              FD15CGE=[]
-              DAT15CGE=[]
-         elif(acceso==1):
-              #print("paso elif CGE")
-              Volt15CGE.append(Vrms)
-              Corriente15CGE.append(Irms)
-              PotActiva15CGE.append(ActivaCGEFase11)
-              PotReactiva15CGE.append(ReactivaCGEFase11)
-              PotAparente15CGE.append(AparenteCGEFase11)
-              if(FPCGE0>0.0):
-                    FP15CGEReactivo.append(FPCGE0)
-              else: 
-                    FP15CGEInductivo.append(FPCGE0)
-              FD15CGE.append(FDCorrienteCGE1)
-              DAT15CGE.append(DATCorrienteCGE1)
- 
-    else:
-        Volt15CGE.append(Vrms)
-        Corriente15CGE.append(Irms)
-        PotActiva15CGE.append(ActivaCGEFase11)
-        PotReactiva15CGE.append(ReactivaCGEFase11)
-        PotAparente15CGE.append(AparenteCGEFase11)
-        if(FPCGE0>0.0):
-              FP15CGEReactivo.append(FPCGE0)
-        else: 
-              FP15CGEInductivo.append(FPCGE0)
-        FD15CGE.append(FDCorrienteCGE1)
-        DAT15CGE.append(DATCorrienteCGE1)
-        acceso = 0
-"""
-        if(len(Volt15CGE)>5):
-            indice=np.median(Volt15CGE)
-            Volt15CGE.pop(indice)
-            #print(f'Volt15CGE Despúes: {Volt15CGE}')
-            indice=np.median(Corriente15CGE)
-            Corriente15CGE.pop(indice)
-            indice=np.median(PotActiva15CGE)
-            PotActiva15CGE.pop(indice)
-            indice=np.median(PotReactiva15CGE)
-            PotReactiva15CGE.pop(indice)
-            indice=np.median(PotAparente15CGE)
-            PotAparente15CGE.pop(indice)
-            if(len(FP15CGEReactivo)>=2):
-                indice=np.argmax(FP15CGEReactivo)
-                FP15CGEReactivo.pop(indice)
-            if(len(FP15CGEInductivo)>=2):
-                indice=np.argmin(FP15CGEInductivo)
-                FP15CGEInductivo.pop(indice)
-            indice=np.median(FD15CGE)
-            FD15CGE.pop(indice)
-            indice=np.median(DAT15CGE)
-            DAT15CGE.pop(indice)
-"""     
 
-
-accesoCarga = 0
-MaxVoltage15Carga=0
-promedioVoltaje15Carga=0
-MinVoltage15Carga=0
-MaxCurrentCarga=0
-promedioCorrienteCarga=0
-MincurrentCarga=0
-maximoPotActivaCarga=0
-promedioPotActivaCarga=0
-minimoPotActivaCarga=0
-maximoPotReactivaCarga=0
-promedioPotReactivaCarga=0
-minimoPotReactivaCarga=0
-maximoPotAparenteCarga=0
-promedioPotAparenteCarga=0
-minimoPotAparenteCarga=0
-maximoFPCargaInductivo=-0.99
-promedioFPCargaInductivo=-0.99
-minimoFPCargaInductivo=-0.99
-maximoFPCargaReactivo=0.99
-promedioFPCargaReactivo=0.99
-minimoFPCargaReactivo=0.99
-maximoFDCarga=0
-promedioFDCarga=0
-minimoFDCarga=0
-maximoDATCarga=0
-promedioDATCarga=0
-minimoDATCarga=0
-Volt15Carga=[]
-dataCarga=[]
-Corriente15Carga=[]
-PotActiva15Carga=[]
-PotReactiva15Carga=[]
-PotAparente15Carga=[]
-FP15CargaReactivo=[]
-FP15CargaInductivo=[]
-FD15Carga=[]
-DAT15Carga=[]
-def Maximo15minCarga():
-    global MaxVoltage15Carga
-    global promedioVoltaje15Carga
-    global MinVoltage15Carga
-    global MaxCurrentCarga
-    global promedioCorrienteCarga
-    global MincurrentCarga
-    global minimoPotActivaCarga
-    global promedioPotActivaCarga
-    global maximoPotActivaCarga
-    global maximoPotReactivaCarga
-    global promedioPotReactivaCarga
-    global minimoPotReactivaCarga
-    global maximoPotAparenteCarga
-    global promedioPotAparenteCarga
-    global minimoPotAparenteCarga
-    global maximoFDCarga
-    global promedioFDCarga
-    global minimoFDCarga
-    global maximoDATCarga
-    global promedioDATCarga
-    global minimoDATCarga
-    global maximoFPCargaInductivo
-    global minimoFPCargaInductivo
-    global promedioFPCargaInductivo
-    global maximoFPCargaReactivo
-    global minimoFPCargaReactivo
-    global promedioFPCargaReactivo
-    global Corriente15Carga
-    global PotActiva15Carga
-    global PotReactiva15Carga
-    global PotAparente15Carga
-    global FP15CargaReactivo
-    global FP15CargaInductivo
-    global FD15Carga
-    global DAT15Carga
-    global Volt15Carga
-    global accesoCarga
+Access_1 = 0
+MaxVoltage15_1=0
+MeanVoltage15_1=0
+MinVoltage15_1=0
+MaxCurrent15_1=0
+MeanCurrent15_1=0
+MinCurrent15_1=0
+MaxActivePower_1=0
+MeanActivePower_1=0
+MinActivePower_1=0
+MaxReactivePower_1=0
+MeanReactivePower_1=0
+MinReactivePower_1=0
+MaxAparentPower_1=0
+MeanAparentPower_1=0
+MinAparentPower_1=0
+MaxFPInductive_1=-0.99
+MeanFPInductive_1=-0.99
+MinFPInductive_1=-0.99
+MaxFPReactive_1=0.99
+MeanFPReactive_1=0.99
+MinFPReactive_1=0.99
+MaxFD_1=0
+MeanFD_1=0
+MinFD_1=0
+MaxDAT_1=0
+MeanDAT_1=0
+MinDAT_1=0
+Volt15_1=[]
+data15_1=[]
+Current15_1=[]
+ActivePower15_1=[]
+ReactivePower15_1=[]
+AparentPower15_1=[]
+FP15_Reactive_1=[]
+FP15_Inductive_1=[]
+FD15_1=[]
+DAT15_1=[]
+def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FD,DAT,Energy):
+    global data15_1
     basea = datetime.datetime.now()
-    #print(f'Maximo Voltaje 15 Carga: {MaxVoltage15Carga}')
     if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
-               print("paso if Carga")
-         #if(len(PotAparente15Carga)>2):
-               if(accesoCarga == 0):
-                    print("paso if 2 Carga")
+               if(Access_1 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
-                    accesoCarga = 1
-                    MaxVoltage15Carga=max(Volt15Carga)
-                    promedioVoltaje15Carga=np.median(Volt15Carga)
-                    MinVoltage15Carga=min(Volt15Carga)
-                    MaxCurrentCarga=max(Corriente15Carga)
-                    promedioCorrienteCarga=np.median(Corriente15Carga)
-                    MincurrentCarga=min(Corriente15Carga)
-                    maximoPotActivaCarga=max(PotActiva15Carga)
-                    promedioPotActivaCarga=np.median(PotActiva15Carga)
-                    minimoPotActivaCarga=min(PotActiva15Carga)
-                    maximoPotReactivaCarga=max(PotReactiva15Carga)
-                    promedioPotReactivaCarga=np.median(PotReactiva15Carga)
-                    minimoPotReactivaCarga=min(PotReactiva15Carga)
-                    maximoPotAparenteCarga=max(PotAparente15Carga)
-                    promedioPotAparenteCarga=np.median(PotAparente15Carga)
-                    minimoPotAparenteCarga=min(PotAparente15Carga)
-                    if(len(FP15CargaInductivo)>0):
-                           maximoFPCargaInductivo=max(FP15CargaInductivo)
-                           promedioFPCargaInductivo=np.median(FP15CargaInductivo)
-                           minimoFPCargaInductivo=min(FP15CargaInductivo)
+                    Access_1 = 1
+                    MaxVoltage15_1=max(Volt15_1)
+                    MeanVoltage15_1=np.median(Volt15_1)
+                    MinVoltage15_1=min(Volt15_1)
+                    MaxCurrent15_1=max(Current15_1)
+                    MeanCurrent15_1=np.median(Current15_1)
+                    MinCurrent15_1=min(Current15_1)
+                    MaxActivePower_1=max(ActivePower15_1)
+                    MeanActivePower_1=np.median(ActivePower15_1)
+                    MinActivePower_1=min(ActivePower15_1)
+                    MaxReactivePower_1=max(ReactivePower15_1)
+                    MeanReactivePower_1=np.median(ReactivePower15_1)
+                    MinReactivePower_1=min(ReactivePower15_1)
+                    MaxAparentPower_1=max(AparentPower15_1)
+                    MeanAparentPower_1=np.median(AparentPower15_1)
+                    MinAparentPower_1=min(AparentPower15_1)
+                    if(len(FP15_Inductive_1)>0):
+                           MaxFPInductive_1=max(FP15_Inductive_1)
+                           MeanFPInductive_1=np.median(FP15_Inductive_1)
+                           MinFPInductive_1=min(FP15_Inductive_1)
                     else:
-                           maximoFPCargaInductivo=-0.99
-                           promedioFPCargaInductivo=-0.99
-                           minimoFPCargaInductivo=-0.99
-                    if(len(FP15CargaReactivo)>0):
-                           maximoFPCargaReactivo=min(FP15CargaReactivo)
-                           promedioFPCargaReactivo=min(FP15CargaReactivo)
-                           minimoFPCargaReactivo=min(FP15CargaReactivo)
+                           MaxFPInductive_1=-0.99
+                           MeanFPInductive_1=-0.99
+                           MinFPInductive_1=-0.99
+                    if(len(FP15_Reactive_1)>0):
+                           MaxFPReactive_1=min(FP15_Reactive_1)
+                           MeanFPReactive_1=min(FP15_Reactive_1)
+                           MinFPReactive_1=min(FP15_Reactive_1)
                     else:
-                           maximoFPCargaReactivo=0.99
-                           promedioFPCargaReactivo=0.99
-                           minimoFPCargaReactivo=0.99
-                    maximoFDCarga=max(FD15Carga)
-                    promedioFDCarga=np.median(FD15Carga)
-                    minimoFDCarga=min(FD15Carga)
-                    maximoDATCarga=max(DAT15Carga)
-                    promedioDATCarga=np.median(DAT15Carga)
-                    minimoDATCarga=min(DAT15Carga)
-                    dataCarga.insert(1,MaxVoltage15Carga)
-                    dataCarga.insert(2,promedioVoltaje15Carga)
-                    dataCarga.insert(3,MinVoltage15Carga)
-                    dataCarga.insert(4,MaxCurrentCarga)
-                    dataCarga.insert(5,promedioCorrienteCarga)
-                    dataCarga.insert(6,MincurrentCarga)
-                    dataCarga.insert(7,maximoPotActivaCarga)
-                    dataCarga.insert(8,promedioPotActivaCarga)
-                    dataCarga.insert(9,minimoPotActivaCarga)
-                    dataCarga.insert(10,maximoPotReactivaCarga)
-                    dataCarga.insert(11,promedioPotReactivaCarga)
-                    dataCarga.insert(12,minimoPotReactivaCarga)
-                    dataCarga.insert(13,maximoPotAparenteCarga)
-                    dataCarga.insert(14,promedioPotAparenteCarga)
-                    dataCarga.insert(15,minimoPotAparenteCarga)
-                    dataCarga.insert(16,maximoFPCargaReactivo)
-                    dataCarga.insert(17,promedioFPCargaReactivo)
-                    dataCarga.insert(18,minimoFPCargaReactivo)
-                    dataCarga.insert(19,maximoFPCargaInductivo)
-                    dataCarga.insert(20,promedioFPCargaInductivo)
-                    dataCarga.insert(21,minimoFPCargaInductivo)
-                    dataCarga.insert(22,maximoFDCarga)
-                    dataCarga.insert(23,promedioFDCarga)
-                    dataCarga.insert(24,minimoFDCarga)
-                    dataCarga.insert(25,maximoDATCarga)
-                    dataCarga.insert(26,promedioDATCarga)
-                    dataCarga.insert(27,minimoDATCarga)
-                    dataCarga.insert(28,energyCargaFase13)
-                    ExcelDataCarga15()
-                    #dataCarga.insert(29,energyCargaFase13Hour)
-                    Volt15Carga=[]
-                    Corriente15Carga=[]
-                    PotActiva15Carga=[]
-                    PotReactiva15Carga=[]
-                    PotAparente15Carga=[]
-                    FP15CargaReactivo=[]
-                    FP15CargaInductivo=[]
-                    FD15Carga=[]
-                    DAT15Carga=[]
-               elif(accesoCarga==1):
-                    #print("paso elif Carga")
-                    Volt15Carga.append(Vrms)
-                    Corriente15Carga.append(irms2)
-                    PotActiva15Carga.append(ActivaCargaFase13)
-                    PotReactiva15Carga.append(ReactivaCargaFase13)
-                    PotAparente15Carga.append(AparenteCargaFase13)
-                    if(FPCarga1>0.0):
-                          FP15CargaReactivo.append(FPCarga1)
+                           MaxFPReactive_1=0.99
+                           MeanFPReactive_1=0.99
+                           MinFPReactive_1=0.99
+                    MaxFD_1=max(FD15_1)
+                    MeanFD_1=np.median(FD15_1)
+                    MinFD_1=min(FD15_1)
+                    MaxDAT_1=max(DAT15_1)
+                    MeanDAT_1=np.median(DAT15_1)
+                    MinDAT_1=min(DAT15_1)
+                    data15_1.insert(1,MaxVoltage15_1)
+                    data15_1.insert(2,MeanVoltage15_1)
+                    data15_1.insert(3,MinVoltage15_1)
+                    data15_1.insert(4,MaxCurrent15_1)
+                    data15_1.insert(5,MeanCurrent15_1)
+                    data15_1.insert(6,MinCurrent15_1)
+                    data15_1.insert(7,MaxActivePower_1)
+                    data15_1.insert(8,MeanActivePower_1)
+                    data15_1.insert(9,MinActivePower_1)
+                    data15_1.insert(10,MaxReactivePower_1)
+                    data15_1.insert(11,MeanReactivePower_1)
+                    data15_1.insert(12,MinReactivePower_1)
+                    data15_1.insert(13,MaxAparentPower_1)
+                    data15_1.insert(14,MeanAparentPower_1)
+                    data15_1.insert(15,MinAparentPower_1)
+                    data15_1.insert(16,MaxFPInductive_1)
+                    data15_1.insert(17,MeanFPInductive_1)
+                    data15_1.insert(18,MinFPInductive_1)
+                    data15_1.insert(19,MaxFPReactive_1)
+                    data15_1.insert(20,MeanFPReactive_1)
+                    data15_1.insert(21,MinFPReactive_1)
+                    data15_1.insert(22,MaxFD_1)
+                    data15_1.insert(23,MeanFD_1)
+                    data15_1.insert(24,MinFD_1)
+                    data15_1.insert(25,MaxDAT_1)
+                    data15_1.insert(26,MeanDAT_1)
+                    data15_1.insert(27,MinDAT_1)
+                    data15_1.insert(28,Energy)
+                    ExcelData15_1()
+                    #data15_1.insert(29,energy2Fase13Hour)
+                    Volt15_1=[]
+                    Current15_1=[]
+                    ActivePower15_1=[]
+                    ReactivePower15_1=[]
+                    AparentPower15_1=[]
+                    FP15_Reactive_1=[]
+                    FP15_Inductive_1=[]
+                    FD15_1=[]
+                    DAT15_1=[]
+               elif(Access_1==1):
+                    #print("paso elif 2")
+                    Volt15.append(Vrms)
+                    Current15.append(Irms)
+                    ActivePower15.append(ActivePower)
+                    ReactivePower15.append(ReactivePower)
+                    AparentPower15.append(AparentPower)
+                    if(FP>0.0):
+                          FP15_Reactive.append(FP)
                     else: 
-                          FP15CargaInductivo.append(FPCarga1)
-                    FD15Carga.append(FDCorrienteCarga1)
-                    DAT15Carga.append(DATCorrienteCarga1)
+                          FP15_Inductive.append(FP)
+                    FD15.append(FD)
+                    DAT15.append(DAT)
               
     else:
-        Volt15Carga.append(vrms2)
-        Volt15Carga.append(vrms2)
-        #print("Volt15Carga: ", Volt15Carga)
-        Corriente15Carga.append(irms2)
-        PotActiva15Carga.append(ActivaCargaFase13)
-        PotReactiva15Carga.append(ReactivaCargaFase13)
-        PotAparente15Carga.append(AparenteCargaFase13)
-        if(FPCarga1>0.0):
-                    FP15CargaReactivo.append(FPCarga1)
+        Volt15_1.append(Vrms)
+        Current15_1.append(Irms)
+        ActivePower15_1.append(ActivePower)
+        ReactivePower15_1.append(ReactivePower)
+        AparentPower15_1.append(AparentPower)
+        if(FP>0.0):
+              FP15_Reactive_1.append(FP)
         else: 
-              FP15CargaInductivo.append(FPCarga1)
-        FD15Carga.append(FDCorrienteCarga1)
-        DAT15Carga.append(DATCorrienteCarga1)
-        accesoCarga = 0
-        """
-        if(len(Volt15Carga)>4):
-            indice=np.argmin(Volt15Carga)
-            Volt15Carga.pop(indice)
-            ##print(f'Volt15Carga Despúes: {Volt15Carga}')
-            indice=np.argmin(Corriente15Carga)
-            Corriente15Carga.pop(indice)
-            indice=np.argmin(PotActiva15Carga)
-            PotActiva15Carga.pop(indice)
-            indice=np.argmin(PotReactiva15Carga)
-            PotReactiva15Carga.pop(indice)
-            indice=np.argmin(PotAparente15Carga)
-            PotAparente15Carga.pop(indice)
-            if(len(FP15CargaReactivo)>=2):
-                indice=np.argmax(FP15CargaReactivo)
-                FP15CargaReactivo.pop(indice)
-            if(len(FP15CargaInductivo)>=2):
-                indice=np.argmin(FP15CargaInductivo)
-                FP15CargaInductivo.pop(indice)
-            indice=np.argmin(FD15Carga)
-            FD15Carga.pop(indice)
-            indice=np.argmin(DAT15Carga)
-            DAT15Carga.pop(indice)
-        """
-
-
-accesoPaneles = 0
-MaxVoltage15Paneles=0
-promedioVoltaje15Paneles=0
-MinVoltage15Paneles=0
-MaxCurrentPaneles=0
-promedioCorrientePaneles=0
-MincurrentPaneles=0
-maximoPotActivaPaneles=0
-promedioPotActivaPaneles=0
-minimoPotActivaPaneles=0
-maximoPotReactivaPaneles=0
-promedioPotReactivaPaneles=0
-minimoPotReactivaPaneles=0
-maximoPotAparentePaneles=0
-promedioPotAparentePaneles=0
-minimoPotAparentePaneles=0
-maximoFPPanelesInductivo=-0.99
-promedioFPPanelesInductivo=-0.99
-minimoFPPanelesInductivo=-0.99
-maximoFPPanelesReactivo=0.99
-promedioFPPanelesReactivo=0.99
-minimoFPPanelesReactivo=0.99
-maximoFDPaneles=0
-promedioFDPaneles=0
-minimoFDPaneles=0
-maximoDATPaneles=0
-promedioDATPaneles=0
-minimoDATPaneles=0
-Volt15Paneles=[]
-dataPaneles=[]
-Corriente15Paneles=[]
-PotActiva15Paneles=[]
-PotReactiva15Paneles=[]
-PotAparente15Paneles=[]
-FP15PanelesReactivo=[]
-FP15PanelesInductivo=[]
-FD15Paneles=[]
-DAT15Paneles=[]
-def Maximo15minPaneles():
-    global MaxVoltage15Paneles
-    global promedioVoltaje15Paneles
-    global MinVoltage15Paneles
-    global MaxCurrentPaneles
-    global promedioCorrientePaneles
-    global MincurrentPaneles
-    global maximoPotActivaPaneles
-    global promedioPotActivaPaneles
-    global minimoPotActivaPaneles
-    global maximoPotReactivaPaneles
-    global promedioPotReactivaPaneles
-    global minimoPotReactivaPaneles
-    global maximoPotAparentePaneles
-    global promedioPotAparentePaneles
-    global minimoPotAparentePaneles
-    global maximoFDPaneles
-    global promedioFDPaneles
-    global minimoFDPaneles
-    global maximoDATPaneles
-    global promedioDATPaneles
-    global minimoDATPaneles
-    global Corriente15Paneles
-    global PotActiva15Paneles
-    global PotReactiva15Paneles
-    global PotAparente15Paneles
-    global FP15PanelesReactivo
-    global FP15PanelesInductivo
-    global FD15Paneles
-    global DAT15Paneles
-    global Volt15Paneles
-    global accesoPaneles
-    basea = datetime.datetime.now()
-    #print(f'Maximo Voltaje 15 Paneles: {MaxVoltage15Paneles}')
-    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45):  
-         #print("paso if Paneles")
-         if(accesoPaneles == 0):
-              #print("paso if 2 Paneles")
-              try:
-                     #graphVoltage(NoVoltageoffset3,ListaIrmsPeak3,samplings3,3)
-                     accesoPaneles = 1
-                     MaxVoltage15Paneles=max(Volt15Paneles)
-                     promedioVoltaje15Paneles=np.median(Volt15Paneles)
-                     MinVoltage15Paneles=min(Volt15Paneles)
-                     MaxCurrentPaneles=max(Corriente15Paneles)
-                     promedioCorrientePaneles=np.median(Corriente15Paneles)
-                     MincurrentPaneles=min(Corriente15Paneles)
-                     maximoPotActivaPaneles=max(PotActiva15Paneles)
-                     promedioPotActivaPaneles=np.median(PotActiva15Paneles)
-                     minimoPotActivaPaneles=min(PotActiva15Paneles)
-                     maximoPotReactivaPaneles=max(PotReactiva15Paneles)
-                     promedioPotReactivaPaneles=min(PotReactiva15Paneles)
-                     minimoPotReactivaPaneles=np.median(PotReactiva15Paneles)
-                     maximoPotAparentePaneles=max(PotAparente15Paneles)
-                     promedioPotAparentePaneles=np.median(PotAparente15Paneles)
-                     minimoPotAparentePaneles=min(PotAparente15Paneles)
-                     if(len(FP15PanelesInductivo)>0):
-                            maximoFPPanelesInductivo=max(FP15PanelesInductivo)
-                            promedioFPPanelesInductivo=np.median(FP15PanelesInductivo)
-                            minimoFPPanelesInductivo=min(FP15PanelesInductivo)
-                     else:
-                            maximoFPPanelesInductivo=-0.99
-                            promedioFPPanelesInductivo=-0.99
-                            minimoFPPanelesInductivo=-0.99
-                     if(len(FP15PanelesReactivo)>0):
-                            maximoFPPanelesReactivo=min(FP15PanelesReactivo)
-                            promedioFPPanelesReactivo=np.median(FP15PanelesReactivo)
-                            minimoFPPanelesReactivo=min(FP15PanelesReactivo)
-                     else:
-                            maximoFPPanelesReactivo=0.99
-                            promedioFPPanelesReactivo=0.99
-                            minimoFPPanelesReactivo=0.99
-                     maximoFDPaneles=max(FD15Paneles)
-                     promedioFDPaneles=np.median(FD15Paneles)
-                     minimoFDPaneles=min(FD15Paneles)
-                     maximoDATPaneles=max(DAT15Paneles)
-                     promedioDATPaneles=np.median(DAT15Paneles)
-                     minimoDATPaneles=min(DAT15Paneles)
-                     dataPaneles.insert(1,MaxVoltage15Paneles)
-                     dataPaneles.insert(1,promedioVoltaje15Paneles)
-                     dataPaneles.insert(1,MinVoltage15Paneles)
-                     dataPaneles.insert(2,MaxCurrentPaneles)
-                     dataPaneles.insert(2,promedioCorrientePaneles)
-                     dataPaneles.insert(2,MincurrentPaneles)
-                     dataPaneles.insert(3,maximoPotActivaPaneles)
-                     dataPaneles.insert(3,promedioPotActivaPaneles)
-                     dataPaneles.insert(3,minimoPotActivaPaneles)
-                     dataPaneles.insert(4,maximoPotReactivaPaneles)
-                     dataPaneles.insert(4,promedioPotReactivaPaneles)
-                     dataPaneles.insert(4,minimoPotReactivaPaneles)
-                     dataPaneles.insert(5,maximoPotAparentePaneles)
-                     dataPaneles.insert(5,promedioPotAparentePaneles)
-                     dataPaneles.insert(5,minimoPotAparentePaneles)
-                     dataPaneles.insert(6,maximoFPPanelesReactivo)
-                     dataPaneles.insert(6,promedioFPPanelesReactivo)
-                     dataPaneles.insert(6,minimoFPPanelesReactivo)
-                     dataPaneles.insert(7,maximoFPPanelesInductivo)
-                     dataPaneles.insert(7,promedioFPPanelesInductivo)
-                     dataPaneles.insert(7,minimoFPPanelesInductivo)
-                     dataPaneles.insert(8,maximoFDPaneles)
-                     dataPaneles.insert(8,promedioFDPaneles)
-                     dataPaneles.insert(8,minimoFDPaneles)
-                     dataPaneles.insert(9,maximoDATPaneles)
-                     dataPaneles.insert(9,promedioDATPaneles)
-                     dataPaneles.insert(9,minimoDATPaneles)
-                     dataPaneles.insert(10,energyPanelesFase12)
-                     dataPaneles.insert(10,energyPanelesFase12Hour)
-                     ExcelDataPaneles15()
-              except:
-                  print("no hay maximos")
-              Volt15Paneles=[]
-              Corriente15Paneles=[]
-              PotActiva15Paneles=[]
-              PotReactiva15Paneles=[]
-              PotAparente15Paneles=[]
-              FP15PanelesReactivo=[]
-              FP15PanelesInductivo=[]
-              FD15Paneles=[]
-              DAT15Paneles=[]
-         elif(accesoPaneles==1):
-              #print("paso elif Paneles")
-              Volt15Paneles.append(vrms3)
-              Corriente15Paneles.append(irms3)
-              PotActiva15Paneles.append(ActivaPanelesFase12)
-              PotReactiva15Paneles.append(ReactivaPanelesFase12)
-              PotAparente15Paneles.append(AparentePanelesFase12)
-              if(FPPaneles1>0.0):
-                    FP15PanelesReactivo.append(FPPaneles1)
-              else: 
-                    FP15PanelesInductivo.append(FPPaneles1)
-              FD15Paneles.append(FDCorrientePaneles1)
-              DAT15Paneles.append(DATCorrientePaneles1)
-              
-              
- 
-    else:
-        Volt15Paneles.append(vrms3)
-        #print(f'Irms Paneles : {irms3}') 
-        Corriente15Paneles.append(irms3)
-        PotActiva15Paneles.append(ActivaPanelesFase12)
-        PotReactiva15Paneles.append(ReactivaPanelesFase12)
-        PotAparente15Paneles.append(AparentePanelesFase12)
-        if(FPPaneles1>0.0):
-                    FP15PanelesReactivo.append(FPPaneles1)
-        else: 
-              FP15PanelesInductivo.append(FPPaneles1)
-        FD15Paneles.append(FDCorrientePaneles1)
-        DAT15Paneles.append(DATCorrientePaneles1)      
-        accesoPaneles = 0
-        """
-        if(len(Volt15Paneles)>4):
-            indice=np.argmin(Volt15Paneles)
-            Volt15Paneles.pop(indice)
-            #print(f'Volt15 paneles Despúes: {Volt15Paneles}')
-            indice=np.argmin(Corriente15Paneles)
-            Corriente15Paneles.pop(indice)
-            #print(f'Corriente15 paneles Despúes: {Corriente15Paneles}')
-            indice=np.argmin(PotActiva15Paneles)
-            PotActiva15Paneles.pop(indice)
-            indice=np.argmin(PotReactiva15Paneles)
-            PotReactiva15Paneles.pop(indice)
-            indice=np.argmin(PotAparente15Paneles)
-            PotAparente15Paneles.pop(indice)
-            if(len(FP15PanelesReactivo)>=2):
-                indice=np.argmax(FP15PanelesReactivo)
-                FP15PanelesReactivo.pop(indice)
-            if(len(FP15PanelesInductivo)>=2):
-                indice=np.argmin(FP15PanelesInductivo)
-                FP15PanelesInductivo.pop(indice)
-            indice=np.argmin(FD15Paneles)
-            FD15Paneles.pop(indice)
-            indice=np.argmin(DAT15Paneles)
-            DAT15Paneles.pop(indice)
-        """
-
-VoltMax15BateriasDC=[]
-CorrienteMax15BateriasDC=[]
-PotMax15BateriasDC=[]
-dataBateriasDC=[]
-accesoBateriasDC=0
-MaxVoltage15BateriasDC=0
-promedioVoltaje15BateriasDC=0
-MinVoltage15BateriasDC=0
-MaxCurrentBateriasDC=0
-promedioCorrienteBateriasDC=0
-MincurrentBateriasDC=0
-maximoPotBateriasDC=0
-promedioPotBateriasDC=0
-minimoPotBateriasDC=0
-def Maximo15minBateriasDC():
-    global MaxVoltage15BateriasDC
-    global promedioVoltaje15BateriasDC
-    global MinVoltage15BateriasDC
-    global MaxCurrentBateriasDC
-    global promedioCorrienteBateriasDC
-    global MincurrentBateriasDC
-    global maximoPotBateriasDC
-    global minimoPotBateriasDC
-    global promedioPotBateriasDC
-    global CorrienteMax15BateriasDC
-    global PotMax15BateriasDC
-    global VoltMax15BateriasDC
-    global accesoBateriasDC
-    basea = datetime.datetime.now()
-    #print(f'Maximo Voltaje 15 Paneles: {MaxVoltage15Paneles}')
-    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45):  
-         print("paso if Baterias")
-         if(accesoBateriasDC == 0):
-              print("paso if 2 Baterias")
-              try:
-                     accesoBateriasDC = 1
-                     MaxVoltage15BateriasDC=max(VoltMax15BateriasDC)
-                     print("MaxVoltage15BateriasDC: ",MaxVoltage15BateriasDC)
-                     promedioVoltaje15BateriasDC=np.median(VoltMax15BateriasDC)
-                     MinVoltage15BateriasDC=min(VoltMax15BateriasDC)
-                     MaxCurrentBateriasDC=max(CorrienteMax15BateriasDC)
-                     promedioCorrienteBateriasDC=np.median(CorrienteMax15BateriasDC)
-                     MincurrentBateriasDC=min(CorrienteMax15BateriasDC)
-                     maximoPotBateriasDC=max(PotMax15BateriasDC)
-                     promedioPotBateriasDC=np.median(PotMax15BateriasDC)
-                     minimoPotBateriasDC=min(PotMax15BateriasDC)
-                     dataBateriasDC.insert(1,MaxVoltage15BateriasDC)
-                     dataBateriasDC.insert(2,promedioVoltaje15BateriasDC)
-                     dataBateriasDC.insert(3,MinVoltage15BateriasDC)
-                     dataBateriasDC.insert(4,MaxCurrentBateriasDC)
-                     dataBateriasDC.insert(5,promedioCorrienteBateriasDC)
-                     dataBateriasDC.insert(6,MincurrentBateriasDC)
-                     dataBateriasDC.insert(7,maximoPotBateriasDC)
-                     dataBateriasDC.insert(8,promedioPotBateriasDC)
-                     dataBateriasDC.insert(10,minimoPotBateriasDC)
-                     dataBateriasDC.insert(11,energyBaterias)
-                     #dataBateriasDC.insert(12,energyBateriaHora)
-                     #print("Data Baterias: ", dataBateriasDC)
-                     ExcelDataBaterias15()
-              #except:
-              except OSError as err:
-                    print("OS error: {0}".format(err))
-                    #continue
-              except ValueError:
-                    print(ValueError)
-                    print("no hay maximos")
-              VoltMax15BateriasDC=[]
-              CorrienteMax15BateriasDC=[]
-              PotMax15BateriasDC=[]
-         elif(accesoBateriasDC==1):
-              #print("paso elif Paneles")
-              VoltMax15BateriasDC.append(VoltajeBaterias)
-              CorrienteMax15BateriasDC.append(CorrienteBaterias)
-              PotMax15BateriasDC.append(PotenciaBaterias)
- 
-    else:
-        VoltMax15BateriasDC.append(VoltajeBaterias)
-        #print("Vltje15BateriasDC: ",VoltMax15BateriasDC)
-        CorrienteMax15BateriasDC.append(CorrienteBaterias)
-        PotMax15BateriasDC.append(PotenciaBaterias)     
-        accesoBateriasDC = 0
-
-
- 
-        """
-        if(len(VoltMax15PanelesDC)>4):
-            indice=np.argmin(VoltMax15BateriasDC)
-            VoltMax15BateriasDC.pop(indice)
-            indice=np.argmin(CorrienteMax15PanelesDC)
-            CorrienteMax15PanelesDC.pop(indice)
-            indice=np.argmin(PotMax15BateriasDC)
-            PotMax15BateriasDC.pop(indice)
-        """
-
-VoltMax15PanelesDC=[]
-CorrienteMax15PanelesDC=[]
-PotMax15PanelesDC=[]
-dataPanelesDirecta15=[]
-accesoPanelesDC = 0
-MaxVoltage15PanelesDC=0
-promedioVoltaje15PanelesDC=0
-MinVoltage15PanelesDC=0
-MaxCurrentPanelesDC=0
-promedioCorrientePanelesDC=0
-MincurrentPanelesDC=0
-maximoPotPanelesDC=0
-promedioPotPanelesDC=0
-minimoPotPanelesDC=0
-def Maximo15minPanelesDC():
-    global MaxVoltage15PanelesDC
-    global promedioVoltaje15PanelesDC
-    global MinVoltage15PanelesDC
-    global MaxCurrentPanelesDC
-    global promedioCorrientePanelesDC
-    global MincurrentPanelesDC
-    global maximoPotPanelesDC
-    global promedioPotPanelesDC
-    global minimoPotPanelesDC
-    global CorrienteMax15PanelesDC
-    global VoltMax15PanelesDC
-    global accesoPanelesDC
-    global PotMax15PanelesDC
-    basea = datetime.datetime.now()
-    #print(f'Maximo Voltaje 15 Paneles: {MaxVoltage15Paneles}')
-    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45):  
-         print("paso if Paneles DC")
-         if(accesoPanelesDC == 0):
-              print("paso if 2 Paneles DC")
-              try:
-                     accesoPanelesDC = 1
-                     MaxVoltage15PanelesDC=max(VoltMax15PanelesDC)
-                     promedioVoltaje15PanelesDC=np.median(VoltMax15PanelesDC)
-                     MinVoltage15PanelesDC=min(VoltMax15PanelesDC)
-                     MaxCurrentPanelesDC=max(CorrienteMax15PanelesDC)
-                     promedioCorrientePanelesDC=np.median(CorrienteMax15PanelesDC)
-                     MincurrentPanelesDC=min(CorrienteMax15PanelesDC)
-                     maximoPotActivaPanelesDC=max(PotMax15PanelesDC)
-                     promedioPotActivaPanelesDC=np.median(PotMax15PanelesDC)
-                     minimoPotActivaPanelesDC=min(PotMax15PanelesDC)
-                     dataPanelesDirecta15.insert(1,MaxVoltage15PanelesDC)
-                     dataPanelesDirecta15.insert(2,promedioVoltaje15PanelesDC)
-                     dataPanelesDirecta15.insert(3,MinVoltage15PanelesDC)
-                     dataPanelesDirecta15.insert(4,MaxCurrentPanelesDC)
-                     dataPanelesDirecta15.insert(5,promedioCorrientePanelesDC)
-                     dataPanelesDirecta15.insert(6,MincurrentPanelesDC)
-                     dataPanelesDirecta15.insert(7,maximoPotActivaPanelesDC)
-                     dataPanelesDirecta15.insert(8,promedioPotActivaPanelesDC)
-                     dataPanelesDirecta15.insert(9,minimoPotActivaPanelesDC)
-                     dataPanelesDirecta15.insert(10,energyPanelesDC)
-                     #dataPanelesDirecta15.insert(10,energyPanelesHoraDC)
-                     #print("dataPanelesDirecta15: ", dataPanelesDirecta15)
-                     ExcelDataPanelesDirecta15()
-                    
-              except:
-                  print("no hay maximos")
-              VoltMax15PanelesDC=[]
-              CorrienteMax15PanelesDC=[]
-              PotMax15PanelesDC=[]
-         elif(accesoPanelesDC==1):
-              #print("paso elif Paneles")
-              VoltMax15PanelesDC.append(VoltajePanelesDC)
-              CorrienteMax15PanelesDC.append(CorrientePanelesDC)
-              PotMax15PanelesDC.append(PotenciaPanelesDC)
- 
-    else:
-        VoltMax15PanelesDC.append(VoltajePanelesDC)
-        CorrienteMax15PanelesDC.append(CorrientePanelesDC)
-        PotMax15PanelesDC.append(PotenciaPanelesDC)     
-        accesoPanelesDC = 0
-        #print("VoltMax15PanelesDC: " , VoltMax15PanelesDC)
-        """
-        if(len(VoltMax15PanelesDC)>4):
-            indice=np.argmin(VoltMax15PanelesDC)
-            VoltMax15PanelesDC.pop(indice)
-            indice=np.argmin(CorrienteMax15PanelesDC)
-            CorrienteMax15PanelesDC.pop(indice)
-            indice=np.argmin(PotMax15PanelesDC)
-            PotMax15PanelesDC.pop(indice)
-        """
+              FP15_Inductive_1.append(FP)
+        FD15_1.append(FD)
+        DAT15_1.append(DAT)
+        Access_1 = 0
         
+        if(len(Volt15_1)>4):
+            indice=np.argmin(Volt15_1)
+            Volt15_1.pop(indice)
+            ##print(f'Volt152 Despúes: {Volt152}')
+            indice=np.argmin(Current15_1)
+            Current15_1.pop(indice)
+            indice=np.argmin(ActivePower15_1)
+            ActivePower15_1.pop(indice)
+            indice=np.argmin(ReactivePower15_1)
+            ReactivePower15_1.pop(indice)
+            indice=np.argmin(AparentPower15_1)
+            AparentPower15_1.pop(indice)
+            if(len(FP15_Reactive_1)>=2):
+                indice=np.argmax(FP15_Reactive_1)
+                FP15_Reactive_1.pop(indice)
+            if(len(FP15_Inductive_1)>=2):
+                indice=np.argmin(FP15_Inductive_1)
+                FP15_Inductive_1.pop(indice)
+            indice=np.argmin(FD15_1)
+            FD15_1.pop(indice)
+            indice=np.argmin(DAT15_1)
+            DAT15_1.pop(indice)
+        
+        
+
     
 
 def excelcreate():
+    global dest_filename
     global sheet1
     global sheet2
-    global dest_filename
     global sheet3
     global sheet4
     global sheet5
@@ -2249,10 +1633,10 @@ def excelcreate():
     #sheet1 = book.active
     sheet1  = book.create_sheet("Variables Raspberry")
     sheet2 = book.create_sheet("CGE Maximos 15 Min")
-    sheet3 = book.create_sheet("Carga Maximos 15 Min")
+    sheet3 = book.create_sheet("2 Maximos 15 Min")
     sheet4 = book.create_sheet("Paneles Maximos 15 Min")
     sheet5 = book.create_sheet("CGE")
-    sheet6 = book.create_sheet("Carga")
+    sheet6 = book.create_sheet("2")
     sheet7 = book.create_sheet("Paneles")
     sheet8 = book.create_sheet("Baterias")
     sheet9 = book.create_sheet("Baterias15")
@@ -2294,8 +1678,8 @@ def excelcreate():
 
 def AbrirExcel():
     global dest_filename
-    global energyCGEFase11
-    global energyCargaFase13
+    global Energy1
+    global energy2Fase13
     global energyPanelesFase12
     global energyBaterias
     global energyPaneles
@@ -2305,7 +1689,7 @@ def AbrirExcel():
             print("Existe")
             workbook=openpyxl.load_workbook(filename = dest_filename)
             sheet5 = workbook["CGE"]
-            sheet6 = workbook["Carga"]
+            sheet6 = workbook["2"]
             sheet7 = workbook["Paneles"]
             sheet8 = workbook["Baterias"]
             sheet10 = workbook["PanelesDC"]
@@ -2313,18 +1697,18 @@ def AbrirExcel():
             print("sheet 5: ", sheet5)
             print("sheet 8: ", sheet8)
             print("Largo excel CGE: ",largoexcelCGE)
-            largoexcelCarga=len(sheet6["FP"])
+            largoexcel2=len(sheet6["FP"])
             largoexcelPaneles=len(sheet7["FP"])
             #print("Largo excel Bateria: ",len(sheet8["Energia"]))
             #largoExcelBateria=len(sheet8["Voltaje"])
             #largoExcelPanelesDC=len(sheet10["Voltaje"])
             #print(f'Numero de filas de paneles: {largoexcelPaneles} ')
-            energyCGEFase11 = float(sheet5[f'k{largoexcelCGE}'].value)
-            energyCargaFase13 = float(sheet6[f'k{largoexcelCarga}'].value)
+            Energy1 = float(sheet5[f'k{largoexcelCGE}'].value)
+            energy2Fase13 = float(sheet6[f'k{largoexcel2}'].value)
             energyPanelesFase12 = float(sheet7[f'k{largoexcelPaneles}'].value)
             #energyBaterias = float(sheet8[f'k{largoexcelCGE-2}'].value)
             #energyPanelesDC = float(sheet10[f'k{largoexcelCGE-2}'].value)
-            print(f'Valor Energia Carga Acumulado: {energyCargaFase13} ')
+            print(f'Valor Energia 2 Acumulado: {energy2Fase13} ')
     else:
             excelcreate()
             print("No Existe")
@@ -2363,27 +1747,27 @@ def ExcelDataCGE15():
        workbook.save(filename = dest_filename)
        dataCGE=[]
       
-def ExcelDataCarga():
-       global dataCargaAll
+def ExcelData15_1():
+       global data15_1All
        workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet6 = workbook["Carga"]
-       dataCargaAll.insert(0,datetime.datetime.now())
-       sheet6.append(list(dataCargaAll))
-       #print(f'Data Carga: {dataCarga}')
+       sheet6 = workbook["2"]
+       data15_1All.insert(0,datetime.datetime.now())
+       sheet6.append(list(data15_1All))
+       #print(f'Data 2: {data15_1}')
        #print("Datos Insertados Correctamente!")
        workbook.save(filename = dest_filename)
-       dataCargaAll=[]
+       data15_1All=[]
 
-def ExcelDataCarga15():
-       global dataCarga
+def ExcelData15_115():
+       global data15_1
        workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet3 = workbook["Carga Maximos 15 Min"]
-       dataCarga.insert(0,datetime.datetime.now())
-       sheet3.append(list(dataCarga))
-       #print(f'Data Carga: {dataCarga}')
+       sheet3 = workbook["2 Maximos 15 Min"]
+       data15_1.insert(0,datetime.datetime.now())
+       sheet3.append(list(data15_1))
+       #print(f'Data 2: {data15_1}')
        #print("Datos Insertados Correctamente!")
        workbook.save(filename = dest_filename)
-       dataCarga=[]
+       data15_1=[]
      
 def ExcelDataPaneles():
        global dataPanelesAll       
@@ -2522,10 +1906,10 @@ Vrms=0.0
 Irms=0.0
 BufferVoltaje=[]
 BufferCurrent=[]
-global accesoemail
-accesoemail=0
-global accesoexcel
-accesoxcel=0
+global Access_1email
+Access_1email=0
+global Access_1excel
+Access_1xcel=0
 countbroker=0
 
 def TomaDatos(list_Voltage,list_Current,samplings,i):
@@ -2538,7 +1922,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     global NoVoltageOffset
     global NoCurrentoffset
     global ListaIrmsPeak1
-    global potrmsCGE
                            
     sos = signal.butter(10, 2500, 'low', fs=samplings, output='sos')
     list_VoltageFilterComplete = signal.sosfilt(sos, list_Voltage)
@@ -2561,7 +1944,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         print(f'Vrms {i}: {Vrms}')
         #str_num = {"value":Vrms,"save":1}
         #Vrms1 = json.dumps(str_num)
-        VoltageFFT(NoVoltageOffset,samplings,1)
+        VoltageFFT(NoVoltageOffset,samplings,i)
         BufferVoltaje=[]
     else:
         BufferVoltaje.append(Vrms)
@@ -2585,7 +1968,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         #Irms1 = json.dumps(str_num)
         CurrentFFT(NoCurrentoffset,samplings,i,Irms)
         potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
-        Potencias(i,Irms,Vrms)
+        Potencias(i,Irms,Vrms,potrmsCGE)
         """
         ExcelAllInsertCGE()
         ExcelDataCGE()
@@ -2609,15 +1992,32 @@ def received():
                      decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
                  except:
                      print("Error en la codificación")
-                     continue
+                     break
                  np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')   
                  if (len(np_array) == 8402):
-                       if (np_array[0] == 11):
-                           
+                       if (np_array[0] == 11 or np_array[0] == 22):
+                           if (np_array[0] == 11):
+                               i = 1
+                           elif (np_array[0] == 22):
+                               i = 2
+                           elif (np_array[0] == 33):
+                               i = 3
+                           elif (np_array[0] == 44):
+                               i = 4
+                           elif (np_array[0] == 55):
+                               i = 5
+                           elif (np_array[0] == 66):
+                               i = 6
+                           elif (np_array[0] == 77):
+                               i = 7
+                           elif (np_array[0] == 88):
+                               i = 8
+                           elif (np_array[0] == 99):
+                               i = 9
                            samplings = np_array[-1]
                            list_Voltage = (np_array[0:4200])
                            list_Current = np_array[4201:8400]
-                           TomaDatos(list_Voltage,list_Current,samplings,1)
+                           TomaDatos(list_Voltage,list_Current,samplings,i)
                  
                  if (len(np_array)>0 and len(np_array)<=2):
                          global tempESP32
@@ -2647,15 +2047,15 @@ def received():
 
                  excel=datetime.datetime.now()
                  if(excel.hour==0 and excel.minute==3):
-                          if(accesoemail==0):
-                                 accesoemail=1
+                          if(Access_1email==0):
+                                 Access_1email=1
                                  print("Entro a SendEmail")
                                  #SendEmail()
                                  time.sleep(5)
                                  #os.remove(dest_filename)
                                  excelcreate()
                  else:
-                     accesoemail=0
+                     Access_1email=0
                  """
                  try:  
                        if(client.connected_flag==True): 
