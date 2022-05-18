@@ -366,7 +366,7 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            sincvoltaje1 = 1
            str_num_FD = {"value":FDVoltage,"save":1}
            str_num_DAT = {"value":DATVoltage,"save":1}
-           if (i == "1"):
+           if (i == 1):
                print("FD: ",FDVoltage)
                FDVoltage_1 = FDVoltage
                DATVoltage_1= DATVoltage
