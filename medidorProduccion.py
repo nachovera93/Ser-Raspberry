@@ -367,6 +367,7 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            str_num_FD = {"value":FDVoltage,"save":1}
            str_num_DAT = {"value":DATVoltage,"save":1}
            if (i == "1"):
+               print(FDVoltage)
                FDVoltage_1 = FDVoltage
                DATVoltage_1= DATVoltage
                FDVoltage_1_JSON = json.dumps(str_num_FD)  
@@ -546,6 +547,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
              JsonFP = json.dumps(str_num_FP)
              sincvoltaje1=0  
              if (i == "1"):
+                 print(CosPhi,FP)
                  CosPhi_1=CosPhi
                  FP_1=FP
                  DATCurrent_1=DATCurrent
@@ -553,7 +555,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FDCurrentJson1 = json.dumps(str_num_FD)  
                  DATCurrentJson1 = json.dumps(str_num_DAT)
                  FPCurrentJson1 = json.dumps(str_num_FP) 
-             elif (i == ""2"):
+             elif (i == "2"):
                  CosPhi_2=CosPhi
                  FP_2=FP
                  DATCurrent_2=DATCurrent
@@ -715,8 +717,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
           ActivePower = np.abs(ActivePower)
           ActivePower = ActivePower*(-1)
     ReactivePower = Vrms*Irms*np.sin(PhaseVoltage-PhaseCurrent)
-    print("1")
-    print("i: ",i)
     if (i == "1"):
         Time1b = datetime.datetime.now()
         delta=(((Time1b - Time1a).microseconds)/1000+((Time1b - Time1a).seconds)*1000)/10000000000
