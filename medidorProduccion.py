@@ -635,7 +635,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global ActivePower
     global AparentPower
     global ReactivePower
-    global OneHourEnergy1
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==0):
             OneHourEnergy1=0
@@ -676,7 +675,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_1 = AparentPower
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
-        Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1):
+        SaveDataCsv_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1):
+        #Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1):
     elif (i == 2):
         Time2b = datetime.datetime.now()
         delta=(((Time2b - Time2a).microseconds)/1000+((Time2b - Time2a).seconds)*1000)/10000000000
@@ -1401,8 +1401,8 @@ def dataAllVariables():
         dataVariablesAll.insert(2,cpu_uso)
         dataVariablesAll.insert(3,RAM)
         #dataVariablesAll.insert(4,RAM)
-
-def ExcelAllInsertCGE():
+"""
+def SaveDataCsv_1():
         dataCGEAll.insert(1,round(Vrms,2))
         dataCGEAll.insert(2,round(Irms,2))
         dataCGEAll.insert(3,round(ActivePower,2))
@@ -1414,7 +1414,7 @@ def ExcelAllInsertCGE():
         dataCGEAll.insert(9,round(CosPhi,2))         
         dataCGEAll.insert(10,round(Energy1,2))
         dataCGEAll.insert(11,round(OneHourEnergy1,2))
-        
+"""        
 def ExcelAllInsert2():        
         data15_1All.insert(1,round(Vrms2,2))
         data15_1All.insert(2,round(Irms2,2))
@@ -1818,16 +1818,14 @@ def VariablesExcel():
        workbook.save(filename = dest_filename)
        dataVariablesAll=[]
 
-def ExcelData_All_1():
-       global dataCGEAll                      
+def SaveDataCsv_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1):
+       Data_1 = [datetime.datetime.now(),Vrms, Irms, ActivePower_1, ReactivePower_1, AparentPower_1, FP_1, CosPhi_1, FDVoltage_1, FDCurrent_1, DATVoltage_1, DATCurrent_1, Energy_1, OneHourEnergy_1]                    
        workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet5 = workbook["CGE"]
-       dataCGEAll.insert(0,datetime.datetime.now())
-       sheet5.append(list(dataCGEAll))
-       #print(f'Data CGE: {dataCGEAll}')
-       #print("Datos Insertados Correctamente!")
+       sheet11 = workbook["Var 1"]
+       #dataCGEAll.insert(0,datetime.datetime.now())
+       sheet11.append(list(dataCGEAll))
        workbook.save(filename = dest_filename)
-       dataCGEAll=[]
+       Data_1=[]
 
 def ExcelData_15_1():
        global dataCGE                        
@@ -2093,7 +2091,7 @@ def received():
                          Ventilador()
                          RAM = psutil.virtual_memory()[2]
                          #dataAllVariables()
-                         VariablesExcel()
+                         #VariablesExcel()
                          if (RAM > 93):
                               os.system("sudo reboot")
                          #temphum()
