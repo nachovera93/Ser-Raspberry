@@ -547,7 +547,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
              JsonFP = json.dumps(str_num_FP)
              sincvoltaje1=0  
              if (p == 1):
-                 CosPhi_1=CosPhp
+                 CosPhi_1=CosPhi
                  FP_1=FP
                  DATCurrent_1=DATCurrent
                  FDCurrent_1=FDCurrent
@@ -726,7 +726,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_1 = ReactivePower
         print(" i : ", i)
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i)
-        Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1):
+        Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1)
     elif (i == 2):
         Time2b = datetime.datetime.now()
         delta=(((Time2b - Time2a).microseconds)/1000+((Time2b - Time2a).seconds)*1000)/10000000000
@@ -1549,10 +1549,26 @@ ReactivePower15_1=[]
 AparentPower15_1=[]
 FP15_Reactive_1=[]
 FP15_Inductive_1=[]
-FD15_1=[]
-DAT15_1=[]
+FDVoltage15_1=[]
+FDCurrent15_1=[]
+DAT15Voltage_1=[]
+DAT15Current_1=[]
 def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
     global data15_1
+    global Volt15_1
+    global data15_1
+    global Current15_1
+    global ActivePower15_1
+    global ReactivePower15_1
+    global AparentPower15_1
+    global FP15_Reactive_1
+    global FP15_Inductive_1
+    global FDVoltage15_1
+    global FDCurrent15_1
+    global DAT15Voltage_1
+    global DAT15Current_1
+    global Access_1
+    
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
                if(Access_1 == 0):
@@ -1639,7 +1655,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet2 = workbook["Max Var 1"]
                     sheet2.append(list(data15_1))
-                    print(f'Data 1: {Guardando Promedios}')
+                    print(f'Data 1: Guardando Promedios')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_1=[]
@@ -1876,7 +1892,7 @@ def VariablesExcel():
        dataVariablesAll=[]
 
 def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i):
-       Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,2), round(OneHourEnergy_1,5)]                    
+       Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
        workbook=openpyxl.load_workbook(filename = dest_filename)
        print("Tipo i: ", type(i))
        if(i==1):
@@ -1900,7 +1916,7 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
              sheet16.append(list(Data))
        elif(i==7):
              sheet17 = workbook["Var 7"]
-             sheet17.append(list(Data)6
+             sheet17.append(list(Data))
        elif(i==8):
              sheet18 = workbook["Var 8"]
              sheet18.append(list(Data))
@@ -1939,7 +1955,7 @@ def SaveDataCsv15(Data):
              sheet7.append(list(Data))
        elif(i==8):
              sheet8 = workbook["Var 7"]
-             sheet8.append(list(Data)6
+             sheet8.append(list(Data))
        elif(i==9):
              sheet9 = workbook["Var 8"]
              sheet9.append(list(Data))
