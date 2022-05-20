@@ -772,7 +772,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         SaveDataCsv(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,CosPhi_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,Energy_5,OneHourEnergy_5,i)
         Maximo15min_5(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,Energy_5)              
     elif (i == 6):
-        Time6b = datetime.datetime.now(5
+        Time6b = datetime.datetime.now()
         delta=(((Time6b - Time6a).microseconds)/1000+((Time6b - Time6a).seconds)*1000)/10000000000
         Energy_6 += np.abs(ActivePower*delta*2.9)
         OneHourEnergy_6 += np.abs(ActivePower*delta*2.9)
@@ -3769,7 +3769,7 @@ def received():
                      decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
                  except:
                      print("Error en la codificación")
-                     break
+                     continue
                  np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')   
                  if (len(np_array) == 8402):
                        if (np_array[0] == 11):
