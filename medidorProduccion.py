@@ -736,6 +736,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_2 = AparentPower
         ActivePower_2 = ActivePower
         ReactivePower_2 = ReactivePower 
+        print(" i : ", i)
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i)
         Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2)       
     elif (i == 3):
@@ -747,6 +748,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_3 = AparentPower
         ActivePower_3 = ActivePower
         ReactivePower_3 = ReactivePower
+        print(" i : ", i)
         SaveDataCsv(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,CosPhi_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3,OneHourEnergy_3,i)
         Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3)             
     elif (i == 4):
