@@ -2284,7 +2284,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
             indice=np.argmin(ActivePower15_4)
             ActivePower15_4.pop(indice)
             indice=np.argmin(ReactivePower15_4)
-            ReactivePower15_4.pop(indice3
+            ReactivePower15_4.pop(indice)
             indice=np.argmin(AparentPower15_4)
             AparentPower15_4.pop(indice)
             if(len(FP15_Reactive_4)>=2):
@@ -3106,7 +3106,7 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     Volt15_6.append(Vrms)
                     Current15_6.append(Irms)
                     ActivePower15_6.append(ActivePower)
-                    ReactivePower15_6.6ppend(ReactivePower)
+                    ReactivePower15_6.append(ReactivePower)
                     AparentPower15_6.append(AparentPower)
                     if(FP>0.0):
                           FP15_Reactive_6.append(FP)
