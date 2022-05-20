@@ -735,7 +735,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         Time2a = datetime.datetime.now()
         AparentPower_2 = AparentPower
         ActivePower_2 = ActivePower
-        ReactivePower_2 = ReactivePower        
+        ReactivePower_2 = ReactivePower 
+        SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i)
+        Maximo15min_2(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1)       
     elif (i == 3):
         Time3b = datetime.datetime.now()
         delta=(((Time3b - Time3a).microseconds)/1000+((Time3b - Time3a).seconds)*1000)/10000000000
@@ -1436,84 +1438,6 @@ def publish(client):
                          print(f"Failed to send message to topic {topic}")
  
 
-dataVariablesAll=[]
-dataCGEAll=[]
-data15_1All=[]
-dataPanelesAll=[]
-dataBateriasAll=[]
-dataPanelesDirectaAll=[]
-
-def dataAllVariables():
-        #print(f'Guardando lista')
-        #print("Temperatura Raspberry:  ",Temp_Raspberry0)
-        #print("Uso de CPU Raspberry:  ",cpu_uso)
-        dataVariablesAll.insert(1,Temp_Raspberry0)
-        dataVariablesAll.insert(2,cpu_uso)
-        dataVariablesAll.insert(3,RAM)
-        #dataVariablesAll.insert(4,RAM)
-"""
-def SaveDataCsv_1():
-        dataCGEAll.insert(1,round(Vrms,2))
-        dataCGEAll.insert(2,round(Irms,2))
-        dataCGEAll.insert(3,round(ActivePower,2))
-        dataCGEAll.insert(4,round(ReactivePower,2))
-        dataCGEAll.insert(5,round(AparentPower1,2))
-        dataCGEAll.insert(6,round(FP,2))
-        dataCGEAll.insert(7,round(FDCurrent,2))
-        dataCGEAll.insert(8,round(DATCurrent,2))
-        dataCGEAll.insert(9,round(CosPhi,2))         
-        dataCGEAll.insert(10,round(Energy1,2))
-        dataCGEAll.insert(11,round(OneHourEnergy1,2))
-"""        
-def ExcelAllInsert2():        
-        data15_1All.insert(1,round(Vrms2,2))
-        data15_1All.insert(2,round(Irms2,2))
-        data15_1All.insert(3,round(Activa2Fase13,2))
-        data15_1All.insert(4,round(Reactiva2Fase13,2))
-        data15_1All.insert(5,round(Aparente2Fase13,2))
-        data15_1All.insert(6,round(FP21,2))
-        data15_1All.insert(7,round(FDCorriente21,2))
-        data15_1All.insert(8,round(DATCorriente21,2))
-        data15_1All.insert(9,round(cosphi2,2))
-        data15_1All.insert(10,round(energy2Fase13,2))
-        data15_1All.insert(11,round(energy2Fase13Hour,2))
-        
-def ExcelAllInsertPaneles():        
-        dataPanelesAll.insert(1,round(Vrms3,2))
-        dataPanelesAll.insert(2,round(Irms3,2))
-        dataPanelesAll.insert(3,round(ActivaPanelesFase12,2))
-        dataPanelesAll.insert(4,round(ReactivaPanelesFase12,2))
-        dataPanelesAll.insert(5,round(AparentePanelesFase12,2))
-        dataPanelesAll.insert(6,round(FPPaneles1,2))
-        dataPanelesAll.insert(7,round(FDCorrientePaneles1,2))
-        dataPanelesAll.insert(8,round(DATCorrientePaneles1,2))
-        dataPanelesAll.insert(9,round(cosphiPaneles,2))
-        dataPanelesAll.insert(10,round(energyPanelesFase12,2))
-        dataPanelesAll.insert(11,round(energyPanelesFase12Hour,2))
-
-
-def ExcelAllInsertBaterias():        
-        dataBateriasAll.insert(1,round(VoltajeBaterias,2))
-        dataBateriasAll.insert(2,round(CorrienteBaterias,2))
-        dataBateriasAll.insert(3,round(PotenciaBaterias,2))
-        dataBateriasAll.insert(4,round(energyBaterias,2))
-        dataBateriasAll.insert(5,round(energyBateriaHora,2))
-        
-  
-def ExcelAllInsertPanelesDC():        
-        dataPanelesDirectaAll.insert(1,round(VoltajePanelesDC,2))
-        dataPanelesDirectaAll.insert(2,round(CorrientePanelesDC,2))
-        dataPanelesDirectaAll.insert(3,round(PotenciaPanelesDC,2))
-        dataPanelesDirectaAll.insert(4,round(energyPanelesDC,2))
-        dataPanelesDirectaAll.insert(5,round(energyPanelesHoraDC,2)) 
-           
-"""
-'Voltaje', 'Corriente','Potencia Activa','Potencia Reactiva','Potencia Aparente',
-'FP','FD','DAT',
-"""
-
-
-Access_1 = 0.0
 MaxVoltage15_1=0.0
 MeanVoltage15_1=0.0
 MinVoltage15_1=0.0
@@ -1541,6 +1465,7 @@ MinFD_1=0.0
 MaxDAT_1=0.0
 MeanDAT_1=0.0
 MinDAT_1=0.0
+Access_1 = 0
 Volt15_1=[]
 data15_1=[]
 Current15_1=[]
@@ -1553,6 +1478,7 @@ FDVoltage15_1=[]
 FDCurrent15_1=[]
 DAT15Voltage_1=[]
 DAT15Current_1=[]
+
 def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
     global data15_1
     global Volt15_1
@@ -1598,8 +1524,8 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                            MeanFPInductive_1=-0.99
                            MinFPInductive_1=-0.99
                     if(len(FP15_Reactive_1)>0):
-                           MaxFPReactive_1=min(FP15_Reactive_1)
-                           MeanFPReactive_1=min(FP15_Reactive_1)
+                           MaxFPReactive_1=max(FP15_Reactive_1)
+                           MeanFPReactive_1=np.median(FP15_Reactive_1)
                            MinFPReactive_1=min(FP15_Reactive_1)
                     else:
                            MaxFPReactive_1=0.99
@@ -1705,7 +1631,6 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         if(len(Volt15_1)>2):
             indice=np.argmin(Volt15_1)
             Volt15_1.pop(indice)
-            ##print(f'Volt152 Despúes: {Volt152}')
             indice=np.argmin(Current15_1)
             Current15_1.pop(indice)
             indice=np.argmin(ActivePower15_1)
@@ -1730,8 +1655,1725 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
             DAT15Current_1.pop(indice)
         
         
-
+Access_2 = 0
+MaxVoltage15_2=0.0
+MeanVoltage15_2=0.0
+MinVoltage15_2=0.0
+MaxCurrent15_2=0.0
+MeanCurrent15_2=0.0
+MinCurrent15_2=0.0
+MaxActivePower_2=0.0
+MeanActivePower_2=0.0
+MinActivePower_2=0.0
+MaxReactivePower_2=0.0
+MeanReactivePower_2=0.0
+MinReactivePower_2=0.0
+MaxAparentPower_2=0.0
+MeanAparentPower_2=0.0
+MinAparentPower_2=0.0
+MaxFPInductive_2=-0.99
+MeanFPInductive_2=-0.99
+MinFPInductive_2=-0.99
+MaxFPReactive_2=0.99
+MeanFPReactive_2=0.99
+MinFPReactive_2=0.99
+MaxFD_2=0.0
+MeanFD_2=0.0
+MinFD_2=0.0
+MaxDAT_2=0.0
+MeanDAT_2=0.0
+MinDAT_2=0.0
+Volt15_2=[]
+data15_2=[]
+Current15_2=[]
+ActivePower15_2=[]
+ReactivePower15_2=[]
+AparentPower15_2=[]
+FP15_Reactive_2=[]
+FP15_Inductive_2=[]
+FDVoltage15_2=[]
+FDCurrent15_2=[]
+DAT15Voltage_2=[]
+DAT15Current_2=[]
+def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+    global data15_2
+    global Volt15_2
+    global data15_2
+    global Current15_2
+    global ActivePower15_2
+    global ReactivePower15_2
+    global AparentPower15_2
+    global FP15_Reactive_2
+    global FP15_Inductive_2
+    global FDVoltage15_2
+    global FDCurrent15_2
+    global DAT15Voltage_2
+    global DAT15Current_2
+    global Access_2
     
+    basea = datetime.datetime.now()
+    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
+               if(Access_2 == 0):
+                    #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
+                    Access_2 = 1
+                    MaxVoltage15_2=max(Volt15_2)
+                    MeanVoltage15_2=np.median(Volt15_2)
+                    MinVoltage15_2=min(Volt15_2)
+                    MaxCurrent15_2=max(Current15_2)
+                    MeanCurrent15_2=np.median(Current15_2)
+                    MinCurrent15_2=min(Current15_2)
+                    MaxActivePower_2=max(ActivePower15_2)
+                    MeanActivePower_2=np.median(ActivePower15_2)
+                    MinActivePower_2=min(ActivePower15_2)
+                    MaxReactivePower_2=max(ReactivePower15_2)
+                    MeanReactivePower_2=np.median(ReactivePower15_2)
+                    MinReactivePower_2=min(ReactivePower15_2)
+                    MaxAparentPower_2=max(AparentPower15_2)
+                    MeanAparentPower_2=np.median(AparentPower15_2)
+                    MinAparentPower_2=min(AparentPower15_2)
+                    if(len(FP15_Inductive_2)>0):
+                           MaxFPInductive_2=max(FP15_Inductive_2)
+                           MeanFPInductive_2=np.median(FP15_Inductive_2)
+                           MinFPInductive_2=min(FP15_Inductive_2)
+                    else:
+                           MaxFPInductive_2=-0.99
+                           MeanFPInductive_2=-0.99
+                           MinFPInductive_2=-0.99
+                    if(len(FP15_Reactive_2)>0):
+                           MaxFPReactive_2=max(FP15_Reactive_2)
+                           MeanFPReactive_2=np.median(FP15_Reactive_2)
+                           MinFPReactive_2=min(FP15_Reactive_2)
+                    else:
+                           MaxFPReactive_2=0.99
+                           MeanFPReactive_2=0.99
+                           MinFPReactive_2=0.99
+                    MaxFDVoltage_2=max(FDVoltage15_2)
+                    MeanFDVoltage_2=np.median(FDVoltage15_2)
+                    MinFDVoltage_2=min(FDVoltage15_2)
+                    MaxFDCurrent_2=max(FDCurrent15_2)
+                    MeanFDCurrent_2=np.median(FDCurrent15_2)
+                    MinFDCurrent_2=min(FDCurrent15_2)
+                    MaxDATVoltage_2=max(DAT15Voltage_2)
+                    MeanDATVoltage_2=np.median(DAT15Voltage_2)
+                    MinDATVoltage_2=min(DAT15Voltage_2)
+                    MaxDATCurrent_2=max(DAT15Current_2)
+                    MeanDATCurrent_2=np.median(DAT15Current_2)
+                    MinDATCurrent_2=min(DAT15Current_2)
+                    data15_2.insert(1,MaxVoltage15_2)
+                    data15_2.insert(2,MeanVoltage15_2)
+                    data15_2.insert(3,MinVoltage15_2)
+                    data15_2.insert(4,MaxCurrent15_2)
+                    data15_2.insert(5,MeanCurrent15_2)
+                    data15_2.insert(6,MinCurrent15_2)
+                    data15_2.insert(7,MaxActivePower_2)
+                    data15_2.insert(8,MeanActivePower_2)
+                    data15_2.insert(9,MinActivePower_2)
+                    data15_2.insert(10,MaxReactivePower_2)
+                    data15_2.insert(11,MeanReactivePower_2)
+                    data15_2.insert(12,MinReactivePower_2)
+                    data15_2.insert(13,MaxAparentPower_2)
+                    data15_2.insert(14,MeanAparentPower_2)
+                    data15_2.insert(15,MinAparentPower_2)
+                    data15_2.insert(16,MaxFPInductive_2)
+                    data15_2.insert(17,MeanFPInductive_2)
+                    data15_2.insert(18,MinFPInductive_2)
+                    data15_2.insert(19,MaxFPReactive_2)
+                    data15_2.insert(20,MeanFPReactive_2)
+                    data15_2.insert(21,MinFPReactive_2)
+                    data15_2.insert(22,MaxFDVoltage_2)
+                    data15_2.insert(23,MeanFDVoltage_2)
+                    data15_2.insert(24,MinFDVoltage_2)
+                    data15_2.insert(25,MaxFDCurrent_2)
+                    data15_2.insert(26,MeanFDCurrent_2)
+                    data15_2.insert(27,MinFDCurrent_2)
+                    data15_2.insert(28,MaxDATVoltage_2)
+                    data15_2.insert(29,MeanDATVoltage_2)
+                    data15_2.insert(30,MinDATVoltage_2)
+                    data15_2.insert(31,MaxDATCurrent_2)
+                    data15_2.insert(32,MeanDATCurrent_2)
+                    data15_2.insert(33,MinDATCurrent_2)
+                    data15_2.insert(34,Energy)
+                    data15_2.insert(0,datetime.datetime.now())
+                    workbook=openpyxl.load_workbook(filename = dest_filename)
+                    sheet3 = workbook["Max Var 2"]
+                    sheet3.append(list(data15_2))
+                    print(f'Data 2: Guardando Promedios')
+                    #print("Datos Insertados Correctamente!")
+                    workbook.save(filename = dest_filename)
+                    data15_2=[]
+                    Volt15_2=[]
+                    Current15_2=[]
+                    ActivePower15_2=[]
+                    ReactivePower15_2=[]
+                    AparentPower15_2=[]
+                    FP15_Reactive_2=[]
+                    FP15_Inductive_2=[]
+                    FDVoltage15_2=[]
+                    FDCurrent15_2=[]
+                    DAT15Voltage_2=[]
+                    DAT15Current_2=[]
+               elif(Access_2==1):
+                    #print("paso elif 2")
+                    Volt15_2.append(Vrms)
+                    Current15_2.append(Irms)
+                    ActivePower15_2.append(ActivePower)
+                    ReactivePower15_2.append(ReactivePower)
+                    AparentPower15_2.append(AparentPower)
+                    if(FP>0.0):
+                          FP15_Reactive_2.append(FP)
+                    else: 
+                          FP15_Inductive_2.append(FP)
+                    FDVoltage15_2.append(FDVoltage)
+                    FDCurrent15_2.append(FDCurrent)
+                    DAT15Voltage_2.append(DATVoltage)
+                    DAT15Current_2.append(DATCurrent)
+              
+    else:
+        Volt15_2.append(Vrms)
+        Current15_2.append(Irms)
+        ActivePower15_2.append(ActivePower)
+        ReactivePower15_2.append(ReactivePower)
+        AparentPower15_2.append(AparentPower)
+        if(FP>0.0):
+              FP15_Reactive_2.append(FP)
+        else: 
+              FP15_Inductive_2.append(FP)
+        FDVoltage15_2.append(FDVoltage)
+        FDCurrent15_2.append(FDCurrent)
+        DAT15Voltage_2.append(DATVoltage)
+        DAT15Current_2.append(DATCurrent)
+        Access_2 = 0
+        
+        if(len(Volt15_2)>2):
+            indice=np.argmin(Volt15_2)
+            Volt15_2.pop(indice)
+            ##print(f'Volt152 Despúes: {Volt152}')
+            indice=np.argmin(Current15_2)
+            Current15_2.pop(indice)
+            indice=np.argmin(ActivePower15_2)
+            ActivePower15_2.pop(indice)
+            indice=np.argmin(ReactivePower15_2)
+            ReactivePower15_2.pop(indice)
+            indice=np.argmin(AparentPower15_2)
+            AparentPower15_2.pop(indice)
+            if(len(FP15_Reactive_2)>=2):
+                indice=np.argmax(FP15_Reactive_2)
+                FP15_Reactive_2.pop(indice)
+            if(len(FP15_Inductive_2)>=2):
+                indice=np.argmin(FP15_Inductive_2)
+                FP15_Inductive_2.pop(indice)
+            indice=np.argmin(FDVoltage15_2)
+            FDVoltage15_2.pop(indice)
+            indice=np.argmin(FDCurrent15_2)
+            FDCurrent15_2.pop(indice)
+            indice=np.argmin(DAT15Voltage_2)
+            DAT15Voltage_2.pop(indice)
+            indice=np.argmin(DAT15Current_2)
+            DAT15Current_2.pop(indice)
+    
+Access_3 = 0
+MaxVoltage15_3=0.0
+MeanVoltage15_3=0.0
+MinVoltage15_3=0.0
+MaxCurrent15_3=0.0
+MeanCurrent15_3=0.0
+MinCurrent15_3=0.0
+MaxActivePower_3=0.0
+MeanActivePower_3=0.0
+MinActivePower_3=0.0
+MaxReactivePower_3=0.0
+MeanReactivePower_3=0.0
+MinReactivePower_3=0.0
+MaxAparentPower_3=0.0
+MeanAparentPower_3=0.0
+MinAparentPower_3=0.0
+MaxFPInductive_3=-0.99
+MeanFPInductive_3=-0.99
+MinFPInductive_3=-0.99
+MaxFPReactive_3=0.99
+MeanFPReactive_3=0.99
+MinFPReactive_3=0.99
+MaxFD_3=0.0
+MeanFD_3=0.0
+MinFD_3=0.0
+MaxDAT_3=0.0
+MeanDAT_3=0.0
+MinDAT_3=0.0
+Volt15_3=[]
+data15_3=[]
+Current15_3=[]
+ActivePower15_3=[]
+ReactivePower15_3=[]
+AparentPower15_3=[]
+FP15_Reactive_3=[]
+FP15_Inductive_3=[]
+FDVoltage15_3=[]
+FDCurrent15_3=[]
+DAT15Voltage_3=[]
+DAT15Current_3=[]
+def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+    global data15_3
+    global Volt15_3
+    global data15_3
+    global Current15_3
+    global ActivePower15_3
+    global ReactivePower15_3
+    global AparentPower15_3
+    global FP15_Reactive_3
+    global FP15_Inductive_3
+    global FDVoltage15_3
+    global FDCurrent15_3
+    global DAT15Voltage_3
+    global DAT15Current_3
+    global Access_3
+    
+    basea = datetime.datetime.now()
+    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
+               if(Access_3 == 0):
+                    #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
+                    Access_3 = 1
+                    MaxVoltage15_3=max(Volt15_3)
+                    MeanVoltage15_3=np.median(Volt15_3)
+                    MinVoltage15_3=min(Volt15_3)
+                    MaxCurrent15_3=max(Current15_3)
+                    MeanCurrent15_3=np.median(Current15_3)
+                    MinCurrent15_3=min(Current15_3)
+                    MaxActivePower_3=max(ActivePower15_3)
+                    MeanActivePower_3=np.median(ActivePower15_3)
+                    MinActivePower_3=min(ActivePower15_3)
+                    MaxReactivePower_3=max(ReactivePower15_3)
+                    MeanReactivePower_3=np.median(ReactivePower15_3)
+                    MinReactivePower_3=min(ReactivePower15_3)
+                    MaxAparentPower_3=max(AparentPower15_3)
+                    MeanAparentPower_3=np.median(AparentPower15_3)
+                    MinAparentPower_3=min(AparentPower15_3)
+                    if(len(FP15_Inductive_3)>0):
+                           MaxFPInductive_3=max(FP15_Inductive_3)
+                           MeanFPInductive_3=np.median(FP15_Inductive_3)
+                           MinFPInductive_3=min(FP15_Inductive_3)
+                    else:
+                           MaxFPInductive_3=-0.99
+                           MeanFPInductive_3=-0.99
+                           MinFPInductive_3=-0.99
+                    if(len(FP15_Reactive_3)>0):
+                           MaxFPReactive_3=max(FP15_Reactive_3)
+                           MeanFPReactive_3=np.median(FP15_Reactive_3)
+                           MinFPReactive_3=min(FP15_Reactive_3)
+                    else:
+                           MaxFPReactive_3=0.99
+                           MeanFPReactive_3=0.99
+                           MinFPReactive_3=0.99
+                    MaxFDVoltage_3=max(FDVoltage15_3)
+                    MeanFDVoltage_3=np.median(FDVoltage15_3)
+                    MinFDVoltage_3=min(FDVoltage15_3)
+                    MaxFDCurrent_3=max(FDCurrent15_3)
+                    MeanFDCurrent_3=np.median(FDCurrent15_3)
+                    MinFDCurrent_3=min(FDCurrent15_3)
+                    MaxDATVoltage_3=max(DAT15Volt3ge_3)
+                    MeanDATVoltage_3=np.median(DAT15Voltage_3)
+                    MinDATVoltage_3=min(DAT15Voltage_3)
+                    MaxDATCurrent_3=max(DAT15Current_3)
+                    MeanDATCurrent_3=np.median(DAT15Current_3)
+                    MinDATCurrent_3=min(DAT15Current_3)
+                    data15_3.insert(1,MaxVoltage15_3)
+                    data15_3.insert(2,MeanVoltage15_3)
+                    data15_3.insert(3,MinVoltage15_3)
+                    data15_3.insert(4,MaxCurrent15_3)
+                    data15_3.insert(5,MeanCurrent15_3)
+                    data15_3.insert(6,MinCurrent15_3)
+                    data15_3.insert(7,MaxActivePower_3)
+                    data15_3.insert(8,MeanActivePower_3)
+                    data15_3.insert(9,MinActivePower_3)
+                    data15_3.insert(10,MaxReactivePower_3)
+                    data15_3.insert(11,MeanReactivePower_3)
+                    data15_3.insert(12,MinReactivePower_3)
+                    data15_3.insert(13,MaxAparentPower_3)
+                    data15_3.insert(14,MeanAparentPower_3)
+                    data15_3.insert(15,MinAparentPower_3)
+                    data15_3.insert(16,MaxFPInductive_3)
+                    data15_3.insert(17,MeanFPInductive_3)
+                    data15_3.insert(18,MinFPInductive_3)
+                    data15_3.insert(19,MaxFPReactive_3)
+                    data15_3.insert(20,MeanFPReactive_3)
+                    data15_3.insert(21,MinFPReactive_3)
+                    data15_3.insert(22,MaxFDVoltage_3)
+                    data15_3.insert(23,MeanFDVoltage_3)
+                    data15_3.insert(24,MinFDVoltage_3)
+                    data15_3.insert(25,MaxFDCurrent_3)
+                    data15_3.insert(26,MeanFDCurrent_3)
+                    data15_3.insert(27,MinFDCurrent_3)
+                    data15_3.insert(28,MaxDATVoltage_3)
+                    data15_3.insert(29,MeanDATVoltage_3)
+                    data15_3.insert(30,MinDATVoltage_3)
+                    data15_3.insert(31,MaxDATCurrent_3)
+                    data15_3.insert(32,MeanDATCurrent_3)
+                    data15_3.insert(33,MinDATCurrent_3)
+                    data15_3.insert(34,Energy)
+                    data15_3.insert(0,datetime.datetime.now())
+                    workbook=openpyxl.load_workbook(filename = dest_filename)
+                    sheet4 = workbook["Max Var 3"]
+                    sheet4.append(list(data15_3))
+                    print(f'Data 3: Guardando Promedios')
+                    #print("Datos Insertados Correctamente!")
+                    workbook.save(filename = dest_filename)
+                    data15_3=[]
+                    Volt15_3=[]
+                    Current15_3=[]
+                    ActivePower15_3=[]
+                    ReactivePower15_3=[]
+                    AparentPower15_3=[]
+                    FP15_Reactive_3=[]
+                    FP15_Inductive_3=[]
+                    FDVoltage15_3=[]
+                    FDCurrent15_3=[]
+                    DAT15Voltage_3=[]
+                    DAT15Current_3=[]
+               elif(Access_3==1):
+                    #print("paso elif 2")
+                    Volt15_3.append(Vrms)
+                    Current15_3.append(Irms)
+                    ActivePower15_3.append(ActivePower)
+                    ReactivePower15_3.append(ReactivePower)
+                    AparentPower15_3.append(AparentPower)
+                    if(FP>0.0):
+                          FP15_Reactive_3.append(FP)
+                    else: 
+                          FP15_Inductive_3.append(FP)
+                    FDVoltage15_3.append(FDVoltage)
+                    FDCurrent15_3.append(FDC3rrent)
+                    DAT15Voltage_3.append(DATVoltage)
+                    DAT15Current_3.append(DATCurrent)
+              
+    else:
+        Volt15_3.append(Vrms)
+        Current15_3.append(Irms)
+        ActivePower15_3.append(ActivePower)
+        ReactivePower15_3.append(ReactivePower)
+        AparentPower15_3.append(AparentPower)
+        if(FP>0.0):
+              FP15_Reactive_3.append(FP)
+        else: 
+              FP15_Inductive_3.append(FP)
+        FDVoltage15_3.append(FDVoltage)
+        FDCurrent15_3.append(FDCurrent)
+        DAT15Voltage_3.append(DATVoltage)
+        DAT15Current_3.append(DATCurrent)
+        Access_3 = 0
+        
+        if(len(Volt15_3)>2):
+            indice=np.argmin(Volt15_3)
+            Volt15_3.pop(indice)
+            ##print(f'Volt152 Despúes: {Volt152}')
+            indice=np.argmin(Current15_3)
+            Current15_3.pop(indice)
+            indice=np.argmin(ActivePower15_3)
+            ActivePower15_3.pop(indice)
+            indice=np.argmin(ReactivePower15_3)
+            ReactivePower15_3.pop(indice)
+            indice=np.argmin(AparentPower15_3)
+            AparentPower15_3.pop(indice)
+            if(len(FP15_Reactive_3)>=2):
+                indice=np.argmax(FP15_Reactive_3)
+                FP15_Reactive_3.pop(indice)
+            if(len(FP15_Inductive_3)>=2):
+                indice=np.argmin(FP15_Inductive_3)
+                FP15_Inductive_3.pop(indice)
+            indice=np.argmin(FDVoltage15_3)
+            FDVoltage15_3.pop(indice)
+            indice=np.argmin(FDCurrent15_3)
+            FDCurrent15_3.pop(indice)
+            indice=np.argmin(DAT15Voltage_3)
+            DAT15Voltage_3.pop(indice)
+            indice=np.argmin(DAT15Current_3)
+            DAT15Current_3.pop(indice)
+
+Access_4 = 0
+MaxVoltage15_4=0.0
+MeanVoltage15_4=0.0
+MinVoltage15_4=0.0
+MaxCurrent15_4=0.0
+MeanCurrent15_4=0.0
+MinCurrent15_4=0.0
+MaxActivePower_4=0.0
+MeanActivePower_4=0.0
+MinActivePower_4=0.0
+MaxReactivePower_4=0.0
+MeanReactivePower_4=0.0
+MinReactivePower_4=0.0
+MaxAparentPower_4=0.0
+MeanAparentPower_4=0.0
+MinAparentPower_4=0.0
+MaxFPInductive_4=-0.99
+MeanFPInductive_4=-0.99
+MinFPInductive_4=-0.99
+MaxFPReactive_4=0.99
+MeanFPReactive_4=0.99
+MinFPReactive_4=0.99
+MaxFD_4=0.0
+MeanFD_4=0.0
+MinFD_4=0.0
+MaxDAT_4=0.0
+MeanDAT_4=0.0
+MinDAT_4=0.0
+Volt15_4=[]
+data15_4=[]
+Current15_4=[]
+ActivePower15_4=[]
+ReactivePower15_4=[]
+AparentPower15_4=[]
+FP15_Reactive_4=[]
+FP15_Inductive_4=[]
+FDVoltage15_4=[]
+FDCurrent15_4=[]
+DAT15Voltage_4=[]
+DAT15Current_4=[]
+def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+    global data15_4
+    global Volt15_4
+    global data15_4
+    global Current15_4
+    global ActivePower15_4
+    global ReactivePower15_4
+    global AparentPower15_4
+    global FP15_Reactive_4
+    global FP15_Inductive_4
+    global FDVoltage15_4
+    global FDCurrent15_4
+    global DAT15Voltage_4
+    global DAT15Current_4
+    global Access_4
+    
+    basea = datetime.datetime.now()
+    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
+               if(Access_4 == 0):
+                    #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
+                    Access_4 = 1
+                    MaxVoltage15_4=max(Volt15_4)
+                    MeanVoltage15_4=np.median(Volt15_4)
+                    MinVoltage15_4=min(Volt15_4)
+                    MaxCurrent15_4=max(Current15_4)
+                    MeanCurrent15_4=np.median(Current15_4)
+                    MinCurrent15_4=min(Current15_4)
+                    MaxActivePower_4=max(ActivePower15_4)
+                    MeanActivePower_4=np.median(ActivePower15_4)
+                    MinActivePower_4=min(ActivePower15_4)
+                    MaxReactivePower_4=max(ReactivePower15_4)
+                    MeanReactivePower_4=np.median(ReactivePower15_4)
+                    MinReactivePower_4=min(ReactivePower15_4)
+                    MaxAparentPower_4=max(AparentPower15_4)
+                    MeanAparentPower_4=np.median(AparentPower15_4)
+                    MinAparentPower_4=min(AparentPower15_4)
+                    if(len(FP15_Inductive_4)>0):
+                           MaxFPInductive_4=max(FP15_Inductive_4)
+                           MeanFPInductive_4=np.median(FP15_Inductive_4)
+                           MinFPInductive_4=min(FP15_Inductive_4)
+                    else:
+                           MaxFPInductive_4=-0.99
+                           MeanFPInductive_4=-0.99
+                           MinFPInductive_4=-0.99
+                    if(len(FP15_Reactive_4)>0):
+                           MaxFPReactive_4=max(FP15_Reactive_4)
+                           MeanFPReactive_4=np.median(FP15_Reactive_4)
+                           MinFPReactive_4=min(FP15_Reactive_4)
+                    else:
+                           MaxFPReactive_4=0.99
+                           MeanFPReactive_4=0.99
+                           MinFPReactive_4=0.99
+                    MaxFDVoltage_4=max(FDVoltage15_4)
+                    MeanFDVoltage_4=np.median(FDVoltage15_4)
+                    MinFDVoltage_4=min(FDVoltage15_4)
+                    MaxFDCurrent_4=max(FDCurrent15_4)
+                    MeanFDCurrent_4=np.median(FDCurrent15_4)
+                    MinFDCurrent_4=min(FDCurrent15_4)
+                    MaxDATVoltage_4=max(DAT15Voltage_4)
+                    MeanDATVoltage_4=np.median(DAT15Voltage_4)
+                    MinDATVoltage_4=min(DAT15Voltage_4)
+                    MaxDATCurrent_4=max(DAT15Current_4)
+                    MeanDATCurrent_4=np.median(DAT15Current_4)
+                    MinDATCurrent_4=min(DAT15Current_4)
+                    data15_4.insert(1,MaxVoltage15_4)
+                    data15_4.insert(2,MeanVoltage15_4)
+                    data15_4.insert(3,MinVoltage15_4)
+                    data15_4.insert(4,MaxCurrent15_4)
+                    data15_4.insert(5,MeanCurrent15_4)
+                    data15_4.insert(6,MinCurrent15_4)
+                    data15_4.insert(7,MaxActivePower_4)
+                    data15_4.insert(8,MeanActivePower_4)
+                    data15_4.insert(9,MinActivePower_4)
+                    data15_4.insert(10,MaxReactivePower_4)
+                    data15_4.insert(11,MeanReactivePower_4)
+                    data15_4.insert(12,MinReactivePower_4)
+                    data15_4.insert(13,MaxAparentPower_4)
+                    data15_4.insert(14,MeanAparentPower_4)
+                    data15_4.insert(15,MinAparentPower_4)
+                    data15_4.insert(16,MaxFPInductive_4)
+                    data15_4.insert(17,MeanFPInductive_4)
+                    data15_4.insert(18,MinFPInductive_4)
+                    data15_4.insert(19,MaxFPReactive_4)
+                    data15_4.insert(20,MeanFPReactive_4)
+                    data15_4.insert(21,MinFPReactive_4)
+                    data15_4.insert(22,MaxFDVoltage_4)
+                    data15_4.insert(23,MeanFDVoltage_4)
+                    data15_4.insert(24,MinFDVoltage_4)
+                    data15_4.insert(25,MaxFDCurrent_4)
+                    data15_4.insert(26,MeanFDCurrent_4)
+                    data15_4.insert(27,MinFDCurrent_4)
+                    data15_4.insert(28,MaxDATVoltage_4)
+                    data15_4.insert(29,MeanDATVoltage_4)
+                    data15_4.insert(30,MinDATVoltage_4)
+                    data15_4.insert(31,MaxDATCurrent_4)
+                    data15_4.insert(32,MeanDATCurrent_4)
+                    data15_4.insert(33,MinDATCurrent_4)
+                    data15_4.insert(34,Energy)
+                    data15_4.insert(0,datetime.datetime.now())
+                    workbook=openpyxl.load_workbook(filename = dest_filename)
+                    sheet5 = workbook["Max Var 4"]
+                    sheet5.append(list(data15_4))
+                    print(f'Data 4: Guardando Promedios')
+                    #print("Datos Insertados Correctamente!")
+                    workbook.save(filename = dest_filename)
+                    data15_4=[]
+                    Volt15_4=[]
+                    Current15_4=[]
+                    ActivePower15_4=[]
+                    ReactivePower15_4=[]
+                    AparentPower15_4=[]
+                    FP15_Reactive_4=[]
+                    FP15_Inductive_4=[]
+                    FDVoltage15_4=[]
+                    FDCurrent15_4=[]
+                    DAT15Voltage_4=[]
+                    DAT15Current_4=[]
+               elif(Access_4==1):
+                    #print("paso elif 2")
+                    Volt15_4.append(Vrms)
+                    Current15_4.append(Irms)
+                    ActivePower15_4.append(ActivePower)
+                    ReactivePower15_4.append(ReactivePower)
+                    AparentPower15_4.append(AparentPower)
+                    if(FP>0.0):
+                          FP15_Reactive_4.append(FP)
+                    else: 
+                          FP15_Inductive_4.append(FP)
+                    FDVoltage15_4.append(FDVoltage)
+                    FDCurrent15_4.append(FDCurrent)
+                    DAT15Voltage_4.append(DATVoltage)
+                    DAT15Current_4.append(DATCurrent)      
+    else:
+        Volt15_4.append(Vrms)
+        Current15_4.append(Irms)
+        ActivePower15_4.append(ActivePower)
+        ReactivePower15_4.append(ReactivePower)
+        AparentPower15_4.append(AparentPower)
+        if(FP>0.0):
+              FP15_Reactive_4.append(FP)
+        else: 
+              FP15_Inductive_4.append(FP)
+        FDVoltage15_4.append(FDVoltage)
+        FDCurrent15_4.append(FDCurrent)
+        DAT15Voltage_4.append(DATVoltage)
+        DAT15Current_4.append(DATCurrent)
+        Access_4 = 0
+        
+        if(len(Volt15_4)>2):
+            indice=np.argmin(Volt15_4)
+            Volt15_4.pop(indice)
+            ##print(f'Volt152 Despúes: {Volt152}')
+            indice=np.argmin(Current15_4)
+            Current15_4.pop(indice)
+            indice=np.argmin(ActivePower15_4)
+            ActivePower15_4.pop(indice)
+            indice=np.argmin(ReactivePower15_4)
+            ReactivePower15_4.pop(indice3
+            indice=np.argmin(AparentPower15_4)
+            AparentPower15_4.pop(indice)
+            if(len(FP15_Reactive_4)>=2):
+                indice=np.argmax(FP15_Reactive_4)
+                FP15_Reactive_4.pop(indice)
+            if(len(FP15_Inductive_4)>=2):
+                indice=np.argmin(FP15_Inductive_4)
+                FP15_Inductive_4.pop(indice)
+            indice=np.argmin(FDVoltage15_4)
+            FDVoltage15_4pop(indice)
+            indice=np.argmin(FDCurrent15_4)
+            FDCurrent15_4.pop(indice)
+            indice=np.argmin(DAT15Voltage_4)
+            DAT15Voltage_4.pop(indice)
+            indice=np.argmin(DAT15Current_4)
+            DAT15Current_4.pop(indice)
+
+Access_5 = 0
+MaxVoltage15_5=0.0
+MeanVoltage15_5=0.0
+MinVoltage15_5=0.0
+MaxCurrent15_5=0.0
+MeanCurrent15_5=0.0
+MinCurrent15_5=0.0
+MaxActivePower_5=0.0
+MeanActivePower_5=0.0
+MinActivePower_5=0.0
+MaxReactivePower_5=0.0
+MeanReactivePower_5=0.0
+MinReactivePower_5=0.0
+MaxAparentPower_5=0.0
+MeanAparentPower_5=0.0
+MinAparentPower_5=0.0
+MaxFPInductive_5=-0.99
+MeanFPInductive_5=-0.99
+MinFPInductive_5=-0.99
+MaxFPReactive_5=0.99
+MeanFPReactive_5=0.99
+MinFPReactive_5=0.99
+MaxFD_5=0.0
+MeanFD_5=0.0
+MinFD_5=0.0
+MaxDAT_5=0.0
+MeanDAT_5=0.0
+MinDAT_5=0.0
+Volt15_5=[]
+data15_5=[]
+Current15_5=[]
+ActivePower15_5=[]
+ReactivePower15_5=[]
+AparentPower15_5=[]
+FP15_Reactive_5=[]
+FP15_Inductive_5=[]
+FDVoltage15_5=[]
+FDCurrent15_5=[]
+DAT15Voltage_5=[]
+DAT15Current_5=[]
+def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+    global data15_5
+    global Volt15_5
+    global data15_5
+    global Current15_5
+    global ActivePower15_5
+    global ReactivePower15_5
+    global AparentPower15_5
+    global FP15_Reactive_5
+    global FP15_Inductive_5
+    global FDVoltage15_5
+    global FDCurrent15_5
+    global DAT15Voltage_5
+    global DAT15Current_5
+    global Access_5
+    
+    basea = datetime.datetime.now()
+    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
+               if(Access_5 == 0):
+                    #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
+                    Access_5 = 1
+                    MaxVoltage15_5=max(Volt15_5)
+                    MeanVoltage15_5=np.median(Volt15_5)
+                    MinVoltage15_5=min(Volt15_5)
+                    MaxCurrent15_5=max(Current15_5)
+                    MeanCurrent15_5=np.median(Current15_5)
+                    MinCurrent15_5=min(Current15_5)
+                    MaxActivePower_5=max(ActivePower15_5)
+                    MeanActivePower_5=np.median(ActivePower15_5)
+                    MinActivePower_5=min(ActivePower15_5)
+                    MaxReactivePower_5=max(ReactivePower15_5)
+                    MeanReactivePower_5=np.median(ReactivePower15_5)
+                    MinReactivePower_5=min(ReactivePower15_5)
+                    MaxAparentPower_5=max(AparentPower15_5)
+                    MeanAparentPower_5=np.median(AparentPower15_5)
+                    MinAparentPower_5=min(AparentPower15_5)
+                    if(len(FP15_Inductive_5)>0):
+                           MaxFPInductive_5=max(FP15_Inductive_5)
+                           MeanFPInductive_5=np.median(FP15_Inductive_5)
+                           MinFPInductive_5=min(FP15_Inductive_5)
+                    else:
+                           MaxFPInductive_5=-0.99
+                           MeanFPInductive_5=-0.99
+                           MinFPInductive_5=-0.99
+                    if(len(FP15_Reactive_5)>0):
+                           MaxFPReactive_5=max(FP15_Reactive_5)
+                           MeanFPReactive_5=np.median(FP15_Reactive_5)
+                           MinFPReactive_5=min(FP15_Reactive_5)
+                    else:
+                           MaxFPReactive_5=0.99
+                           MeanFPReactive_5=0.99
+                           MinFPReactive_5=0.99
+                    MaxFDVoltage_5=max(FDVoltage15_5)
+                    MeanFDVoltage_5=np.median(FDVoltage15_5)
+                    MinFDVoltage_5=min(FDVoltage15_5)
+                    MaxFDCurrent_5=max(FDCurrent15_5)
+                    MeanFDCurrent_5=np.median(FDCurrent15_5)
+                    MinFDCurrent_5=min(FDCurrent15_5)
+                    MaxDATVoltage_5=max(DAT15Voltage_5)
+                    MeanDATVoltage_5=np.median(DAT15Voltage_5)
+                    MinDATVoltage_5=min(DAT15Voltage_5)
+                    MaxDATCurrent_5=max(DAT15Current_5)
+                    MeanDATCurrent_5=np.median(DAT15Current_5)
+                    MinDATCurrent_5=min(DAT15Current_5)
+                    data15_5.insert(1,MaxVoltage15_5)
+                    data15_5.insert(2,MeanVoltage15_5)
+                    data15_5.insert(3,MinVoltage15_5)
+                    data15_5.insert(4,MaxCurrent15_5)
+                    data15_5.insert(5,MeanCurrent15_5)
+                    data15_5.insert(6,MinCurrent15_5)
+                    data15_5.insert(7,MaxActivePower_5)
+                    data15_5.insert(8,MeanActivePower_5)
+                    data15_5.insert(9,MinActivePower_5)
+                    data15_5.insert(10,MaxReactivePower_5)
+                    data15_5.insert(11,MeanReactivePower_5)
+                    data15_5.insert(12,MinReactivePower_5)
+                    data15_5.insert(13,MaxAparentPower_5)
+                    data15_5.insert(14,MeanAparentPower_5)
+                    data15_5.insert(15,MinAparentPower_5)
+                    data15_5.insert(16,MaxFPInductive_5)
+                    data15_5.insert(17,MeanFPInductive_5)
+                    data15_5.insert(18,MinFPInductive_5)
+                    data15_5.insert(19,MaxFPReactive_5)
+                    data15_5.insert(20,MeanFPReactive_5)
+                    data15_5.insert(21,MinFPReactive_5)
+                    data15_5.insert(22,MaxFDVoltage_5)
+                    data15_5.insert(23,MeanFDVoltage_5)
+                    data15_5.insert(24,MinFDVoltage_5)
+                    data15_5.insert(25,MaxFDCurrent_5)
+                    data15_5.insert(26,MeanFDCurrent_5)
+                    data15_5.insert(27,MinFDCurrent_5)
+                    data15_5.insert(28,MaxDATVoltage_5)
+                    data15_5.insert(29,MeanDATVoltage_5)
+                    data15_5.insert(30,MinDATVoltage_5)
+                    data15_5.insert(31,MaxDATCurrent_5)
+                    data15_5.insert(32,MeanDATCurrent_5)
+                    data15_5.insert(33,MinDATCurrent_5)
+                    data15_5.insert(34,Energy)
+                    data15_5.insert(0,datetime.datetime.now())
+                    workbook=openpyxl.load_workbook(filename = dest_filename)
+                    sheet6 = workbook["Max Var 5"]
+                    sheet6.append(list(data15_5))
+                    print(f'Data 5: Guardando Promedios')
+                    #print("Datos Insertados Correctamente!")
+                    workbook.save(filename = dest_filename)
+                    data15_5=[]
+                    Volt15_5=[]
+                    Current15_5=[]
+                    ActivePower15_5=[]
+                    ReactivePower15_5=[]
+                    AparentPower15_5=[]
+                    FP15_Reactive_5=[]
+                    FP15_Inductive_5=[]
+                    FDVoltage15_5=[]
+                    FDCurrent15_5=[]
+                    DAT15Voltage_5=[]
+                    DAT15Current_5=[]
+               elif(Access_5==1):
+                    #print("paso elif 2")
+                    Volt15_5.append(Vrms)
+                    Current15_5.append(Irms)
+                    ActivePower15_5.append(ActivePower)
+                    ReactivePower15_5.append(ReactivePower)
+                    AparentPower15_5.append(AparentPower)
+                    if(FP>0.0):
+                          FP15_Reactive_5.append(FP)
+                    else: 
+                          FP15_Inductive_5.append(FP)
+                    FDVoltage15_5.append(FDVoltage)
+                    FDCurrent15_5.append(FDCurrent)
+                    DAT15Voltage_5.append(DATVoltage)
+                    DAT15Current_5.append(DATCurrent)
+              
+    else:
+        Volt15_5.append(Vrms)
+        Current15_5.append(Irms)
+        ActivePower15_5.append(ActivePower)
+        ReactivePower15_5.append(ReactivePower)
+        AparentPower15_5.append(AparentPower)
+        if(FP>0.0):
+              FP15_Reactive_5.append(FP)
+        else: 
+              FP15_Inductive_5.append(FP)
+        FDVoltage15_5.append(FDVoltage)
+        FDCurrent15_5.append(FDCurrent)
+        DAT15Voltage_5.append(DATVoltage)
+        DAT15Current_5.append(DATCurrent)
+        Access_5 = 8
+        
+        if(len(Volt15_5)>2):
+            indice=np.argmin(Volt15_5)
+            Volt15_5.pop(indice)
+            ##print(f'Volt152 Despúes: {Volt152}')
+            indice=np.argmin(Current15_5)
+            Current15_5.pop(indice)
+            indice=np.argmin(ActivePower15_5)
+            ActivePower15_5.pop(indice)
+            indice=np.argmin(ReactivePower15_5)
+            ReactivePower15_5.pop(indice)
+            indice=np.argmin(AparentPower15_5)
+            AparentPower15_5.pop(indice)
+            if(len(FP15_Reactive_5)>=2):
+                indice=np.argmax(FP15_Reactive_5)
+                FP15_Reactive_5.pop(indice)
+            if(len(FP15_Inductive_5)>=2):
+                indice=np.argmin(FP15_Inductive_5)
+                FP15_Inductive_5.pop(indice)
+            indice=np.argmin(FDVoltage15_5)
+            FDVoltage15_5.pop(indice)
+            indice=np.argmin(FDCurrent15_5)
+            FDCurrent15_5.pop(indice)
+            indice=np.argmin(DAT15Voltage_5)
+            DAT15Voltage_5.pop(indice)
+            indice=np.argmin(DAT15Current_5)
+            DAT15Current_5.pop(indice)
+
+Access_7 = 0
+MaxVoltage15_7=0.0
+MeanVoltage15_7=0.0
+MinVoltage15_7=0.0
+MaxCurrent15_7=0.0
+MeanCurrent15_7=0.0
+MinCurrent15_7=0.0
+MaxActivePower_7=0.0
+MeanActivePower_7=0.0
+MinActivePower_7=0.0
+MaxReactivePower_7=0.0
+MeanReactivePower_7=0.7
+MinReactivePower_7=0.0
+MaxAparentPower_7=0.0
+MeanAparentPower_7=0.0
+MinAparentPower_7=0.0
+MaxFPInductive_7=-0.99
+MeanFPInductive_7=-0.99
+MinFPInductive_7=-0.99
+MaxFPReactive_7=0.99
+MeanFPReactive_7=0.99
+MinFPReactive_7=0.99
+MaxFD_7=0.0
+MeanFD_7=0.0
+MinFD_7=0.0
+MaxDAT_7=0.0
+MeanDAT_7=0.0
+MinDAT_7=0.0
+Volt15_7=[]
+data15_7=[]
+Current15_7=[]
+ActivePower15_7=[]
+ReactivePower15_7=[]
+AparentPower15_7=[]
+FP15_Reactive_7=[]
+FP15_Inductive_7=[]
+FDVoltage15_7=[]
+FDCurrent15_7=[]
+DAT15Voltage_7=[]
+DAT15Current_7=[]
+def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+    global data15_7
+    global Volt15_7
+    global data15_7
+    global Current15_7
+    global ActivePower15_7
+    global ReactivePower15_7
+    global AparentPower15_7
+    global FP15_Reactive_7
+    global FP15_Inductive_7
+    global FDVoltage15_7
+    global FDCurrent15_7
+    global DAT15Voltage_7
+    global DAT15Current_7
+    global Access_7
+    
+    basea = datetime.datetime.now()
+    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
+               if(Access_7 == 0):
+                    #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
+                    Access_7 = 1
+                    MaxVoltage15_7=max(Volt15_7)
+                    MeanVoltage15_7=np.median(Volt15_7)
+                    MinVoltage15_7=min(Volt15_7)
+                    MaxCurrent15_7=max(Current15_7)
+                    MeanCurrent15_7=np.median(Current15_7)
+                    MinCurrent15_7=min(Current15_7)
+                    MaxActivePower_7=max(ActivePower15_7)
+                    MeanActivePower_7=np.median(ActivePower15_7)
+                    MinActivePower_7=min(ActivePower15_7)
+                    MaxReactivePower_7=max(ReactivePower15_7)
+                    MeanReactivePower_7=np.median(ReactivePower15_7)
+                    MinReactivePower_7=min(ReactivePower15_7)
+                    MaxAparentPower_7=max(AparentPower15_7)
+                    MeanAparentPower_7=np.median(AparentPower15_7)
+                    MinAparentPower_7=min(AparentPower15_7)
+                    if(len(FP15_Inductive_7)>0):
+                           MaxFPInductive_7=max(FP15_Inductive_7)
+                           MeanFPInductive_7=np.median(FP15_Inductive_7)
+                           MinFPInductive_7=min(FP15_Inductive_7)
+                    else:
+                           MaxFPInductive_7=-0.99
+                           MeanFPInductive_7=-0.99
+                           MinFPInductive_7=-0.99
+                    if(len(FP15_Reactive_7)>0):
+                           MaxFPReactive_7=max(FP15_Reactive_7)
+                           MeanFPReactive_7=np.median(FP15_Reactive_7)
+                           MinFPReactive_7=min(FP15_Reactive_7)
+                    else:
+                           MaxFPReactive_7=0.99
+                           MeanFPReactive_7=0.99
+                           MinFPReactive_7=0.99
+                    MaxFDVoltage_7=max(FDVoltage15_7)
+                    MeanFDVoltage_7=np.median(FDVoltage15_7)
+                    MinFDVoltage_7=min(FDVoltage15_7)
+                    MaxFDCurrent_7=max(FDCurrent15_7)
+                    MeanFDCurrent_7=np.median(FDCurrent15_7)
+                    MinFDCurrent_7=min(FDCurrent15_7)
+                    MaxDATVoltage_7=max(DAT15Volt3ge_7)
+                    MeanDATVoltage_7=np.median(DAT15Voltage_7)
+                    MinDATVoltage_7=min(DAT15Voltage_7)
+                    MaxDATCurrent_7=max(DAT15Current_7)
+                    MeanDATCurrent_7=np.median(DAT15Current_7)
+                    MinDATCurrent_7=min(DAT15Current_7)
+                    data15_7.insert(1,MaxVoltage15_7)
+                    data15_7.insert(2,MeanVoltage15_7)
+                    data15_7.insert(3,MinVoltage15_7)
+                    data15_7.insert(4,MaxCurrent15_7)
+                    data15_7.insert(5,MeanCurrent15_7)
+                    data15_7.insert(6,MinCurrent15_7)
+                    data15_7.insert(7,MaxActivePower_7)
+                    data15_7.insert(8,MeanActivePower_7)
+                    data15_7.insert(9,MinActivePower_7)
+                    data15_7.insert(10,MaxReactivePower_7)
+                    data15_7.insert(11,MeanReactivePower_7)
+                    data15_7.insert(12,MinReactivePower_7)
+                    data15_7.insert(13,MaxAparentPower_7)
+                    data15_7.insert(14,MeanAparentPower_7)
+                    data15_7.insert(15,MinAparentPower_7)
+                    data15_7.insert(16,MaxFPInductive_7)
+                    data15_7.insert(17,MeanFPInductive_7)
+                    data15_7.insert(18,MinFPInductive_7)
+                    data15_7.insert(19,MaxFPReactive_7)
+                    data15_7.insert(20,MeanFPReactive_7)
+                    data15_7.insert(21,MinFPReactive_7)
+                    data15_7.insert(22,MaxFDVoltage_7)
+                    data15_7.insert(23,MeanFDVoltage_7)
+                    data15_7.insert(24,MinFDVoltage_7)
+                    data15_7.insert(25,MaxFDCurrent_7)
+                    data15_7.insert(26,MeanFDCurrent_7)
+                    data15_7.insert(27,MinFDCurrent_7)
+                    data15_7.insert(28,MaxDATVoltage_7)
+                    data15_7.insert(29,MeanDATVoltage_7)
+                    data15_7.insert(30,MinDATVoltage_7)
+                    data15_7.insert(31,MaxDATCurrent_7)
+                    data15_7.insert(32,MeanDATCurrent_7)
+                    data15_7.insert(33,MinDATCurrent_7)
+                    data15_7.insert(34,Energy)
+                    data15_7.insert(0,datetime.datetime.now())
+                    workbook=openpyxl.load_workbook(filename = dest_filename)
+                    sheet8 = workbook["Max Var 7"]
+                    sheet8.append(list(data15_7))
+                    print(f'Data 7: Guardando Promedios')
+                    #print("Datos Insertados Correctamente!")
+                    workbook.save(filename = dest_filename)
+                    data15_7=[]
+                    Volt15_7=[]
+                    Current15_7=[]
+                    ActivePower15_7=[]
+                    ReactivePower15_7=[]
+                    AparentPower15_7=[]
+                    FP15_Reactive_7=[]
+                    FP15_Inductive_7=[]
+                    FDVoltage15_7=[]
+                    FDCurrent15_7=[]
+                    DAT15Voltage_7=[]
+                    DAT15Current_7=[]
+               elif(Access_7==1):
+                    #print("paso elif 2")
+                    Volt15_7.append(Vrms)
+                    Current15_7.append(Irms)
+                    ActivePower15_7.append(ActivePower)
+                    ReactivePower15_7.append(ReactivePower)
+                    AparentPower15_7.append(AparentPower)
+                    if(FP>0.0):
+                          FP15_Reactive_7.append(FP)
+                    else: 
+                          FP15_Inductive_7.append(FP)
+                    FDVoltage15_7.append(FDVoltage)
+                    FDCurrent15_7.append(FDCurrent)
+                    DAT15Voltage_7.append(DATVoltage)
+                    DAT15Current_7.append(DATCurrent)          
+    else:
+        Volt15_7.append(Vrms)
+        Current15_7.append(Irms)
+        ActivePower15_7.append(ActivePower)
+        ReactivePower15_7.append(ReactivePower)
+        AparentPower15_7.append(AparentPower)
+        if(FP>0.0):
+              FP15_Reactive_7.append(FP)
+        else: 
+              FP15_Inductive_7.append(FP)
+        FDVoltage15_7.append(FDVoltage)
+        FDCurrent15_7.append(FDCurrent)
+        DAT15Voltage_7.append(DATVoltage)
+        DAT15Current_7.append(DATCurrent)
+        Access_7 = 0
+        
+        if(len(Volt15_7)>2):
+            indice=np.argmin(Volt15_7)
+            Volt15_7.pop(indice)
+            ##print(f'Volt152 Despúes: {Volt152}')
+            indice=np.argmin(Current15_7)
+            Current15_7.pop(indice)
+            indice=np.argmin(ActivePower15_7)
+            ActivePower15_7.pop(indice)
+            indice=np.argmin(ReactivePower15_7)
+            ReactivePower15_7.pop(indice)
+            indice=np.argmin(AparentPower15_7)
+            AparentPower15_7.pop(indice)
+            if(len(FP15_Reactive_7)>=2):
+                indice=np.argmax(FP15_Reactive_7)
+                FP15_Reactive_7.pop(indice)
+            if(len(FP15_Inductive_7)>=2):
+                indice=np.argmin(FP15_Inductive_7)
+                FP15_Inductive_7.pop(indice)
+            indice=np.argmin(FDVoltage15_7)
+            FDVoltage15_7.pop(indice)
+            indice=np.argmin(FDCurrent15_7)
+            FDCurrent15_7.pop(indice)
+            indice=np.argmin(DAT15Voltage_7)
+            DAT15Voltage_7.pop(indice)
+            indice=np.argmin(DAT15Current_7)
+            DAT15Current_7.pop(indice)
+
+Access_8 = 0
+MaxVoltage15_8=0.0
+MeanVoltage15_8=0.0
+MinVoltage15_8=0.0
+MaxCurrent15_8=0.0
+MeanCurrent15_8=0.0
+MinCurrent15_8=0.0
+MaxActivePower_8=0.0
+MeanActivePower_8=0.0
+MinActivePower_8=0.0
+MaxReactivePower_8=0.0
+MeanReactivePower_8=0.0
+MinReactivePower_8=0.0
+MaxAparentPower_8=0.0
+MeanAparentPower_8=0.0
+MinAparentPower_8=0.0
+MaxFPInductive_8=-0.99
+MeanFPInductive_8=-0.99
+MinFPInductive_8=-0.99
+MaxFPReactive_8=0.99
+MeanFPReactive_8=0.99
+MinFPReactive_8=0.99
+MaxFD_8=0.0
+MeanFD_8=0.0
+MinFD_8=0.0
+MaxDAT_8=0.0
+MeanDAT_8=0.0
+MinDAT_8=0.0
+Volt15_8=[]
+data15_8=[]
+Current15_8=[]
+ActivePower15_8=[]
+ReactivePower15_8=[]
+AparentPower15_8=[]
+FP15_Reactive_8=[]
+FP15_Inductive_8=[]
+FDVoltage15_8=[]
+FDCurrent15_8=[]
+DAT15Voltage_8=[]
+DAT15Current_8=[]
+def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+    global data15_8
+    global Volt15_8
+    global data15_8
+    global Current15_8
+    global ActivePower15_8
+    global ReactivePower15_8
+    global AparentPower15_8
+    global FP15_Reactive_8
+    global FP15_Inductive_8
+    global FDVoltage15_8
+    global FDCurrent15_8
+    global DAT15Voltage_8
+    global DAT15Current_8
+    global Access_8
+    basea = datetime.datetime.now()
+    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
+               if(Access_8 == 0):
+                    #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
+                    Access_8 = 1
+                    MaxVoltage15_8=max(Volt15_8)
+                    MeanVoltage15_8=np.median(Volt15_8)
+                    MinVoltage15_8=min(Volt15_8)
+                    MaxCurrent15_8=max(Current15_8)
+                    MeanCurrent15_8=np.median(Current15_8)
+                    MinCurrent15_8=min(Current15_8)
+                    MaxActivePower_8=max(ActivePower15_8)
+                    MeanActivePower_8=np.median(ActivePower15_8)
+                    MinActivePower_8=min(ActivePower15_8)
+                    MaxReactivePower_8=max(ReactivePower15_8)
+                    MeanReactivePower_8=np.median(ReactivePower15_8)
+                    MinReactivePower_8=min(ReactivePower15_8)
+                    MaxAparentPower_8=max(AparentPower15_8)
+                    MeanAparentPower_8=np.median(AparentPower15_8)
+                    MinAparentPower_8=min(AparentPower15_8)
+                    if(len(FP15_Inductive_8)>0):
+                           MaxFPInductive_8=max(FP15_Inductive_8)
+                           MeanFPInductive_8=np.median(FP15_Inductive_8)
+                           MinFPInductive_8=min(FP15_Inductive_8)
+                    else:
+                           MaxFPInductive_8=-0.59
+                           MeanFPInductive_8=-0.99
+                           MinFPInductive_8=-0.99
+                    if(len(FP15_Reactive_8)>0):
+                           MaxFPReactive_8=max(FP15_Reactive_8)
+                           MeanFPReactive_8=np.median(FP15_Reactive_8)
+                           MinFPReactive_8=min(FP15_Reactive_8)
+                    else:
+                           MaxFPReactive_8=0.99
+                           MeanFPReactive_8=0.99
+                           MinFPReactive_8=0.99
+                    MaxFDVoltage_8=max(FDVoltage15_8)
+                    MeanFDVoltage_8=np.median(FDVoltage15_8)
+                    MinFDVoltage_8=min(FDVoltage15_8)
+                    MaxFDCurrent_8=max(FDCurrent15_8)
+                    MeanFDCurrent_8=np.median(FDCurrent15_8)
+                    MinFDCurrent_8=min(FDCurrent15_8)
+                    MaxDATVoltage_8=max(DAT15Volt8ge_8)
+                    MeanDATVoltage_8=np.median(DAT15Voltage_8)
+                    MinDATVoltage_8=min(DAT15Voltage_8)
+                    MaxDATCurrent_8=max(DAT15Current_8)
+                    MeanDATCurrent_8=np.median(DAT15Current_8)
+                    MinDATCurrent_8=min(DAT15Current_8)
+                    data15_8.insert(1,MaxVoltage15_8)
+                    data15_8.insert(2,MeanVoltage15_8)
+                    data15_8.insert(3,MinVoltage15_8)
+                    data15_8.insert(4,MaxCurrent15_8)
+                    data15_8.insert(5,MeanCurrent15_8)
+                    data15_8.insert(6,MinCurrent15_8)
+                    data15_8.insert(7,MaxActivePower_8)
+                    data15_8.insert(8,MeanActivePower_8)
+                    data15_8.insert(9,MinActivePower_8)
+                    data15_8.insert(10,MaxReactivePower_8)
+                    data15_8.insert(11,MeanReactivePower_8)
+                    data15_8.insert(12,MinReactivePower_8)
+                    data15_8.insert(13,MaxAparentPower_8)
+                    data15_8.insert(14,MeanAparentPower_8)
+                    data15_8.insert(15,MinAparentPower_8)
+                    data15_8.insert(16,MaxFPInductive_8)
+                    data15_8.insert(17,MeanFPInductive_8)
+                    data15_8.insert(18,MinFPInductive_8)
+                    data15_8.insert(19,MaxFPReactive_8)
+                    data15_8.insert(20,MeanFPReactive_8)
+                    data15_5.insert(21,MinFPReactive_8)
+                    data15_8.insert(22,MaxFDVoltage_8)
+                    data15_8.insert(23,MeanFDVoltage_8)
+                    data15_8.insert(24,MinFDVoltage_8)
+                    data15_8.insert(25,MaxFDCurrent_8)
+                    data15_8.insert(26,MeanFDCurrent_8)
+                    data15_8.insert(27,MinFDCurrent_8)
+                    data15_8.insert(28,MaxDATVoltage_8)
+                    data15_8.insert(29,MeanDATVoltage_8)
+                    data15_8.insert(30,MinDATVoltage_8)
+                    data15_8.insert(31,MaxDATCurrent_8)
+                    data15_8.insert(32,MeanDATCurrent_8)
+                    data15_8.insert(33,MinDATCurrent_8)
+                    data15_8.insert(34,Energy)
+                    data15_8.insert(0,datetime.datetime.now())
+                    workbook=openpyxl.load_workbook(filename = dest_filename)
+                    sheet9 = workbook["Max Var 8"]
+                    sheet9.append(list(data15_8))
+                    print(f'Data 8: Guardando Promedios')
+                    #print("Datos Insertados Correctamente!")
+                    workbook.save(filename = dest_filename)
+                    data15_8=[]
+                    Volt15_8=[]
+                    Current15_8=[]
+                    ActivePower15_8=[]
+                    ReactivePower15_8=[]
+                    AparentPower15_8=[]
+                    FP15_Reactive_8=[]
+                    FP15_Inductive_8=[]
+                    FDVoltage15_8=[]
+                    FDCurrent15_8=[]
+                    DAT15Voltage_8=[]
+                    DAT15Current_8=[]
+               elif(Access_8==1):
+                    #print("paso elif 2")
+                    Volt15_8.append(Vrms)
+                    Current15_8.append(Irms)
+                    ActivePower15_8.append(ActivePower)
+                    ReactivePower15_8.append(ReactivePower)
+                    AparentPower15_8.append(AparentPower)
+                    if(FP>0.0):
+                          FP15_Reactive_8.append(FP)
+                    else: 
+                          FP15_Inductive_8.append(FP)
+                    FDVoltage15_8.append(FDVoltage)
+                    FDCurrent15_8.append(FDCurrent)
+                    DAT15Voltage_8.append(DATVoltage)
+                    DAT15Current_8.append(DATCurrent)            
+    else:
+        Volt15_8.append(Vrms)
+        Current15_8.append(Irms)
+        ActivePower15_8.append(ActivePower)
+        ReactivePower15_8.append(ReactivePower)
+        AparentPower15_8.append(AparentPower)
+        if(FP>0.0):
+              FP15_Reactive_8.append(FP)
+        else: 
+              FP15_Inductive_8.append(FP)
+        FDVoltage15_8.append(FDVoltage)
+        FDCurrent15_8.append(FDCurrent)
+        DAT15Voltage_8.append(DATVoltage)
+        DAT15Current_8.append(DATCurrent)
+        Access_8 = 0       
+        if(len(Volt15_8)>2):
+            indice=np.argmin(Volt15_8)
+            Volt15_8.pop(indice)
+            indice=np.argmin(Current15_8)
+            Current15_8.pop(indice)
+            indice=np.argmin(ActivePower15_8)
+            ActivePower15_8.pop(indice)
+            indice=np.argmin(ReactivePower15_8)
+            ReactivePower15_8.pop(indice)
+            indice=np.argmin(AparentPower15_8)
+            AparentPower15_8.pop(indice)
+            if(len(FP15_Reactive_8)>=2):
+                indice=np.argmax(FP15_Reactive_8)
+                FP15_Reactive_8.pop(indice)
+            if(len(FP15_Inductive_8)>=2):
+                indice=np.argmin(FP15_Inductive_8)
+                FP15_Inductive_8.pop(indice)
+            indice=np.argmin(FDVoltage15_8)
+            FDVoltage15_8.pop(indice)
+            indice=np.argmin(FDCurrent15_8)
+            FDCurrent15_8.pop(indice)
+            indice=np.argmin(DAT15Voltage_8)
+            DAT15Voltage_8.pop(indice)
+            indice=np.argmin(DAT15Current_8)
+            DAT15Current_8.pop(indice)
+
+Access_6 = 0
+MaxVoltage15_6=0.0
+MeanVoltage15_6=0.0
+MinVoltage15_6=0.0
+MaxCurrent15_6=0.0
+MeanCurrent15_6=0.0
+MinCurrent15_6=0.0
+MaxActivePower_6=0.0
+MeanActivePower_6=0.0
+MinActivePower_6=0.0
+MaxReactivePower_6=0.0
+MeanReactivePower_6=0.0
+MinReactivePower_6=0.0
+MaxAparentPower_6=0.0
+MeanAparentPower_6=0.0
+MinAparentPower_6=0.0
+MaxFPInductive_6=-0.99
+MeanFPInductive_6=-0.99
+MinFPInductive_6=-0.99
+MaxFPReactive_6=0.99
+MeanFPReactive_6=0.99
+MinFPReactive_6=0.99
+MaxFD_6=0.0
+MeanFD_6=0.0
+MinFD_6=0.0
+MaxDAT_6=0.0
+MeanDAT_6=0.0
+MinDAT_6=0.0
+Volt15_6=[]
+data15_6=[]
+Current15_6=[]
+ActivePower15_6=[]
+ReactivePower15_6=[]
+AparentPower15_6=[]
+FP15_Reactive_6=[]
+FP15_Inductive_6=[]
+FDVoltage15_6=[]
+FDCurrent15_6=[]
+DAT15Voltage_6=[]
+DAT15Current_6=[]
+def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+    global data15_6
+    global Volt15_6
+    global data15_6
+    global Current15_6
+    global ActivePower15_6
+    global ReactivePower15_6
+    global AparentPower15_6
+    global FP15_Reactive_6
+    global FP15_Inductive_6
+    global FDVoltage15_6
+    global FDCurrent15_6
+    global DAT15Voltage_6
+    global DAT15Current_6
+    global Access_6
+    basea = datetime.datetime.now()
+    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
+               if(Access_6 == 0):
+                    #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
+                    Access_6 = 1
+                    MaxVoltage15_6=max(Volt15_6)
+                    MeanVoltage15_6=np.median(Volt15_6)
+                    MinVoltage15_6=min(Volt15_6)
+                    MaxCurrent15_6=max(Current15_6)
+                    MeanCurrent15_6=np.median(Current15_6)
+                    MinCurrent15_6=min(Current15_6)
+                    MaxActivePower_6=max(ActivePower15_6)
+                    MeanActivePower_6=np.median(ActivePower15_6)
+                    MinActivePower_6=min(ActivePower15_6)
+                    MaxReactivePower_6=max(ReactivePower15_6)
+                    MeanReactivePower_6=np.median(ReactivePower15_6)
+                    MinReactivePower_6=min(ReactivePower15_6)
+                    MaxAparentPower_6=max(AparentPower15_6)
+                    MeanAparentPower_6=np.median(AparentPower15_6)
+                    MinAparentPower_6=min(AparentPower15_6)
+                    if(len(FP15_Inductive_6)>0):
+                           MaxFPInductive_6=max(FP15_Inductive_6)
+                           MeanFPInductive_6=np.median(FP15_Inductive_6)
+                           MinFPInductive_6=min(FP15_Inductive_6)
+                    else:
+                           MaxFPInductive_6=-0.59
+                           MeanFPInductive_6=-0.99
+                           MinFPInductive_6=-0.99
+                    if(len(FP15_Reactive_6)>0):
+                           MaxFPReactive_6=max(FP15_Reactive_6)
+                           MeanFPReactive_6=np.median(FP15_Reactive_6)
+                           MinFPReactive_6=min(FP15_Reactive_6)
+                    else:
+                           MaxFPReactive_6=0.99
+                           MeanFPReactive_6=0.99
+                           MinFPReactive_6=0.99
+                    MaxFDVoltage_6=max(FDVoltage15_6)
+                    MeanFDVoltage_6=np.median(FDVoltage15_6)
+                    MinFDVoltage_6=min(FDVoltage15_6)
+                    MaxFDCurrent_6=max(FDCurrent15_6)
+                    MeanFDCurrent_6=np.median(FDCurrent15_6)
+                    MinFDCurrent_6=min(FDCurrent15_6)
+                    MaxDATVoltage_6=max(DAT15Voltage_6)
+                    MeanDATVoltage_6=np.median(DAT15Voltage_6)
+                    MinDATVoltage_6=min(DAT15Voltage_6)
+                    MaxDATCurrent_6=max(DAT15Current_6)
+                    MeanDATCurrent_6=np.median(DAT15Current_6)
+                    MinDATCurrent_6=min(DAT15Current_6)
+                    data15_6.insert(1,MaxVoltage15_6)
+                    data15_6.insert(2,MeanVoltage15_6)
+                    data15_6.insert(3,MinVoltage15_6)
+                    data15_6.insert(4,MaxCurrent15_6)
+                    data15_6.insert(5,MeanCurrent15_6)
+                    data15_6.insert(6,MinCurrent15_6)
+                    data15_6.insert(7,MaxActivePower_6)
+                    data15_6.insert(8,MeanActivePower_6)
+                    data15_6.insert(9,MinActivePower_6)
+                    data15_6.insert(10,MaxReactivePower_6)
+                    data15_6.insert(11,MeanReactivePower_6)
+                    data15_6.insert(12,MinReactivePower_6)
+                    data15_6.insert(13,MaxAparentPower_6)
+                    data15_6.insert(14,MeanAparentPower_6)
+                    data15_6.insert(15,MinAparentPower_6)
+                    data15_6.insert(16,MaxFPInductive_6)
+                    data15_6.insert(17,MeanFPInductive_6)
+                    data15_6.insert(18,MinFPInductive_6)
+                    data15_6.insert(19,MaxFPReactive_6)
+                    data15_6.insert(20,MeanFPReactive_6)
+                    data15_6.insert(21,MinFPReactive_6)
+                    data15_6.insert(22,MaxFDVoltage_6)
+                    data15_6.insert(23,MeanFDVoltage_6)
+                    data15_6.insert(24,MinFDVoltage_6)
+                    data15_6.insert(25,MaxFDCurrent_6)
+                    data15_6.insert(26,MeanFDCurrent_6)
+                    data15_6.insert(27,MinFDCurrent_6)
+                    data15_6.insert(28,MaxDATVoltage_6)
+                    data15_6.insert(29,MeanDATVoltage_6)
+                    data15_6.insert(30,MinDATVoltage_6)
+                    data15_6.insert(31,MaxDATCurrent_6)
+                    data15_6.insert(32,MeanDATCurrent_6)
+                    data15_6.insert(33,MinDATCurrent_6)
+                    data15_6.insert(34,Energy)
+                    data15_6.insert(0,datetime.datetime.now())
+                    workbook=openpyxl.load_workbook(filename = dest_filename)
+                    sheet7 = workbook["Max Var 6"]
+                    sheet7.append(list(data15_6))
+                    print(f'Data 6: Guardando Promedios')
+                    #print("Datos Insertados Correctamente!")
+                    workbook.save(filename = dest_filename)
+                    data15_6=[]
+                    Volt15_6=[]
+                    Current15_6=[]
+                    ActivePower15_6=[]
+                    ReactivePower15_6=[]
+                    AparentPower15_6=[]
+                    FP15_Reactive_6=[]
+                    FP15_Inductive_6=[]
+                    FDVoltage15_6=[]
+                    FDCurrent15_6=[]
+                    DAT15Voltage_6=[]
+                    DAT15Current_6=[]
+               elif(Access_6==1):
+                    #print("paso elif 2")
+                    Volt15_6.append(Vrms)
+                    Current15_6.append(Irms)
+                    ActivePower15_6.append(ActivePower)
+                    ReactivePower15_6.6ppend(ReactivePower)
+                    AparentPower15_6.append(AparentPower)
+                    if(FP>0.0):
+                          FP15_Reactive_6.append(FP)
+                    else: 
+                          FP15_Inductive_6.append(FP)
+                    FDVoltage15_6.append(FDVoltage)
+                    FDCurrent15_6.append(FDCurrent)
+                    DAT15Voltage_6.append(DATVoltage)
+                    DAT15Current_6.append(DATCurrent)
+              
+    else:
+        Volt15_6.append(Vrms)
+        Current15_6.append(Irms)
+        ActivePower15_6.append(ActivePower)
+        ReactivePower15_6.append(ReactivePower)
+        AparentPower15_6.append(AparentPower)
+        if(FP>0.0):
+              FP15_Reactive_6.append(FP)
+        else: 
+              FP15_Inductive_6.append(FP)
+        FDVoltage15_6.append(FDVoltage)
+        FDCurrent15_6.append(FDCurrent)
+        DAT15Voltage_6.append(DATVoltage)
+        DAT15Current_6.append(DATCurrent)
+        Access_6 = 0
+        
+        if(len(Volt15_6)>2):
+            indice=np.argmin(Volt15_6)
+            Volt15_6.pop(indice)
+            ##print(f'Volt152 Despúes: {Volt152}')
+            indice=np.argmin(Current15_6)
+            Current15_6.pop(indice)
+            indice=np.argmin(ActivePower15_6)
+            ActivePower15_6.pop(indice)
+            indice=np.argmin(ReactivePower15_6)
+            ReactivePower15_6.pop(indice)
+            indice=np.argmin(AparentPower15_6)
+            AparentPower15_6.pop(indice)
+            if(len(FP15_Reactive_6)>=2):
+                indice=np.argmax(FP15_Reactive_6)
+                FP15_Reactive_6.pop(indice)
+            if(len(FP15_Inductive_6)>=2):
+                indice=np.argmin(FP15_Inductive_6)
+                FP15_Inductive_6.pop(indice)
+            indice=np.argmin(FDVoltage15_6)
+            FDVoltage15_6.pop(indice)
+            indice=np.argmin(FDCurrent15_6)
+            FDCurrent15_6.pop(indice)
+            indice=np.argmin(DAT15Voltage_6)
+            DAT15Voltage_6.pop(indice)
+            indice=np.argmin(DAT15Current_6)
+            DAT15Current_6.pop(indice)
+
+Access_9 = 0
+MaxVoltage15_9=0.0
+MeanVoltage15_9=0.0
+MinVoltage15_9=0.0
+MaxCurrent15_9=0.0
+MeanCurrent15_9=0.0
+MinCurrent15_9=0.0
+MaxActivePower_9=0.0
+MeanActivePower_9=0.0
+MinActivePower_9=0.0
+MaxReactivePower_9=0.0
+MeanReactivePower_9=0.0
+MinReactivePower_9=0.0
+MaxAparentPower_9=0.0
+MeanAparentPower_9=0.0
+MinAparentPower_9=0.0
+MaxFPInductive_9=-0.99
+MeanFPInductive_9=-0.99
+MinFPInductive_9=-0.99
+MaxFPReactive_9=0.99
+MeanFPReactive_9=0.99
+MinFPReactive_9=0.99
+MaxFD_9=0.0
+MeanFD_9=0.0
+MinFD_9=0.0
+MaxDAT_9=0.0
+MeanDAT_9=0.0
+MinDAT_9=0.0
+Volt15_9=[]
+data15_9=[]
+Current15_9=[]
+ActivePower15_9=[]
+ReactivePower15_9=[]
+AparentPower15_9=[]
+FP15_Reactive_9=[]
+FP15_Inductive_9=[]
+FDVoltage15_9=[]
+FDCurrent15_9=[]
+DAT15Voltage_9=[]
+DAT15Current_9=[]
+def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+    global data15_9
+    global Volt15_9
+    global data15_9
+    global Current15_9
+    global ActivePower15_9
+    global ReactivePower15_9
+    global AparentPower15_9
+    global FP15_Reactive_9
+    global FP15_Inductive_9
+    global FDVoltage15_9
+    global FDCurrent15_9
+    global DAT15Voltage_9
+    global DAT15Current_9
+    global Access_9
+    basea = datetime.datetime.now()
+    if(basea.minute==0 or basea.minute==15 or basea.minute==30 or basea.minute==45): 
+               if(Access_9 == 0):
+                    #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
+                    Access_9 = 1
+                    MaxVoltage15_9=max(Volt15_9)
+                    MeanVoltage15_9=np.median(Volt15_9)
+                    MinVoltage15_9=min(Volt15_9)
+                    MaxCurrent15_9=max(Current15_9)
+                    MeanCurrent15_4=np.median(Current15_9)
+                    MinCurrent15_9=min(Current15_9)
+                    MaxActivePower_9=max(ActivePower15_9)
+                    MeanActivePower_9=np.median(ActivePower15_9)
+                    MinActivePower_9=min(ActivePower15_9)
+                    MaxReactivePower_9=max(ReactivePower15_9)
+                    MeanReactivePower_9=np.median(ReactivePower15_9)
+                    MinReactivePower_9=min(ReactivePower15_9)
+                    MaxAparentPower_9=max(AparentPower15_9)
+                    MeanAparentPower_9=np.median(AparentPower15_9)
+                    MinAparentPower_9=min(AparentPower15_9)
+                    if(len(FP15_Inductive_9)>0):
+                           MaxFPInductive_9=max(FP15_Inductive_9)
+                           MeanFPInductive_9=np.median(FP15_Inductive_9)
+                           MinFPInductive_9=min(FP15_Inductive_9)
+                    else:
+                           MaxFPInductive_9=-0.99
+                           MeanFPInductive_9=-0.99
+                           MinFPInductive_9=-0.99
+                    if(len(FP15_Reactive_9)>0):
+                           MaxFPReactive_9=max(FP15_Reactive_9)
+                           MeanFPReactive_9=np.median(FP15_Reactive_9)
+                           MinFPReactive_9=min(FP15_Reactive_9)
+                    else:
+                           MaxFPReactive_9=0.99
+                           MeanFPReactive_9=0.99
+                           MinFPReactive_9=0.99
+                    MaxFDVoltage_9=max(FDVoltage15_9)
+                    MeanFDVoltage_9=np.median(FDVoltage15_9)
+                    MinFDVoltage_9=min(FDVoltage15_9)
+                    MaxFDCurrent_9=max(FDCurrent15_9)
+                    MeanFDCurrent_9=np.median(FDCurrent15_9)
+                    MinFDCurrent_9=min(FDCurrent15_9)
+                    MaxDATVoltage_9=max(DAT15Voltage_9)
+                    MeanDATVoltage_9=np.median(DAT15Voltage_9)
+                    MinDATVoltage_9=min(DAT15Voltage_9)
+                    MaxDATCurrent_9=max(DAT15Current_9)
+                    MeanDATCurrent_9=np.median(DAT15Current_9)
+                    MinDATCurrent_9=min(DAT15Current_9)
+                    data15_9.insert(1,MaxVoltage15_9)
+                    data15_9.insert(2,MeanVoltage15_9)
+                    data15_9.insert(3,MinVoltage15_9)
+                    data15_9.insert(4,MaxCurrent15_9)
+                    data15_9.insert(5,MeanCurrent15_9)
+                    data15_9.insert(6,MinCurrent15_9)
+                    data15_9.insert(7,MaxActivePower_9)
+                    data15_9.insert(8,MeanActivePower_9)
+                    data15_9.insert(9,MinActivePower_9)
+                    data15_9.insert(10,MaxReactivePower_9)
+                    data15_9.insert(11,MeanReactivePower_9)
+                    data15_9.insert(12,MinReactivePower_9)
+                    data15_9.insert(13,MaxAparentPower_9)
+                    data15_9.insert(14,MeanAparentPower_9)
+                    data15_9.insert(15,MinAparentPower_9)
+                    data15_9.insert(16,MaxFPInductive_9)
+                    data15_9.insert(17,MeanFPInductive_9)
+                    data15_9.insert(18,MinFPInductive_9)
+                    data15_9.insert(19,MaxFPReactive_9)
+                    data15_9.insert(20,MeanFPReactive_9)
+                    data15_9.insert(21,MinFPReactive_9)
+                    data15_9.insert(22,MaxFDVoltage_9)
+                    data15_9.insert(23,MeanFDVoltage_9)
+                    data15_9.insert(24,MinFDVoltage_9)
+                    data15_9.insert(25,MaxFDCurrent_9)
+                    data15_9.insert(26,MeanFDCurrent_9)
+                    data15_9.insert(27,MinFDCurrent_9)
+                    data15_9.insert(28,MaxDATVoltage_9)
+                    data15_9.insert(29,MeanDATVoltage_9)
+                    data15_9.insert(30,MinDATVoltage_9)
+                    data15_9.insert(31,MaxDATCurrent_9)
+                    data15_9.insert(32,MeanDATCurrent_9)
+                    data15_9.insert(33,MinDATCurrent_9)
+                    data15_9.insert(34,Energy)
+                    data15_9.insert(0,datetime.datetime.now())
+                    workbook=openpyxl.load_workbook(filename = dest_filename)
+                    sheet10 = workbook["Max Var 9"]
+                    sheet10.append(list(data15_9))
+                    print(f'Data 9: Guardando Promedios')
+                    #print("Datos Insertados Correctamente!")
+                    workbook.save(filename = dest_filename)
+                    data15_9=[]
+                    Volt15_9=[]
+                    Current15_9=[]
+                    ActivePower15_9=[]
+                    ReactivePower15_9=[]
+                    AparentPower15_9=[]
+                    FP15_Reactive_9=[]
+                    FP15_Inductive_9=[]
+                    FDVoltage15_9=[]
+                    FDCurrent15_9=[]
+                    DAT15Voltage_9=[]
+                    DAT15Current_9=[]
+               elif(Access_9==1):
+                    #print("paso elif 2")
+                    Volt15_9.append(Vrms)
+                    Current15_9.append(Irms)
+                    ActivePower15_9.append(ActivePower)
+                    ReactivePower15_9.append(ReactivePower)
+                    AparentPower15_9.append(AparentPower)
+                    if(FP>0.0):
+                          FP15_Reactive_9.append(FP)
+                    else: 
+                          FP15_Inductive_9.append(FP)
+                    FDVoltage15_9.append(FDVoltage)
+                    FDCurrent15_9.append(FDCurrent)
+                    DAT15Voltage_9.append(DATVoltage)
+                    DAT15Current_9.append(DATCurrent)
+              
+    else:
+        Volt15_9.append(Vrms)
+        Current15_9.append(Irms)
+        ActivePower15_9.append(ActivePower)
+        ReactivePower15_9.append(ReactivePower)
+        AparentPower15_9.append(AparentPower)
+        if(FP>0.0):
+              FP15_Reactive_9.append(FP)
+        else: 
+              FP15_Inductive_9.append(FP)
+        FDVoltage15_9.append(FDVoltage)
+        FDCurrent15_9.append(FDCurrent)
+        DAT15Voltage_9.append(DATVoltage)
+        DAT15Current_9.append(DATCurrent)
+        Access_9 = 0
+        
+        if(len(Volt15_9)>2):
+            indice=np.argmin(Volt15_9)
+            Volt15_9.pop(indice)
+            ##print(f'Volt152 Despúes: {Volt152}')
+            indice=np.argmin(Current15_9)
+            Current15_9.pop(indice)
+            indice=np.argmin(ActivePower15_9)
+            ActivePower15_9.pop(indice)
+            indice=np.argmin(ReactivePower15_9)
+            ReactivePower15_9.pop(indice)
+            indice=np.argmin(AparentPower15_9)
+            AparentPower15_9.pop(indice)
+            if(len(FP15_Reactive_9)>=2):
+                indice=np.argmax(FP15_Reactive_9)
+                FP15_Reactive_4.pop(indice)
+            if(len(FP15_Inductive_9)>=2):
+                indice=np.argmin(FP15_Inductive_9)
+                FP15_Inductive_9.pop(indice)
+            indice=np.argmin(FDVoltage15_9)
+            FDVoltage15_9pop(indice)
+            indice=np.argmin(FDCurrent15_9)
+            FDCurrent15_9.pop(indice)
+            indice=np.argmin(DAT15Voltage_9)
+            DAT15Voltage_9.pop(indice)
+            indice=np.argmin(DAT15Current_9)
+            DAT15Current_9.pop(indice)
 
 def excelcreate():
     global dest_filename
@@ -1882,14 +3524,13 @@ def AbrirExcel():
 AbrirExcel()
 
 
-def VariablesExcel():
-       global dataVariablesAll                      
+def VariablesBasicas(Temp_Raspberry,cpu_uso,RAM,tempESP32):                   
        workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet1 = workbook["Variables Raspberry"]
-       dataVariablesAll.insert(0,datetime.datetime.now())
-       sheet1.append(list(dataVariablesAll))
+       sheet1 = workbook["Var 0"]
+       Data=[datetime.datetime.now(),round(Temp_Raspberry,1), round(cpu_uso,1), round(RAM,1), round(tempESP32,2)]
+       sheet1.append(list(Data))
        workbook.save(filename = dest_filename)
-       dataVariablesAll=[]
+       Data=[]
 
 def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i):
        Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
@@ -1930,43 +3571,6 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
 
 
 
-
-
-def SaveDataCsv15(Data):
-       workbook=openpyxl.load_workbook(filename = dest_filename)
-       print("Tipo i: ", type(i))
-       if(i==2):
-             sheet2 = workbook["Var 1"]
-             sheet2.append(list(Data))
-       elif(i==3):
-             sheet3 = workbook["Var 2"]
-             sheet3.append(list(Data))
-       elif(i==4):
-             sheet4 = workbook["Var 3"]
-             sheet4.append(list(Data))
-       elif(i==5):
-             sheet5 = workbook["Var 4"]
-             sheet5.append(list(Data))
-       elif(i==6):
-             sheet6 = workbook["Var 5"]
-             sheet6.append(list(Data))
-       elif(i==7):
-             sheet7 = workbook["Var 6"]
-             sheet7.append(list(Data))
-       elif(i==8):
-             sheet8 = workbook["Var 7"]
-             sheet8.append(list(Data))
-       elif(i==9):
-             sheet9 = workbook["Var 8"]
-             sheet9.append(list(Data))
-       elif(i==10):
-             sheet10 = workbook["Var 9"]
-             sheet10.append(list(Data))
-       
-       
-       workbook.save(filename = dest_filename)
-       Data=[]
-
 def ExcelData_15():                       
        workbook=openpyxl.load_workbook(filename = dest_filename)
        sheet2 = workbook["CGE Maximos 15 Min"]
@@ -1986,41 +3590,6 @@ def ExcelData15_1():
        #print("Datos Insertados Correctamente!")
        workbook.save(filename = dest_filename)
        data15_1All=[]
-
-def ExcelData15_115():
-       global data15_1
-       workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet3 = workbook["2 Maximos 15 Min"]
-       data15_1.insert(0,datetime.datetime.now())
-       sheet3.append(list(data15_1))
-       #print(f'Data 2: {data15_1}')
-       #print("Datos Insertados Correctamente!")
-       workbook.save(filename = dest_filename)
-       data15_1=[]
-     
-def ExcelDataPaneles():
-       global dataPanelesAll       
-       workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet7 = workbook["Paneles"]
-       dataPanelesAll.insert(0,datetime.datetime.now())
-       sheet7.append(list(dataPanelesAll))
-       #print(f'Numero de filas de paneles: {len(sheet7["FP"])} ')
-       #print(f'Data paneles: {dataPaneles}')
-       #print("Datos Insertados Correctamente!")
-       workbook.save(filename = dest_filename)
-       dataPanelesAll=[]
-
-def ExcelDataPaneles15():
-       global dataPaneles       
-       workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet4 = workbook["Paneles Maximos 15 Min"]
-       dataPaneles.insert(0,datetime.datetime.now())
-       sheet4.append(list(dataPaneles))
-       #print(f'Data paneles: {dataPaneles}')
-       #print("Datos Insertados Correctamente!")
-       workbook.save(filename = dest_filename)
-       dataPaneles=[]
-
 
 
 
@@ -2215,27 +3784,19 @@ def received():
                            TomaDatos(list_Voltage,list_Current,samplings,i)
                  
                  if (len(np_array)>0 and len(np_array)<=2):
-                         global tempESP32
-                         global Temp_Raspberry
-                         global Temp_Raspberry0
-                         global cpu_uso
-                         global RAM
-                         global RAM1
-                         global reinicio
-                         Temp_Raspberry0=cpu_temp()
+                         Temp_Raspberry=cpu_temp()
                          cpu_uso=get_cpuload()
-                         #str_num = {"value":Temp_Raspberry0,"save":0}
-                         Temp_Raspberry = json.dumps(str_num)
-                         Ventilador()
+                         tempESP32 = round(np_array[0],0)
                          RAM = psutil.virtual_memory()[2]
-                         #dataAllVariables()
-                         #VariablesExcel()
+                         VariablesBasicas(Temp_Raspberry,cpu_uso,RAM,tempESP32)
                          if (RAM > 93):
                               os.system("sudo reboot")
+                         #Temp_Raspberry_JSON = json.dumps(str_num)
+                         #Ventilador()
                          #temphum()
                          #distance()
-                         tempESP320 = round(np_array[0],0)
                          #str_num2 = {"value":tempESP320,"save":0}
+                         #str_num = {"value":Temp_Raspberry0,"save":0}
                          #tempESP32 = json.dumps(str_num2)
                          
 
