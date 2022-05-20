@@ -559,16 +559,16 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FP_2=FP
                  DATCurrent_2=DATCurrent
                  FDCurrent2=FDCurrent
-                 FDCurrentJson2 = json.dumps(str_num_FD)  
-                 DATCurrentJson2 = json.dumps(str_num_DAT)  
+                 FDCurrentJson2 = json.dumps(str_num_FD_Current)  
+                 DATCurrentJson2 = json.dumps(str_num_DAT_Current)  
                  FPCurrentJson2 = json.dumps(str_num_FP)            
              elif (p == 3):
                  CosPhi_3=CosPhi
                  FP_3=FP
                  DATCurrent_3=DATCurrent
                  FDCurrent_3=FDCurrent
-                 FDCurrentJson3 = json.dumps(str_num_FD)  
-                 DATCurrentJson3 = json.dumps(str_num_DAT)
+                 FDCurrentJson3 = json.dumps(str_num_FD_Current)  
+                 DATCurrentJson3 = json.dumps(str_num_DAT_Current)
                  FPCurrentJson3 = json.dumps(str_num_FP)              
              elif (p == 4):
                  CosPhi_4=CosPhi
@@ -3774,7 +3774,7 @@ def received():
                      continue
                  np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')   
                  if (len(np_array) == 8402):
-                       if (np_array[0] == 11):
+                       if (np_array[0] == 11 or np_array[0] == 22 or np_array[0] == 33):
                            if (np_array[0] == 11):
                                i = 1
                            elif (np_array[0] == 22):
