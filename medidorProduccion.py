@@ -723,7 +723,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_1 = AparentPower
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
-        print(" i2 : ", i)
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i)
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1)
     elif (i == 2):
@@ -735,7 +734,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_2 = AparentPower
         ActivePower_2 = ActivePower
         ReactivePower_2 = ReactivePower 
-        print(" i2 : ", i)
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i)
         Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2)       
     elif (i == 3):
@@ -747,7 +745,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_3 = AparentPower
         ActivePower_3 = ActivePower
         ReactivePower_3 = ReactivePower
-        print(" i2 : ", i)
         SaveDataCsv(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,CosPhi_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3,OneHourEnergy_3,i)
         Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3)             
     elif (i == 4):
@@ -800,7 +797,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         Energy_8 += np.abs(ActivePower*delta*2.9)
         OneHourEnergy_8 += np.abs(ActivePower*delta*2.9)
         Time8a = datetime.datetime.now()
-        AparentPower_8 = AparentPowe7
+        AparentPower_8 = AparentPower
         ActivePower_8 = ActivePower
         ReactivePower_8 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_8,ReactivePower_8,AparentPower_8,FP_8,CosPhi_8,FDVoltage_8,FDCurrent_8,DATVoltage_8,DATCurrent_8,Energy_8,OneHourEnergy_8,i)
@@ -2504,7 +2501,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         FDCurrent15_5.append(FDCurrent)
         DAT15Voltage_5.append(DATVoltage)
         DAT15Current_5.append(DATCurrent)
-        Access_5 = 8
+        Access_5 = 0
         
         if(len(Volt15_5)>2):
             indice=np.argmin(Volt15_5)
@@ -2631,7 +2628,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     MaxFDCurrent_7=max(FDCurrent15_7)
                     MeanFDCurrent_7=np.median(FDCurrent15_7)
                     MinFDCurrent_7=min(FDCurrent15_7)
-                    MaxDATVoltage_7=max(DAT15Volt3ge_7)
+                    MaxDATVoltage_7=max(DAT15Voltage_7)
                     MeanDATVoltage_7=np.median(DAT15Voltage_7)
                     MinDATVoltage_7=min(DAT15Voltage_7)
                     MaxDATCurrent_7=max(DAT15Current_7)
@@ -2845,7 +2842,7 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     MaxFDCurrent_8=max(FDCurrent15_8)
                     MeanFDCurrent_8=np.median(FDCurrent15_8)
                     MinFDCurrent_8=min(FDCurrent15_8)
-                    MaxDATVoltage_8=max(DAT15Volt8ge_8)
+                    MaxDATVoltage_8=max(DAT15Voltage_8)
                     MeanDATVoltage_8=np.median(DAT15Voltage_8)
                     MinDATVoltage_8=min(DAT15Voltage_8)
                     MaxDATCurrent_8=max(DAT15Current_8)
@@ -4021,6 +4018,7 @@ def received():
                          VariablesBasicas(Temp_Raspberry,cpu_uso,RAM,tempESP32)
                          if (RAM > 93):
                               os.system("sudo reboot")
+                         print(f"Temp_Raspberry: {Temp_Raspberry}"))
                          #Temp_Raspberry_JSON = json.dumps(str_num)
                          #Ventilador()
                          #temphum()
