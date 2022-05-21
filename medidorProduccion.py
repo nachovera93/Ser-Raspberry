@@ -3680,11 +3680,27 @@ try:
 finally:
     f.close()
 
-
+CurrentCal=0.885
 Vrms=0.0
 Irms=0.0
-BufferVoltaje=[]
-BufferCurrent=[]
+BufferVoltaje_1=[]
+BufferVoltaje_2=[]
+BufferVoltaje_3=[]
+BufferVoltaje_4=[]
+BufferVoltaje_5=[]
+BufferVoltaje_6=[]
+BufferVoltaje_7=[]
+BufferVoltaje_8=[]
+BufferVoltaje_9=[]
+BufferCurrent_1=[]
+BufferCurrent_2=[]
+BufferCurrent_3=[]
+BufferCurrent_4=[]
+BufferCurrent_5=[]
+BufferCurrent_6=[]
+BufferCurrent_7=[]
+BufferCurrent_8=[]
+BufferCurrent_9=[]
 global Access_1email
 Access_1email=0
 global Access_1excel
@@ -3713,23 +3729,110 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     MaxVoltage = np.median(List_MaxVoltage)
     MinVoltage = np.median(List_MinVoltage)
     DC_VoltageMedian = (MaxVoltage+MinVoltage)/2
-    NoVoltageOffset=(list_FinalVoltage-DC_VoltageMedian)
-                           
+    NoVoltageOffset=(list_FinalVoltage-DC_VoltageMedian)             
     Vrms=VoltajeRms(NoVoltageOffset)*0.92
-                          
-    if (len(BufferVoltaje)>=5):
-        MediaBufferVoltaje=np.median(BufferVoltaje)
-        Vrms=VoltRms(MediaBufferVoltaje)
-        print(f'Vrms {i}: {Vrms}')
-        #str_num = {"value":Vrms,"save":1}
-        #Vrms1 = json.dumps(str_num)
-        VoltageFFT(NoVoltageOffset,samplings,i)
-        BufferVoltaje=[]
-    else:
-        BufferVoltaje.append(Vrms)
+
+    if(i==1):
+        if (len(BufferVoltaje_1)>=5):
+            MediaBufferVoltaje=np.median(BufferVoltaje_1)
+            Vrms=VoltRms(MediaBufferVoltaje)
+            print(f'Vrms {i}: {Vrms}')
+            str_num = {"value":Vrms,"save":1}
+            Vrms1 = json.dumps(str_num)
+            VoltageFFT(NoVoltageOffset,samplings,i)
+            BufferVoltaje_1=[]
+        else:
+            BufferVoltaje_1.append(Vrms)
+    elif(i==2):
+        if (len(BufferVoltaje_2)>=5):
+            MediaBufferVoltaje=np.median(BufferVoltaje_2)
+            Vrms=VoltRms(MediaBufferVoltaje)
+            print(f'Vrms {i}: {Vrms}')
+            str_num = {"value":Vrms,"save":1}
+            Vrms2 = json.dumps(str_num)
+            VoltageFFT(NoVoltageOffset,samplings,i)
+            BufferVoltaje_2=[]
+        else:
+            BufferVoltaje_2.append(Vrms)
+    elif(i==3):
+        if (len(BufferVoltaje_3)>=5):
+            MediaBufferVoltaje=np.median(BufferVoltaje_3)
+            Vrms=VoltRms(MediaBufferVoltaje)
+            print(f'Vrms {i}: {Vrms}')
+            str_num = {"value":Vrms,"save":1}
+            Vrms3 = json.dumps(str_num)
+            VoltageFFT(NoVoltageOffset,samplings,i)
+            BufferVoltaje_3=[]
+        else:
+            BufferVoltaje_3.append(Vrms)
+    elif(i==4):
+        if (len(BufferVoltaje_4)>=5):
+            MediaBufferVoltaje=np.median(BufferVoltaje_4)
+            Vrms=VoltRms(MediaBufferVoltaje)
+            print(f'Vrms {i}: {Vrms}')
+            str_num = {"value":Vrms,"save":1}
+            Vrms4 = json.dumps(str_num)
+            VoltageFFT(NoVoltageOffset,samplings,i)
+            BufferVoltaje_4=[]
+        else:
+            BufferVoltaje_1.append(Vrms)
+    elif(i==5):
+        if (len(BufferVoltaje_5)>=5):
+            MediaBufferVoltaje=np.median(BufferVoltaje_5)
+            Vrms=VoltRms(MediaBufferVoltaje)
+            print(f'Vrms {i}: {Vrms}')
+            str_num = {"value":Vrms,"save":1}
+            Vrms5 = json.dumps(str_num)
+            VoltageFFT(NoVoltageOffset,samplings,i)
+            BufferVoltaje_5=[]
+        else:
+            BufferVoltaje_5.append(Vrms)
+    elif(i==6):
+        if (len(BufferVoltaje_6)>=5):
+            MediaBufferVoltaje=np.median(BufferVoltaje_6)
+            Vrms=VoltRms(MediaBufferVoltaje)
+            print(f'Vrms {i}: {Vrms}')
+            str_num = {"value":Vrms,"save":1}
+            Vrms6 = json.dumps(str_num)
+            VoltageFFT(NoVoltageOffset,samplings,i)
+            BufferVoltaje_6=[]
+        else:
+            BufferVoltaje_6.append(Vrms)
+    elif(i==7):
+        if (len(BufferVoltaje_7)>=5):
+            MediaBufferVoltaje=np.median(BufferVoltaje_7)
+            Vrms=VoltRms(MediaBufferVoltaje)
+            print(f'Vrms {i}: {Vrms}')
+            str_num = {"value":Vrms,"save":1}
+            Vrms7 = json.dumps(str_num)
+            VoltageFFT(NoVoltageOffset,samplings,i)
+            BufferVoltaje_7=[]
+        else:
+            BufferVoltaje_7.append(Vrms)
+    elif(i==8):
+        if (len(BufferVoltaje_8)>=5):
+            MediaBufferVoltaje=np.median(BufferVoltaje_8)
+            Vrms=VoltRms(MediaBufferVoltaje)
+            print(f'Vrms {i}: {Vrms}')
+            str_num = {"value":Vrms,"save":1}
+            Vrms8 = json.dumps(str_num)
+            VoltageFFT(NoVoltageOffset,samplings,i)
+            BufferVoltaje_8=[]
+        else:
+            BufferVoltaje_8.append(Vrms)
+    elif(i==9):
+        if (len(BufferVoltaje_9)>=5):
+            MediaBufferVoltaje=np.median(BufferVoltaje_9)
+            Vrms=VoltRms(MediaBufferVoltaje)
+            print(f'Vrms {i}: {Vrms}')
+            str_num = {"value":Vrms,"save":1}
+            Vrms9 = json.dumps(str_num)
+            VoltageFFT(NoVoltageOffset,samplings,i)
+            BufferVoltaje_9=[]
+        else:
+            BufferVoltaje_9.append(Vrms)
                         
 
-    #Valor dc de corriente
     List_MaxCurrent=getMaxValues(list_FinalCurrent, 50)
     List_MinCurrent=getMinValues(list_FinalCurrent, 50)
     MaxCurrent = np.median(List_MaxCurrent)
@@ -3738,19 +3841,124 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     NoCurrentoffset=list_FinalCurrent-DC_CurrentMedian
     Irms=CorrienteRms(NoCurrentoffset)
                                
-    
-    if (len(BufferCurrent)>=5):
-        MediaBufferCurrent=np.median(BufferCurrent)
-        Irms=CurrentRms(MediaBufferCurrent)*0.885
-        print(f'Irms {i}: {Irms}')
-        #str_num = {"value":Irms,"save":1}
-        #Irms1 = json.dumps(str_num)
-        CurrentFFT(NoCurrentoffset,samplings,i,Irms)
-        potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
-        Potencias(i,Irms,Vrms,potrmsCGE)     
-        BufferCurrent=[]
-    else:
-        BufferCurrent.append(Irms)
+    if(i==1):
+        if(len(BufferCurrent_1)>=5):
+            MediaBufferCurrent=np.median(BufferCurrent_1)
+            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
+            print(f'Irms {i}: {Irms}')
+            str_num = {"value":Irms,"save":1}
+            Irms1 = json.dumps(str_num)
+            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
+            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
+            Potencias(i,Irms,Vrms,potrmsCGE)     
+            BufferCurrent_1=[]
+        else:
+        BufferCurrent_1.append(Irms)
+    elif(i==2):
+        if(len(BufferCurrent_2)>=5):
+            MediaBufferCurrent=np.median(BufferCurrent_2)
+            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
+            print(f'Irms {i}: {Irms}')
+            str_num = {"value":Irms,"save":1}
+            Irms2 = json.dumps(str_num)
+            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
+            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
+            Potencias(i,Irms,Vrms,potrmsCGE)     
+            BufferCurrent_2=[]
+        else:
+        BufferCurrent_2.append(Irms)
+    elif(i==3):
+        if(len(BufferCurrent_3)>=5):
+            MediaBufferCurrent=np.median(BufferCurrent_3)
+            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
+            print(f'Irms {i}: {Irms}')
+            str_num = {"value":Irms,"save":1}
+            Irms3 = json.dumps(str_num)
+            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
+            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
+            Potencias(i,Irms,Vrms,potrmsCGE)     
+            BufferCurrent_3=[]
+        else:
+        BufferCurrent_3.append(Irms)
+    elif(i==4):
+        if(len(BufferCurrent_4)>=5):
+            MediaBufferCurrent=np.median(BufferCurrent_4)
+            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
+            print(f'Irms {i}: {Irms}')
+            str_num = {"value":Irms,"save":1}
+            Irms4 = json.dumps(str_num)
+            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
+            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
+            Potencias(i,Irms,Vrms,potrmsCGE)     
+            BufferCurrent_4=[]
+        else:
+        BufferCurrent_4.append(Irms)
+    elif(i==5):
+        if(len(BufferCurrent_5)>=5):
+            MediaBufferCurrent=np.median(BufferCurrent_5)
+            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
+            print(f'Irms {i}: {Irms}')
+            str_num = {"value":Irms,"save":1}
+            Irms5 = json.dumps(str_num)
+            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
+            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
+            Potencias(i,Irms,Vrms,potrmsCGE)     
+            BufferCurrent_5=[]
+        else:
+        BufferCurrent_5.append(Irms)
+    elif(i==6):
+        if(len(BufferCurrent_6)>=5):
+            MediaBufferCurrent=np.median(BufferCurrent_6)
+            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
+            print(f'Irms {i}: {Irms}')
+            str_num = {"value":Irms,"save":1}
+            Irms6 = json.dumps(str_num)
+            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
+            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
+            Potencias(i,Irms,Vrms,potrmsCGE)     
+            BufferCurrent_6=[]
+        else:
+        BufferCurrent_6.append(Irms)
+    elif(i==7):
+        if(len(BufferCurrent_7)>=5):
+            MediaBufferCurrent=np.median(BufferCurrent_7)
+            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
+            print(f'Irms {i}: {Irms}')
+            str_num = {"value":Irms,"save":1}
+            Irms7 = json.dumps(str_num)
+            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
+            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
+            Potencias(i,Irms,Vrms,potrmsCGE)     
+            BufferCurrent_7=[]
+        else:
+        BufferCurrent_7.append(Irms)
+    elif(i==8):
+        if(len(BufferCurrent_8)>=5):
+            MediaBufferCurrent=np.median(BufferCurrent_8)
+            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
+            print(f'Irms {i}: {Irms}')
+            str_num = {"value":Irms,"save":1}
+            Irms8 = json.dumps(str_num)
+            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
+            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
+            Potencias(i,Irms,Vrms,potrmsCGE)     
+            BufferCurrent_8=[]
+        else:
+        BufferCurrent_8.append(Irms)
+    elif(i==9):
+        if(len(BufferCurrent_9)>=5):
+            MediaBufferCurrent=np.median(BufferCurrent_9)
+            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
+            print(f'Irms {i}: {Irms}')
+            str_num = {"value":Irms,"save":1}
+            Irms9 = json.dumps(str_num)
+            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
+            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
+            Potencias(i,Irms,Vrms,potrmsCGE)     
+            BufferCurrent_9=[]
+        else:
+        BufferCurrent_9.append(Irms)
+
 
 def received():
     while True:
