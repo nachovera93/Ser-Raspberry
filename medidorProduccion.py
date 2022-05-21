@@ -574,48 +574,48 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FP_4=FP
                  DATCurrent_4=DATCurrent
                  FDCurrent_4=FDCurrent
-                 FDCurrentJson4 = json.dumps(str_num_FD)  
-                 DATCurrentJson4 = json.dumps(str_num_DAT)
+                 FDCurrentJson4 = json.dumps(str_num_FD_Current)  
+                 DATCurrentJson4 = json.dumps(str_num_DAT_Current)
                  FPCurrentJson4 = json.dumps(str_num_FP)              
              elif (p == 5):
                  CosPhi_5=CosPhi
                  FP_5=FP
                  DATCurrent_5=DATCurrent
                  FDCurrent_5=FDCurrent
-                 FDCurrentJson5 = json.dumps(str_num_FD)  
-                 DATCurrentJson5 = json.dumps(str_num_DAT)
+                 FDCurrentJson5 = json.dumps(str_num_FD_Current)  
+                 DATCurrentJson5 = json.dumps(str_num_DAT_Current)
                  FPCurrentJson5 = json.dumps(str_num_FP)              
              elif (p == 6):
                  CosPhi_6=CosPhi
                  FP_6=FP
                  DATCurrent_6=DATCurrent
                  FDCurrent_6=FDCurrent
-                 FDCurrentJson6 = json.dumps(str_num_FD)  
-                 DATCurrentJson6 = json.dumps(str_num_DAT)
+                 FDCurrentJson6 = json.dumps(str_num_FD_Current)  
+                 DATCurrentJson6 = json.dumps(str_num_DAT_Current)
                  FPCurrentJson6 = json.dumps(str_num_FP)             
              elif (p == 7):
                  CosPhi_7=CosPhi
                  FP_7=FP
                  DATCurrent_7=DATCurrent
                  FDCurrent_7=FDCurrent
-                 FDCurrentJson7 = json.dumps(str_num_FD)  
-                 DATCurrentJson7 = json.dumps(str_num_DAT)
+                 FDCurrentJson7 = json.dumps(str_num_FD_Current)  
+                 DATCurrentJson7 = json.dumps(str_num_DAT_Current)
                  FPCurrentJson7 = json.dumps(str_num_FP)              
              elif (p == 8):
                  CosPhi_8=CosPhi
                  FP_8=FP
                  DATCurrent_8=DATCurrent
                  FDCurrent_8=FDCurrent
-                 FDCurrentJson8 = json.dumps(str_num_FD)  
-                 DATCurrent8son8 = json.dumps(str_num_DAT)
+                 FDCurrentJson8 = json.dumps(str_num_FD_Current)  
+                 DATCurrent8son8 = json.dumps(str_num_DAT_Current)
                  FPCurrentJson8 = json.dumps(str_num_FP)              
              elif (p == 9):
                  CosPhi_9=CosPhi
                  FP_9=FP
                  DATCurrent_9=DATCurrent
-                 FDCurrent_9=FDCurren9
-                 FDCurrentJson9 = json.dumps(str_num_FD)  
-                 DATCurrentJson9 = json.dumps(str_num_DAT)
+                 FDCurrent_9=FDCurrent
+                 FDCurrentJson9 = json.dumps(str_num_FD_Current)  
+                 DATCurrentJson9 = json.dumps(str_num_DAT_Current)
                  FPCurrentJson9 = json.dumps(str_num_FP)        
 
 
@@ -2306,7 +2306,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                 indice=np.argmin(FP15_Inductive_4)
                 FP15_Inductive_4.pop(indice)
             indice=np.argmin(FDVoltage15_4)
-            FDVoltage15_4pop(indice)
+            FDVoltage15_4.pop(indice)
             indice=np.argmin(FDCurrent15_4)
             FDCurrent15_4.pop(indice)
             indice=np.argmin(DAT15Voltage_4)
@@ -3374,12 +3374,12 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
             AparentPower15_9.pop(indice)
             if(len(FP15_Reactive_9)>=2):
                 indice=np.argmax(FP15_Reactive_9)
-                FP15_Reactive_4.pop(indice)
+                FP15_Reactive_9.pop(indice)
             if(len(FP15_Inductive_9)>=2):
                 indice=np.argmin(FP15_Inductive_9)
                 FP15_Inductive_9.pop(indice)
             indice=np.argmin(FDVoltage15_9)
-            FDVoltage15_9pop(indice)
+            FDVoltage15_9.pop(indice)
             indice=np.argmin(FDCurrent15_9)
             FDCurrent15_9.pop(indice)
             indice=np.argmin(DAT15Voltage_9)
@@ -3539,7 +3539,7 @@ AbrirExcel()
 def VariablesBasicas(Temp_Raspberry,cpu_uso,RAM,tempESP32):                   
        workbook=openpyxl.load_workbook(filename = dest_filename)
        sheet1 = workbook["Var 0"]
-       Data=[datetime.datetime.now(),round(Temp_Raspberry,1), round(cpu_uso,1), round(RAM,1), round(tempESP32,2)]
+       Data=[datetime.datetime.now(),Temp_Raspberry,cpu_uso,RAM,tempESP32]
        sheet1.append(list(Data))
        workbook.save(filename = dest_filename)
        Data=[]
@@ -3979,6 +3979,7 @@ def received():
                      print("Error en la codificación")
                      continue
                  np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')   
+                 #print(f'Largo Array {len(np_array)}')
                  if (len(np_array) == 8402):
                        if (np_array[0] == 11 or np_array[0] == 22 or np_array[0] == 33 or np_array[0] == 44 or np_array[0] == 55 or np_array[0] == 66 or np_array[0] == 77 or np_array[0] == 88 or np_array[0] == 99):
                            if (np_array[0] == 11):
@@ -4013,12 +4014,12 @@ def received():
                  if (len(np_array)>0 and len(np_array)<=2):
                          Temp_Raspberry=cpu_temp()
                          cpu_uso=get_cpuload()
-                         tempESP32 = round(np_array[0],0)
+                         tempESP32 = np_array[0]
                          RAM = psutil.virtual_memory()[2]
                          VariablesBasicas(Temp_Raspberry,cpu_uso,RAM,tempESP32)
                          if (RAM > 93):
                               os.system("sudo reboot")
-                         print(f"Temp_Raspberry: {Temp_Raspberry}"))
+                         print(f"Temp_Raspberry: {Temp_Raspberry}")
                          #Temp_Raspberry_JSON = json.dumps(str_num)
                          #Ventilador()
                          #temphum()
