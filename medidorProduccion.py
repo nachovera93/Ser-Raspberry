@@ -3708,8 +3708,24 @@ Access_1xcel=0
 countbroker=0
 
 def TomaDatos(list_Voltage,list_Current,samplings,i):
-    global BufferVoltaje
-    global BufferCurrent
+    global BufferVoltaje_1
+    global BufferVoltaje_2
+    global BufferVoltaje_3
+    global BufferVoltaje_4
+    global BufferVoltaje_5
+    global BufferVoltaje_6
+    global BufferVoltaje_7
+    global BufferVoltaje_8
+    global BufferVoltaje_9
+    global BufferCurrent_1
+    global BufferCurrent_2
+    global BufferCurrent_3
+    global BufferCurrent_4
+    global BufferCurrent_5
+    global BufferCurrent_6
+    global BufferCurrent_7
+    global BufferCurrent_8
+    global BufferCurrent_9
     global Vrms
     global Irms
     global MediaBufferVoltaje
