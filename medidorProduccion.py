@@ -1614,15 +1614,15 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     DAT15Current_1=[]
                elif(Access_1==1):
                     #print("paso elif 2")
-                    Volt15.append(Vrms)
-                    Current15.append(Irms)
-                    ActivePower15.append(ActivePower)
-                    ReactivePower15.append(ReactivePower)
-                    AparentPower15.append(AparentPower)
+                    Volt15_1.append(Vrms)
+                    Current15_1.append(Irms)
+                    ActivePoActivePower15_1wer15.append(ActivePower)
+                    ReactivePower15_1.append(ReactivePower)
+                    AparentPower15_1.append(AparentPower)
                     if(FP>0.0):
-                          FP15_Reactive.append(FP)
+                          FP15_Reactive_1.append(FP)
                     else: 
-                          FP15_Inductive.append(FP)
+                          FP15_Inductive_1.append(FP)
                     FDVoltage15_1.append(FDVoltage)
                     FDCurrent15_1.append(FDCurrent)
                     DAT15Voltage_1.append(DATVoltage)
@@ -3728,8 +3728,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     global BufferCurrent_9
     global Vrms
     global Irms
-    global MediaBufferVoltaje
-    global MediaBufferCurrent
     global NoVoltageOffset
     global NoCurrentoffset
     global ListaIrmsPeak1
