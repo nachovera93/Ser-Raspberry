@@ -724,7 +724,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_1 = AparentPower
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
-        print(" i : ", i)
+        print(" i2 : ", i)
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i)
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1)
     elif (i == 2):
@@ -736,7 +736,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_2 = AparentPower
         ActivePower_2 = ActivePower
         ReactivePower_2 = ReactivePower 
-        print(" i : ", i)
+        print(" i2 : ", i)
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i)
         Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2)       
     elif (i == 3):
@@ -748,7 +748,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_3 = AparentPower
         ActivePower_3 = ActivePower
         ReactivePower_3 = ReactivePower
-        print(" i : ", i)
+        print(" i2 : ", i)
         SaveDataCsv(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,CosPhi_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3,OneHourEnergy_3,i)
         Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3)             
     elif (i == 4):
@@ -1512,7 +1512,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_1
     
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==2 or basea.minute==15 or basea.minute==16 basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46): 
+    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46): 
                if(Access_1 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_1 = 1
@@ -1728,7 +1728,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_2
     
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==2 or basea.minute==15 or basea.minute==16 basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
+    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
                if(Access_2 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_2 = 1
@@ -1944,7 +1944,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_3
     
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==2 or basea.minute==15 or basea.minute==16 basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46): 
+    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
                if(Access_3 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_3 = 1
@@ -1985,7 +1985,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     MaxFDCurrent_3=max(FDCurrent15_3)
                     MeanFDCurrent_3=np.median(FDCurrent15_3)
                     MinFDCurrent_3=min(FDCurrent15_3)
-                    MaxDATVoltage_3=max(DAT15Volt3ge_3)
+                    MaxDATVoltage_3=max(DAT15Voltage_3)
                     MeanDATVoltage_3=np.median(DAT15Voltage_3)
                     MinDATVoltage_3=min(DAT15Voltage_3)
                     MaxDATCurrent_3=max(DAT15Current_3)
@@ -2056,7 +2056,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     else: 
                           FP15_Inductive_3.append(FP)
                     FDVoltage15_3.append(FDVoltage)
-                    FDCurrent15_3.append(FDC3rrent)
+                    FDCurrent15_3.append(FDCurrent)
                     DAT15Voltage_3.append(DATVoltage)
                     DAT15Current_3.append(DATCurrent)
               
@@ -2160,7 +2160,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_4
     
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==2 or basea.minute==15 or basea.minute==16 basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46): 
+    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
                if(Access_4 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_4 = 1
@@ -2375,7 +2375,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_5
     
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==2 or basea.minute==15 or basea.minute==16 basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46): 
+    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
                if(Access_5 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_5 = 1
@@ -2591,7 +2591,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_7
     
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==2 or basea.minute==15 or basea.minute==16 basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46): 
+    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
                if(Access_7 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_7 = 1
@@ -2805,7 +2805,7 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global DAT15Current_8
     global Access_8
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==2 or basea.minute==15 or basea.minute==16 basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
+    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
                if(Access_8 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_8 = 1
@@ -3017,7 +3017,7 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global DAT15Current_6
     global Access_6
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==2 or basea.minute==15 or basea.minute==16 basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46): 
+    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
                if(Access_6 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_6 = 1
@@ -3232,7 +3232,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global DAT15Current_9
     global Access_9
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==2 or basea.minute==15 or basea.minute==16 basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46): 
+    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
                if(Access_9 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_9 = 1
@@ -3747,19 +3747,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         #Irms1 = json.dumps(str_num)
         CurrentFFT(NoCurrentoffset,samplings,i,Irms)
         potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
-        Potencias(i,Irms,Vrms,potrmsCGE)
-        """
-        ExcelAllInsertCGE()
-        ExcelDataCGE()
-        try:
-             Maximo15minCGE()
-        except OSError as err:
-             print("OS error: {0}".format(err))
-             continue
-        except ValueError:
-             print("Could not convert data to an integer.")
-             continue
-        """
+        Potencias(i,Irms,Vrms,potrmsCGE)     
         BufferCurrent=[]
     else:
         BufferCurrent.append(Irms)
@@ -3796,8 +3784,14 @@ def received():
                            samplings = np_array[-1]
                            list_Voltage = (np_array[0:4200])
                            list_Current = np_array[4201:8400]
-                           TomaDatos(list_Voltage,list_Current,samplings,i)
-                 
+                           try:
+                                 TomaDatos(list_Voltage,list_Current,samplings,i)
+                           except OSError as err:
+                                 print("OS error: {0}".format(err))
+                                 continue
+                           except ValueError:
+                                 print("Could not convert data to an integer.")
+                                 continue
                  if (len(np_array)>0 and len(np_array)<=2):
                          Temp_Raspberry=cpu_temp()
                          cpu_uso=get_cpuload()
