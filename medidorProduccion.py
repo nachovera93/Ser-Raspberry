@@ -365,7 +365,6 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            sincvoltaje1 = 1
            str_num_FD = {"value":FDVoltage,"save":1}
            str_num_DAT = {"value":DATVoltage,"save":1}
-           print("SincVoltaje Voltage: ", sincvoltaje1)
            if (p == 1):
                print("FD: ",FDVoltage)
                FDVoltage_1 = FDVoltage
@@ -1616,7 +1615,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     #print("paso elif 2")
                     Volt15_1.append(Vrms)
                     Current15_1.append(Irms)
-                    ActivePoActivePower15_1wer15.append(ActivePower)
+                    ActivePower15_1.append(ActivePower)
                     ReactivePower15_1.append(ReactivePower)
                     AparentPower15_1.append(AparentPower)
                     if(FP>0.0):
