@@ -366,7 +366,7 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            str_num_FD = {"value":FDVoltage,"save":1}
            str_num_DAT = {"value":DATVoltage,"save":1}
            if (p == 1):
-               print("FD: ",FDVoltage)
+               print("FD Voltage: ",FDVoltage)
                FDVoltage_1 = FDVoltage
                DATVoltage_1= DATVoltage
                FDVoltage_1_JSON = json.dumps(str_num_FD)  
@@ -550,6 +550,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FP_1=FP
                  DATCurrent_1=DATCurrent
                  FDCurrent_1=FDCurrent
+                 print("FD Current: ",FDVoltage)
                  FDCurrentJson1 = json.dumps(str_num_FD_Current)  
                  DATCurrentJson1 = json.dumps(str_num_DAT_Current)
                  FPCurrentJson1 = json.dumps(str_num_FP) 
