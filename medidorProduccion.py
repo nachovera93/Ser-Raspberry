@@ -3733,6 +3733,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     list_CurrentFilterComplete = signal.sosfilt(sos, list_Current)
     list_FinalVoltage = list_VoltageFilterComplete[104:4200]
     list_FinalCurrent = list_CurrentFilterComplete [103:4200]
+    #print(f'list_FinalCurrent {i} Max: {max(list_FinalCurrent)}')
 
     List_MaxVoltage=getMaxValues(list_FinalVoltage, 50)
     List_MinVoltage=getMinValues(list_FinalVoltage, 50)
@@ -3869,6 +3870,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferCurrent=np.median(BufferCurrent_2)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
+            #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
             str_num = {"value":Irms,"save":1}
             Irms2 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
@@ -3881,7 +3883,9 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if(len(BufferCurrent_3)>=5):
             MediaBufferCurrent=np.median(BufferCurrent_3)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
+            #print(f'Current cal: {CurrentCal}')
             print(f'Irms {i}: {Irms}')
+            #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
             str_num = {"value":Irms,"save":1}
             Irms3 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
@@ -3894,7 +3898,9 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if(len(BufferCurrent_4)>=5):
             MediaBufferCurrent=np.median(BufferCurrent_4)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
+            #print(f'Current cal: {CurrentCal}')
             print(f'Irms {i}: {Irms}')
+            #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
             str_num = {"value":Irms,"save":1}
             Irms4 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
@@ -3934,6 +3940,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferCurrent=np.median(BufferCurrent_7)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
+            #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
             str_num = {"value":Irms,"save":1}
             Irms7 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
