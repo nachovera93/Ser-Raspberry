@@ -550,7 +550,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FP_1=FP
                  DATCurrent_1=DATCurrent
                  FDCurrent_1=FDCurrent
-                 print("FD Current: ",FDVoltage)
+                 print("FD Current: ",FDCurrent)
                  FDCurrentJson1 = json.dumps(str_num_FD_Current)  
                  DATCurrentJson1 = json.dumps(str_num_DAT_Current)
                  FPCurrentJson1 = json.dumps(str_num_FP) 
