@@ -1734,7 +1734,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
             DAT15Voltage_3.pop(indice+1)
             indice=np.argmax(DAT15Voltage_3)
             DAT15Voltage_3.pop(indice-1)
-        if(len(DAT15Current_3)>4)
+        if(len(DAT15Current_3)>4):
             indice=np.argmin(DAT15Current_3)
             DAT15Current_3.pop(indice+1)
             indice=np.argmax(DAT15Current_3)
