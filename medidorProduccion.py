@@ -72,8 +72,8 @@ print("Hora de comienzo:", horasetup)
 
 broker = '18.228.175.193'    #mqtt server
 port = 1883
-dId = '123454321'
-passw = '25ebiBqWgR'
+dId = '1234321'
+passw = 'V0FLgcWETb'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
@@ -366,7 +366,7 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            str_num_FD = {"value":FDVoltage,"save":1}
            str_num_DAT = {"value":DATVoltage,"save":1}
            if (p == 1):
-               print("FD Voltage: ",FDVoltage)
+               #print("FD Voltage: ",FDVoltage)
                FDVoltage_1 = FDVoltage
                DATVoltage_1= DATVoltage
                FDVoltage_1_JSON = json.dumps(str_num_FD)  
@@ -1685,7 +1685,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
             indice=np.argmin(ReactivePower15_3)
             ReactivePower15_3.pop(indice+1)
             indice=np.argmax(ReactivePower15_3)
-            ReactivePower15_23pop(indice-1)
+            ReactivePower15_3.pop(indice-1)
             indice=np.argmin(AparentPower15_3)
             ReactivePower15_3.pop(indice+1)
             indice=np.argmax(AparentPower15_3)
@@ -2835,6 +2835,7 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     else:
         Volt15_6.append(Vrms)
         Current15_6.append(Irms)
+        print(Current15_6)
         ActivePower15_6.append(ActivePower)
         ReactivePower15_6.append(ReactivePower)
         AparentPower15_6.append(AparentPower)
