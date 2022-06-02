@@ -138,7 +138,7 @@ def on_connected(client, userdata, flags, rc):
         client.bad_connection_flag=False
 
    
-"""
+
 get_mqtt_credentials()     
 client = mqtt.Client(str_client_id)   #Creación cliente
 client.connect(broker, port)     #Conexión al broker
@@ -155,7 +155,7 @@ def reconnectmqtt():
     client.username_pw_set(usernamemqtt, passwordmqtt)
     client.on_connect = on_connected
     client.loop_start()
-"""
+
 
 def get_cpuload():
     cpuload = psutil.cpu_percent(interval=1, percpu=False)
@@ -550,7 +550,6 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FP_1=FP
                  DATCurrent_1=DATCurrent
                  FDCurrent_1=FDCurrent
-                 print("FD Current: ",FDCurrent)
                  FDCurrentJson1 = json.dumps(str_num_FD_Current)  
                  DATCurrentJson1 = json.dumps(str_num_DAT_Current)
                  FPCurrentJson1 = json.dumps(str_num_FP) 
@@ -650,9 +649,10 @@ OneHourEnergy_9 = 0.0
 AparentPower = 0.0
 ActivePower = 0.0
 ReactivePower = 0.0
-
+optionsave=1
 
 def Potencias(i,Irms,Vrms,potrmsCGE):
+    global optionsave
     global a
     global Energy
     global Energy_1
@@ -735,6 +735,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_2 = AparentPower
         ActivePower_2 = ActivePower
         ReactivePower_2 = ReactivePower 
+        str_num = {"value":Vrms,"save":optionsave}
+        Vrms2 = json.dumps(str_num)
+        str_num = {"value":Irms,"save":optionsave}
+        Irms2 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i)
         Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2)       
     elif (i == 3):
@@ -746,6 +750,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_3 = AparentPower
         ActivePower_3 = ActivePower
         ReactivePower_3 = ReactivePower
+        str_num = {"value":Vrms,"save":optionsave}
+        Vrms3 = json.dumps(str_num)
+        str_num = {"value":Irms,"save":optionsave}
+        Irms3 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,CosPhi_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3,OneHourEnergy_3,i)
         Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3)             
     elif (i == 4):
@@ -757,6 +765,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_4 = AparentPower
         ActivePower_4 = ActivePower
         ReactivePower_4 = ReactivePower
+        str_num = {"value":Vrms,"save":optionsave}
+        Vrms4 = json.dumps(str_num)
+        str_num = {"value":Irms,"save":optionsave}
+        Irms4 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,CosPhi_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,Energy_4,OneHourEnergy_4,i)
         Maximo15min_4(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,Energy_4)              
     elif (i == 5):
@@ -768,6 +780,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_5 = AparentPower
         ActivePower_5 = ActivePower
         ReactivePower_5 = ReactivePower
+        str_num = {"value":Vrms,"save":optionsave}
+        Vrms5 = json.dumps(str_num)
+        str_num = {"value":Irms,"save":optionsave}
+        Irms5 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,CosPhi_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,Energy_5,OneHourEnergy_5,i)
         Maximo15min_5(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,Energy_5)              
     elif (i == 6):
@@ -779,6 +795,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_6 = AparentPower
         ActivePower_6 = ActivePower
         ReactivePower_6 = ReactivePower
+        str_num = {"value":Vrms,"save":optionsave}
+        Vrms6 = json.dumps(str_num)
+        str_num = {"value":Irms,"save":optionsave}
+        Irms6 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,CosPhi_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,Energy_6,OneHourEnergy_6,i)
         Maximo15min_6(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,Energy_6)           
     elif (i == 7):
@@ -790,6 +810,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_7 = AparentPower
         ActivePower_7 = ActivePower
         ReactivePower_7 = ReactivePower
+        str_num = {"value":Vrms,"save":optionsave}
+        Vrms7 = json.dumps(str_num)
+        str_num = {"value":Irms,"save":optionsave}
+        Irms7 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_7,ReactivePower_7,AparentPower_7,FP_7,CosPhi_7,FDVoltage_7,FDCurrent_7,DATVoltage_7,DATCurrent_7,Energy_7,OneHourEnergy_7,i)
         Maximo15min_7(Vrms,Irms,ActivePower_7,ReactivePower_7,AparentPower_7,FP_7,FDVoltage_7,FDCurrent_7,DATVoltage_7,DATCurrent_7,Energy_7)             
     elif (i == 8):
@@ -801,6 +825,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_8 = AparentPower
         ActivePower_8 = ActivePower
         ReactivePower_8 = ReactivePower
+        str_num = {"value":Vrms,"save":optionsave}
+        Vrms8 = json.dumps(str_num)
+        str_num = {"value":Irms,"save":optionsave}
+        Irms8 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_8,ReactivePower_8,AparentPower_8,FP_8,CosPhi_8,FDVoltage_8,FDCurrent_8,DATVoltage_8,DATCurrent_8,Energy_8,OneHourEnergy_8,i)
         Maximo15min_8(Vrms,Irms,ActivePower_8,ReactivePower_8,AparentPower_8,FP_8,FDVoltage_8,FDCurrent_8,DATVoltage_8,DATCurrent_8,Energy_8)            
     elif (i == 9):
@@ -812,6 +840,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_9 = AparentPower
         ActivePower_9 = ActivePower
         ReactivePower_9 = ReactivePower
+        str_num = {"value":Vrms,"save":optionsave}
+        Vrms9 = json.dumps(str_num)
+        str_num = {"value":Irms,"save":optionsave}
+        Irms9 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_9,ReactivePower_9,AparentPower_9,FP_9,CosPhi_9,FDVoltage_9,FDCurrent_9,DATVoltage_9,DATCurrent_9,Energy_9,OneHourEnergy_9,i)
         Maximo15min_9(Vrms,Irms,ActivePower_9,ReactivePower_9,AparentPower_9,FP_9,FDVoltage_9,FDCurrent_9,DATVoltage_9,DATCurrent_9,Energy_9) 
         """
@@ -915,542 +947,57 @@ def graphVoltage(list_fftVoltage,list_FinalCurrent,samplings,i):
     
 
 
-b1=time.time()
-c1=time.time()
-d1=time.time()
-e21=time.time()
-f1=time.time()
-g1=time.time()
-h1=time.time()
-j1=time.time()
-k1=time.time()
-z1=time.time()
-l1=time.time()
-m1=time.time()
-n1=time.time()
-o21=time.time()
-p1=time.time()
-q1=time.time()
-r1=time.time()
-s1=time.time()
-t1=time.time()
-u1=time.time()
-v1=time.time()
-v12=time.time()
-v13=time.time()
-v14=time.time()
-v15=time.time()
-v16=time.time()
-v17=time.time()
-w1=time.time()
-x1=time.time()
-y1=time.time()
-#varsLastSend=[b,c,d,e]
+vt1=time.time()
+vt2=time.time()
+vt3=time.time()
+vt4=time.time()
+vt5=time.time()
+vt6=time.time()
+vt7=time.time()
+vt8=time.time()
+vt9=time.time()
 
-def publish(client): 
-        global b1, c1 ,d1, e21, f1 ,g1 ,h1 , j1, k1, l1, m1, n1, o21 ,p1, q1, r1, s1, t1, u1, v1 
-        global v12, v13, v14, v15, v16, v17,v18,v19,v20,v21,v22,v23, w1, x1, y1, z1
-        a1=time.time()
-        for i in data["variables"]:
+def SendDataToBroker(Vrms,Irms,PotenciaAp,Energia,k):
+        str_num = {"value":Vrms,"save":optionsave}
+        Vrms = json.dumps(str_num)
+        str_num = {"value":Irms,"save":optionsave}
+        Irms = json.dumps(str_num)
+        str_num = {"value":PotenciaAp,"save":optionsave}
+        PotAp = json.dumps(str_num)
+        str_num = {"value":Energia,"save":optionsave}
+        Energia = json.dumps(str_num)
+        def publish(client): 
+            global vt1#,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9
+            timeToSend=time.time()
+            for i in data["variables"]:
+                #    if(data["variables"][i]["variableType"]=="output"):
+                #        continue
+                if(i["variableFullName"]==f'Vrms_{k}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt1 > float(freq)):
+                         vt1=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, Vrms)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Irms: `{Vrms}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+        try:  
+            if(client.connected_flag==True): 
+                publish(client)
+        except:
+            pass
 
-            #    if(data["variables"][i]["variableType"]=="output"):
-            #        continue
-            if(i["variableFullName"]=="Corriente-CGE"):
-                freq = i["variableSendFreq"]
-                if(a1 - b1 > float(freq)):
-                     b1=time.time()
-                     str_variable = i["variable"]
-                     topic1 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic1, Irms1)
-                     status = result[0]            
-                     if status == 0:
-                         print(f"Send Irms: `{Irms1}` to topic `{topic1}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic1}")
+    
+    
+
+                      
+                
         
                    
-            if(i["variableFullName"]=="Voltaje-CGE"):
-                freq = i["variableSendFreq"]
-                if(a1 - c1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     c1=time.time()
-                     str_variable2 = i["variable"]
-                     topic2 = topicmqtt + str_variable2 + "/sdata"
-                     result = client.publish(topic2, Vrms1)
-                #     status = result[0]
-                #     if status == 0:
-                #         print(f"Send Vrms: `{Vrms1}` to topic `{topic2}` con freq: {freq}")
-                #     else:
-                #         print(f"Failed to send message to topic {topic2}")
-            """
-            if(i["variableFullName"]=="Potencia-Reactiva-CGE"):
-                freq = i["variableSendFreq"]
-                if(a1 - d1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     d1=time.time()
-                     str_variable3 = i["variable"]
-                     topic3 = topicmqtt + str_variable3 + "/sdata"
-                     result = client.publish(topic3, ReactivePower)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Pot-Reactiva-CGE: `{ReactivePower}` to topic `{topic3}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic3}")
-            """
-            if(i["variableFullName"]=="Pot-Activa-CGE"):
-                freq = i["variableSendFreq"]
-                if(a1 - e21 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     e21=time.time()
-                     str_variable4 = i["variable"]
-                     topic4 = topicmqtt + str_variable4 + "/sdata"
-                     result = client.publish(topic4, ActivePower)
-               #      status = result[0]
-               #      if status == 0:
-               #          print(f"Send Pot-Activa CGE: `{ActivePower}` to topic `{topic4}` con freq: {freq}")
-               #      else:
-               #          print(f"Failed to send message to topic {topic4}")
             
-            if(i["variableFullName"]=="Energia-CGE"):
-                freq = i["variableSendFreq"]
-                if(a1 - f1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     f1=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, Energy)
-               #      status = result[0]
-               #      if status == 0:
-               #          print(f"Send energia CGE: `{Energy}` to topic `{topic5}` con freq: {freq}")
-               #      else:
-               #          print(f"Failed to send message to topic {topic5}")
-            
-            if(i["variableFullName"]=="FP-CGE"):
-                freq = i["variableSendFreq"]
-                if(a1 - g1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     g1=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, FPCGE)
-               #     status = result[0]
-               #     if status == 0:
-               #         print(f"Send FP-CGE: `{FPCGE}` to topic `{topic5}` con freq: {freq}")
-               #     else:
-               #         print(f"Failed to send message to topic {topic5}")
-            """
-            if(i["variableFullName"]=="FD-CGE"):
-                freq = i["variableSendFreq"]
-                if(a1 - h1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     h1=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, JsonFDCurrent)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send FD-CGE: `{JsonFDCurrent}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
-            if(i["variableFullName"]=="DAT-CGE"):
-                freq = i["variableSendFreq"]
-                if(a1 - j1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     j1=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, DATCorrienteCGE)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send DAT-CGE: `{DATCorrienteCGE}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
-            """
-            if(i["variableFullName"]=="Pot-CGE"):
-                freq = i["variableSendFreq"]
-                if(a1 - k1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     k1=time.time()
-                     str_variable = i["variable"]
-                     topic5= topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, AparentPower)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Pot-Aparente-CGE : `{AparentPower}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
-            
-            #SEGUNDA TOMA
-            if(i["variableFullName"]=="Corriente-2"):
-                freq = i["variableSendFreq"]
-                if(a1 - l1 > float(freq)):
-                     l1=time.time()
-                     str_variable = i["variable"]
-                     topic = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic, Irms22)
-              #       status = result[0]
-              #       
-              #       if status == 0:
-              #           print(f"Send Corriente-2: `{Irms22}` to topic `{topic}` con freq: {freq}")
-              #       else:
-              #           print(f"Failed to send message to topic {topic}")
-        
-                   
-            if(i["variableFullName"]=="Voltaje-2"):
-                freq = i["variableSendFreq"]
-                if(a1 - m1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     m1=time.time()
-                     str_variable2 = i["variable"]
-                     topic2 = topicmqtt + str_variable2 + "/sdata"
-                     result = client.publish(topic2, Vrms22)
-              #       status = result[0]
-              #       if status == 0:
-              #           print(f"Send Voltaje-2: `{Vrms22}` to topic `{topic2}` con freq: {freq}")
-              #       else:
-              #           print(f"Failed to send message to topic {topic2}")
-            """
-            if(i["variableFullName"]=="Potencia-Reactiva-2"):
-                freq = i["variableSendFreq"]
-                if(a1 - n1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     n1=time.time()
-                     str_variable3 = i["variable"]
-                     topic3 = topicmqtt + str_variable3 + "/sdata"
-                     result = client.publish(topic3, Reactiva2Fase1)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Potencia-Reactiva-2: `{Reactiva2Fase1}` to topic `{topic3}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic3}")
-            """
-            if(i["variableFullName"]=="Pot-Activa-2"):
-                freq = i["variableSendFreq"]
-                if(a1 - o21 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     o21=time.time()
-                     str_variable4 = i["variable"]
-                     topic4 = topicmqtt + str_variable4 + "/sdata"
-                     result = client.publish(topic4, Activa2Fase1)
-               #      status = result[0]
-               #      if status == 0:
-               #          print(f"Send Pot-Activa-2: `{Activa2Fase1}` to topic `{topic4}` con freq: {freq}")
-               #      else:
-               #          print(f"Failed to send message to topic {topic4}")
-            
-            if(i["variableFullName"]=="Energia-2"):
-                freq = i["variableSendFreq"]
-                if(a1 - p1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     p1=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, energy2Fase1)
-                 #    status = result[0]
-                 #    if status == 0:
-                 #        print(f"Send Energia-2: `{energy2Fase1}` to topic `{topic5}` con freq: {freq}")
-                 #    else:
-                 #        print(f"Failed to send message to topic {topic5}")
-            
-            if(i["variableFullName"]=="FP-2"):
-                freq = i["variableSendFreq"]
-                if(a1 - q1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     q1=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, FP2)
-               #      status = result[0]
-               #      if status == 0:
-               #          print(f"Send FP-2: `{FP2}` to topic `{topic5}` con freq: {freq}")
-               #      else:
-               #          print(f"Failed to send message to topic {topic5}")
-            """
-            if(i["variableFullName"]=="FD-2"):
-                freq = i["variableSendFreq"]
-                if(a1 - r1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     r1=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, FDCorriente2)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send FD-2: `{FDCorriente2}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
-            if(i["variableFullName"]=="DAT-2"):
-                freq = i["variableSendFreq"]
-                if(a1 - s1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     s1=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, DATCorriente2)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send DAT-2: `{DATCorriente2}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
-            
-            """
-            if(i["variableFullName"]=="Pot-2"):
-                freq = i["variableSendFreq"]
-                if(a1 - t1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     t1=time.time()
-                     str_variable = i["variable"]
-                     topic5= topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, Aparente2Fase1)
-                     status = result[0]
-              #       if status == 0:
-               #          print(f"Send Pot-Aparente-2: `{Aparente2Fase1}` to topic `{topic5}` con freq: {freq}")
-                #     else:
-                 #        print(f"Failed to send message to topic {topic5}")
-            
-            #Tercera Toma
-            if(i["variableFullName"]=="Corriente-Paneles"):
-                freq = i["variableSendFreq"]
-                if(a1 - u1 > float(freq)):
-                     u1=time.time()
-                     str_variable = i["variable"]
-                     topic = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic, Irms33)
-               #      status = result[0]
-               #      
-               #      if status == 0:
-               #          print(f"Send Corriente-Paneles: `{Irms33}` to topic `{topic}` con freq: {freq}")
-               #      else:
-               #          print(f"Failed to send message to topic {topic}")
-        
-                   
-            if(i["variableFullName"]=="Voltaje-Paneles"):
-                freq = i["variableSendFreq"]
-                if(a1 - v1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v1=time.time()
-                     str_variable2 = i["variable"]
-                     topic2 = topicmqtt + str_variable2 + "/sdata"
-                     result = client.publish(topic2, Vrms33)
-                #     status = result[0]
-                #     if status == 0:
-                #         print(f"Send Voltaje-Paneles: `{Vrms33}` to topic `{topic2}` con freq: {freq}")
-                #     else:
-                #         print(f"Failed to send message to topic {topic2}")
-            """
-            if(i["variableFullName"]=="Potencia-Reactiva-Paneles"):
-                freq = i["variableSendFreq"]
-                if(a1 - v12 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v12=time.time()
-                     str_variable3 = i["variable"]
-                     topic3 = topicmqtt + str_variable3 + "/sdata"
-                     result = client.publish(topic3, ReactivaPanelesFase1)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Potencia-Reactiva-Paneles: `{ReactivaPanelesFase1}` to topic `{topic3}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic3}")
-            """
-            if(i["variableFullName"]=="Pot-Activa-Paneles"):
-                freq = i["variableSendFreq"]
-                if(a1 - v13 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v13=time.time()
-                     str_variable4 = i["variable"]
-                     topic4 = topicmqtt + str_variable4 + "/sdata"
-                     result = client.publish(topic4, ActivaPanelesFase1)
-                 #    status = result[0]
-                 #    if status == 0:
-                 #        print(f"Send Pot-Activa-Paneles: `{ActivaPanelesFase1}` to topic `{topic4}` con freq: {freq}")
-                 #    else:
-                 #        print(f"Failed to send message to topic {topic4}")
-            
-            if(i["variableFullName"]=="Energia-Paneles"):
-                freq = i["variableSendFreq"]
-                if(a1 - v14 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v14=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, energyPanelesFase1)
-                  #   status = result[0]
-                  #   if status == 0:
-                  #       print(f"Send Energia-Paneles: `{energyPanelesFase1}` to topic `{topic5}` con freq: {freq}")
-                  #   else:
-                  #       print(f"Failed to send message to topic {topic5}")
-            
-            if(i["variableFullName"]=="FP-Paneles"):
-                freq = i["variableSendFreq"]
-                if(a1 - v15 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v15=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, FPPaneles)
-                  #   status = result[0]
-                  #   if status == 0:
-                  #       print(f"Send FP-Paneles: `{FPPaneles}` to topic `{topic5}` con freq: {freq}")
-                  #   else:
-                  #       print(f"Failed to send message to topic {topic5}")
-            """
-            if(i["variableFullName"]=="FD-Paneles"):
-                freq = i["variableSendFreq"]
-                if(a1 - v16 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v16=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, FDCorrientePaneles)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send FD-Paneles: `{FDCorrientePaneles}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
-            if(i["variableFullName"]=="DAT-Paneles"):
-                freq = i["variableSendFreq"]
-                if(a1 - v17 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v17=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, DATCorrientePaneles)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send DAT-Paneles: `{DATCorrientePaneles}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
-            if(i["variableFullName"]=="Pot-Aparente-Paneles"):
-                freq = i["variableSendFreq"]
-                if(a1 - w1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     w1=time.time()
-                     str_variable = i["variable"]
-                     topic5= topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, AparentePanelesFase1)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Pot-Aparente-Paneles: `{AparentePanelesFase1}` to topic `{topic5}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic5}")
-            
-            """
-            if(i["variableFullName"]=="Voltaje-Baterias"):
-                freq = i["variableSendFreq"]
-                if(a1 - v16 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v16=time.time()
-                     str_variable4 = i["variable"]
-                     topic4 = topicmqtt + str_variable4 + "/sdata"
-                     result = client.publish(topic4, VoltajeBateriaSend)  
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Voltaje-Baterias: `{VoltajeBateriaSend}` to topic `{topic4}` ")
-                     else:
-                         print(f"Failed to send message to topic {topic4}")    
-            if(i["variableFullName"]=="Corriente-Baterias"):
-                freq = i["variableSendFreq"]
-                if(a1 - v17 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v17=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, CorrienteBateriaSend)     
-            if(i["variableFullName"]=="Potencia-Baterias"):
-                freq = i["variableSendFreq"]
-                if(a1 - v18 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v18=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, PotenciaBateriaSend)
-            if(i["variableFullName"]=="Energia-Baterias"):
-                freq = i["variableSendFreq"]
-                if(a1 - v19 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v19=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, energyBateriaSend)
-
-            if(i["variableFullName"]=="Voltaje-PanelesDC"):
-                freq = i["variableSendFreq"]
-                if(a1 - v20 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v20=time.time()
-                     str_variable4 = i["variable"]
-                     topic4 = topicmqtt + str_variable4 + "/sdata"
-                     result = client.publish(topic4, VoltajePanelesDCSend)
-
-            if(i["variableFullName"]=="Corriente-PanelesDC"):
-                freq = i["variableSendFreq"]
-                if(a1 - v21 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v21=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, CorrientePanelesDCSend)    
-
-            if(i["variableFullName"]=="Potencia-PanelesDC"):
-                freq = i["variableSendFreq"]
-                if(a1 - v22 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v22=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, PotenciaPanelesDCSend)
-            if(i["variableFullName"]=="Energia-PanelesDC"):
-                freq = i["variableSendFreq"]
-                if(a1 - v23 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     v23=time.time()
-                     str_variable = i["variable"]
-                     topic5 = topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic5, energyPanelesDCSend)
-
-            if(i["variableFullName"]=="Temperatura-ESP32"):
-                freq = i["variableSendFreq"]
-                if(a1 - x1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     x1=time.time()
-                     str_variable = i["variable"]
-                     topic= topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic, tempESP32)
-                     status = result[0]
-                     #if status == 0:
-                         #print(f"Send Temperatura-ESP32: `{tempESP32}` to topic `{topic}` con freq: {freq}")
-                     #else:
-                       #    print(f"Failed to send message to topic {topic}")
-
-            if(i["variableFullName"]=="Ventilador-Raspberry"):
-                freq = i["variableSendFreq"]
-                if(a1 - y1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     y1=time.time()
-                     str_variable = i["variable"]
-                     topic= topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic, EstateVentilador)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Ventilador-Raspberry: `{EstateVentilador}` to topic `{topic}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic}")
-            
-            if(i["variableFullName"]=="Temperatura-Raspberry"):
-                freq = i["variableSendFreq"]
-                if(a1 - z1 > float(freq)):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     z1=time.time()
-                     str_variable = i["variable"]
-                     topic= topicmqtt + str_variable + "/sdata"
-                     result = client.publish(topic, Temp_Raspberry)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send Temperatura-Raspberry: `{Temp_Raspberry}` to topic `{topic}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic}")
- 
-
 MaxVoltage15_1=0.0
 MeanVoltage15_1=0.0
 MinVoltage15_1=0.0
@@ -1595,7 +1142,12 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet2 = workbook["Max Var 1"]
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
+                    SendDataToBroker(MaxVoltage15_1,MaxCurrent15_1,MaxActivePower_1,Energy,1)
                     #print("Datos Insertados Correctamente!")
+                    #str_num = {"value":Vrms,"save":optionsave}
+                    #Vrms1 = json.dumps(str_num)
+                    #str_num = {"value":Irms,"save":optionsave}
+                    #Irms1 = json.dumps(str_num)
                     workbook.save(filename = dest_filename)
                     data15_1=[]
                     Volt15_1=[]
@@ -1641,31 +1193,54 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         DAT15Current_1.append(DATCurrent)
         Access_1 = 0
         
-        if(len(Volt15_1)>2):
+        if(len(Volt15_1)>4):
+            print(f'Array Volt 1:  {Volt15_1}')
             indice=np.argmin(Volt15_1)
-            Volt15_1.pop(indice)
+            Volt15_1.pop(indice+1)
+            indice=np.argmax(Volt15_1)
+            Volt15_1.pop(indice-1)
             indice=np.argmin(Current15_1)
-            Current15_1.pop(indice)
+            Current15_1.pop(indice+1)
+            indice=np.argmax(Current15_1)
+            Current15_1.pop(indice-1)
             indice=np.argmin(ActivePower15_1)
-            ActivePower15_1.pop(indice)
+            ActivePower15_1.pop(indice+1)
+            indice=np.argmax(ActivePower15_1)
+            ActivePower15_1.pop(indice-1)
             indice=np.argmin(ReactivePower15_1)
-            ReactivePower15_1.pop(indice)
+            ReactivePower15_1.pop(indice+1)
+            indice=np.argmax(ReactivePower15_1)
+            ReactivePower15_1.pop(indice-1)
             indice=np.argmin(AparentPower15_1)
-            AparentPower15_1.pop(indice)
-            if(len(FP15_Reactive_1)>=2):
+            ReactivePower15_1.pop(indice+1)
+            indice=np.argmax(AparentPower15_1)
+            AparentPower15_1.pop(indice-1)
+            if(len(FP15_Reactive_1)>4):
+                indice=np.argmin(FP15_Reactive_1)
+                FP15_Reactive_1.pop(indice+1)
                 indice=np.argmax(FP15_Reactive_1)
-                FP15_Reactive_1.pop(indice)
-            if(len(FP15_Inductive_1)>=2):
+                FP15_Reactive_1.pop(indice-1)
+            if(len(FP15_Inductive_1)>4):
                 indice=np.argmin(FP15_Inductive_1)
-                FP15_Inductive_1.pop(indice)
+                FP15_Inductive_1.pop(indice+1)
+                indice=np.argmax(FP15_Inductive_1)
+                FP15_Inductive_1.pop(indice-1)
             indice=np.argmin(FDVoltage15_1)
-            FDVoltage15_1.pop(indice)
+            FDVoltage15_1.pop(indice+1)
+            indice=np.argmax(FDVoltage15_1)
+            FDVoltage15_1.pop(indice-1)
             indice=np.argmin(FDCurrent15_1)
-            FDCurrent15_1.pop(indice)
+            FDCurrent15_1.pop(indice+1)
+            indice=np.argmax(FDCurrent15_1)
+            FDCurrent15_1.pop(indice-1)
             indice=np.argmin(DAT15Voltage_1)
-            DAT15Voltage_1.pop(indice)
+            DAT15Voltage_1.pop(indice+1)
+            indice=np.argmax(DAT15Voltage_1)
+            DAT15Voltage_1.pop(indice-1)
             indice=np.argmin(DAT15Current_1)
-            DAT15Current_1.pop(indice)
+            DAT15Current_1.pop(indice+1)
+            indice=np.argmax(DAT15Current_1)
+            DAT15Current_1.pop(indice-1)
         
         
 Access_2 = 0
@@ -1856,33 +1431,54 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         DAT15Voltage_2.append(DATVoltage)
         DAT15Current_2.append(DATCurrent)
         Access_2 = 0
-        
-        if(len(Volt15_2)>2):
+    
+        if(len(Volt15_2)>4):
             indice=np.argmin(Volt15_2)
-            Volt15_2.pop(indice)
-            ##print(f'Volt152 Despúes: {Volt152}')
+            Volt15_2.pop(indice+1)
+            indice=np.argmax(Volt15_2)
+            Volt15_2.pop(indice-1)
             indice=np.argmin(Current15_2)
-            Current15_2.pop(indice)
+            Current15_2.pop(indice+1)
+            indice=np.argmax(Current15_2)
+            Current15_2.pop(indice-1)
             indice=np.argmin(ActivePower15_2)
-            ActivePower15_2.pop(indice)
+            ActivePower15_2.pop(indice+1)
+            indice=np.argmax(ActivePower15_2)
+            ActivePower15_2.pop(indice-1)
             indice=np.argmin(ReactivePower15_2)
-            ReactivePower15_2.pop(indice)
+            ReactivePower15_2.pop(indice+1)
+            indice=np.argmax(ReactivePower15_2)
+            ReactivePower15_2.pop(indice-1)
             indice=np.argmin(AparentPower15_2)
-            AparentPower15_2.pop(indice)
-            if(len(FP15_Reactive_2)>=2):
+            ReactivePower15_2.pop(indice+1)
+            indice=np.argmax(AparentPower15_2)
+            AparentPower15_2.pop(indice-1)
+            if(len(FP15_Reactive_2)>4):
+                indice=np.argmin(FP15_Reactive_2)
+                FP15_Reactive_2.pop(indice+1)
                 indice=np.argmax(FP15_Reactive_2)
-                FP15_Reactive_2.pop(indice)
-            if(len(FP15_Inductive_2)>=2):
+                FP15_Reactive_2.pop(indice-1)
+            if(len(FP15_Inductive_2)>4):
                 indice=np.argmin(FP15_Inductive_2)
-                FP15_Inductive_2.pop(indice)
+                FP15_Inductive_2.pop(indice+1)
+                indice=np.argmax(FP15_Inductive_2)
+                FP15_Inductive_2.pop(indice-1)
             indice=np.argmin(FDVoltage15_2)
-            FDVoltage15_2.pop(indice)
+            FDVoltage15_2.pop(indice+1)
+            indice=np.argmax(FDVoltage15_2)
+            FDVoltage15_2.pop(indice-1)
             indice=np.argmin(FDCurrent15_2)
-            FDCurrent15_2.pop(indice)
+            FDCurrent15_2.pop(indice+1)
+            indice=np.argmax(FDCurrent15_2)
+            FDCurrent15_2.pop(indice-1)
             indice=np.argmin(DAT15Voltage_2)
-            DAT15Voltage_2.pop(indice)
+            DAT15Voltage_2.pop(indice+1)
+            indice=np.argmax(DAT15Voltage_2)
+            DAT15Voltage_2.pop(indice-1)
             indice=np.argmin(DAT15Current_2)
-            DAT15Current_2.pop(indice)
+            DAT15Current_2.pop(indice+1)
+            indice=np.argmax(DAT15Current_2)
+            DAT15Current_2.pop(indice-1)
     
 Access_3 = 0
 MaxVoltage15_3=0.0
@@ -2073,32 +1669,53 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         DAT15Current_3.append(DATCurrent)
         Access_3 = 0
         
-        if(len(Volt15_3)>2):
+        if(len(Volt15_3)>4):
             indice=np.argmin(Volt15_3)
-            Volt15_3.pop(indice)
-            ##print(f'Volt152 Despúes: {Volt152}')
+            Volt15_3.pop(indice+1)    
+            indice=np.argmax(Volt15_3)
+            Volt15_3.pop(indice-1)
             indice=np.argmin(Current15_3)
-            Current15_3.pop(indice)
+            Current15_3.pop(indice+1)
+            indice=np.argmax(Current15_3)
+            Current15_3.pop(indice-1)
             indice=np.argmin(ActivePower15_3)
-            ActivePower15_3.pop(indice)
+            ActivePower15_3.pop(indice+1)
+            indice=np.argmax(ActivePower15_3)
+            ActivePower15_3.pop(indice-1)
             indice=np.argmin(ReactivePower15_3)
-            ReactivePower15_3.pop(indice)
+            ReactivePower15_3.pop(indice+1)
+            indice=np.argmax(ReactivePower15_3)
+            ReactivePower15_23pop(indice-1)
             indice=np.argmin(AparentPower15_3)
-            AparentPower15_3.pop(indice)
-            if(len(FP15_Reactive_3)>=2):
+            ReactivePower15_3.pop(indice+1)
+            indice=np.argmax(AparentPower15_3)
+            AparentPower15_3.pop(indice-1)
+            if(len(FP15_Reactive_3)>4):
+                indice=np.argmin(FP15_Reactive_3)
+                FP15_Reactive_3.pop(indice+1)
                 indice=np.argmax(FP15_Reactive_3)
-                FP15_Reactive_3.pop(indice)
-            if(len(FP15_Inductive_3)>=2):
+                FP15_Reactive_3.pop(indice-1)
+            if(len(FP15_Inductive_3)>4):
                 indice=np.argmin(FP15_Inductive_3)
-                FP15_Inductive_3.pop(indice)
+                FP15_Inductive_3.pop(indice+1)
+                indice=np.argmax(FP15_Inductive_3)
+                FP15_Inductive_3.pop(indice-1)
             indice=np.argmin(FDVoltage15_3)
-            FDVoltage15_3.pop(indice)
+            FDVoltage15_3.pop(indice+1)
+            indice=np.argmax(FDVoltage15_3)
+            FDVoltage15_3.pop(indice-1)
             indice=np.argmin(FDCurrent15_3)
-            FDCurrent15_3.pop(indice)
+            FDCurrent15_3.pop(indice+1)
+            indice=np.argmax(FDCurrent15_3)
+            FDCurrent15_3.pop(indice-1)
             indice=np.argmin(DAT15Voltage_3)
-            DAT15Voltage_3.pop(indice)
+            DAT15Voltage_3.pop(indice+1)
+            indice=np.argmax(DAT15Voltage_3)
+            DAT15Voltage_3.pop(indice-1)
             indice=np.argmin(DAT15Current_3)
-            DAT15Current_3.pop(indice)
+            DAT15Current_3.pop(indice+1)
+            indice=np.argmax(DAT15Current_3)
+            DAT15Current_3.pop(indice-1)
 
 Access_4 = 0
 MaxVoltage15_4=0.0
@@ -2288,32 +1905,53 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         DAT15Current_4.append(DATCurrent)
         Access_4 = 0
         
-        if(len(Volt15_4)>2):
+        if(len(Volt15_4)>4):
             indice=np.argmin(Volt15_4)
-            Volt15_4.pop(indice)
-            ##print(f'Volt152 Despúes: {Volt152}')
+            Volt15_4.pop(indice+1)
+            indice=np.argmax(Volt15_4)
+            Volt15_4.pop(indice-1)
             indice=np.argmin(Current15_4)
-            Current15_4.pop(indice)
+            Current15_4.pop(indice+1)
+            indice=np.argmax(Current15_4)
+            Current15_4.pop(indice-1)
             indice=np.argmin(ActivePower15_4)
-            ActivePower15_4.pop(indice)
+            ActivePower15_4.pop(indice+1)
+            indice=np.argmax(ActivePower15_4)
+            ActivePower15_4.pop(indice-1)
             indice=np.argmin(ReactivePower15_4)
-            ReactivePower15_4.pop(indice)
+            ReactivePower15_4.pop(indice+1)
+            indice=np.argmax(ReactivePower15_4)
+            ReactivePower15_4.pop(indice-1)
             indice=np.argmin(AparentPower15_4)
-            AparentPower15_4.pop(indice)
-            if(len(FP15_Reactive_4)>=2):
+            ReactivePower15_4.pop(indice+1)
+            indice=np.argmax(AparentPower15_4)
+            AparentPower15_4.pop(indice-1)
+            if(len(FP15_Reactive_4)>4):
+                indice=np.argmin(FP15_Reactive_4)
+                FP15_Reactive_4.pop(indice+1)
                 indice=np.argmax(FP15_Reactive_4)
-                FP15_Reactive_4.pop(indice)
-            if(len(FP15_Inductive_4)>=2):
+                FP15_Reactive_4.pop(indice-1)
+            if(len(FP15_Inductive_4)>4):
                 indice=np.argmin(FP15_Inductive_4)
-                FP15_Inductive_4.pop(indice)
+                FP15_Inductive_4.pop(indice+1)
+                indice=np.argmax(FP15_Inductive_4)
+                FP15_Inductive_4.pop(indice-1)
             indice=np.argmin(FDVoltage15_4)
-            FDVoltage15_4.pop(indice)
+            FDVoltage15_4.pop(indice+1)
+            indice=np.argmax(FDVoltage15_4)
+            FDVoltage15_4.pop(indice-1)
             indice=np.argmin(FDCurrent15_4)
-            FDCurrent15_4.pop(indice)
+            FDCurrent15_4.pop(indice+1)
+            indice=np.argmax(FDCurrent15_4)
+            FDCurrent15_4.pop(indice-1)
             indice=np.argmin(DAT15Voltage_4)
-            DAT15Voltage_4.pop(indice)
+            DAT15Voltage_4.pop(indice+1)
+            indice=np.argmax(DAT15Voltage_4)
+            DAT15Voltage_4.pop(indice-1)
             indice=np.argmin(DAT15Current_4)
-            DAT15Current_4.pop(indice)
+            DAT15Current_4.pop(indice+1)
+            indice=np.argmax(DAT15Current_4)
+            DAT15Current_4.pop(indice-1)
 
 Access_5 = 0
 MaxVoltage15_5=0.0
@@ -2504,33 +2142,54 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         DAT15Current_5.append(DATCurrent)
         Access_5 = 0
         
-        if(len(Volt15_5)>2):
+        if(len(Volt15_5)>4):
             indice=np.argmin(Volt15_5)
-            Volt15_5.pop(indice)
-            ##print(f'Volt152 Despúes: {Volt152}')
+            Volt15_5.pop(indice+1)
+            indice=np.argmax(Volt15_5)
+            Volt15_5.pop(indice-1)
             indice=np.argmin(Current15_5)
-            Current15_5.pop(indice)
+            Current15_5.pop(indice+1)
+            indice=np.argmax(Current15_5)
+            Current15_5.pop(indice-1)
             indice=np.argmin(ActivePower15_5)
-            ActivePower15_5.pop(indice)
+            ActivePower15_5.pop(indice+1)
+            indice=np.argmax(ActivePower15_5)
+            ActivePower15_5.pop(indice-1)
             indice=np.argmin(ReactivePower15_5)
-            ReactivePower15_5.pop(indice)
+            ReactivePower15_5.pop(indice+1)
+            indice=np.argmax(ReactivePower15_5)
+            ReactivePower15_5.pop(indice-1)
             indice=np.argmin(AparentPower15_5)
-            AparentPower15_5.pop(indice)
-            if(len(FP15_Reactive_5)>=2):
+            ReactivePower15_5.pop(indice+1)
+            indice=np.argmax(AparentPower15_5)
+            AparentPower15_5.pop(indice-1)
+            if(len(FP15_Reactive_5)>4):
+                indice=np.argmin(FP15_Reactive_5)
+                FP15_Reactive_5.pop(indice+1)
                 indice=np.argmax(FP15_Reactive_5)
-                FP15_Reactive_5.pop(indice)
-            if(len(FP15_Inductive_5)>=2):
+                FP15_Reactive_5.pop(indice-1)
+            if(len(FP15_Inductive_5)>4):
                 indice=np.argmin(FP15_Inductive_5)
-                FP15_Inductive_5.pop(indice)
+                FP15_Inductive_5.pop(indice+1)
+                indice=np.argmax(FP15_Inductive_5)
+                FP15_Inductive_5.pop(indice-1)
             indice=np.argmin(FDVoltage15_5)
-            FDVoltage15_5.pop(indice)
+            FDVoltage15_5.pop(indice+1)
+            indice=np.argmax(FDVoltage15_5)
+            FDVoltage15_5.pop(indice-1)
             indice=np.argmin(FDCurrent15_5)
-            FDCurrent15_5.pop(indice)
+            FDCurrent15_5.pop(indice+1)
+            indice=np.argmax(FDCurrent15_5)
+            FDCurrent15_5.pop(indice-1)
             indice=np.argmin(DAT15Voltage_5)
-            DAT15Voltage_5.pop(indice)
+            DAT15Voltage_5.pop(indice+1)
+            indice=np.argmax(DAT15Voltage_5)
+            DAT15Voltage_5.pop(indice-1)
             indice=np.argmin(DAT15Current_5)
-            DAT15Current_5.pop(indice)
-
+            DAT15Current_5.pop(indice+1)
+            indice=np.argmax(DAT15Current_5)
+            DAT15Current_5.pop(indice-1)
+            
 Access_7 = 0
 MaxVoltage15_7=0.0
 MeanVoltage15_7=0.0
@@ -2719,32 +2378,53 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         DAT15Current_7.append(DATCurrent)
         Access_7 = 0
         
-        if(len(Volt15_7)>2):
+        if(len(Volt15_7)>4):
             indice=np.argmin(Volt15_7)
-            Volt15_7.pop(indice)
-            ##print(f'Volt152 Despúes: {Volt152}')
+            Volt15_7.pop(indice+1)
+            indice=np.argmax(Volt15_7)
+            Volt15_7.pop(indice-1)
             indice=np.argmin(Current15_7)
-            Current15_7.pop(indice)
+            Current15_7.pop(indice+1)
+            indice=np.argmax(Current15_7)
+            Current15_7.pop(indice-1)
             indice=np.argmin(ActivePower15_7)
-            ActivePower15_7.pop(indice)
+            ActivePower15_7.pop(indice+1)
+            indice=np.argmax(ActivePower15_7)
+            ActivePower15_7.pop(indice-1)
             indice=np.argmin(ReactivePower15_7)
-            ReactivePower15_7.pop(indice)
+            ReactivePower15_7.pop(indice+1)
+            indice=np.argmax(ReactivePower15_7)
+            ReactivePower15_7.pop(indice-1)
             indice=np.argmin(AparentPower15_7)
-            AparentPower15_7.pop(indice)
-            if(len(FP15_Reactive_7)>=2):
+            ReactivePower15_7.pop(indice+1)
+            indice=np.argmax(AparentPower15_7)
+            AparentPower15_7.pop(indice-1)
+            if(len(FP15_Reactive_7)>4):
+                indice=np.argmin(FP15_Reactive_7)
+                FP15_Reactive_7.pop(indice+1)
                 indice=np.argmax(FP15_Reactive_7)
-                FP15_Reactive_7.pop(indice)
-            if(len(FP15_Inductive_7)>=2):
+                FP15_Reactive_7.pop(indice-1)
+            if(len(FP15_Inductive_7)>4):
                 indice=np.argmin(FP15_Inductive_7)
-                FP15_Inductive_7.pop(indice)
+                FP15_Inductive_7.pop(indice+1)
+                indice=np.argmax(FP15_Inductive_7)
+                FP15_Inductive_7.pop(indice-1)
             indice=np.argmin(FDVoltage15_7)
-            FDVoltage15_7.pop(indice)
+            FDVoltage15_7.pop(indice+1)
+            indice=np.argmax(FDVoltage15_7)
+            FDVoltage15_7.pop(indice-1)
             indice=np.argmin(FDCurrent15_7)
-            FDCurrent15_7.pop(indice)
+            FDCurrent15_7.pop(indice+1)
+            indice=np.argmax(FDCurrent15_7)
+            FDCurrent15_7.pop(indice-1)
             indice=np.argmin(DAT15Voltage_7)
-            DAT15Voltage_7.pop(indice)
+            DAT15Voltage_7.pop(indice+1)
+            indice=np.argmax(DAT15Voltage_7)
+            DAT15Voltage_7.pop(indice-1)
             indice=np.argmin(DAT15Current_7)
-            DAT15Current_7.pop(indice)
+            DAT15Current_7.pop(indice+1)
+            indice=np.argmax(DAT15Current_7)
+            DAT15Current_7.pop(indice-1)
 
 Access_8 = 0
 MaxVoltage15_8=0.0
@@ -2932,31 +2612,53 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         DAT15Voltage_8.append(DATVoltage)
         DAT15Current_8.append(DATCurrent)
         Access_8 = 0       
-        if(len(Volt15_8)>2):
+        if(len(Volt15_8)>4):
             indice=np.argmin(Volt15_8)
-            Volt15_8.pop(indice)
+            Volt15_8.pop(indice+1)
+            indice=np.argmax(Volt15_8)
+            Volt15_8.pop(indice-1)
             indice=np.argmin(Current15_8)
-            Current15_8.pop(indice)
+            Current15_8.pop(indice+1)
+            indice=np.argmax(Current15_8)
+            Current15_8.pop(indice-1)
             indice=np.argmin(ActivePower15_8)
-            ActivePower15_8.pop(indice)
+            ActivePower15_8.pop(indice+1)
+            indice=np.argmax(ActivePower15_8)
+            ActivePower15_8.pop(indice-1)
             indice=np.argmin(ReactivePower15_8)
-            ReactivePower15_8.pop(indice)
+            ReactivePower15_8.pop(indice+1)
+            indice=np.argmax(ReactivePower15_8)
+            ReactivePower15_8.pop(indice-1)
             indice=np.argmin(AparentPower15_8)
-            AparentPower15_8.pop(indice)
-            if(len(FP15_Reactive_8)>=2):
+            AparentPower15_8.pop(indice+1)
+            indice=np.argmax(AparentPower15_8)
+            AparentPower15_8.pop(indice-1)
+            if(len(FP15_Reactive_8)>4):
+                indice=np.argmin(FP15_Reactive_8)
+                FP15_Reactive_8.pop(indice+1)
                 indice=np.argmax(FP15_Reactive_8)
-                FP15_Reactive_8.pop(indice)
-            if(len(FP15_Inductive_8)>=2):
+                FP15_Reactive_8.pop(indice-1)
+            if(len(FP15_Inductive_8)>4):
                 indice=np.argmin(FP15_Inductive_8)
-                FP15_Inductive_8.pop(indice)
+                FP15_Inductive_8.pop(indice+1)
+                indice=np.argmax(FP15_Inductive_8)
+                FP15_Inductive_8.pop(indice-1)
             indice=np.argmin(FDVoltage15_8)
-            FDVoltage15_8.pop(indice)
+            FDVoltage15_8.pop(indice+1)
+            indice=np.argmax(FDVoltage15_8)
+            FDVoltage15_8.pop(indice-1)
             indice=np.argmin(FDCurrent15_8)
-            FDCurrent15_8.pop(indice)
+            FDCurrent15_8.pop(indice+1)
+            indice=np.argmax(FDCurrent15_8)
+            FDCurrent15_8.pop(indice-1)
             indice=np.argmin(DAT15Voltage_8)
-            DAT15Voltage_8.pop(indice)
+            DAT15Voltage_8.pop(indice+1)
+            indice=np.argmax(DAT15Voltage_8)
+            DAT15Voltage_8.pop(indice-1)
             indice=np.argmin(DAT15Current_8)
-            DAT15Current_8.pop(indice)
+            DAT15Current_8.pop(indice+1)
+            indice=np.argmax(DAT15Current_8)
+            DAT15Current_8.pop(indice-1)
 
 Access_6 = 0
 MaxVoltage15_6=0.0
@@ -3146,32 +2848,53 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         DAT15Current_6.append(DATCurrent)
         Access_6 = 0
         
-        if(len(Volt15_6)>2):
+        if(len(Volt15_6)>4):
             indice=np.argmin(Volt15_6)
-            Volt15_6.pop(indice)
-            ##print(f'Volt152 Despúes: {Volt152}')
+            Volt15_6.pop(indice+1)
+            indice=np.argmax(Volt15_6)
+            Volt15_6.pop(indice-1)
             indice=np.argmin(Current15_6)
-            Current15_6.pop(indice)
+            Current15_6.pop(indice+1)
+            indice=np.argmax(Current15_6)
+            Current15_6.pop(indice-1)
             indice=np.argmin(ActivePower15_6)
-            ActivePower15_6.pop(indice)
+            ActivePower15_6.pop(indice+1)
+            indice=np.argmax(ActivePower15_6)
+            ActivePower15_6.pop(indice-1)
             indice=np.argmin(ReactivePower15_6)
-            ReactivePower15_6.pop(indice)
+            ReactivePower15_6.pop(indice+1)
+            indice=np.argmax(ReactivePower15_6)
+            ReactivePower15_6.pop(indice-1)
             indice=np.argmin(AparentPower15_6)
-            AparentPower15_6.pop(indice)
-            if(len(FP15_Reactive_6)>=2):
+            AparentPower15_6.pop(indice+1)
+            indice=np.argmax(AparentPower15_6)
+            AparentPower15_6.pop(indice-1)
+            if(len(FP15_Reactive_6)>4):
+                indice=np.argmin(FP15_Reactive_6)
+                FP15_Reactive_6.pop(indice+1)
                 indice=np.argmax(FP15_Reactive_6)
-                FP15_Reactive_6.pop(indice)
-            if(len(FP15_Inductive_6)>=2):
+                FP15_Reactive_6.pop(indice-1)
+            if(len(FP15_Inductive_6)>4):
                 indice=np.argmin(FP15_Inductive_6)
-                FP15_Inductive_6.pop(indice)
+                FP15_Inductive_6.pop(indice+1)
+                indice=np.argmax(FP15_Inductive_6)
+                FP15_Inductive_6.pop(indice-1)
             indice=np.argmin(FDVoltage15_6)
-            FDVoltage15_6.pop(indice)
+            FDVoltage15_6.pop(indice+1)
+            indice=np.argmax(FDVoltage15_6)
+            FDVoltage15_6.pop(indice-1)
             indice=np.argmin(FDCurrent15_6)
-            FDCurrent15_6.pop(indice)
+            FDCurrent15_6.pop(indice+1)
+            indice=np.argmax(FDCurrent15_6)
+            FDCurrent15_6.pop(indice-1)
             indice=np.argmin(DAT15Voltage_6)
-            DAT15Voltage_6.pop(indice)
+            DAT15Voltage_6.pop(indice+1)
+            indice=np.argmax(DAT15Voltage_6)
+            DAT15Voltage_6.pop(indice-1)
             indice=np.argmin(DAT15Current_6)
-            DAT15Current_6.pop(indice)
+            DAT15Current_6.pop(indice+1)
+            indice=np.argmax(DAT15Current_6)
+            DAT15Current_6.pop(indice-1)
 
 Access_9 = 0
 MaxVoltage15_9=0.0
@@ -3237,7 +2960,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     MeanVoltage15_9=np.median(Volt15_9)
                     MinVoltage15_9=min(Volt15_9)
                     MaxCurrent15_9=max(Current15_9)
-                    MeanCurrent15_4=np.median(Current15_9)
+                    MeanCurrent15_9=np.median(Current15_9)
                     MinCurrent15_9=min(Current15_9)
                     MaxActivePower_9=max(ActivePower15_9)
                     MeanActivePower_9=np.median(ActivePower15_9)
@@ -3361,32 +3084,53 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         DAT15Current_9.append(DATCurrent)
         Access_9 = 0
         
-        if(len(Volt15_9)>2):
+        if(len(Volt15_9)>4):
             indice=np.argmin(Volt15_9)
-            Volt15_9.pop(indice)
-            ##print(f'Volt152 Despúes: {Volt152}')
+            Volt15_9.pop(indice+1)
+            indice=np.argmax(Volt15_9)
+            Volt15_9.pop(indice-1)
             indice=np.argmin(Current15_9)
-            Current15_9.pop(indice)
+            Current15_9.pop(indice+1)
+            indice=np.argmax(Current15_9)
+            Current15_9.pop(indice-1)
             indice=np.argmin(ActivePower15_9)
-            ActivePower15_9.pop(indice)
+            ActivePower15_9.pop(indice+1)
+            indice=np.argmax(ActivePower15_9)
+            ActivePower15_9.pop(indice-1)
             indice=np.argmin(ReactivePower15_9)
-            ReactivePower15_9.pop(indice)
+            ReactivePower15_9.pop(indice+1)
+            indice=np.argmax(ReactivePower15_9)
+            ReactivePower15_9.pop(indice-1)
             indice=np.argmin(AparentPower15_9)
-            AparentPower15_9.pop(indice)
-            if(len(FP15_Reactive_9)>=2):
+            AparentPower15_9.pop(indice+1)
+            indice=np.argmax(AparentPower15_9)
+            AparentPower15_9.pop(indice-1)
+            if(len(FP15_Reactive_9)>4):
+                indice=np.argmin(FP15_Reactive_9)
+                FP15_Reactive_9.pop(indice+1)
                 indice=np.argmax(FP15_Reactive_9)
-                FP15_Reactive_9.pop(indice)
-            if(len(FP15_Inductive_9)>=2):
+                FP15_Reactive_9.pop(indice-1)
+            if(len(FP15_Inductive_9)>4):
                 indice=np.argmin(FP15_Inductive_9)
-                FP15_Inductive_9.pop(indice)
+                FP15_Inductive_9.pop(indice+1)
+                indice=np.argmax(FP15_Inductive_9)
+                FP15_Inductive_9.pop(indice-1)
             indice=np.argmin(FDVoltage15_9)
-            FDVoltage15_9.pop(indice)
+            FDVoltage15_9.pop(indice+1)
+            indice=np.argmax(FDVoltage15_9)
+            FDVoltage15_9.pop(indice-1)
             indice=np.argmin(FDCurrent15_9)
-            FDCurrent15_9.pop(indice)
+            FDCurrent15_9.pop(indice+1)
+            indice=np.argmax(FDCurrent15_9)
+            FDCurrent15_9.pop(indice-1)
             indice=np.argmin(DAT15Voltage_9)
-            DAT15Voltage_9.pop(indice)
+            DAT15Voltage_9.pop(indice+1)
+            indice=np.argmax(DAT15Voltage_9)
+            DAT15Voltage_9.pop(indice-1)
             indice=np.argmin(DAT15Current_9)
-            DAT15Current_9.pop(indice)
+            DAT15Current_9.pop(indice+1)
+            indice=np.argmax(DAT15Current_9)
+            DAT15Current_9.pop(indice-1)
 
 def excelcreate():
     global dest_filename
@@ -3736,8 +3480,8 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     list_FinalCurrent = list_CurrentFilterComplete [103:4200]
     #print(f'list_FinalCurrent {i} Max: {max(list_FinalCurrent)}')
 
-    List_MaxVoltage=getMaxValues(list_FinalVoltage, 50)
-    List_MinVoltage=getMinValues(list_FinalVoltage, 50)
+    List_MaxVoltage=getMaxValues(list_FinalVoltage, 100)
+    List_MinVoltage=getMinValues(list_FinalVoltage, 100)
     MaxVoltage = np.median(List_MaxVoltage)
     MinVoltage = np.median(List_MinVoltage)
     DC_VoltageMedian = (MaxVoltage+MinVoltage)/2
@@ -3749,8 +3493,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferVoltaje=np.median(BufferVoltaje_1)
             Vrms=VoltRms(MediaBufferVoltaje)
             print(f'Vrms {i}: {Vrms}')
-            str_num = {"value":Vrms,"save":1}
-            Vrms1 = json.dumps(str_num)
             VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_1=[]
         else:
@@ -3760,8 +3502,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferVoltaje=np.median(BufferVoltaje_2)
             Vrms=VoltRms(MediaBufferVoltaje)
             print(f'Vrms {i}: {Vrms}')
-            str_num = {"value":Vrms,"save":1}
-            Vrms2 = json.dumps(str_num)
             VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_2=[]
         else:
@@ -3771,8 +3511,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferVoltaje=np.median(BufferVoltaje_3)
             Vrms=VoltRms(MediaBufferVoltaje)
             print(f'Vrms {i}: {Vrms}')
-            str_num = {"value":Vrms,"save":1}
-            Vrms3 = json.dumps(str_num)
             VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_3=[]
         else:
@@ -3782,8 +3520,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferVoltaje=np.median(BufferVoltaje_4)
             Vrms=VoltRms(MediaBufferVoltaje)
             print(f'Vrms {i}: {Vrms}')
-            str_num = {"value":Vrms,"save":1}
-            Vrms4 = json.dumps(str_num)
             VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_4=[]
         else:
@@ -3793,8 +3529,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferVoltaje=np.median(BufferVoltaje_5)
             Vrms=VoltRms(MediaBufferVoltaje)
             print(f'Vrms {i}: {Vrms}')
-            str_num = {"value":Vrms,"save":1}
-            Vrms5 = json.dumps(str_num)
             VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_5=[]
         else:
@@ -3804,8 +3538,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferVoltaje=np.median(BufferVoltaje_6)
             Vrms=VoltRms(MediaBufferVoltaje)
             print(f'Vrms {i}: {Vrms}')
-            str_num = {"value":Vrms,"save":1}
-            Vrms6 = json.dumps(str_num)
             VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_6=[]
         else:
@@ -3815,8 +3547,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferVoltaje=np.median(BufferVoltaje_7)
             Vrms=VoltRms(MediaBufferVoltaje)
             print(f'Vrms {i}: {Vrms}')
-            str_num = {"value":Vrms,"save":1}
-            Vrms7 = json.dumps(str_num)
             VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_7=[]
         else:
@@ -3826,8 +3556,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferVoltaje=np.median(BufferVoltaje_8)
             Vrms=VoltRms(MediaBufferVoltaje)
             print(f'Vrms {i}: {Vrms}')
-            str_num = {"value":Vrms,"save":1}
-            Vrms8 = json.dumps(str_num)
             VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_8=[]
         else:
@@ -3837,8 +3565,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferVoltaje=np.median(BufferVoltaje_9)
             Vrms=VoltRms(MediaBufferVoltaje)
             print(f'Vrms {i}: {Vrms}')
-            str_num = {"value":Vrms,"save":1}
-            Vrms9 = json.dumps(str_num)
             VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_9=[]
         else:
@@ -3858,8 +3584,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferCurrent=np.median(BufferCurrent_1)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
-            str_num = {"value":Irms,"save":1}
-            Irms1 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
             potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
             Potencias(i,Irms,Vrms,potrmsCGE)     
