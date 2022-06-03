@@ -970,7 +970,7 @@ def SendDataToBroker(Vrms,Irms,PotenciaAp,Energia,k):
             for i in data["variables"]:
                 #    if(data["variables"][i]["variableType"]=="output"):
                 #        continue
-                if(i["variableFullName"]==f'Vrms_{k}'):
+                if(i["variableFullName"]==f'Vrms-{k}'):
                     freq = i["variableSendFreq"]
                     if(timeToSend - vt1 > float(freq)):
                          vt1=time.time()
@@ -980,6 +980,42 @@ def SendDataToBroker(Vrms,Irms,PotenciaAp,Energia,k):
                          status = result[0]            
                          if status == 0:
                              print(f"Send Irms: `{Vrms}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Irms-{k}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt1 > float(freq)):
+                         vt1=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, Vrms)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Irms: `{Irms}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Potencia-{k}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt1 > float(freq)):
+                         vt1=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, Vrms)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Irms: `{PotAp}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Energia-{k}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt1 > float(freq)):
+                         vt1=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, Vrms)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Irms: `{Energia}` to topic `{topic1}` con freq: {freq}")  
                          else:
                              print(f"Failed to send message to topic {topic1}")
         try:  
@@ -1141,11 +1177,6 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
                     SendDataToBroker(MaxVoltage15_1,MaxCurrent15_1,MaxActivePower_1,Energy,1)
-                    #print("Datos Insertados Correctamente!")
-                    #str_num = {"value":Vrms,"save":optionsave}
-                    #Vrms1 = json.dumps(str_num)
-                    #str_num = {"value":Irms,"save":optionsave}
-                    #Irms1 = json.dumps(str_num)
                     workbook.save(filename = dest_filename)
                     data15_1=[]
                     Volt15_1=[]
@@ -3651,8 +3682,8 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
 
     List_MaxVoltage=getMaxValues(list_FinalVoltage, 100)
     List_MinVoltage=getMinValues(list_FinalVoltage, 100)
-    MaxVoltage = np.median(List_MaxVoltage)
-    MinVoltage = np.median(List_MinVoltage)
+    MaxVoltage = np.min(List_MaxVoltage)
+    MinVoltage = np.max(List_MinVoltage)
     DC_VoltageMedian = (MaxVoltage+MinVoltage)/2
     NoVoltageOffset=(list_FinalVoltage-DC_VoltageMedian)             
     Vrms=VoltajeRms(NoVoltageOffset)*0.92
