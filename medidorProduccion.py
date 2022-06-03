@@ -964,6 +964,7 @@ def SendDataToBroker(Vrms,Irms,PotenciaAp,Energia,k):
         PotAp = json.dumps(str_num)
         str_num = {"value":Energia,"save":optionsave}
         Energia = json.dumps(str_num)
+        print(f"Preparando Envio {k}")
         def publish(client): 
             global vt1#,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9
             timeToSend=time.time()
