@@ -1091,7 +1091,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_1
     
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46): 
+    if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47): 
                if(Access_1 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_1 = 1
@@ -1348,7 +1348,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_2
     
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
+    if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_2 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_2 = 1
@@ -1604,7 +1604,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_3
     
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
+    if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_3 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_3 = 1
@@ -1860,7 +1860,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_4
     
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
+    if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_4 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_4 = 1
@@ -2115,7 +2115,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_5
     
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
+    if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_5 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_5 = 1
@@ -2371,7 +2371,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_7
     
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
+    if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_7 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_7 = 1
@@ -2625,7 +2625,7 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global DAT15Current_8
     global Access_8
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
+    if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_8 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_8 = 1
@@ -2878,7 +2878,7 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global DAT15Current_6
     global Access_6
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
+    if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_6 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_6 = 1
@@ -3134,7 +3134,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global DAT15Current_9
     global Access_9
     basea = datetime.datetime.now()
-    if(basea.minute==0 or basea.minute==1 or basea.minute==15 or basea.minute==16 or basea.minute==30 or basea.minute==31 or basea.minute==45 or basea.minute==46):
+    if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_9 == 0):
                     #graphVoltage(NoVoltageoffset2,ListaIrmsPeak2,samplings2,2)
                     Access_9 = 1
