@@ -72,8 +72,8 @@ print("Hora de comienzo:", horasetup)
 
 broker = '18.228.175.193'    #mqtt server
 port = 1883
-dId = '1234321'
-passw = 'V0FLgcWETb'
+dId = '123454321'
+passw = 'OeC5zvR6Ko'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
@@ -970,7 +970,7 @@ def SendDataToBroker(Vrms,Irms,PotenciaAp,Energia,k):
             for i in data["variables"]:
                 #    if(data["variables"][i]["variableType"]=="output"):
                 #        continue
-                if(i["variableFullName"]==f'Vrms-{k}'):
+                if(i["variableFullName"]==f'Voltaje-{k}'):
                     freq = i["variableSendFreq"]
                     if(timeToSend - vt1 > float(freq)):
                          vt1=time.time()
@@ -982,7 +982,7 @@ def SendDataToBroker(Vrms,Irms,PotenciaAp,Energia,k):
                              print(f"Send Irms: `{Vrms}` to topic `{topic1}` con freq: {freq}")  
                          else:
                              print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Irms-{k}'):
+                if(i["variableFullName"]==f'Corriente-{k}'):
                     freq = i["variableSendFreq"]
                     if(timeToSend - vt1 > float(freq)):
                          vt1=time.time()
@@ -3692,8 +3692,11 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if (len(BufferVoltaje_1)>=5):
             MediaBufferVoltaje=np.median(BufferVoltaje_1)
             Vrms=VoltRms(MediaBufferVoltaje)
-            print(f'Vrms {i}: {Vrms}')
-            VoltageFFT(NoVoltageOffset,samplings,i)
+            if(Vrms>235):
+                print(f"Mayor a 235 {i}")
+            else:
+                print(f'Vrms {i}: {Vrms}')
+                VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_1=[]
         else:
             BufferVoltaje_1.append(Vrms)
@@ -3701,8 +3704,11 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if (len(BufferVoltaje_2)>=5):
             MediaBufferVoltaje=np.median(BufferVoltaje_2)
             Vrms=VoltRms(MediaBufferVoltaje)
-            print(f'Vrms {i}: {Vrms}')
-            VoltageFFT(NoVoltageOffset,samplings,i)
+            if(Vrms>235):
+                print(f"Mayor a 235 {i}")
+            else:
+                print(f'Vrms {i}: {Vrms}')
+                VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_2=[]
         else:
             BufferVoltaje_2.append(Vrms)
@@ -3710,8 +3716,11 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if (len(BufferVoltaje_3)>=5):
             MediaBufferVoltaje=np.median(BufferVoltaje_3)
             Vrms=VoltRms(MediaBufferVoltaje)
-            print(f'Vrms {i}: {Vrms}')
-            VoltageFFT(NoVoltageOffset,samplings,i)
+            if(Vrms>235):
+                print(f"Mayor a 235 {i}")
+            else:
+                print(f'Vrms {i}: {Vrms}')
+                VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_3=[]
         else:
             BufferVoltaje_3.append(Vrms)
@@ -3719,8 +3728,11 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if (len(BufferVoltaje_4)>=5):
             MediaBufferVoltaje=np.median(BufferVoltaje_4)
             Vrms=VoltRms(MediaBufferVoltaje)
-            print(f'Vrms {i}: {Vrms}')
-            VoltageFFT(NoVoltageOffset,samplings,i)
+            if(Vrms>235):
+                print(f"Mayor a 235 {i}")
+            else:
+                print(f'Vrms {i}: {Vrms}')
+                VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_4=[]
         else:
             BufferVoltaje_1.append(Vrms)
@@ -3728,8 +3740,11 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if (len(BufferVoltaje_5)>=5):
             MediaBufferVoltaje=np.median(BufferVoltaje_5)
             Vrms=VoltRms(MediaBufferVoltaje)
-            print(f'Vrms {i}: {Vrms}')
-            VoltageFFT(NoVoltageOffset,samplings,i)
+            if(Vrms>235):
+                print(f"Mayor a 235 {i}")
+            else:
+                print(f'Vrms {i}: {Vrms}')
+                VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_5=[]
         else:
             BufferVoltaje_5.append(Vrms)
@@ -3737,8 +3752,11 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if (len(BufferVoltaje_6)>=5):
             MediaBufferVoltaje=np.median(BufferVoltaje_6)
             Vrms=VoltRms(MediaBufferVoltaje)
-            print(f'Vrms {i}: {Vrms}')
-            VoltageFFT(NoVoltageOffset,samplings,i)
+            if(Vrms>235):
+                print(f"Mayor a 235 {i}")
+            else:
+                print(f'Vrms {i}: {Vrms}')
+                VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_6=[]
         else:
             BufferVoltaje_6.append(Vrms)
@@ -3746,8 +3764,11 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if (len(BufferVoltaje_7)>=5):
             MediaBufferVoltaje=np.median(BufferVoltaje_7)
             Vrms=VoltRms(MediaBufferVoltaje)
-            print(f'Vrms {i}: {Vrms}')
-            VoltageFFT(NoVoltageOffset,samplings,i)
+            if(Vrms>235):
+                print(f"Mayor a 235 {i}")
+            else:
+                print(f'Vrms {i}: {Vrms}')
+                VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_7=[]
         else:
             BufferVoltaje_7.append(Vrms)
@@ -3755,8 +3776,11 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if (len(BufferVoltaje_8)>=5):
             MediaBufferVoltaje=np.median(BufferVoltaje_8)
             Vrms=VoltRms(MediaBufferVoltaje)
-            print(f'Vrms {i}: {Vrms}')
-            VoltageFFT(NoVoltageOffset,samplings,i)
+            if(Vrms>235):
+                print(f"Mayor a 235 {i}")
+            else:
+                print(f'Vrms {i}: {Vrms}')
+                VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_8=[]
         else:
             BufferVoltaje_8.append(Vrms)
@@ -3764,8 +3788,11 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if (len(BufferVoltaje_9)>=5):
             MediaBufferVoltaje=np.median(BufferVoltaje_9)
             Vrms=VoltRms(MediaBufferVoltaje)
-            print(f'Vrms {i}: {Vrms}')
-            VoltageFFT(NoVoltageOffset,samplings,i)
+            if(Vrms>235):
+                print(f"Mayor a 235 {i}")
+            else:
+                print(f'Vrms {i}: {Vrms}')
+                VoltageFFT(NoVoltageOffset,samplings,i)
             BufferVoltaje_9=[]
         else:
             BufferVoltaje_9.append(Vrms)
