@@ -137,8 +137,6 @@ def on_connected(client, userdata, flags, rc):
         print("Bad connection Returned code=",rc)
         client.bad_connection_flag=False
 
-   
-
 get_mqtt_credentials()     
 client = mqtt.Client(str_client_id)   #Creación cliente
 client.connect(broker, port)     #Conexión al broker
