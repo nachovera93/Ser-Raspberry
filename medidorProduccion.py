@@ -684,7 +684,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global Time8a
     global Time9a
     TimeEnergy = datetime.datetime.now()
-    if(TimeEnergy.minute==0):
+    if(TimeEnergy.minute==3):
             OneHourEnergy_1=0
             OneHourEnergy_2=0
             OneHourEnergy_3=0
@@ -694,7 +694,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             OneHourEnergy_7=0
             OneHourEnergy_8=0
             OneHourEnergy_9=0
-    if(TimeEnergy.hour==0 and TimeEnergy.minute==0):
+    if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
             Energy_1=0
             Energy_2=0
             Energy_3=0
@@ -723,7 +723,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i)
-        Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1)
+        Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1)
     elif (i == 2):
         Time2b = datetime.datetime.now()
         delta=(((Time2b - Time2a).microseconds)/1000+((Time2b - Time2a).seconds)*1000)/10000000000
@@ -954,25 +954,27 @@ vt6=time.time()
 vt7=time.time()
 vt8=time.time()
 vt9=time.time()
+vt10=time.time()
+vt11=time.time()
 
 
-def SendDataToBroker(Vrms,Irms,PotenciaAp,Energia,k):
-        str_num = {"value":Vrms,"save":optionsave}
-        Vrms = json.dumps(str_num)
-        str_num = {"value":Irms,"save":optionsave}
-        Irms = json.dumps(str_num)
-        str_num = {"value":PotenciaAp,"save":optionsave}
-        PotAp = json.dumps(str_num)
-        str_num = {"value":Energia,"save":optionsave}
-        Energia = json.dumps(str_num)
+def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,PotApMean,PotApMin,OneHourEnergy,Energy,k):
+        str_num = {"value":VrmsMax,"save":optionsave}
+        VrmsMax = json.dumps(str_num)
+        str_num = {"value":IrmsMax,"save":optionsave}
+        IrmsMax = json.dumps(str_num)
+        str_num = {"value":PotApMax,"save":optionsave}
+        PotApMax = json.dumps(str_num)
+        str_num = {"value":Energy,"save":optionsave}
+        Energy = json.dumps(str_num)
         print(f"Preparando Envio {k}")
         def publish(client): 
-            global vt1,vt2,vt3,vt4#,vt5,vt6,vt7,vt8,vt9
+            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11
             timeToSend=time.time()
             for i in data["variables"]:
                 #    if(data["variables"][i]["variableType"]=="output"):
                 #        continue
-                if(i["variableFullName"]==f'Voltaje-{k}'):
+                if(i["variableFullName"]==f'Voltaje-Maximo-{k}'):
                     freq = i["variableSendFreq"]
                     if(timeToSend - vt1 > float(freq)):
                          vt1=time.time()
@@ -1014,10 +1016,10 @@ def SendDataToBroker(Vrms,Irms,PotenciaAp,Energia,k):
                          vt1=time.time()
                          str_variable = i["variable"]
                          topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, Energia)
+                         result = client.publish(topic1, Energy)
                          status = result[0]            
                          if status == 0:
-                             print(f"Send Energia: `{Energia}` to topic `{topic1}` con freq: {freq}")  
+                             print(f"Send Energia: `{Energy}` to topic `{topic1}` con freq: {freq}")  
                          else:
                              print(f"Failed to send message to topic {topic1}")
         try:  
@@ -1075,7 +1077,7 @@ FDCurrent15_1=[]
 DAT15Voltage_1=[]
 DAT15Current_1=[]
 
-def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy):
     global data15_1
     global Volt15_1
     global data15_1
@@ -1172,13 +1174,14 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_1.insert(31,MaxDATCurrent_1)
                     data15_1.insert(32,MeanDATCurrent_1)
                     data15_1.insert(33,MinDATCurrent_1)
-                    data15_1.insert(34,Energy)
+                    data15_1.insert(34,OneHourEnergy)
+                    data15_1.insert(35,Energy)
                     data15_1.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet2 = workbook["Max Var 1"]
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
-                    SendDataToBroker(MaxVoltage15_1,MaxCurrent15_1,MaxActivePower_1,Energy,1)
+                    SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxActivePower_1,MeanActivePower_1,MinActivePower_1,OneHourEnergy,Energy,1)
                     workbook.save(filename = dest_filename)
                     data15_1=[]
                     Volt15_1=[]
@@ -3809,7 +3812,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     Irms=CorrienteRms(NoCurrentoffset)
                                
     if(i==1):
-        if(len(BufferCurrent_1)>=5):
+        if(len(BufferCurrent_1)>=5 and Vrms<235):
             MediaBufferCurrent=np.median(BufferCurrent_1)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -3820,7 +3823,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_1.append(Irms)
     elif(i==2):
-        if(len(BufferCurrent_2)>=5):
+        if(len(BufferCurrent_2)>=5 and Vrms<235):
             MediaBufferCurrent=np.median(BufferCurrent_2)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -3834,7 +3837,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_2.append(Irms)
     elif(i==3):
-        if(len(BufferCurrent_3)>=5):
+        if(len(BufferCurrent_3)>=5 and Vrms<235):
             MediaBufferCurrent=np.median(BufferCurrent_3)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             #print(f'Current cal: {CurrentCal}')
@@ -3849,7 +3852,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_3.append(Irms)
     elif(i==4):
-        if(len(BufferCurrent_4)>=5):
+        if(len(BufferCurrent_4)>=5 and Vrms<235):
             MediaBufferCurrent=np.median(BufferCurrent_4)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             #print(f'Current cal: {CurrentCal}')
@@ -3864,7 +3867,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_4.append(Irms)
     elif(i==5):
-        if(len(BufferCurrent_5)>=5):
+        if(len(BufferCurrent_5)>=5 and Vrms<235):
             MediaBufferCurrent=np.median(BufferCurrent_5)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -3877,7 +3880,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_5.append(Irms)
     elif(i==6):
-        if(len(BufferCurrent_6)>=5):
+        if(len(BufferCurrent_6)>=5 and Vrms<235):
             MediaBufferCurrent=np.median(BufferCurrent_6)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -3890,7 +3893,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_6.append(Irms)
     elif(i==7):
-        if(len(BufferCurrent_7)>=5):
+        if(len(BufferCurrent_7)>=5 and Vrms<235):
             MediaBufferCurrent=np.median(BufferCurrent_7)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -3904,7 +3907,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_7.append(Irms)
     elif(i==8):
-        if(len(BufferCurrent_8)>=5):
+        if(len(BufferCurrent_8)>=5 and Vrms<235):
             MediaBufferCurrent=np.median(BufferCurrent_8)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -3917,7 +3920,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_8.append(Irms)
     elif(i==9):
-        if(len(BufferCurrent_9)>=5):
+        if(len(BufferCurrent_9)>=5 and Vrms<235):
             MediaBufferCurrent=np.median(BufferCurrent_9)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
