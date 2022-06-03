@@ -955,6 +955,7 @@ vt7=time.time()
 vt8=time.time()
 vt9=time.time()
 
+
 def SendDataToBroker(Vrms,Irms,PotenciaAp,Energia,k):
         str_num = {"value":Vrms,"save":optionsave}
         Vrms = json.dumps(str_num)
@@ -966,7 +967,7 @@ def SendDataToBroker(Vrms,Irms,PotenciaAp,Energia,k):
         Energia = json.dumps(str_num)
         print(f"Preparando Envio {k}")
         def publish(client): 
-            global vt1#,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9
+            global vt1,vt2,vt3,vt4#,vt5,vt6,vt7,vt8,vt9
             timeToSend=time.time()
             for i in data["variables"]:
                 #    if(data["variables"][i]["variableType"]=="output"):
@@ -980,16 +981,16 @@ def SendDataToBroker(Vrms,Irms,PotenciaAp,Energia,k):
                          result = client.publish(topic1, Vrms)
                          status = result[0]            
                          if status == 0:
-                             print(f"Send Irms: `{Vrms}` to topic `{topic1}` con freq: {freq}")  
+                             print(f"Send Vrms: `{Vrms}` to topic `{topic1}` con freq: {freq}")  
                          else:
                              print(f"Failed to send message to topic {topic1}")
                 if(i["variableFullName"]==f'Corriente-{k}'):
                     freq = i["variableSendFreq"]
-                    if(timeToSend - vt1 > float(freq)):
+                    if(timeToSend - vt2 > float(freq)):
                          vt1=time.time()
                          str_variable = i["variable"]
                          topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, Vrms)
+                         result = client.publish(topic1, Irms)
                          status = result[0]            
                          if status == 0:
                              print(f"Send Irms: `{Irms}` to topic `{topic1}` con freq: {freq}")  
@@ -997,26 +998,26 @@ def SendDataToBroker(Vrms,Irms,PotenciaAp,Energia,k):
                              print(f"Failed to send message to topic {topic1}")
                 if(i["variableFullName"]==f'Potencia-{k}'):
                     freq = i["variableSendFreq"]
-                    if(timeToSend - vt1 > float(freq)):
+                    if(timeToSend - vt3 > float(freq)):
                          vt1=time.time()
                          str_variable = i["variable"]
                          topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, Vrms)
+                         result = client.publish(topic1, PotAp)
                          status = result[0]            
                          if status == 0:
-                             print(f"Send Irms: `{PotAp}` to topic `{topic1}` con freq: {freq}")  
+                             print(f"Send PotAp: `{PotAp}` to topic `{topic1}` con freq: {freq}")  
                          else:
                              print(f"Failed to send message to topic {topic1}")
                 if(i["variableFullName"]==f'Energia-{k}'):
                     freq = i["variableSendFreq"]
-                    if(timeToSend - vt1 > float(freq)):
+                    if(timeToSend - vt4 > float(freq)):
                          vt1=time.time()
                          str_variable = i["variable"]
                          topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, Vrms)
+                         result = client.publish(topic1, Energia)
                          status = result[0]            
                          if status == 0:
-                             print(f"Send Irms: `{Energia}` to topic `{topic1}` con freq: {freq}")  
+                             print(f"Send Energia: `{Energia}` to topic `{topic1}` con freq: {freq}")  
                          else:
                              print(f"Failed to send message to topic {topic1}")
         try:  
