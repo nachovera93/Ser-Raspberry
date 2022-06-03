@@ -1439,57 +1439,57 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         DAT15Current_2.append(DATCurrent)
         Access_2 = 0
     
-        if(len(Volt15_2)>66:
+        if(len(Volt15_2)>66):
             indice=np.argmin(Volt15_2)
             Volt15_2.pop(indice+1)
             indice=np.argmax(Volt15_2)
             Volt15_2.pop(indice-1)
-        if(len(Current15_2)>66:
+        if(len(Current15_2)>6):
             indice=np.argmin(Current15_2)
             Current15_2.pop(indice+1)
             indice=np.argmax(Current15_2)
             Current15_2.pop(indice-1)
-        if(len(ActivePower15_2)>66:
+        if(len(ActivePower15_2)>6):
             indice=np.argmin(ActivePower15_2)
             ActivePower15_2.pop(indice+1)
             indice=np.argmax(ActivePower15_2)
             ActivePower15_2.pop(indice-1)
-        if(len(ReactivePower15_2)>66:
+        if(len(ReactivePower15_2)>6):
             indice=np.argmin(ReactivePower15_2)
             ReactivePower15_2.pop(indice+1)
             indice=np.argmax(ReactivePower15_2)
             ReactivePower15_2.pop(indice-1)
-        if(len(AparentPower15_2)>66:
+        if(len(AparentPower15_2)>6):
             indice=np.argmin(AparentPower15_2)
             AparentPower15_2.pop(indice+1)
             indice=np.argmax(AparentPower15_2)
             AparentPower15_2.pop(indice-1)
-        if(len(FP15_Reactive_2)>66:
+        if(len(FP15_Reactive_2)>6):
             indice=np.argmin(FP15_Reactive_2)
             FP15_Reactive_2.pop(indice+1)
             indice=np.argmax(FP15_Reactive_2)
             FP15_Reactive_2.pop(indice-1)
-        if(len(FP15_Inductive_2)>66:
+        if(len(FP15_Inductive_2)>6):
             indice=np.argmin(FP15_Inductive_2)
             FP15_Inductive_2.pop(indice+1)
             indice=np.argmax(FP15_Inductive_2)
             FP15_Inductive_2.pop(indice-1)
-        if(len(FDVoltage15_2)>66:
+        if(len(FDVoltage15_2)>6):
             indice=np.argmin(FDVoltage15_2)
             FDVoltage15_2.pop(indice+1)
             indice=np.argmax(FDVoltage15_2)
             FDVoltage15_2.pop(indice-1)
-        if(len(FDCurrent15_2)>66:
+        if(len(FDCurrent15_2)>6):
             indice=np.argmin(FDCurrent15_2)
             FDCurrent15_2.pop(indice+1)
             indice=np.argmax(FDCurrent15_2)
             FDCurrent15_2.pop(indice-1)
-        if(len(DAT15Voltage_2)>66:
+        if(len(DAT15Voltage_2)>6):
             indice=np.argmin(DAT15Voltage_2)
             DAT15Voltage_2.pop(indice+1)
             indice=np.argmax(DAT15Voltage_2)
             DAT15Voltage_2.pop(indice-1)
-        if(len(DAT15Current_2)>66:
+        if(len(DAT15Current_2)>6):
             indice=np.argmin(DAT15Current_2)
             DAT15Current_2.pop(indice+1)
             indice=np.argmax(DAT15Current_2)
@@ -1731,7 +1731,8 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
             FDCurrent15_3.pop(indice-1)
         if(len(DAT15Voltage_3)>6):
             indice=np.argmin(DAT15Voltage_3)
-            DAT15Voltage_3.pop(indice+1)66           indice=np.argmax(DAT15Voltage_3)
+            DAT15Voltage_3.pop(indice+1)
+            indice=np.argmax(DAT15Voltage_3)
             DAT15Voltage_3.pop(indice-1)
         if(len(DAT15Current_3)>6):
             indice=np.argmin(DAT15Current_3)
@@ -1932,7 +1933,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
             Volt15_4.pop(indice+1)
             indice=np.argmax(Volt15_4)
             Volt15_4.pop(indice-1)
-        if(len(Current15_4)>6)6
+        if(len(Current15_4)>6):
             indice=np.argmin(Current15_4)
             Current15_4.pop(indice+1)
             indice=np.argmax(Current15_4)
@@ -2419,7 +2420,8 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         if(len(Volt15_7)>6):
             indice=np.argmin(Volt15_7)
             Volt15_7.pop(indice+1)
-            indice=np.argmax(Volt15_7)6            Volt15_7.pop(indice-1)
+            indice=np.argmax(Volt15_7)          
+            Volt15_7.pop(indice-1)
         if(len(Current15_7)>6):
             indice=np.argmin(Current15_7)
             Current15_7.pop(indice+1)
@@ -2657,57 +2659,57 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
         DAT15Voltage_8.append(DATVoltage)
         DAT15Current_8.append(DATCurrent)
         Access_8 = 0       
-        if(len(Volt15_8)>66:
+        if(len(Volt15_8)>6):
             indice=np.argmin(Volt15_8)
             Volt15_8.pop(indice+1)
             indice=np.argmax(Volt15_8)
             Volt15_8.pop(indice-1)
-        if(len(Current15_8)>66:
+        if(len(Current15_8)>6):
             indice=np.argmin(Current15_8)
             Current15_8.pop(indice+1)
             indice=np.argmax(Current15_8)
             Current15_8.pop(indice-1)
-        if(len(ActivePower15_8)>66:
+        if(len(ActivePower15_8)>6):
             indice=np.argmin(ActivePower15_8)
             ActivePower15_8.pop(indice+1)
             indice=np.argmax(ActivePower15_8)
             ActivePower15_8.pop(indice-1)
-        if(len(ReactivePower15_8)>66:
+        if(len(ReactivePower15_8)>6):
             indice=np.argmin(ReactivePower15_8)
             ReactivePower15_8.pop(indice+1)
             indice=np.argmax(ReactivePower15_8)
             ReactivePower15_8.pop(indice-1)
-        if(len(AparentPower15_8)>66:
+        if(len(AparentPower15_8)>6):
             indice=np.argmin(AparentPower15_8)
             AparentPower15_8.pop(indice+1)
             indice=np.argmax(AparentPower15_8)
             AparentPower15_8.pop(indice-1)
-        if(len(FP15_Reactive_8)>66:
+        if(len(FP15_Reactive_8)>6):
             indice=np.argmin(FP15_Reactive_8)
             FP15_Reactive_8.pop(indice+1)
             indice=np.argmax(FP15_Reactive_8)
             FP15_Reactive_8.pop(indice-1)
-        if(len(FP15_Inductive_8)>66:
+        if(len(FP15_Inductive_8)>6):
             indice=np.argmin(FP15_Inductive_8)
             FP15_Inductive_8.pop(indice+1)
             indice=np.argmax(FP15_Inductive_8)
             FP15_Inductive_8.pop(indice-1)
-        if(len(FDVoltage15_8)>66:
+        if(len(FDVoltage15_8)>6):
             indice=np.argmin(FDVoltage15_8)
             FDVoltage15_8.pop(indice+1)
             indice=np.argmax(FDVoltage15_8)
             FDVoltage15_8.pop(indice-1)
-        if(len(FDCurrent15_8)>66:
+        if(len(FDCurrent15_8)>6):
             indice=np.argmin(FDCurrent15_8)
             FDCurrent15_8.pop(indice+1)
             indice=np.argmax(FDCurrent15_8)
             FDCurrent15_8.pop(indice-1)
-        if(len(DAT15Voltage_8)>66:
+        if(len(DAT15Voltage_8)>6):
             indice=np.argmin(DAT15Voltage_8)
             DAT15Voltage_8.pop(indice+1)
             indice=np.argmax(DAT15Voltage_8)
             DAT15Voltage_8.pop(indice-1)
-        if(len(DAT15Current_8)>66:
+        if(len(DAT15Current_8)>6):
             indice=np.argmin(DAT15Current_8)
             DAT15Current_8.pop(indice+1)
             indice=np.argmax(DAT15Current_8)
