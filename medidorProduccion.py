@@ -1266,7 +1266,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_1.insert(35,Energy)
                     data15_1.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet2 = workbook["Max Var 1"]
+                    sheet2 = workbook[f"Max Var 1-{k}-{f}"]
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
                     SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f)
@@ -1523,7 +1523,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_2.insert(34,Energy)
                     data15_2.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet3 = workbook["Max Var 2"]
+                    sheet3 = workbook[f"Max Var 2-{k}-{f}"]
                     sheet3.append(list(data15_2))
                     print(f'Data 2: Guardando Promedios')
                     #print("Datos Insertados Correctamente!")
@@ -1779,7 +1779,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_3.insert(34,Energy)
                     data15_3.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet4 = workbook["Max Var 3"]
+                    sheet4 = workbook[f"Max Var 3-{k}-{f}"]
                     sheet4.append(list(data15_3))
                     print(f'Data 3: Guardando Promedios')
                     #print("Datos Insertados Correctamente!")
@@ -2035,7 +2035,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_4.insert(34,Energy)
                     data15_4.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet5 = workbook["Max Var 4"]
+                    sheet5 = workbook[f"Max Var 4-{k}-{f}"]
                     sheet5.append(list(data15_4))
                     print(f'Data 4: Guardando Promedios')
                     #print("Datos Insertados Correctamente!")
@@ -2290,7 +2290,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_5.insert(34,Energy)
                     data15_5.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet6 = workbook["Max Var 5"]
+                    sheet6 = workbook[f"Max Var 5-{k}-{f}"]
                     sheet6.append(list(data15_5))
                     print(f'Data 5: Guardando Promedios')
                     #print("Datos Insertados Correctamente!")
@@ -2546,7 +2546,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_7.insert(34,Energy)
                     data15_7.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet8 = workbook["Max Var 7"]
+                    sheet8 = workbook[f"Max Var 7-{k}-{f}"]
                     sheet8.append(list(data15_7))
                     print(f'Data 7: Guardando Promedios')
                     #print("Datos Insertados Correctamente!")
@@ -2800,7 +2800,7 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_8.insert(34,Energy)
                     data15_8.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet9 = workbook["Max Var 8"]
+                    sheet9 = workbook[f"Max Var 8-{k}-{f}"]
                     sheet9.append(list(data15_8))
                     print(f'Data 8: Guardando Promedios')
                     #print("Datos Insertados Correctamente!")
@@ -3053,7 +3053,7 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_6.insert(34,Energy)
                     data15_6.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet7 = workbook["Max Var 6"]
+                    sheet7 = workbook[f"Max Var 6-{k}-{f}"]
                     sheet7.append(list(data15_6))
                     print(f'Data 6: Guardando Promedios')
                     #print("Datos Insertados Correctamente!")
@@ -3309,7 +3309,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_9.insert(34,Energy)
                     data15_9.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet10 = workbook["Max Var 9"]
+                    sheet10 = workbook[f"Max Var 9-{k}-{f}"]
                     sheet10.append(list(data15_9))
                     print(f'Data 9: Guardando Promedios')
                     #print("Datos Insertados Correctamente!")
