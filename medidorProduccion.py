@@ -1423,7 +1423,7 @@ FDVoltage15_2=[]
 FDCurrent15_2=[]
 DAT15Voltage_2=[]
 DAT15Current_2=[]
-def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
     global data15_2
     global Volt15_2
     global data15_2
@@ -1679,7 +1679,7 @@ FDVoltage15_3=[]
 FDCurrent15_3=[]
 DAT15Voltage_3=[]
 DAT15Current_3=[]
-def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
     global data15_3
     global Volt15_3
     global data15_3
@@ -1935,7 +1935,7 @@ FDVoltage15_4=[]
 FDCurrent15_4=[]
 DAT15Voltage_4=[]
 DAT15Current_4=[]
-def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
     global data15_4
     global Volt15_4
     global data15_4
@@ -2190,7 +2190,7 @@ FDVoltage15_5=[]
 FDCurrent15_5=[]
 DAT15Voltage_5=[]
 DAT15Current_5=[]
-def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
     global data15_5
     global Volt15_5
     global data15_5
@@ -2446,7 +2446,7 @@ FDVoltage15_7=[]
 FDCurrent15_7=[]
 DAT15Voltage_7=[]
 DAT15Current_7=[]
-def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
     global data15_7
     global Volt15_7
     global data15_7
@@ -2701,7 +2701,7 @@ FDVoltage15_8=[]
 FDCurrent15_8=[]
 DAT15Voltage_8=[]
 DAT15Current_8=[]
-def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
     global data15_8
     global Volt15_8
     global data15_8
@@ -2954,7 +2954,7 @@ FDVoltage15_6=[]
 FDCurrent15_6=[]
 DAT15Voltage_6=[]
 DAT15Current_6=[]
-def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
     global data15_6
     global Volt15_6
     global data15_6
@@ -3210,7 +3210,7 @@ FDVoltage15_9=[]
 FDCurrent15_9=[]
 DAT15Voltage_9=[]
 DAT15Current_9=[]
-def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,Energy):
+def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
     global data15_9
     global Volt15_9
     global data15_9
