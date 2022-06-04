@@ -647,10 +647,9 @@ OneHourEnergy_9 = 0.0
 AparentPower = 0.0
 ActivePower = 0.0
 ReactivePower = 0.0
-optionsave=1
+
 
 def Potencias(i,Irms,Vrms,potrmsCGE):
-    global optionsave
     global a
     global Energy
     global Energy_1
@@ -722,8 +721,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_1 = AparentPower
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
-        SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i)
-        Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1)
+        SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
+        SendDataToBroker(Vrms,Irms,AparentPower_1,_,_,_,_,_,_,_,_,_,_,Energy,k1,f1)
+        Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,k1,f1)
     elif (i == 2):
         Time2b = datetime.datetime.now()
         delta=(((Time2b - Time2a).microseconds)/1000+((Time2b - Time2a).seconds)*1000)/10000000000
@@ -733,12 +733,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_2 = AparentPower
         ActivePower_2 = ActivePower
         ReactivePower_2 = ReactivePower 
-        str_num = {"value":Vrms,"save":optionsave}
-        Vrms2 = json.dumps(str_num)
-        str_num = {"value":Irms,"save":optionsave}
-        Irms2 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i)
-        Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2)       
+        Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,k1,f2)       
     elif (i == 3):
         Time3b = datetime.datetime.now()
         delta=(((Time3b - Time3a).microseconds)/1000+((Time3b - Time3a).seconds)*1000)/10000000000
@@ -748,12 +744,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_3 = AparentPower
         ActivePower_3 = ActivePower
         ReactivePower_3 = ReactivePower
-        str_num = {"value":Vrms,"save":optionsave}
-        Vrms3 = json.dumps(str_num)
-        str_num = {"value":Irms,"save":optionsave}
-        Irms3 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,CosPhi_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3,OneHourEnergy_3,i)
-        Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3)             
+        Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,OneHourEnergy_3,Energy_3,k1,f3)             
     elif (i == 4):
         Time4b = datetime.datetime.now()
         delta=(((Time4b - Time4a).microseconds)/1000+((Time4b - Time4a).seconds)*1000)/10000000000
@@ -763,12 +755,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_4 = AparentPower
         ActivePower_4 = ActivePower
         ReactivePower_4 = ReactivePower
-        str_num = {"value":Vrms,"save":optionsave}
-        Vrms4 = json.dumps(str_num)
-        str_num = {"value":Irms,"save":optionsave}
-        Irms4 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,CosPhi_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,Energy_4,OneHourEnergy_4,i)
-        Maximo15min_4(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,Energy_4)              
+        Maximo15min_4(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,OneHourEnergy_4,Energy_4,k2,f1)              
     elif (i == 5):
         Time5b = datetime.datetime.now()
         delta=(((Time5b - Time5a).microseconds)/1000+((Time5b - Time5a).seconds)*1000)/10000000000
@@ -778,12 +766,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_5 = AparentPower
         ActivePower_5 = ActivePower
         ReactivePower_5 = ReactivePower
-        str_num = {"value":Vrms,"save":optionsave}
-        Vrms5 = json.dumps(str_num)
-        str_num = {"value":Irms,"save":optionsave}
-        Irms5 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,CosPhi_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,Energy_5,OneHourEnergy_5,i)
-        Maximo15min_5(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,Energy_5)              
+        Maximo15min_5(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,Energy_5,OneHourEnergy_5,Energy_5,k2,f2)               
     elif (i == 6):
         Time6b = datetime.datetime.now()
         delta=(((Time6b - Time6a).microseconds)/1000+((Time6b - Time6a).seconds)*1000)/10000000000
@@ -793,12 +777,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_6 = AparentPower
         ActivePower_6 = ActivePower
         ReactivePower_6 = ReactivePower
-        str_num = {"value":Vrms,"save":optionsave}
-        Vrms6 = json.dumps(str_num)
-        str_num = {"value":Irms,"save":optionsave}
-        Irms6 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,CosPhi_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,Energy_6,OneHourEnergy_6,i)
-        Maximo15min_6(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,Energy_6)           
+        Maximo15min_6(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,OneHourEnergy_6,Energy_6,k2,f3)           
     elif (i == 7):
         Time7b = datetime.datetime.now()
         delta=(((Time7b - Time7a).microseconds)/1000+((Time7b - Time7a).seconds)*1000)/10000000000
@@ -808,12 +788,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_7 = AparentPower
         ActivePower_7 = ActivePower
         ReactivePower_7 = ReactivePower
-        str_num = {"value":Vrms,"save":optionsave}
-        Vrms7 = json.dumps(str_num)
-        str_num = {"value":Irms,"save":optionsave}
-        Irms7 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_7,ReactivePower_7,AparentPower_7,FP_7,CosPhi_7,FDVoltage_7,FDCurrent_7,DATVoltage_7,DATCurrent_7,Energy_7,OneHourEnergy_7,i)
-        Maximo15min_7(Vrms,Irms,ActivePower_7,ReactivePower_7,AparentPower_7,FP_7,FDVoltage_7,FDCurrent_7,DATVoltage_7,DATCurrent_7,Energy_7)             
+        Maximo15min_7(Vrms,Irms,ActivePower_7,ReactivePower_7,AparentPower_7,FP_7,FDVoltage_7,FDCurrent_7,DATVoltage_7,DATCurrent_7,OneHourEnergy_7,Energy_7,k3,f1)           
     elif (i == 8):
         Time8b = datetime.datetime.now()
         delta=(((Time8b - Time8a).microseconds)/1000+((Time8b - Time8a).seconds)*1000)/10000000000
@@ -823,12 +799,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_8 = AparentPower
         ActivePower_8 = ActivePower
         ReactivePower_8 = ReactivePower
-        str_num = {"value":Vrms,"save":optionsave}
-        Vrms8 = json.dumps(str_num)
-        str_num = {"value":Irms,"save":optionsave}
-        Irms8 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_8,ReactivePower_8,AparentPower_8,FP_8,CosPhi_8,FDVoltage_8,FDCurrent_8,DATVoltage_8,DATCurrent_8,Energy_8,OneHourEnergy_8,i)
-        Maximo15min_8(Vrms,Irms,ActivePower_8,ReactivePower_8,AparentPower_8,FP_8,FDVoltage_8,FDCurrent_8,DATVoltage_8,DATCurrent_8,Energy_8)            
+        Maximo15min_8(Vrms,Irms,ActivePower_8,ReactivePower_8,AparentPower_8,FP_8,FDVoltage_8,FDCurrent_8,DATVoltage_8,DATCurrent_8,OneHourEnergy_8,Energy_8,k3,f2)             
     elif (i == 9):
         Time9b = datetime.datetime.now()
         delta=(((Time9b - Time9a).microseconds)/1000+((Time9b - Time9a).seconds)*1000)/10000000000
@@ -838,23 +810,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_9 = AparentPower
         ActivePower_9 = ActivePower
         ReactivePower_9 = ReactivePower
-        str_num = {"value":Vrms,"save":optionsave}
-        Vrms9 = json.dumps(str_num)
-        str_num = {"value":Irms,"save":optionsave}
-        Irms9 = json.dumps(str_num)
         SaveDataCsv(Vrms,Irms,ActivePower_9,ReactivePower_9,AparentPower_9,FP_9,CosPhi_9,FDVoltage_9,FDCurrent_9,DATVoltage_9,DATCurrent_9,Energy_9,OneHourEnergy_9,i)
-        Maximo15min_9(Vrms,Irms,ActivePower_9,ReactivePower_9,AparentPower_9,FP_9,FDVoltage_9,FDCurrent_9,DATVoltage_9,DATCurrent_9,Energy_9) 
-        """
-          str_num = {"value":ActivePower,"save":1}
-          str_num2 = {"value":ReactivePower,"save":0}
-          str_num3 = {"value":AparentPower1,"save":1}
-          str_num4 = {"value":Energy1 ,"save":0}
-          ActivePower = json.dumps(str_num)
-          AparentPower = json.dumps(str_num3)
-          ReactivePower = json.dumps(str_num2)
-          Energy = json.dumps(str_num4)
-        
-        """
+        Maximo15min_9(Vrms,Irms,ActivePower_9,ReactivePower_9,AparentPower_9,FP_9,FDVoltage_9,FDCurrent_9,DATVoltage_9,DATCurrent_9,OneHourEnergy_9,Energy_9,k3,f3) 
+       
     
     
 font = {'family': 'serif',
@@ -956,9 +914,18 @@ vt8=time.time()
 vt9=time.time()
 vt10=time.time()
 vt11=time.time()
+vt12=time.time()
+vt13=time.time()
+vt14=time.time()
 
-
-def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,PotApMean,PotApMin,OneHourEnergy,Energy,k):
+optionsave=1
+k1="RED-Compañia"
+k2="Central-Fotovoltaica"
+k3="Consumo-Cliente"
+f1="Fase-1"
+f2="Fase-2"
+f3="Fase-3"
+def SendDataToBroker(Vrms,Irms,PotAp,VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,PotApMean,PotApMin,OneHourEnergy,Energy,k,f):
         str_num = {"value":VrmsMax,"save":optionsave}
         VrmsMax = json.dumps(str_num)
         str_num = {"value":IrmsMax,"save":optionsave}
@@ -967,17 +934,66 @@ def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,
         PotApMax = json.dumps(str_num)
         str_num = {"value":Energy,"save":optionsave}
         Energy = json.dumps(str_num)
-        print(f"Preparando Envio {k}")
+        print(f"Preparando Envio {Vrms} - {Irms} - {PotAp} - {VrmsMin}")
+        print(f"Preparando Envio {k} - {f}")
         def publish(client): 
-            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11
+            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt12,vt13,vt14
             timeToSend=time.time()
             for i in data["variables"]:
                 #    if(data["variables"][i]["variableType"]=="output"):
                 #        continue
-                if(i["variableFullName"]==f'Voltaje-{k}'):
+                if(i["variableFullName"]==f'Voltaje-{k}-{f}'):
                     freq = i["variableSendFreq"]
                     if(timeToSend - vt1 > float(freq)):
                          vt1=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, Vrms)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Vrms: `{Vrms}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Corriente-{k}-{f}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt1 > float(freq)):
+                         vt2=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, Irms)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Vrms: `{Irms}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Potencia-{k}-{f}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt1 > float(freq)):
+                         vt3=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, PotAp)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Vrms: `{PotAp}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Energia-{k}-{f}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt1 > float(freq)):
+                         vt4=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, Energy)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Vrms: `{Energy}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Voltaje-Maximo-{k}-{f}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt1 > float(freq)):
+                         vt5=time.time()
                          str_variable = i["variable"]
                          topic1 = topicmqtt + str_variable + "/sdata"
                          result = client.publish(topic1, VrmsMax)
@@ -986,10 +1002,34 @@ def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,
                              print(f"Send Vrms: `{VrmsMax}` to topic `{topic1}` con freq: {freq}")  
                          else:
                              print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Corriente-{k}'):
+                if(i["variableFullName"]==f'Voltaje-Promedio-{k}-{f}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt1 > float(freq)):
+                         vt6=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, VrmsMean)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Vrms: `{VrmsMean}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Voltaje-Minimo-{k}-{f}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt1 > float(freq)):
+                         vt7=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, VrmsMin)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Vrms: `{VrmsMin}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Corriente-Maximo-{k}-{f}'):
                     freq = i["variableSendFreq"]
                     if(timeToSend - vt2 > float(freq)):
-                         vt1=time.time()
+                         vt8=time.time()
                          str_variable = i["variable"]
                          topic1 = topicmqtt + str_variable + "/sdata"
                          result = client.publish(topic1, IrmsMax)
@@ -998,10 +1038,34 @@ def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,
                              print(f"Send Irms: `{IrmsMax}` to topic `{topic1}` con freq: {freq}")  
                          else:
                              print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Potencia-{k}'):
+                if(i["variableFullName"]==f'Corriente-Promedio-{k}-{f}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt2 > float(freq)):
+                         vt9=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, IrmsMean)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Irms: `{IrmsMean}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Corriente-Minimo-{k}-{f}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt2 > float(freq)):
+                         vt10=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, IrmsMin)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Irms: `{IrmsMin}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Potencia-Maximo-{k}-{f}'):
                     freq = i["variableSendFreq"]
                     if(timeToSend - vt3 > float(freq)):
-                         vt1=time.time()
+                         vt11=time.time()
                          str_variable = i["variable"]
                          topic1 = topicmqtt + str_variable + "/sdata"
                          result = client.publish(topic1, PotApMax)
@@ -1010,16 +1074,40 @@ def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,
                              print(f"Send PotAp: `{PotApMax}` to topic `{topic1}` con freq: {freq}")  
                          else:
                              print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Energia-{k}'):
+                if(i["variableFullName"]==f'Potencia-Promedio-{k}-{f}'):
                     freq = i["variableSendFreq"]
-                    if(timeToSend - vt4 > float(freq)):
-                         vt1=time.time()
+                    if(timeToSend - vt3 > float(freq)):
+                         vt12=time.time()
                          str_variable = i["variable"]
                          topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, Energy)
+                         result = client.publish(topic1, PotApMean)
                          status = result[0]            
                          if status == 0:
-                             print(f"Send Energia: `{Energy}` to topic `{topic1}` con freq: {freq}")  
+                             print(f"Send PotAp: `{PotApMean}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Potencia-Minimo-{k}-{f}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt3 > float(freq)):
+                         vt13=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, PotApMin)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send PotAp: `{PotApMin}` to topic `{topic1}` con freq: {freq}")  
+                         else:
+                             print(f"Failed to send message to topic {topic1}")
+                if(i["variableFullName"]==f'Energia-Hora-{k}-{f}'):
+                    freq = i["variableSendFreq"]
+                    if(timeToSend - vt4 > float(freq)):
+                         vt14=time.time()
+                         str_variable = i["variable"]
+                         topic1 = topicmqtt + str_variable + "/sdata"
+                         result = client.publish(topic1, OneHourEnergy)
+                         status = result[0]            
+                         if status == 0:
+                             print(f"Send Energia: `{OneHourEnergy}` to topic `{topic1}` con freq: {freq}")  
                          else:
                              print(f"Failed to send message to topic {topic1}")
         try:  
@@ -1077,7 +1165,7 @@ FDCurrent15_1=[]
 DAT15Voltage_1=[]
 DAT15Current_1=[]
 
-def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy):
+def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
     global data15_1
     global Volt15_1
     global data15_1
@@ -1181,7 +1269,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet2 = workbook["Max Var 1"]
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
-                    SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxActivePower_1,MeanActivePower_1,MinActivePower_1,OneHourEnergy,Energy,1)
+                    SendDataToBroker(_,_,_,MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f)
                     workbook.save(filename = dest_filename)
                     data15_1=[]
                     Volt15_1=[]
@@ -3364,24 +3452,24 @@ def excelcreate():
     dest_filename = f'{exceltime}.xlsx'
     #sheet1 = book.active
     sheet1  = book.create_sheet("Var 0")
-    sheet2 = book.create_sheet("Max Var 1")
-    sheet3 = book.create_sheet("Max Var 2")
-    sheet4 = book.create_sheet("Max Var 3")
-    sheet5 = book.create_sheet("Max Var 4")
-    sheet6 = book.create_sheet("Max Var 5")
-    sheet7 = book.create_sheet("Max Var 6")
-    sheet8 = book.create_sheet("Max Var 7")
-    sheet9 = book.create_sheet("Max Var 8")
-    sheet10 = book.create_sheet("Max Var 9")
-    sheet11 = book.create_sheet("Var 1")
-    sheet12 = book.create_sheet("Var 2")
-    sheet13 = book.create_sheet("Var 3")
-    sheet14 = book.create_sheet("Var 4")
-    sheet15 = book.create_sheet("Var 5")
-    sheet16 = book.create_sheet("Var 6")
-    sheet17 = book.create_sheet("Var 7")
-    sheet18 = book.create_sheet("Var 8")
-    sheet19 = book.create_sheet("Var 9")
+    sheet2 = book.create_sheet(f"Max Var 1-{k1}-{f1}")
+    sheet3 = book.create_sheet(f"Max Var 2-{k1}-{f2}")
+    sheet4 = book.create_sheet(f"Max Var 3-{k1}-{f3}")
+    sheet5 = book.create_sheet(f"Max Var 4-{k2}-{f1}")
+    sheet6 = book.create_sheet(f"Max Var 5-{k2}-{f2}")
+    sheet7 = book.create_sheet(f"Max Var 6-{k2}-{f3}")
+    sheet8 = book.create_sheet(f"Max Var 7-{k3}-{f1}")
+    sheet9 = book.create_sheet(f"Max Var 8-{k3}-{f2}")
+    sheet10 = book.create_sheet(f"Max Var 9-{k3}-{f3}")
+    sheet11 = book.create_sheet(f"Var 1-{k1}-{f1}") 
+    sheet12 = book.create_sheet(f"Var 2-{k1}-{f2}") 
+    sheet13 = book.create_sheet(f"Var 3-{k1}-{f3}") 
+    sheet14 = book.create_sheet(f"Var 4-{k2}-{f1}") 
+    sheet15 = book.create_sheet(f"Var 5-{k2}-{f2}") 
+    sheet16 = book.create_sheet(f"Var 6-{k2}-{f3}") 
+    sheet17 = book.create_sheet(f"Var 7-{k3}-{f1}") 
+    sheet18 = book.create_sheet(f"Var 8-{k3}-{f2}") 
+    sheet19 = book.create_sheet(f"Var 9-{k3}-{f3}") 
     headings0 = ['Fecha y Hora'] + list(['T° Raspberry','Uso CPU %','RAM2'])
     headings=['Fecha y Hora'] + list(['Max Voltage','Mean Voltage','Min Voltage', 'Max Current','Mean Current','Min Current','Max Active Power','Mean Active Power','Mean Active Power','Max Reactive Power','Mean Reactive Power','Min Reactive Power','Max Aparent Power','Mean Aparent Power','Min Aparent Power','Max FPReact ','Mean FPReact','Min FPReact','Max FPInduct','Mean FPInduct','Min FPInduct','Max FDVoltage','Mean FDVoltage','Min FDVoltage','Max FDCurrent','Mean FDCurrent','Min FDCurrent','Max DATVoltage','Mean DATVoltage','Min DATVoltage','Max DATCurrent','Mean DATCurrent','Min DATCurrent','Energy'])
     headings2=['Fecha y Hora'] + list(['Voltage', 'Current','Active Power','Reactive Power','Aparent Power','FP','FDVoltage','FDCurrent','DATVoltage','DATCurrent','cos(phi)','Energy','Hour Energy'])
@@ -3448,15 +3536,15 @@ def AbrirExcel():
             dest_filename = f'{dia}.xlsx'
             print("Existe")
             workbook=openpyxl.load_workbook(filename = dest_filename)
-            sheet11 = workbook["Var 1"]
-            sheet12 = workbook["Var 2"]
-            sheet13 = workbook["Var 3"]
-            sheet14 = workbook["Var 4"]
-            sheet15 = workbook["Var 5"]
-            sheet16 = workbook["Var 6"]
-            sheet17 = workbook["Var 7"]
-            sheet18 = workbook["Var 8"]
-            sheet19 = workbook["Var 9"]
+            sheet11 = workbook[f"Var 1-{k1}-{f1}"]
+            sheet12 = workbook[f"Var 2-{k1}-{f2}"]
+            sheet13 = workbook[f"Var 3-{k1}-{f3}"]
+            sheet14 = workbook[f"Var 4-{k2}-{f1}"]
+            sheet15 = workbook[f"Var 5-{k2}-{f2}"]
+            sheet16 = workbook[f"Var 6-{k2}-{f3}"]
+            sheet17 = workbook[f"Var 7-{k3}-{f1}"]
+            sheet18 = workbook[f"Var 8-{k3}-{f2}"]
+            sheet19 = workbook[f"Var 9-{k3}-{f3}"]
             LargeSheet11=len(sheet11["FP"])
             LargeSheet12=len(sheet12["FP"])
             LargeSheet13=len(sheet13["FP"])
@@ -3494,36 +3582,35 @@ def VariablesBasicas(Temp_Raspberry,cpu_uso,RAM,tempESP32):
        workbook.save(filename = dest_filename)
        Data=[]
 
-def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i):
+def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k,f):
        Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
        workbook=openpyxl.load_workbook(filename = dest_filename)
        if(i==1):
-             sheet11 = workbook["Var 1"]
-             #dataCGEAll.insert(0,datetime.datetime.now())
+             sheet11 = workbook[f"Var 1-{k}-{f}"]
              sheet11.append(list(Data))
        elif(i==2):
-             sheet12 = workbook["Var 2"]
+             sheet12 = workbook[f"Var 2-{k}-{f}"]
              sheet12.append(list(Data))
        elif(i==3):
-             sheet13 = workbook["Var 3"]
+             sheet13 = workbook[f"Var 3-{k}-{f}"]
              sheet13.append(list(Data))
        elif(i==4):
-             sheet14 = workbook["Var 4"]
+             sheet14 = workbook[f"Var 4-{k}-{f}"]
              sheet14.append(list(Data))
        elif(i==5):
-             sheet15 = workbook["Var 5"]
+             sheet15 = workbook[f"Var 5-{k}-{f}"]
              sheet15.append(list(Data))
        elif(i==6):
-             sheet16 = workbook["Var 6"]
+             sheet16 = workbook[f"Var 6-{k}-{f}"]
              sheet16.append(list(Data))
        elif(i==7):
-             sheet17 = workbook["Var 7"]
+             sheet17 = workbook[f"Var 7-{k}-{f}"]
              sheet17.append(list(Data))
        elif(i==8):
-             sheet18 = workbook["Var 8"]
+             sheet18 = workbook[f"Var 8-{k}-{f}"]
              sheet18.append(list(Data))
        elif(i==9):
-             sheet19 = workbook["Var 9"]
+             sheet19 = workbook[f"Var 9-{k}-{f}"]
              sheet19.append(list(Data))
        
        
