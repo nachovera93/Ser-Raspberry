@@ -3586,31 +3586,31 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
        workbook=openpyxl.load_workbook(filename = dest_filename)
        if(i==1):
-             sheet11 = workbook[f"Var 1-{k}-{f}"]
+             sheet11 = workbook[f"{k}-{f}"]
              sheet11.append(list(Data))
        elif(i==2):
-             sheet12 = workbook[f"Var 2-{k}-{f}"]
+             sheet12 = workbook[f"{k}-{f}"]
              sheet12.append(list(Data))
        elif(i==3):
-             sheet13 = workbook[f"Var 3-{k}-{f}"]
+             sheet13 = workbook[f"{k}-{f}"]
              sheet13.append(list(Data))
        elif(i==4):
-             sheet14 = workbook[f"Var 4-{k}-{f}"]
+             sheet14 = workbook[f"{k}-{f}"]
              sheet14.append(list(Data))
        elif(i==5):
-             sheet15 = workbook[f"Var 5-{k}-{f}"]
+             sheet15 = workbook[f"{k}-{f}"]
              sheet15.append(list(Data))
        elif(i==6):
-             sheet16 = workbook[f"Var 6-{k}-{f}"]
+             sheet16 = workbook[f"{k}-{f}"]
              sheet16.append(list(Data))
        elif(i==7):
-             sheet17 = workbook[f"Var 7-{k}-{f}"]
+             sheet17 = workbook[f"{k}-{f}"]
              sheet17.append(list(Data))
        elif(i==8):
-             sheet18 = workbook[f"Var 8-{k}-{f}"]
+             sheet18 = workbook[f"{k}-{f}"]
              sheet18.append(list(Data))
        elif(i==9):
-             sheet19 = workbook[f"Var 9-{k}-{f}"]
+             sheet19 = workbook[f"{k}-{f}"]
              sheet19.append(list(Data))
        
        
