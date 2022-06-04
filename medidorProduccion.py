@@ -722,7 +722,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
-        SendDataToBroker(Vrms,Irms,AparentPower_1,_,_,_,_,_,_,_,_,_,_,Energy,k1,f1)
+        #SendDataToBroker(Vrms,Irms,AparentPower_1,_,_,_,_,_,_,_,_,_,_,Energy,k1,f1)
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,k1,f1)
     elif (i == 2):
         Time2b = datetime.datetime.now()
@@ -925,7 +925,7 @@ k3="Consumo-Cliente"
 f1="Fase-1"
 f2="Fase-2"
 f3="Fase-3"
-def SendDataToBroker(Vrms,Irms,PotAp,VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,PotApMean,PotApMin,OneHourEnergy,Energy,k,f):
+def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,PotApMean,PotApMin,OneHourEnergy,Energy,k,f):
         str_num = {"value":VrmsMax,"save":optionsave}
         VrmsMax = json.dumps(str_num)
         str_num = {"value":IrmsMax,"save":optionsave}
@@ -934,7 +934,7 @@ def SendDataToBroker(Vrms,Irms,PotAp,VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,I
         PotApMax = json.dumps(str_num)
         str_num = {"value":Energy,"save":optionsave}
         Energy = json.dumps(str_num)
-        print(f"Preparando Envio {Vrms} - {Irms} - {PotAp} - {VrmsMin}")
+        #print(f"Preparando Envio {Vrms} - {Irms} - {PotAp} - {VrmsMin}")
         print(f"Preparando Envio {k} - {f}")
         def publish(client): 
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt12,vt13,vt14
@@ -1269,7 +1269,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet2 = workbook["Max Var 1"]
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
-                    SendDataToBroker(_,_,_,MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f)
+                    SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f)
                     workbook.save(filename = dest_filename)
                     data15_1=[]
                     Volt15_1=[]
