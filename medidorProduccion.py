@@ -3779,11 +3779,8 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     DC_VoltageMedian = (MaxVoltage+MinVoltage)/2
     NoVoltageOffset=(list_FinalVoltage-DC_VoltageMedian)             
     Vrms=VoltajeRms(NoVoltageOffset)*0.92
-    print("Entro 1")
     if(i==1):
-        print("Entro 1")
         if (len(BufferVoltaje_1)>=5):
-            print("Entro 2")
             MediaBufferVoltaje=np.median(BufferVoltaje_1)
             Vrms=VoltRms(MediaBufferVoltaje)
             if(Vrms>235):
@@ -4032,7 +4029,7 @@ def received():
                      print("Error en la codificación")
                      continue
                  np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')   
-                 print(f'Largo Array {len(np_array)}')
+                 #print(f'Largo Array {len(np_array)}')
                  if (len(np_array) == 8402):
                        if (np_array[0] == 11 or np_array[0] == 22 or np_array[0] == 33 or np_array[0] == 44 or np_array[0] == 55 or np_array[0] == 66 or np_array[0] == 77 or np_array[0] == 88 or np_array[0] == 99):
                            if (np_array[0] == 11):
