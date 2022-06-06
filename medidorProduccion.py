@@ -953,6 +953,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                              else:
                                  print(f"Failed to send message to topic {topic}")
                     #break
+            print("Salio for")
             vt1=time.time()
         try:  
             if(client.connected_flag==True): 
