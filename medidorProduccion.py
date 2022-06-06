@@ -722,7 +722,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
-        SendDataToBroker(q=i,k=k1,f=f1,Vrms=f"{Vrms}",Irms=f"{Irms}",PotAp=f"{AparentPower_1}",Energia=f"{Energy_1}")
+        SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
         #Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,k1,f1)
     elif (i == 2):
         Time2b = datetime.datetime.now()
@@ -932,14 +932,14 @@ def SendDataToBroker(q,k,f,**kwargs):
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt12,vt13,vt14
             timeToSend=time.time()
             for key, value in kwargs.items():
-                print(f"Preparando Envio 2 {key}-{q} {value} {f} - {k}")
+                print(f"Preparando Envio - {key}-{q} {value} {f} - {k}")
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 for i in data["variables"]:
                     #    if(data["variables"][i]["variableType"]=="output"):
                     #        continue
                     if(i["variableFullName"]==f'{key}-{q}'):
-                        print(f"Preparando Envio 2 en publish de variable {key}-{q}")
+                        print(f"Preparando Envio en publish de variable {key}-{q}")
                         freq = i["variableSendFreq"]
                         if(timeToSend - vt1 > float(freq)):
                              vt1=time.time()
