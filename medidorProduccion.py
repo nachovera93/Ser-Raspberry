@@ -937,7 +937,10 @@ def SendDataToBroker(**kwargs):
         str_num = {"value":Energy,"save":optionsave}
         Energy = json.dumps(str_num)
         """
-        print(f"Preparando Envio {Voltaje}")
+        for arg in kwargs.values():
+            print(f"Preparando Envio {arg}")
+        for arg in kwargs:
+            print(f"Preparando Envio 2 {arg}")
         #print(f"Preparando Envio {k} - {f}")
         """
         def publish(client): 
