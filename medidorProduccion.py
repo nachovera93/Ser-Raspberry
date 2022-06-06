@@ -966,7 +966,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                              result = client.publish(topic, valueJson)
                              status = result[0]            
                              if status == 0:
-                                 print(f"Send Vrms: `{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
+                                 print(f"Send {key}-{q}: `{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}")
                              if(g==len(kwargs.values())):   
@@ -988,8 +988,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                      vt8=time.time()   
                                  elif(q==9):
                                      vt9=time.time()           
-            print(f'G = {g}')
-            print("Salio for")
+
         try:  
             if(client.connected_flag==True): 
                 publish(client)
