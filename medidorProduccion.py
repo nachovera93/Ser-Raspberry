@@ -940,7 +940,7 @@ def SendDataToBroker(**kwargs):
         for arg in kwargs.values():
             print(f"Preparando Envio {arg}")
         for arg in kwargs:
-            print(f"Preparando Envio 2 {arg} {arg.value}")
+            print(f"Preparando Envio 2 {arg} {arg.values()}")
         #print(f"Preparando Envio {k} - {f}")
         """
         def publish(client): 
