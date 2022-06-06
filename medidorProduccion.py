@@ -928,23 +928,23 @@ def SendDataToBroker(q,k,f,**kwargs):
         def publish(client): 
             g=0
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9
-            if(i==1):
+            if(q==1):
                 vt = vt1
-            elif(i==2):
+            elif(q==2):
                 vt = vt2
-            elif(i==3):
+            elif(q==3):
                 vt = vt3
-            elif(i==4):
+            elif(q==4):
                 vt = vt4
-            elif(i==5):
+            elif(q==5):
                 vt = vt5
-            elif(i==6):
+            elif(q==6):
                 vt = vt6
-            elif(i==7):
+            elif(q==7):
                 vt = vt7
-            elif(i==8):
+            elif(q==8):
                 vt = vt8
-            elif(i==9):
+            elif(q==9):
                 vt = vt9
             timeToSend=time.time() 
             print(f'Largo Kwargs {len(kwargs.values())}')
