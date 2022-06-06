@@ -943,7 +943,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                         freq = i["variableSendFreq"]
                         if(timeToSend - vt1 > float(freq)):
                              print(f"Entrando a envio {key}-{q}")
-                             vt1=time.time()
+                             #vt1=time.time()
                              str_variable = i["variable"]
                              topic = topicmqtt + str_variable + "/sdata"
                              result = client.publish(topic, valueJson)
@@ -953,6 +953,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                              else:
                                  print(f"Failed to send message to topic {topic}")
                     #break
+            vt1=time.time()
         try:  
             if(client.connected_flag==True): 
                 publish(client)
