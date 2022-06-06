@@ -938,7 +938,7 @@ def SendDataToBroker(**kwargs):
         Energy = json.dumps(str_num)
         """
         for key, value in kwargs.items():
-            print(f"Preparando Envio 2 {key-1} {value}")
+            print(f"Preparando Envio 2 {key}-1 {value}")
         #print(f"Preparando Envio {k} - {f}")
         
         def publish(client): 
