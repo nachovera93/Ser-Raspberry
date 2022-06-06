@@ -921,8 +921,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             global vt
             timeToSend=time.time() #1, 10
             print(f'Largo Kwargs {len(kwargs.values())}')
-            print(f'Largo Kwargs 2 {len(kwargs())}')
-            for g in kwargs():
+            for g in kwargs.values():
                 g=g+1
                 for key, value in kwargs.items():
                     print(f"Preparando Envio - {key}-{q} {value} {f} - {k}")
