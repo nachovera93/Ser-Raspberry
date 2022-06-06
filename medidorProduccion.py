@@ -927,6 +927,7 @@ f2="Fase-2"
 f3="Fase-3"
 #def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,PotApMean,PotApMin,OneHourEnergy,Energy,k,f,Voltaje):
 def SendDataToBroker(**kwargs):
+        """
         str_num = {"value":VrmsMax,"save":optionsave}
         VrmsMax = json.dumps(str_num)
         str_num = {"value":IrmsMax,"save":optionsave}
@@ -935,6 +936,7 @@ def SendDataToBroker(**kwargs):
         PotApMax = json.dumps(str_num)
         str_num = {"value":Energy,"save":optionsave}
         Energy = json.dumps(str_num)
+        """
         print(f"Preparando Envio {Voltaje}")
         #print(f"Preparando Envio {k} - {f}")
         """
