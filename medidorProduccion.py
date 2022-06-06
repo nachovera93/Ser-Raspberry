@@ -945,7 +945,7 @@ def SendDataToBroker(**kwargs):
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt12,vt13,vt14
             timeToSend=time.time()
             for key, value in kwargs.items():
-                print(f"Preparando Envio 2 {key} {value}")
+                print(f"Preparando Envio 2 {key-1} {value}")
                 for i in data["variables"]:
                     #    if(data["variables"][i]["variableType"]=="output"):
                     #        continue
