@@ -937,31 +937,32 @@ def SendDataToBroker(**kwargs):
         str_num = {"value":Energy,"save":optionsave}
         Energy = json.dumps(str_num)
         """
-        for arg in kwargs.values():
-            print(f"Preparando Envio {arg}")
         for key, value in kwargs.items():
             print(f"Preparando Envio 2 {key} {value}")
         #print(f"Preparando Envio {k} - {f}")
-        """
+        
         def publish(client): 
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt12,vt13,vt14
             timeToSend=time.time()
-            for i in data["variables"]:
-                #    if(data["variables"][i]["variableType"]=="output"):
-                #        continue
-                if(i["variableFullName"]==f'Voltaje-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt1 > float(freq)):
-                         vt1=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, Vrms)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send Vrms: `{Vrms}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-        """
+            for key, value in kwargs.items():
+                print(f"Preparando Envio 2 {key} {value}")
+                for i in data["variables"]:
+                    #    if(data["variables"][i]["variableType"]=="output"):
+                    #        continue
+                    if(i["variableFullName"]==f'{key-1}'):
+                        print(f"Preparando Envio 2 en publish de variable {key-1}")
+                        freq = i["variableSendFreq"]
+                        if(timeToSend - vt1 > float(freq)):
+                             vt1=time.time()
+                             str_variable = i["variable"]
+                             topic1 = topicmqtt + str_variable + "/sdata"
+                             result = client.publish(topic1, value)
+                             status = result[0]            
+                             if status == 0:
+                                 print(f"Send Vrms: `{value}` to topic `{topic1}` con freq: {freq}")  
+                             else:
+                                 print(f"Failed to send message to topic {topic1}")
+        
         """
         def publish(client): 
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt12,vt13,vt14
@@ -1138,13 +1139,13 @@ def SendDataToBroker(**kwargs):
                          else:
                              print(f"Failed to send message to topic {topic1}")
         """
-        """
+        
         try:  
             if(client.connected_flag==True): 
                 publish(client)
         except:
             pass
-        """
+        
         
     
     
