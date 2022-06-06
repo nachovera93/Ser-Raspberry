@@ -903,7 +903,16 @@ def graphVoltage(list_fftVoltage,list_FinalCurrent,samplings,i):
     
 
 
+
 vt1=time.time()
+vt2=time.time()
+vt3=time.time()
+vt4=time.time()
+vt5=time.time()
+vt6=time.time()
+vt7=time.time()
+vt8=time.time()
+vt9=time.time()
 
 
 optionsave=1
@@ -918,7 +927,25 @@ def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             g=0
-            global vt1
+            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9
+            if(i==1):
+                vt = vt1
+            elif(i==2):
+                vt = vt2
+            elif(i==3):
+                vt = vt3
+            elif(i==4):
+                vt = vt4
+            elif(i==5):
+                vt = vt5
+            elif(i==6):
+                vt = vt6
+            elif(i==7):
+                vt = vt7
+            elif(i==8):
+                vt = vt8
+            elif(i==9):
+                vt = vt9
             timeToSend=time.time() 
             print(f'Largo Kwargs {len(kwargs.values())}')
             for key, value in kwargs.items():
@@ -928,13 +955,11 @@ def SendDataToBroker(q,k,f,**kwargs):
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 for i in data["variables"]:
-                    #    if(data["variables"][i]["variableType"]=="output"):
-                    #        continue
                     if(i["variableFullName"]==f'{key}-{q}'):
                         print(f"Preparando Envio en publish de variable {key}-{q}")
                         freq = i["variableSendFreq"]  
-                        print(f'{timeToSend - vt1}') 
-                        if(timeToSend - vt1 > float(freq)): 
+                        print(f'{timeToSend - vt}') 
+                        if(timeToSend - vt > float(freq)): 
                              print(f"Entrando a envio {key}-{q}")
                              str_variable = i["variable"]
                              topic = topicmqtt + str_variable + "/sdata"
@@ -944,17 +969,35 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  print(f"Send Vrms: `{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}")
-                             if(g==len(kwargs.values())):
-                                 vt1=time.time() 
-                                 
+                             if(g==len(kwargs.values())):   
+                                 if(q==1):
+                                     vt1=time.time()   
+                                 elif(q==2):
+                                     vt2=time.time()   
+                                 elif(q==3):
+                                     vt3=time.time()   
+                                 elif(q==4):
+                                     vt4=time.time()   
+                                 elif(q==5):
+                                     vt5=time.time()   
+                                 elif(q==6):
+                                     vt6=time.time()   
+                                 elif(q==7):
+                                     vt7=time.time()   
+                                 elif(q==8):
+                                     vt8=time.time()   
+                                 elif(q==9):
+                                     vt9=time.time()           
             print(f'G = {g}')
             print("Salio for")
-            
         try:  
             if(client.connected_flag==True): 
                 publish(client)
         except:
             pass
+        
+ #    if(data["variables"][i]["variableType"]=="output"):
+#        continue
         """
         def publish(client): 
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt12,vt13,vt14
