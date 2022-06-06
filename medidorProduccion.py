@@ -930,7 +930,7 @@ def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt12,vt13,vt14
-            timeToSend=time.time()
+            timeToSend=time.time() #1, 10
             for key, value in kwargs.items():
                 print(f"Preparando Envio - {key}-{q} {value} {f} - {k}")
                 str_num = {"value":value,"save":optionsave}
@@ -941,10 +941,10 @@ def SendDataToBroker(q,k,f,**kwargs):
                     if(i["variableFullName"]==f'{key}-{q}'):
                         print(f"Preparando Envio en publish de variable {key}-{q}")
                         freq = i["variableSendFreq"]
-                        print(f'{timeToSend - vt1}')
-                        if(timeToSend - vt1 > float(freq)):
+                        print(f'{timeToSend - vt1}') #10-0 = 10  // 
+                        if(timeToSend - vt1 > float(freq)): #5    //
                              print(f"Entrando a envio {key}-{q}")
-                             #vt1=time.time()
+                             vt1=time.time()  #11
                              str_variable = i["variable"]
                              topic = topicmqtt + str_variable + "/sdata"
                              result = client.publish(topic, valueJson)
@@ -955,7 +955,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  print(f"Failed to send message to topic {topic}")
                     #break
             print("Salio for")
-            vt1=time.time()
+            
         try:  
             if(client.connected_flag==True): 
                 publish(client)
