@@ -722,7 +722,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
-        #SendDataToBroker(Vrms,Irms,AparentPower_1,_,_,_,_,_,_,_,_,_,_,Energy,k1,f1)
+        SendDataToBroker(_,_,_,_,_,_,_,_,_,_,_,k,f,Vrms)
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,k1,f1)
     elif (i == 2):
         Time2b = datetime.datetime.now()
@@ -925,7 +925,7 @@ k3="Consumo-Cliente"
 f1="Fase-1"
 f2="Fase-2"
 f3="Fase-3"
-def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,PotApMean,PotApMin,OneHourEnergy,Energy,k,f):
+def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,PotApMean,PotApMin,OneHourEnergy,Energy,k,f,Voltaje):
         str_num = {"value":VrmsMax,"save":optionsave}
         VrmsMax = json.dumps(str_num)
         str_num = {"value":IrmsMax,"save":optionsave}
@@ -934,7 +934,7 @@ def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,
         PotApMax = json.dumps(str_num)
         str_num = {"value":Energy,"save":optionsave}
         Energy = json.dumps(str_num)
-        #print(f"Preparando Envio {Vrms} - {Irms} - {PotAp} - {VrmsMin}")
+        print(f"Preparando Envio {Voltaje}")
         print(f"Preparando Envio {k} - {f}")
         def publish(client): 
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt12,vt13,vt14
@@ -1269,7 +1269,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet2 = workbook[f"Max,Min-{k}-{f}"]
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
-                    SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f)
+                    SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f,_)
                     workbook.save(filename = dest_filename)
                     data15_1=[]
                     Volt15_1=[]
@@ -3619,27 +3619,6 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
 
 
 
-def ExcelData_15():                       
-       workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet2 = workbook["CGE Maximos 15 Min"]
-       sheet2.append(list(dataCGE))
-       #print(f'Data CGE: {dataCGE}')
-       #print("Datos Insertados Correctamente!")
-       workbook.save(filename = dest_filename)
-       dataCGE=[]
-      
-def ExcelData15_1():
-       global data15_1All
-       workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet6 = workbook["2"]
-       data15_1All.insert(0,datetime.datetime.now())
-       sheet6.append(list(data15_1All))
-       #print(f'Data 2: {data15_1}')
-       #print("Datos Insertados Correctamente!")
-       workbook.save(filename = dest_filename)
-       data15_1All=[]
-
-
 
 
 def SendEmail():
@@ -3914,8 +3893,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
             #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
-            str_num = {"value":Irms,"save":1}
-            Irms2 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
             potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
             Potencias(i,Irms,Vrms,potrmsCGE)     
@@ -3929,8 +3906,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             #print(f'Current cal: {CurrentCal}')
             print(f'Irms {i}: {Irms}')
             #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
-            str_num = {"value":Irms,"save":1}
-            Irms3 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
             potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
             Potencias(i,Irms,Vrms,potrmsCGE)     
@@ -3944,8 +3919,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             #print(f'Current cal: {CurrentCal}')
             print(f'Irms {i}: {Irms}')
             #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
-            str_num = {"value":Irms,"save":1}
-            Irms4 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
             potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
             Potencias(i,Irms,Vrms,potrmsCGE)     
@@ -3957,8 +3930,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferCurrent=np.median(BufferCurrent_5)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
-            str_num = {"value":Irms,"save":1}
-            Irms5 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
             potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
             Potencias(i,Irms,Vrms,potrmsCGE)     
@@ -3970,8 +3941,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferCurrent=np.median(BufferCurrent_6)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
-            str_num = {"value":Irms,"save":1}
-            Irms6 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
             potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
             Potencias(i,Irms,Vrms,potrmsCGE)     
@@ -3984,8 +3953,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
             #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
-            str_num = {"value":Irms,"save":1}
-            Irms7 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
             potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
             Potencias(i,Irms,Vrms,potrmsCGE)     
@@ -3997,8 +3964,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferCurrent=np.median(BufferCurrent_8)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
-            str_num = {"value":Irms,"save":1}
-            Irms8 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
             potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
             Potencias(i,Irms,Vrms,potrmsCGE)     
@@ -4010,8 +3975,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             MediaBufferCurrent=np.median(BufferCurrent_9)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
-            str_num = {"value":Irms,"save":1}
-            Irms9 = json.dumps(str_num)
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
             potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
             Potencias(i,Irms,Vrms,potrmsCGE)     
