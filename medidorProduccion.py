@@ -927,9 +927,9 @@ f2="Fase-2"
 f3="Fase-3"
 #def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,PotApMean,PotApMin,OneHourEnergy,Energy,k,f,Voltaje):
 def SendDataToBroker(**kwargs):
+        
+        
         """
-        str_num = {"value":VrmsMax,"save":optionsave}
-        VrmsMax = json.dumps(str_num)
         str_num = {"value":IrmsMax,"save":optionsave}
         IrmsMax = json.dumps(str_num)
         str_num = {"value":PotApMax,"save":optionsave}
@@ -937,8 +937,9 @@ def SendDataToBroker(**kwargs):
         str_num = {"value":Energy,"save":optionsave}
         Energy = json.dumps(str_num)
         """
-        for key, value in kwargs.items():
-            print(f"Preparando Envio 2 {key}-1 {value}")
+        #for keys, value in kwargs.items():
+        #    str_num = {"value":keys,"save":optionsave}
+        #    key = json.dumps(str_num)
         #print(f"Preparando Envio {k} - {f}")
         
         def publish(client): 
@@ -946,6 +947,8 @@ def SendDataToBroker(**kwargs):
             timeToSend=time.time()
             for key, value in kwargs.items():
                 print(f"Preparando Envio 2 {key}-1 {value}")
+                str_num = {"value":value,"save":optionsave}
+                valueJson = json.dumps(str_num)
                 for i in data["variables"]:
                     #    if(data["variables"][i]["variableType"]=="output"):
                     #        continue
@@ -956,10 +959,10 @@ def SendDataToBroker(**kwargs):
                              vt1=time.time()
                              str_variable = i["variable"]
                              topic = topicmqtt + str_variable + "/sdata"
-                             result = client.publish(topic, value)
+                             result = client.publish(topic, valueJson)
                              status = result[0]            
                              if status == 0:
-                                 print(f"Send Vrms: `{value}` to topic `{topic}` freq: {freq} to {key}-1 ")  
+                                 print(f"Send Vrms: `{valueJson}` to topic `{topic}` freq: {freq} to {key}-1 ")  
                              else:
                                  print(f"Failed to send message to topic {topic}")
         
