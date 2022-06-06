@@ -722,7 +722,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
-        SendDataToBroker(Voltaje=f"{Vrms}")
+        SendDataToBroker(i=i,k=k1,f=f1,Vrms=f"{Vrms}",Irms=f"{Irms}",PotAp=f"{AparentPower_1}",Energia=f"{Energy_1}")
         #Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,k1,f1)
     elif (i == 2):
         Time2b = datetime.datetime.now()
@@ -926,33 +926,19 @@ f1="Fase-1"
 f2="Fase-2"
 f3="Fase-3"
 #def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,PotApMean,PotApMin,OneHourEnergy,Energy,k,f,Voltaje):
-def SendDataToBroker(**kwargs):
-        
-        
-        """
-        str_num = {"value":IrmsMax,"save":optionsave}
-        IrmsMax = json.dumps(str_num)
-        str_num = {"value":PotApMax,"save":optionsave}
-        PotApMax = json.dumps(str_num)
-        str_num = {"value":Energy,"save":optionsave}
-        Energy = json.dumps(str_num)
-        """
-        #for keys, value in kwargs.items():
-        #    str_num = {"value":keys,"save":optionsave}
-        #    key = json.dumps(str_num)
-        #print(f"Preparando Envio {k} - {f}")
+def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt12,vt13,vt14
             timeToSend=time.time()
             for key, value in kwargs.items():
-                print(f"Preparando Envio 2 {key}-1 {value}")
+                print(f"Preparando Envio 2 {key}-q {value} {f} - {k}")
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 for i in data["variables"]:
                     #    if(data["variables"][i]["variableType"]=="output"):
                     #        continue
-                    if(i["variableFullName"]==f'{key}-1'):
+                    if(i["variableFullName"]==f'{key}-q'):
                         print(f"Preparando Envio 2 en publish de variable {key}-1")
                         freq = i["variableSendFreq"]
                         if(timeToSend - vt1 > float(freq)):
@@ -962,10 +948,15 @@ def SendDataToBroker(**kwargs):
                              result = client.publish(topic, valueJson)
                              status = result[0]            
                              if status == 0:
-                                 print(f"Send Vrms: `{valueJson}` to topic `{topic}` freq: {freq} to {key}-1 ")  
+                                 print(f"Send Vrms: `{valueJson}` to topic `{topic}` freq: {freq} to {key}-q ")  
                              else:
                                  print(f"Failed to send message to topic {topic}")
-        
+                    #break
+        try:  
+            if(client.connected_flag==True): 
+                publish(client)
+        except:
+            pass
         """
         def publish(client): 
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt12,vt13,vt14
@@ -1143,11 +1134,7 @@ def SendDataToBroker(**kwargs):
                              print(f"Failed to send message to topic {topic1}")
         """
         
-        try:  
-            if(client.connected_flag==True): 
-                publish(client)
-        except:
-            pass
+        
         
         
     
