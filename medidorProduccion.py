@@ -941,6 +941,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                     if(i["variableFullName"]==f'{key}-{q}'):
                         print(f"Preparando Envio en publish de variable {key}-{q}")
                         freq = i["variableSendFreq"]
+                        print(f'{timeToSend - vt1}')
                         if(timeToSend - vt1 > float(freq)):
                              print(f"Entrando a envio {key}-{q}")
                              #vt1=time.time()
