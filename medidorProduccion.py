@@ -903,7 +903,7 @@ def graphVoltage(list_fftVoltage,list_FinalCurrent,samplings,i):
     
 
 
-vt=time.time()
+vt1=time.time()
 
 
 optionsave=1
@@ -918,12 +918,9 @@ def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             g=0
-            global vt
-            timeToSend=time.time() #1, 10
+            global vt1
+            timeToSend=time.time() 
             print(f'Largo Kwargs {len(kwargs.values())}')
-            #for p in kwargs.values():
-            #    print(f'g = {g}')
-            #    g=g+1
             for key, value in kwargs.items():
                 g=g+1
                 print(f'g = {g}')
@@ -935,11 +932,10 @@ def SendDataToBroker(q,k,f,**kwargs):
                     #        continue
                     if(i["variableFullName"]==f'{key}-{q}'):
                         print(f"Preparando Envio en publish de variable {key}-{q}")
-                        freq = i["variableSendFreq"]
-                        print(f'{timeToSend - vt}') #10-0 = 10  // 
-                        if(timeToSend - vt > float(freq)): #5    //
+                        freq = i["variableSendFreq"]  
+                        print(f'{timeToSend - vt1}') 
+                        if(timeToSend - vt1 > float(freq)): 
                              print(f"Entrando a envio {key}-{q}")
-                             vt=time.time()  #11
                              str_variable = i["variable"]
                              topic = topicmqtt + str_variable + "/sdata"
                              result = client.publish(topic, valueJson)
@@ -948,6 +944,9 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  print(f"Send Vrms: `{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}")
+                             if(g==len(kwargs.values())):
+                                 vt1=time.time() 
+                                 
             print(f'G = {g}')
             print("Salio for")
             
