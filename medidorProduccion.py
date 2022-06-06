@@ -955,13 +955,13 @@ def SendDataToBroker(**kwargs):
                         if(timeToSend - vt1 > float(freq)):
                              vt1=time.time()
                              str_variable = i["variable"]
-                             topic1 = topicmqtt + str_variable + "/sdata"
-                             result = client.publish(topic1, value)
+                             topic = topicmqtt + str_variable + "/sdata"
+                             result = client.publish(topic, value)
                              status = result[0]            
                              if status == 0:
-                                 print(f"Send Vrms: `{value}` to topic `{topic1}` con freq: {freq}")  
+                                 print(f"Send Vrms: `{value}` to topic `{topic}` freq: {freq} to {key}-1 ")  
                              else:
-                                 print(f"Failed to send message to topic {topic1}")
+                                 print(f"Failed to send message to topic {topic}")
         
         """
         def publish(client): 
