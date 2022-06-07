@@ -712,11 +712,12 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
           ActivePower = np.abs(ActivePower)
           ActivePower = ActivePower*(-1)
     ReactivePower = Vrms*Irms*np.sin(PhaseVoltage-PhaseCurrent)
+    
     if (i == 1):
         Time1b = datetime.datetime.now()
         delta=(((Time1b - Time1a).microseconds)/1000+((Time1b - Time1a).seconds)*1000)/10000000000
-        Energy_1 += np.abs(ActivePower*delta*2.9)
-        OneHourEnergy_1 += np.abs(ActivePower*delta*2.9)
+        Energy_1 += np.abs(AparentPower*delta*2.9) #ActivePower
+        OneHourEnergy_1 += np.abs(AparentPower*delta*2.9) #ActivePower
         Time1a = datetime.datetime.now()
         AparentPower_1 = AparentPower
         ActivePower_1 = ActivePower
@@ -724,22 +725,24 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
         SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
         #Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,k1,f1)
+        #{key}-{q}-{f}-{k}
     elif (i == 2):
         Time2b = datetime.datetime.now()
         delta=(((Time2b - Time2a).microseconds)/1000+((Time2b - Time2a).seconds)*1000)/10000000000
-        Energy_2 += np.abs(ActivePower*delta*2.9)
-        OneHourEnergy_2 += np.abs(ActivePower*delta*2.9)
+        Energy_2 += np.abs(AparentPower*delta*2.9)
+        OneHourEnergy_2 += np.abs(AparentPower*delta*2.9)
         Time2a = datetime.datetime.now()
         AparentPower_2 = AparentPower
         ActivePower_2 = ActivePower
         ReactivePower_2 = ReactivePower 
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i,k1,f2)
+        SendDataToBroker(q=i,k=k1,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
         #Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,k1,f2)       
     elif (i == 3):
         Time3b = datetime.datetime.now()
         delta=(((Time3b - Time3a).microseconds)/1000+((Time3b - Time3a).seconds)*1000)/10000000000
-        Energy_3 += np.abs(ActivePower*delta*2.9)
-        OneHourEnergy_3 += np.abs(ActivePower*delta*2.9)
+        Energy_3 += np.abs(AparentPower*delta*2.9)
+        OneHourEnergy_3 += np.abs(AparentPower*delta*2.9)
         Time3a = datetime.datetime.now()
         AparentPower_3 = AparentPower
         ActivePower_3 = ActivePower
@@ -749,8 +752,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 4):
         Time4b = datetime.datetime.now()
         delta=(((Time4b - Time4a).microseconds)/1000+((Time4b - Time4a).seconds)*1000)/10000000000
-        Energy_4 += np.abs(ActivePower*delta*2.9)
-        OneHourEnergy_4 += np.abs(ActivePower*delta*2.9)
+        Energy_4 += np.abs(AparentPower*delta*2.9)
+        OneHourEnergy_4 += np.abs(AparentPower*delta*2.9)
         Time4a = datetime.datetime.now()
         AparentPower_4 = AparentPower
         ActivePower_4 = ActivePower
@@ -760,8 +763,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 5):
         Time5b = datetime.datetime.now()
         delta=(((Time5b - Time5a).microseconds)/1000+((Time5b - Time5a).seconds)*1000)/10000000000
-        Energy_5 += np.abs(ActivePower*delta*2.9)
-        OneHourEnergy_5 += np.abs(ActivePower*delta*2.9)
+        Energy_5 += np.abs(AparentPower*delta*2.9)
+        OneHourEnergy_5 += np.abs(AparentPower*delta*2.9)
         Time5a = datetime.datetime.now()
         AparentPower_5 = AparentPower
         ActivePower_5 = ActivePower
@@ -771,8 +774,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 6):
         Time6b = datetime.datetime.now()
         delta=(((Time6b - Time6a).microseconds)/1000+((Time6b - Time6a).seconds)*1000)/10000000000
-        Energy_6 += np.abs(ActivePower*delta*2.9)
-        OneHourEnergy_6 += np.abs(ActivePower*delta*2.9)
+        Energy_6 += np.abs(AparentPower*delta*2.9)
+        OneHourEnergy_6 += np.abs(AparentPower*delta*2.9)
         Time6a = datetime.datetime.now()
         AparentPower_6 = AparentPower
         ActivePower_6 = ActivePower
@@ -782,8 +785,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 7):
         Time7b = datetime.datetime.now()
         delta=(((Time7b - Time7a).microseconds)/1000+((Time7b - Time7a).seconds)*1000)/10000000000
-        Energy_7 += np.abs(ActivePower*delta*2.9)
-        OneHourEnergy_7 += np.abs(ActivePower*delta*2.9)
+        Energy_7 += np.abs(AparentPower*delta*2.9)
+        OneHourEnergy_7 += np.abs(AparentPower*delta*2.9)
         Time7a = datetime.datetime.now()
         AparentPower_7 = AparentPower
         ActivePower_7 = ActivePower
@@ -793,8 +796,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 8):
         Time8b = datetime.datetime.now()
         delta=(((Time8b - Time8a).microseconds)/1000+((Time8b - Time8a).seconds)*1000)/10000000000
-        Energy_8 += np.abs(ActivePower*delta*2.9)
-        OneHourEnergy_8 += np.abs(ActivePower*delta*2.9)
+        Energy_8 += np.abs(AparentPower*delta*2.9)
+        OneHourEnergy_8 += np.abs(AparentPower*delta*2.9)
         Time8a = datetime.datetime.now()
         AparentPower_8 = AparentPower
         ActivePower_8 = ActivePower
@@ -804,8 +807,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 9):
         Time9b = datetime.datetime.now()
         delta=(((Time9b - Time9a).microseconds)/1000+((Time9b - Time9a).seconds)*1000)/10000000000
-        Energy_9 += np.abs(ActivePower*delta*2.9)
-        OneHourEnergy_9 += np.abs(ActivePower*delta*2.9)
+        Energy_9 += np.abs(AparentPower*delta*2.9)
+        OneHourEnergy_9 += np.abs(AparentPower*delta*2.9)
         Time9a = datetime.datetime.now()
         AparentPower_9 = AparentPower
         ActivePower_9 = ActivePower
@@ -916,12 +919,12 @@ vt9=time.time()
 
 
 optionsave=1
-k1="RED-Compañia"
-k2="Central-Fotovoltaica"
-k3="Consumo-Cliente"
-f1="Fase-1"
-f2="Fase-2"
-f3="Fase-3"
+k1="REDCompañia"
+k2="CentralFotovoltaica"
+k3="ConsumoCliente"
+f1="Fase1"
+f2="Fase2"
+f3="Fase3"
 #def SendDataToBroker(VrmsMax,VrmsMean,VrmsMin,IrmsMax,IrmsMean,IrmsMin,PotApMax,PotApMean,PotApMin,OneHourEnergy,Energy,k,f,Voltaje):
 def SendDataToBroker(q,k,f,**kwargs):
         
@@ -955,7 +958,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 for i in data["variables"]:
-                    if(i["variableFullName"]==f'{key}-{q}'):
+                    if(i["variableFullName"]==f'{key}-{q}-{f}-{k}'):
                         print(f"Preparando Envio en publish de variable {key}-{q}")
                         freq = i["variableSendFreq"]  
                         print(f'{timeToSend - vt}') 
@@ -3513,15 +3516,15 @@ def excelcreate():
     dest_filename = f'{exceltime}.xlsx'
     #sheet1 = book.active
     sheet1  = book.create_sheet("Var 0")
-    sheet2 = book.create_sheet(f"Max,Min-{k1}-{f1}")
-    sheet3 = book.create_sheet(f"Max,Min-{k1}-{f2}")
-    sheet4 = book.create_sheet(f"Max,Min-{k1}-{f3}")
-    sheet5 = book.create_sheet(f"Max,Min-{k2}-{f1}")
-    sheet6 = book.create_sheet(f"Max,Min-{k2}-{f2}")
-    sheet7 = book.create_sheet(f"Max,Min-{k2}-{f3}")
-    sheet8 = book.create_sheet(f"Max,Min-{k3}-{f1}")
-    sheet9 = book.create_sheet(f"Max,Min-{k3}-{f2}")
-    sheet10 = book.create_sheet(f"Max,Min-{k3}-{f3}")
+    sheet2 = book.create_sheet(f"Mean-{k1}-{f1}")
+    sheet3 = book.create_sheet(f"Mean-{k1}-{f2}")
+    sheet4 = book.create_sheet(f"Mean-{k1}-{f3}")
+    sheet5 = book.create_sheet(f"Mean-{k2}-{f1}")
+    sheet6 = book.create_sheet(f"Mean-{k2}-{f2}")
+    sheet7 = book.create_sheet(f"Mean-{k2}-{f3}")
+    sheet8 = book.create_sheet(f"Mean-{k3}-{f1}")
+    sheet9 = book.create_sheet(f"Mean-{k3}-{f2}")
+    sheet10 = book.create_sheet(f"Mean-{k3}-{f3}")
     sheet11 = book.create_sheet(f"{k1}-{f1}") 
     sheet12 = book.create_sheet(f"{k1}-{f2}") 
     sheet13 = book.create_sheet(f"{k1}-{f3}") 
