@@ -73,7 +73,9 @@ print("Hora de comienzo:", horasetup)
 broker = '18.228.175.193'    #mqtt server
 port = 1883
 dId = '123321'
+dId2 = '1234321'
 passw = '5pYEv8nGMt'
+passw2 = 'EmRQWe4XUg'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
@@ -117,6 +119,46 @@ def get_mqtt_credentials():
           print("Ends mqtt credentials")
     return True
 
+
+def get_mqtt_credentials2():
+    global usernamemqtt2
+    global passwordmqtt2
+    global mqttopic2
+    global str_client_id2
+    global topicmqtt2
+    global data2
+    print("Getting MQTT Credentials from WebHook")
+    time.sleep(2)
+    toSend2 = {"dId": dId2, "password": passw2}
+    respuesta2 = requests.post(webhook_endpoint, data2=toSend2)
+
+    if(respuesta2.status_code < 0):
+          print("Error Sending Post Request ", respuesta2.status_code)
+          respuesta2.close()
+          return False
+    if(respuesta2.status_code != 200):
+          print("Error in response ", respuesta2.status_code)
+          respuesta2.close()
+          return False
+    if(respuesta2.status_code == 200):
+          print("Mqtt Credentials Obtained Successfully :)   ")
+          #print("json: " ,resp.content)
+          #print('- ' * 20)
+          my_bytes_value = respuesta2.content      #Contenido entero del json
+          my_new_string = my_bytes_value.decode("utf-8").replace("'", '"')
+          data2 = json.loads(my_new_string)
+          s = json.dumps(data, indent=4, sort_keys=True)
+          print(s)
+          usernamemqtt2 = data2["username"]
+          #print("username:",usernamemqtt)
+          passwordmqtt2 = data2["password"]
+          topicmqtt2 = data["topic"]   #topico al que nos vamos a suscribir
+          mqttopic2 = f"{topicmqtt2}+/actdata"
+          str_client_id2 = f'device_{dId2}_{random.randint(0, 9999)}'
+          #print(mqttopic)
+          respuesta2.close()
+          print("Ends mqtt credentials")
+    return True
    
 def on_disconnect(client, userdata, rc):
     if (rc != 0 and rc != 5):
@@ -124,7 +166,9 @@ def on_disconnect(client, userdata, rc):
     elif(rc==5):
         print("Getting new credentials!")
         get_mqtt_credentials()
+        get_mqtt_credentials2()
         client.username_pw_set(usernamemqtt, passwordmqtt)
+        client2.username_pw_set(usernamemqtt2, passwordmqtt2)
                       
 def on_connected(client, userdata, flags, rc):
   
@@ -145,14 +189,13 @@ client.username_pw_set(usernamemqtt, passwordmqtt)
 client.on_connect = on_connected
 client.loop_start()
 
-def reconnectmqtt():
-    get_mqtt_credentials()     
-    client = mqtt.Client(str_client_id)   #Creación cliente
-    client.connect(broker, port)     #Conexión al broker
-    client.on_disconnect = on_disconnect
-    client.username_pw_set(usernamemqtt, passwordmqtt)
-    client.on_connect = on_connected
-    client.loop_start()
+get_mqtt_credentials2()     
+client2 = mqtt.Client(str_client_id2)   #Creación cliente
+client2.connect(broker, port)     #Conexión al broker
+client2.on_disconnect = on_disconnect
+client2.username_pw_set(usernamemqtt2, passwordmqtt2)
+client2.on_connect = on_connected
+client2.loop_start()
 
 
 def get_cpuload():
@@ -361,54 +404,35 @@ def VoltageFFT(list_fftVoltages, samplings,i):
            FDVoltage = Magnitud1/SumMagnitudEficaz
            DATVoltage= np.sqrt(((SumMagnitudEficaz**2)-(Magnitud1**2))/(Magnitud1**2))
            sincvoltaje1 = 1
-           str_num_FD = {"value":FDVoltage,"save":1}
-           str_num_DAT = {"value":DATVoltage,"save":1}
            if (p == 1):
                #print("FD Voltage: ",FDVoltage)
                FDVoltage_1 = FDVoltage
                DATVoltage_1= DATVoltage
-               FDVoltage_1_JSON = json.dumps(str_num_FD)  
-               DATVoltage_1_JSON = json.dumps(str_num_DAT)
            elif (p == 2):
                FDVoltage_2 = FDVoltage
-               DATVoltage_2= DATVoltage
-               FDVoltage_2_JSON = json.dumps(str_num_FD)  
-               DATVoltage_2_JSON = json.dumps(str_num_DAT)             
+               DATVoltage_2= DATVoltage         
            elif (p == 3):
                FDVoltage_3 = FDVoltage
-               DATVoltage_3= DATVoltage
-               FDVoltage_3_JSON = json.dumps(str_num_FD)  
-               DATVoltage_3_JSON = json.dumps(str_num_DAT)             
+               DATVoltage_3= DATVoltage        
            elif (p == 4):
                FDVoltage_4 = FDVoltage
-               DATVoltage_4= DATVoltage
-               FDVoltage_4_JSON = json.dumps(str_num_FD)  
-               DATVoltage_4_JSON = json.dumps(str_num_DAT)             
+               DATVoltage_4= DATVoltage         
            elif (p == 5):
                FDVoltage_5 = FDVoltage
-               DATVoltage_5= DATVoltage
-               FDVoltage_5_JSON = json.dumps(str_num_FD)  
-               DATVoltage_5_JSON = json.dumps(str_num_DAT)             
+               DATVoltage_5= DATVoltage        
            elif (p == 6):
                FDVoltage_6 = FDVoltage
-               DATVoltage_6= DATVoltage
-               FDVoltage_6_JSON = json.dumps(str_num_FD)  
-               DATVoltage_6_JSON = json.dumps(str_num_DAT)             
+               DATVoltage_6= DATVoltage         
            elif (p == 7):
                FDVoltage_7 = FDVoltage
-               DATVoltage_7= DATVoltage
-               FDVoltage_7_JSON = json.dumps(str_num_FD)  
-               DATVoltage_7_JSON = json.dumps(str_num_DAT)             
+               DATVoltage_7= DATVoltage             
            elif (p == 8):
                FDVoltage_8 = FDVoltage
-               DATVoltage_8= DATVoltage
-               FDVoltage_8_JSON = json.dumps(str_num_FD)  
-               DATVoltage_8_JSON = json.dumps(str_num_DAT)             
+               DATVoltage_8= DATVoltage            
            elif (p == 9):
                FDVoltage_9 = FDVoltage
                DATVoltage_9= DATVoltage
-               FDVoltage_9_JSON = json.dumps(str_num_FD)  
-               DATVoltage_9_JSON = json.dumps(str_num_DAT)             
+                       
            
 
 
@@ -527,11 +551,7 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
          Irmsarmonico1prop=Magnitud1*proporcion
          Irmstotalproporcionado=np.sqrt((Irmsarmonico1prop**2)+(ArmonicosRestantes*proporcion)**2)
          FDCurrent = Irmsarmonico1prop/Irms
-         str_num_FD_Current = {"value":FDCurrent,"save":0}
-         JsonFDCurrent = json.dumps(str_num_FD_Current)
          DATCurrent = np.sqrt((SumMagnitudEficaz2**2-Magnitud1**2)/(Magnitud1**2))
-         str_num_DAT_Current = {"value":DATCurrent,"save":0}
-         JsonDATCurrent = json.dumps(str_num_DAT_Current)
          PhaseCurrent = np.arctan(real[0]/(imag[0]))
          if (sincvoltaje1 == 1):
              if(PhaseVoltage-(PhaseCurrent)>=0):
@@ -548,73 +568,46 @@ def CurrentFFT(list_fftVoltages, samplings, i,Irms):
                  FP_1=FP
                  DATCurrent_1=DATCurrent
                  FDCurrent_1=FDCurrent
-                 FDCurrentJson1 = json.dumps(str_num_FD_Current)  
-                 DATCurrentJson1 = json.dumps(str_num_DAT_Current)
-                 FPCurrentJson1 = json.dumps(str_num_FP) 
              elif (p == 2):
                  CosPhi_2=CosPhi
                  FP_2=FP
                  DATCurrent_2=DATCurrent
-                 FDCurrent2=FDCurrent
-                 FDCurrentJson2 = json.dumps(str_num_FD_Current)  
-                 DATCurrentJson2 = json.dumps(str_num_DAT_Current)  
-                 FPCurrentJson2 = json.dumps(str_num_FP)            
+                 FDCurrent_2=FDCurrent
              elif (p == 3):
                  CosPhi_3=CosPhi
                  FP_3=FP
                  DATCurrent_3=DATCurrent
-                 FDCurrent_3=FDCurrent
-                 FDCurrentJson3 = json.dumps(str_num_FD_Current)  
-                 DATCurrentJson3 = json.dumps(str_num_DAT_Current)
-                 FPCurrentJson3 = json.dumps(str_num_FP)              
+                 FDCurrent_3=FDCurrent           
              elif (p == 4):
                  CosPhi_4=CosPhi
                  FP_4=FP
                  DATCurrent_4=DATCurrent
-                 FDCurrent_4=FDCurrent
-                 FDCurrentJson4 = json.dumps(str_num_FD_Current)  
-                 DATCurrentJson4 = json.dumps(str_num_DAT_Current)
-                 FPCurrentJson4 = json.dumps(str_num_FP)              
+                 FDCurrent_4=FDCurrent           
              elif (p == 5):
                  CosPhi_5=CosPhi
                  FP_5=FP
                  DATCurrent_5=DATCurrent
-                 FDCurrent_5=FDCurrent
-                 FDCurrentJson5 = json.dumps(str_num_FD_Current)  
-                 DATCurrentJson5 = json.dumps(str_num_DAT_Current)
-                 FPCurrentJson5 = json.dumps(str_num_FP)              
+                 FDCurrent_5=FDCurrent         
              elif (p == 6):
                  CosPhi_6=CosPhi
                  FP_6=FP
                  DATCurrent_6=DATCurrent
-                 FDCurrent_6=FDCurrent
-                 FDCurrentJson6 = json.dumps(str_num_FD_Current)  
-                 DATCurrentJson6 = json.dumps(str_num_DAT_Current)
-                 FPCurrentJson6 = json.dumps(str_num_FP)             
+                 FDCurrent_6=FDCurrent          
              elif (p == 7):
                  CosPhi_7=CosPhi
                  FP_7=FP
                  DATCurrent_7=DATCurrent
-                 FDCurrent_7=FDCurrent
-                 FDCurrentJson7 = json.dumps(str_num_FD_Current)  
-                 DATCurrentJson7 = json.dumps(str_num_DAT_Current)
-                 FPCurrentJson7 = json.dumps(str_num_FP)              
+                 FDCurrent_7=FDCurrent           
              elif (p == 8):
                  CosPhi_8=CosPhi
                  FP_8=FP
                  DATCurrent_8=DATCurrent
-                 FDCurrent_8=FDCurrent
-                 FDCurrentJson8 = json.dumps(str_num_FD_Current)  
-                 DATCurrent8son8 = json.dumps(str_num_DAT_Current)
-                 FPCurrentJson8 = json.dumps(str_num_FP)              
+                 FDCurrent_8=FDCurrent    
              elif (p == 9):
                  CosPhi_9=CosPhi
                  FP_9=FP
                  DATCurrent_9=DATCurrent
-                 FDCurrent_9=FDCurrent
-                 FDCurrentJson9 = json.dumps(str_num_FD_Current)  
-                 DATCurrentJson9 = json.dumps(str_num_DAT_Current)
-                 FPCurrentJson9 = json.dumps(str_num_FP)        
+                 FDCurrent_9=FDCurrent       
 
 
 Time1a = datetime.datetime.now()
@@ -727,7 +720,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_2 = ReactivePower 
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i,k1,f2)
         SendDataToBroker(q=i,k=k1,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_2}",Energia=f"{Energy_1}")
-        #Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,k1,f2)       
+        Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,k1,f2)       
     elif (i == 3):
         Time3b = datetime.datetime.now()
         delta=(((Time3b - Time3a).microseconds)/1000+((Time3b - Time3a).seconds)*1000)/10000000000
@@ -738,7 +731,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_3 = ActivePower
         ReactivePower_3 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,CosPhi_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3,OneHourEnergy_3,i,k1,f3)
-        #Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,OneHourEnergy_3,Energy_3,k1,f3)             
+        Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,OneHourEnergy_3,Energy_3,k1,f3)             
     elif (i == 4):
         Time4b = datetime.datetime.now()
         delta=(((Time4b - Time4a).microseconds)/1000+((Time4b - Time4a).seconds)*1000)/10000000000
@@ -993,193 +986,8 @@ def SendDataToBroker(q,k,f,**kwargs):
 
 #    if(data["variables"][i]["variableType"]=="output"):
 #        continue
-        """
-        def publish(client): 
-            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt12,vt13,vt14
-            timeToSend=time.time()
-            for i in data["variables"]:
-                #    if(data["variables"][i]["variableType"]=="output"):
-                #        continue
-                if(i["variableFullName"]==f'Voltaje-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt1 > float(freq)):
-                         vt1=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, Vrms)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send Vrms: `{Vrms}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Corriente-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt1 > float(freq)):
-                         vt2=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, Irms)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send Vrms: `{Irms}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Potencia-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt1 > float(freq)):
-                         vt3=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, PotAp)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send Vrms: `{PotAp}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Energia-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt1 > float(freq)):
-                         vt4=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, Energy)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send Vrms: `{Energy}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Voltaje-Maximo-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt1 > float(freq)):
-                         vt5=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, VrmsMax)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send Vrms: `{VrmsMax}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Voltaje-Promedio-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt1 > float(freq)):
-                         vt6=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, VrmsMean)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send Vrms: `{VrmsMean}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Voltaje-Minimo-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt1 > float(freq)):
-                         vt7=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, VrmsMin)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send Vrms: `{VrmsMin}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Corriente-Maximo-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt2 > float(freq)):
-                         vt8=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, IrmsMax)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send Irms: `{IrmsMax}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Corriente-Promedio-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt2 > float(freq)):
-                         vt9=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, IrmsMean)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send Irms: `{IrmsMean}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Corriente-Minimo-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt2 > float(freq)):
-                         vt10=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, IrmsMin)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send Irms: `{IrmsMin}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Potencia-Maximo-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt3 > float(freq)):
-                         vt11=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, PotApMax)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send PotAp: `{PotApMax}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Potencia-Promedio-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt3 > float(freq)):
-                         vt12=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, PotApMean)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send PotAp: `{PotApMean}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Potencia-Minimo-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt3 > float(freq)):
-                         vt13=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, PotApMin)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send PotAp: `{PotApMin}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-                if(i["variableFullName"]==f'Energia-Hora-{k}-{f}'):
-                    freq = i["variableSendFreq"]
-                    if(timeToSend - vt4 > float(freq)):
-                         vt14=time.time()
-                         str_variable = i["variable"]
-                         topic1 = topicmqtt + str_variable + "/sdata"
-                         result = client.publish(topic1, OneHourEnergy)
-                         status = result[0]            
-                         if status == 0:
-                             print(f"Send Energia: `{OneHourEnergy}` to topic `{topic1}` con freq: {freq}")  
-                         else:
-                             print(f"Failed to send message to topic {topic1}")
-        """
         
-        
-        
-        
-    
-    
-
-                      
-                
-        
-                   
+             
             
 MaxVoltage15_1=0.0
 MeanVoltage15_1=0.0
@@ -1327,7 +1135,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet2 = workbook[f"Mean-{k}-{f}"]
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
-                    SendDataToBroker(q=i,k=k1,f=f1,VoltajeMax=f'{MaxVoltage15_1}',VoltajePromedio=f'{MeanVoltage15_1}',VoltajeMin=f'{MinVoltage15_1}',MaxCorriente=f'{MaxCurrent15_1}',PromedioCorriente=f'{MeanCurrent15_1}',MinimoCorriente=f'{MinCurrent15_1}',MaxPotenciaAparente=f'{MaxAparentPower_1}',PromedioPotenciaAparente=f'{MeanAparentPower_1}',MinPotenciaAparente=f'{MinAparentPower_1}',Energia15min=f'{OneHourEnergy_1}',Energia=f'{Energy}')
+                    SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_1}',VoltajePromedio=f'{MeanVoltage15_1}',VoltajeMin=f'{MinVoltage15_1}',MaxCorriente=f'{MaxCurrent15_1}',PromedioCorriente=f'{MeanCurrent15_1}',MinimoCorriente=f'{MinCurrent15_1}',MaxPotenciaAparente=f'{MaxAparentPower_1}',PromedioPotenciaAparente=f'{MeanAparentPower_1}',MinPotenciaAparente=f'{MinAparentPower_1}',Energia15min=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f,_)
                     workbook.save(filename = dest_filename)
                     data15_1=[]
@@ -1483,7 +1291,7 @@ FDVoltage15_2=[]
 FDCurrent15_2=[]
 DAT15Voltage_2=[]
 DAT15Current_2=[]
-def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
+def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,i,k,f):
     global data15_2
     global Volt15_2
     global data15_2
@@ -1498,6 +1306,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global DAT15Voltage_2
     global DAT15Current_2
     global Access_2
+    global OneHourEnergy_2
     
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
@@ -1580,12 +1389,14 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_2.insert(31,MaxDATCurrent_2)
                     data15_2.insert(32,MeanDATCurrent_2)
                     data15_2.insert(33,MinDATCurrent_2)
-                    data15_2.insert(34,Energy)
+                    data15_1.insert(34,OneHourEnergy)
+                    data15_2.insert(35,Energy)
                     data15_2.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet3 = workbook[f"Max,Min-{k}-{f}"]
+                    sheet3 = workbook[f"Mean-{k}-{f}"]
                     sheet3.append(list(data15_2))
                     print(f'Data 2: Guardando Promedios')
+                    SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_2}',VoltajePromedio=f'{MeanVoltage15_2}',VoltajeMin=f'{MinVoltage15_2}',MaxCorriente=f'{MaxCurrent15_2}',PromedioCorriente=f'{MeanCurrent15_2}',MinimoCorriente=f'{MinCurrent15_2}',MaxPotenciaAparente=f'{MaxAparentPower_2}',PromedioPotenciaAparente=f'{MeanAparentPower_2}',MinPotenciaAparente=f'{MinAparentPower_2}',Energia15min=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_2=[]
@@ -1600,6 +1411,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     FDCurrent15_2=[]
                     DAT15Voltage_2=[]
                     DAT15Current_2=[]
+                    OneHourEnergy_2=0
                elif(Access_2==1):
                     #print("paso elif 2")
                     Volt15_2.append(Vrms)
@@ -1739,7 +1551,7 @@ FDVoltage15_3=[]
 FDCurrent15_3=[]
 DAT15Voltage_3=[]
 DAT15Current_3=[]
-def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
+def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,i,k,f):
     global data15_3
     global Volt15_3
     global data15_3
@@ -1754,6 +1566,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global DAT15Voltage_3
     global DAT15Current_3
     global Access_3
+    global OneHourEnergy_3
     
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
@@ -1836,12 +1649,14 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_3.insert(31,MaxDATCurrent_3)
                     data15_3.insert(32,MeanDATCurrent_3)
                     data15_3.insert(33,MinDATCurrent_3)
-                    data15_3.insert(34,Energy)
+                    data15_3.insert(34,OneHourEnergy)
+                    data15_3.insert(35,Energy)
                     data15_3.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet4 = workbook[f"Max,Min-{k}-{f}"]
+                    sheet4 = workbook[f"Mean-{k}-{f}"]
                     sheet4.append(list(data15_3))
                     print(f'Data 3: Guardando Promedios')
+                    SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_3}',VoltajePromedio=f'{MeanVoltage15_3}',VoltajeMin=f'{MinVoltage15_3}',MaxCorriente=f'{MaxCurrent15_3}',PromedioCorriente=f'{MeanCurrent15_3}',MinimoCorriente=f'{MinCurrent15_3}',MaxPotenciaAparente=f'{MaxAparentPower_3}',PromedioPotenciaAparente=f'{MeanAparentPower_3}',MinPotenciaAparente=f'{MinAparentPower_3}',Energia15min=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_3=[]
@@ -1856,6 +1671,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     FDCurrent15_3=[]
                     DAT15Voltage_3=[]
                     DAT15Current_3=[]
+                    OneHourEnergy_3=0
                elif(Access_3==1):
                     #print("paso elif 2")
                     Volt15_3.append(Vrms)
@@ -1995,7 +1811,7 @@ FDVoltage15_4=[]
 FDCurrent15_4=[]
 DAT15Voltage_4=[]
 DAT15Current_4=[]
-def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
+def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,i,k,f):
     global data15_4
     global Volt15_4
     global data15_4
@@ -2010,6 +1826,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global DAT15Voltage_4
     global DAT15Current_4
     global Access_4
+    global OneHourEnergy_4
     
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
@@ -2092,12 +1909,14 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_4.insert(31,MaxDATCurrent_4)
                     data15_4.insert(32,MeanDATCurrent_4)
                     data15_4.insert(33,MinDATCurrent_4)
-                    data15_4.insert(34,Energy)
+                    data15_4.insert(34,OneHourEnergy)
+                    data15_4.insert(35,Energy)
                     data15_4.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet5 = workbook[f"Max,Min-{k}-{f}"]
+                    sheet5 = workbook[f"Mean-{k}-{f}"]
                     sheet5.append(list(data15_4))
                     print(f'Data 4: Guardando Promedios')
+                    SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_4}',VoltajePromedio=f'{MeanVoltage15_4}',VoltajeMin=f'{MinVoltage15_4}',MaxCorriente=f'{MaxCurrent15_4}',PromedioCorriente=f'{MeanCurrent15_4}',MinimoCorriente=f'{MinCurrent15_4}',MaxPotenciaAparente=f'{MaxAparentPower_4}',PromedioPotenciaAparente=f'{MeanAparentPower_4}',MinPotenciaAparente=f'{MinAparentPower_4}',Energia15min=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_4=[]
@@ -2112,6 +1931,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     FDCurrent15_4=[]
                     DAT15Voltage_4=[]
                     DAT15Current_4=[]
+                    OneHourEnergy_4=0
                elif(Access_4==1):
                     #print("paso elif 2")
                     Volt15_4.append(Vrms)
@@ -2250,7 +2070,7 @@ FDVoltage15_5=[]
 FDCurrent15_5=[]
 DAT15Voltage_5=[]
 DAT15Current_5=[]
-def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
+def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,i,k,f):
     global data15_5
     global Volt15_5
     global data15_5
@@ -2265,6 +2085,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global DAT15Voltage_5
     global DAT15Current_5
     global Access_5
+    global OneHourEnergy_5
     
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
@@ -2347,12 +2168,14 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_5.insert(31,MaxDATCurrent_5)
                     data15_5.insert(32,MeanDATCurrent_5)
                     data15_5.insert(33,MinDATCurrent_5)
-                    data15_5.insert(34,Energy)
+                    data15_5.insert(34,OneHourEnergy)
+                    data15_5.insert(35,Energy)
                     data15_5.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet6 = workbook[f"Max,Min-{k}-{f}"]
+                    sheet6 = workbook[f"Mean-{k}-{f}"]
                     sheet6.append(list(data15_5))
                     print(f'Data 5: Guardando Promedios')
+                    SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_5}',VoltajePromedio=f'{MeanVoltage15_5}',VoltajeMin=f'{MinVoltage15_5}',MaxCorriente=f'{MaxCurrent15_5}',PromedioCorriente=f'{MeanCurrent15_5}',MinimoCorriente=f'{MinCurrent15_5}',MaxPotenciaAparente=f'{MaxAparentPower_5}',PromedioPotenciaAparente=f'{MeanAparentPower_5}',MinPotenciaAparente=f'{MinAparentPower_5}',Energia15min=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_5=[]
@@ -2367,6 +2190,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     FDCurrent15_5=[]
                     DAT15Voltage_5=[]
                     DAT15Current_5=[]
+                    OneHourEnergy_5=0
                elif(Access_5==1):
                     #print("paso elif 2")
                     Volt15_5.append(Vrms)
@@ -2506,7 +2330,7 @@ FDVoltage15_7=[]
 FDCurrent15_7=[]
 DAT15Voltage_7=[]
 DAT15Current_7=[]
-def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,k,f):
+def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,i,k,f):
     global data15_7
     global Volt15_7
     global data15_7
@@ -2521,6 +2345,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global DAT15Voltage_7
     global DAT15Current_7
     global Access_7
+    global OneHourEnergy_7
     
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
@@ -2603,12 +2428,14 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_7.insert(31,MaxDATCurrent_7)
                     data15_7.insert(32,MeanDATCurrent_7)
                     data15_7.insert(33,MinDATCurrent_7)
-                    data15_7.insert(34,Energy)
+                    data15_7.insert(34,MinDATCurrent_7)
+                    data15_7.insert(35,Energy)
                     data15_7.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet8 = workbook[f"Max,Min-{k}-{f}"]
+                    sheet8 = workbook[f"Mean-{k}-{f}"]
                     sheet8.append(list(data15_7))
                     print(f'Data 7: Guardando Promedios')
+                    SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_7}',VoltajePromedio=f'{MeanVoltage15_7}',VoltajeMin=f'{MinVoltage15_7}',MaxCorriente=f'{MaxCurrent15_7}',PromedioCorriente=f'{MeanCurrent15_7}',MinimoCorriente=f'{MinCurrent15_7}',MaxPotenciaAparente=f'{MaxAparentPower_7}',PromedioPotenciaAparente=f'{MeanAparentPower_7}',MinPotenciaAparente=f'{MinAparentPower_7}',Energia15min=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_7=[]
@@ -2623,6 +2450,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     FDCurrent15_7=[]
                     DAT15Voltage_7=[]
                     DAT15Current_7=[]
+                    OneHourEnergy_7=0
                elif(Access_7==1):
                     #print("paso elif 2")
                     Volt15_7.append(Vrms)
