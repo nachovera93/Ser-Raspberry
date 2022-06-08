@@ -127,7 +127,7 @@ def get_mqtt_credentials2():
     global str_client_id2
     global topicmqtt2
     global data2
-    print("Getting MQTT Credentials from WebHook")
+    print("Getting MQTT Credentials from WebHook 2")
     time.sleep(2)
     toSend2 = {"dId": dId2, "password": passw2}
     respuesta2 = requests.post(webhook_endpoint, data=toSend2)
@@ -157,7 +157,7 @@ def get_mqtt_credentials2():
           str_client_id2 = f'device_{dId2}_{random.randint(0, 9999)}'
           #print(mqttopic)
           respuesta2.close()
-          print("Ends mqtt credentials")
+          print("Ends mqtt credentials 2")
     return True
    
 def on_disconnect(client, userdata, rc):
