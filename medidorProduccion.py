@@ -73,9 +73,7 @@ print("Hora de comienzo:", horasetup)
 broker = '18.228.175.193'    #mqtt server
 port = 1883
 dId = '123321'
-dId2 = '1234321'
 passw = '5pYEv8nGMt'
-passw2 = '5KVlOsFJpo'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
@@ -120,72 +118,25 @@ def get_mqtt_credentials():
     return True
 
 
-def get_mqtt_credentials2():
-    global usernamemqtt2
-    global passwordmqtt2
-    global mqttopic2
-    global str_client_id2
-    global topicmqtt2
-    global data2
-    print("Getting MQTT Credentials from WebHook 2")
-    time.sleep(2)
-    toSend2 = {"dId": dId2, "password": passw2}
-    respuesta2 = requests.post(webhook_endpoint, data=toSend2)
-
-    if(respuesta2.status_code < 0):
-          print("Error Sending Post Request ", respuesta2.status_code)
-          respuesta2.close()
-          return False
-    if(respuesta2.status_code != 200):
-          print("Error in response ", respuesta2.status_code)
-          respuesta2.close()
-          return False
-    if(respuesta2.status_code == 200):
-          print("Mqtt Credentials Obtained Successfully :)   ")
-          #print("json: " ,resp.content)
-          #print('- ' * 20)
-          my_bytes_value = respuesta2.content      #Contenido entero del json
-          my_new_string = my_bytes_value.decode("utf-8").replace("'", '"')
-          data2 = json.loads(my_new_string)
-          s = json.dumps(data, indent=4, sort_keys=True)
-          print(s)
-          usernamemqtt2 = data2["username"]
-          #print("username:",usernamemqtt)
-          passwordmqtt2 = data2["password"]
-          topicmqtt2 = data["topic"]   #topico al que nos vamos a suscribir
-          mqttopic2 = f"{topicmqtt2}+/actdata"
-          str_client_id2 = f'device_{dId2}_{random.randint(0, 9999)}'
-          #print(mqttopic)
-          respuesta2.close()
-          print("Ends mqtt credentials 2")
-    return True
    
 def on_disconnect(client, userdata, rc):
     if (rc != 0 and rc != 5):
         print("Unexpected disconnection, will auto-reconnect")
     elif(rc==5):
         print("Getting new credentials!")
-        get_mqtt_credentials()
-        get_mqtt_credentials2()
+        #get_mqtt_credentials()
         client.username_pw_set(usernamemqtt, passwordmqtt)
-        client2.username_pw_set(usernamemqtt2, passwordmqtt2)
+ 
                       
 def on_connected(client, userdata, flags, rc):
-    global client2
     if rc==0:
         client.connected_flag=True #set flag
         client.subscribe(mqttopic)
-        client2.connected_flag=True #set flag
-        client2.subscribe(mqttopic)
         print("connected OK")
         print("rc =",client.connected_flag)
-        print("connected OK")
-        print("rc2 =",client2.connected_flag)
     else:
         print("Bad connection Returned code=",rc)
         client.bad_connection_flag=False
-        print("Bad connection Returned code=",rc)
-        client2.bad_connection_flag=False
 
 get_mqtt_credentials()     
 client = mqtt.Client(str_client_id)   #Creación cliente
@@ -195,13 +146,6 @@ client.username_pw_set(usernamemqtt, passwordmqtt)
 client.on_connect = on_connected
 client.loop_start()
 
-get_mqtt_credentials2()     
-client2 = mqtt.Client(str_client_id2)   #Creación cliente
-client2.connect(broker, port)     #Conexión al broker
-client2.on_disconnect = on_disconnect
-client2.username_pw_set(usernamemqtt2, passwordmqtt2)
-client2.on_connect = on_connected
-client2.loop_start()
 
 
 def get_cpuload():
