@@ -171,15 +171,21 @@ def on_disconnect(client, userdata, rc):
         client2.username_pw_set(usernamemqtt2, passwordmqtt2)
                       
 def on_connected(client, userdata, flags, rc):
-  
+    global client2
     if rc==0:
         client.connected_flag=True #set flag
         client.subscribe(mqttopic)
+        client2.connected_flag=True #set flag
+        client2.subscribe(mqttopic)
         print("connected OK")
         print("rc =",client.connected_flag)
+        print("connected OK")
+        print("rc2 =",client2.connected_flag)
     else:
         print("Bad connection Returned code=",rc)
         client.bad_connection_flag=False
+        print("Bad connection Returned code=",rc)
+        client2.bad_connection_flag=False
 
 get_mqtt_credentials()     
 client = mqtt.Client(str_client_id)   #Creación cliente
