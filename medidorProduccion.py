@@ -75,7 +75,7 @@ port = 1883
 dId = '123321'
 dId2 = '1234321'
 passw = '5pYEv8nGMt'
-passw2 = 'EmRQWe4XUg'
+passw2 = '5KVlOsFJpo'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
