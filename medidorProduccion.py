@@ -931,7 +931,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                              result = client.publish(topic, valueJson)
                              status = result[0]            
                              if status == 0:
-                                 print(f"Send {key}-{f}-{k} ")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
+                                 print(f"Send {key}-{f}-{k} {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}")
                              if(g==len(kwargs.values())):   
