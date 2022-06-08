@@ -130,7 +130,7 @@ def get_mqtt_credentials2():
     print("Getting MQTT Credentials from WebHook")
     time.sleep(2)
     toSend2 = {"dId": dId2, "password": passw2}
-    respuesta2 = requests.post(webhook_endpoint, data2=toSend2)
+    respuesta2 = requests.post(webhook_endpoint, data=toSend2)
 
     if(respuesta2.status_code < 0):
           print("Error Sending Post Request ", respuesta2.status_code)
