@@ -912,26 +912,26 @@ def SendDataToBroker(q,k,f,**kwargs):
             elif(q==9):
                 vt = vt9
             timeToSend=time.time() 
-            print(f'Largo Kwargs {len(kwargs.values())}')
+            #print(f'Largo Kwargs {len(kwargs.values())}')
             for key, value in kwargs.items():
                 g=g+1
-                print(f'g = {g}')
-                print(f"Preparando Envio - {key}-{q} {value} {f} - {k}")
+                #print(f'g = {g}')
+                #print(f"Preparando Envio - {key}-{q} {value} {f} - {k}")
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 for i in data["variables"]:
                     if(i["variableFullName"]==f'{key}-{f}-{k}'):
-                        print(f"Preparando Envio en publish de variable {key}-{q}")
+                        #print(f"Preparando Envio en publish de variable {key}-{q}")
                         freq = i["variableSendFreq"]  
                         print(f'{timeToSend - vt}') 
                         if(timeToSend - vt > float(freq)): 
-                             print(f"Entrando a envio {key}-{q}")
+                             #print(f"Entrando a envio {key}-{q}")
                              str_variable = i["variable"]
                              topic = topicmqtt + str_variable + "/sdata"
                              result = client.publish(topic, valueJson)
                              status = result[0]            
                              if status == 0:
-                                 print(f"Send {key}-{q}: `{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
+                                 print(f"Send {key}-{f}-{k}: ")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}")
                              if(g==len(kwargs.values())):   
