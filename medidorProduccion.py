@@ -920,7 +920,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 for i in data["variables"]:
-                    if(i["variableFullName"]==f'{key}-{f}-{k}'):
+                    if(i["variableFullName"]==f'{key}-{q}-{f}-{k}'):
                         #print(f"Preparando Envio en publish de variable {key}-{q}")
                         freq = i["variableSendFreq"]  
                         print(f'{timeToSend - vt}') 
