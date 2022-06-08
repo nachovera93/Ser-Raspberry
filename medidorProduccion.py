@@ -646,7 +646,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
           ActivePower = np.abs(ActivePower)
           ActivePower = ActivePower*(-1)
     ReactivePower = Vrms*Irms*np.sin(PhaseVoltage-PhaseCurrent)
-    optionsave=0
+    optionsave=1
     if (i == 1):
         Time1b = datetime.datetime.now()
         delta=(((Time1b - Time1a).microseconds)/1000+((Time1b - Time1a).seconds)*1000)/10000000000
@@ -3194,7 +3194,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_9.insert(35,Energy)
                     data15_9.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet10 = workbook[f"Max,Min-{k}-{f}"] 
+                    sheet10 = workbook[f"Mean-{k}-{f}"] 
                     sheet10.append(list(data15_9))
                     print(f'Data 9: Guardando Promedios')
                     optionsave=1
