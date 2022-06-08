@@ -72,8 +72,8 @@ print("Hora de comienzo:", horasetup)
 
 broker = '18.228.175.193'    #mqtt server
 port = 1883
-dId = '123454321'
-passw = 'pt63Dk8RUX'
+dId = '1234321'
+passw = 'EJsCZjuUIg'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
@@ -920,7 +920,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 for i in data["variables"]:
-                    if(i["variableFullName"]==f'{key}-{q}-{f}-{k}'):
+                    if(i["variableFullName"]==f'{key}-{f}-{k}'):
                         #print(f"Preparando Envio en publish de variable {key}-{q}")
                         freq = i["variableSendFreq"]  
                         print(f'{timeToSend - vt}') 
@@ -931,7 +931,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                              result = client.publish(topic, valueJson)
                              status = result[0]            
                              if status == 0:
-                                 print(f"Send {key}-{f}-{k}: ")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
+                                 print(f"Send {key}-{f}-{k} ")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}")
                              if(g==len(kwargs.values())):   
