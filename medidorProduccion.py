@@ -894,7 +894,10 @@ def SendDataToBroker(q,k,f,**kwargs):
             g=0
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt
             if(q==1):
-                vt = vt1
+                print(f'vt {vt}')
+                print(f'vt1 {vt1}')
+                vt = vt1 #0 // 10
+                print(f'vt {vt}')
             elif(q==2):
                 vt = vt2
             elif(q==3):
@@ -911,7 +914,8 @@ def SendDataToBroker(q,k,f,**kwargs):
                 vt = vt8
             elif(q==9):
                 vt = vt9
-            timeToSend=time.time() 
+            timeToSend=time.time() #10 // 20
+            print(f'timetoSend: {round(timeToSend)}')
             #print(f'Largo Kwargs {len(kwargs.values())}')
             for key, value in kwargs.items():
                 g=g+1
@@ -923,7 +927,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                     if(i["variableFullName"]==f'{key}-{q}-{f}-{k}'):
                         print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                         freq = i["variableSendFreq"]  
-                        print(f'{timeToSend - vt}') 
+                        print(f'{timeToSend - vt}')  #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
                              #print(f"Entrando a envio {key}-{q}")
                              str_variable = i["variable"]
@@ -936,7 +940,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  print(f"Failed to send message to topic {topic}")
                              if(g==len(kwargs.values())):   
                                  if(q==1):
-                                     vt1=time.time()   
+                                     vt1=time.time()   #10 // 20
                                  elif(q==2):
                                      vt2=time.time()   
                                  elif(q==3):
