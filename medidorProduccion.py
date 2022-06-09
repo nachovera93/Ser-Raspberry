@@ -939,27 +939,27 @@ def SendDataToBroker(q,k,f,**kwargs):
                              else:
                                  print(f"Failed to send message to topic {topic}")
                              print(f'g : {g}')
-                             if(g==len(kwargs.values())):  
+                             #if(g==len(kwargs.values())):  
                                   
-                                 if(q==1):
-                                     vt1=time.time()   #10 // 20
-                                     print(f'vt1 2{vt1}')
-                                 elif(q==2):
-                                     vt2=time.time()   
-                                 elif(q==3):
-                                     vt3=time.time()   
-                                 elif(q==4):
-                                     vt4=time.time()   
-                                 elif(q==5):
-                                     vt5=time.time()   
-                                 elif(q==6):
-                                     vt6=time.time()   
-                                 elif(q==7):
-                                     vt7=time.time()   
-                                 elif(q==8):
-                                     vt8=time.time()   
-                                 elif(q==9):
-                                     vt9=time.time()           
+                             if(q==1):
+                                 vt1=time.time()   #10 // 20
+                                 print(f'vt1 2{vt1}')
+                             elif(q==2):
+                                 vt2=time.time()   
+                             elif(q==3):
+                                 vt3=time.time()   
+                             elif(q==4):
+                                 vt4=time.time()   
+                             elif(q==5):
+                                 vt5=time.time()   
+                             elif(q==6):
+                                 vt6=time.time()   
+                             elif(q==7):
+                                 vt7=time.time()   
+                             elif(q==8):
+                                 vt8=time.time()   
+                             elif(q==9):
+                                 vt9=time.time()           
 
         try:  
             if(client.connected_flag==True): 
