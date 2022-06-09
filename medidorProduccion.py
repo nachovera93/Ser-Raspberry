@@ -3880,9 +3880,8 @@ def received():
                      print("Error en la codificación")
                      continue
                  np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')   
-                 print(f'Largo Array {len(np_array)}')
+                 #print(f'Largo Array {len(np_array)}')
                  if (len(np_array) == 8402):
-                       print(np_array[0])
                        if (np_array[0] == 11 or np_array[0] == 22 or np_array[0] == 33 or np_array[0] == 44 or np_array[0] == 55 or np_array[0] == 66 or np_array[0] == 77 or np_array[0] == 88 or np_array[0] == 99):
                            if (np_array[0] == 11):
                                i = 1
