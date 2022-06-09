@@ -915,7 +915,6 @@ def SendDataToBroker(q,k,f,**kwargs):
             #print(f'Largo Kwargs {len(kwargs.values())}')
             for key, value in kwargs.items():
                 g=g+1
-                global vt
                 #print(f'g = {g}')
                 #print(f"Preparando Envio - {key}-{q} {value} {f} - {k}")
                 str_num = {"value":value,"save":optionsave}
