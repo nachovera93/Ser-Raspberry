@@ -916,12 +916,12 @@ def SendDataToBroker(q,k,f,**kwargs):
             for key, value in kwargs.items():
                 g=g+1
                 #print(f'g = {g}')
-                #print(f"Preparando Envio - {key}-{q} {value} {f} - {k}")
+                print(f"Preparando Envio - {key}-{q} {value} {f} - {k}")
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 for i in data["variables"]:
-                    if(i["variableFullName"]==f'{key}-{i}-{f}-{k}'):
-                        #print(f"Preparando Envio en publish de variable {key}-{q}")
+                    if(i["variableFullName"]==f'{key}-{q}-{f}-{k}'):
+                        print(f"Preparando Envio en publish de variable {key}-{q}")
                         freq = i["variableSendFreq"]  
                         print(f'{timeToSend - vt}') 
                         if(timeToSend - vt > float(freq)): 
