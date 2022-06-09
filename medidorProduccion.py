@@ -892,7 +892,7 @@ def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             g=0
-            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt
+            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9
             if(q==1):
                 vt = vt1
             elif(q==2):
