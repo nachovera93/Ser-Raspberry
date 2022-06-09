@@ -70,11 +70,11 @@ except:
 horasetup=datetime.datetime.now()
 print("Hora de comienzo:", horasetup)
 
-broker = '192.168.1.82'  #'18.228.175.193'    #mqtt server
+broker = '18.228.175.193'    #mqtt server
 port = 1883
 dId = '123454321'
 passw = '6uOjaHy9kS'
-webhook_endpoint = 'http://192.168.1.82:3001/api/getdevicecredentials'
+webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
 def get_mqtt_credentials():
@@ -3880,8 +3880,9 @@ def received():
                      print("Error en la codificación")
                      continue
                  np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')   
-                 #print(f'Largo Array {len(np_array)}')
+                 print(f'Largo Array {len(np_array)}')
                  if (len(np_array) == 8402):
+                       print(np_array[0])
                        if (np_array[0] == 11 or np_array[0] == 22 or np_array[0] == 33 or np_array[0] == 44 or np_array[0] == 55 or np_array[0] == 66 or np_array[0] == 77 or np_array[0] == 88 or np_array[0] == 99):
                            if (np_array[0] == 11):
                                i = 1
