@@ -916,7 +916,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                 vt = vt9
             timeToSend=time.time() #10 // 20
             print(f'timetoSend: {round(timeToSend)}')
-            #print(f'Largo Kwargs {len(kwargs.values())}')
+            print(f'Largo Kwargs {len(kwargs.values())}')
             for key, value in kwargs.items():
                 g=g+1
                 #print(f'g = {g}')
@@ -938,8 +938,9 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  print(f"Send {key}-{f}-{k} {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}")
-                             if(i==len(kwargs.values())):  
-                                 print(f'q : {q}') 
+                             print(f'g : {g}')
+                             if(g==len(kwargs.values())):  
+                                  
                                  if(q==1):
                                      vt1=time.time()   #10 // 20
                                      print(f'vt1 2{vt1}')
