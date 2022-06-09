@@ -70,11 +70,11 @@ except:
 horasetup=datetime.datetime.now()
 print("Hora de comienzo:", horasetup)
 
-broker = '18.228.175.193'    #mqtt server
+broker = '192.168.1.82'  #'18.228.175.193'    #mqtt server
 port = 1883
 dId = '123454321'
 passw = '76x33f4Taz'
-webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
+webhook_endpoint = 'http://192.168.1.82:3001/api/getdevicecredentials'
 
 
 def get_mqtt_credentials():
