@@ -847,7 +847,7 @@ def graphVoltage(list_fftVoltage,list_FinalCurrent,samplings,i):
     
 
 
-
+vt=time.time()
 vt1=time.time()
 vt2=time.time()
 vt3=time.time()
@@ -892,7 +892,7 @@ def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             g=0
-            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9
+            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt
             if(q==1):
                 vt = vt1
             elif(q==2):
