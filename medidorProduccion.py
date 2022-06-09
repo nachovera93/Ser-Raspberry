@@ -938,7 +938,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  print(f"Send {key}-{f}-{k} {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}")
-                             if(g==len(kwargs.values())):  
+                             if(i==len(kwargs.values())):  
                                  print(f'q : {q}') 
                                  if(q==1):
                                      vt1=time.time()   #10 // 20
