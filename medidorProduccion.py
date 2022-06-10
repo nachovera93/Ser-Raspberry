@@ -593,6 +593,8 @@ ReactivePower = 0.0
 
 
 def Potencias(i,Irms,Vrms,potrmsCGE):
+    global vt1
+    global vt2
     global a
     global Energy
     global Energy_1
@@ -659,6 +661,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
         SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,i,k1,f1)
+        vt1=time.time() 
         #{key}-{q}-{f}-{k}
     elif (i == 2):
         Time2b = datetime.datetime.now()
@@ -671,7 +674,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_2 = ReactivePower 
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i,k1,f2)
         SendDataToBroker(q=i,k=k1,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_2}",Energia=f"{Energy_2}")
-        Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,i,k1,f2)       
+        Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,i,k1,f2)  
+        vt2=time.time()      
     elif (i == 3):
         Time3b = datetime.datetime.now()
         delta=(((Time3b - Time3a).microseconds)/1000+((Time3b - Time3a).seconds)*1000)/10000000000
@@ -892,7 +896,7 @@ def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             g=0
-            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt
+            global vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt
             if(q==1):
                 print(f'vt {vt}')
                 print(f'vt1 {vt1}')
@@ -940,7 +944,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  print(f"Failed to send message to topic {topic}")
                              print(f'g : {g}')
                              #if(g==len(kwargs.values())):  
-                                  
+                             """     
                              if(q==1):
                                  vt1=time.time()   #10 // 20
                                  print(f'vt1 2{vt1}')
@@ -959,7 +963,8 @@ def SendDataToBroker(q,k,f,**kwargs):
                              elif(q==8):
                                  vt8=time.time()   
                              elif(q==9):
-                                 vt9=time.time()           
+                                 vt9=time.time()   
+                            """        
 
         try:  
             if(client.connected_flag==True): 
@@ -1120,7 +1125,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     print(f'Data 1: Guardando Promedios')
                     optionsave=1
                     SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_1}',VoltajePromedio=f'{MeanVoltage15_1}',VoltajeMin=f'{MinVoltage15_1}',MaxCorriente=f'{MaxCurrent15_1}',PromedioCorriente=f'{MeanCurrent15_1}',MinimoCorriente=f'{MinCurrent15_1}',PotenciaMax=f'{MaxAparentPower_1}',PromedioPotenciaAparente=f'{MeanAparentPower_1}',MinPotenciaAparente=f'{MinAparentPower_1}',EnergiaMaxCada15Min=f'{OneHourEnergy}',Energia=f'{Energy}')
-                    #SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f,_)
+                    SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f,_)
                     workbook.save(filename = dest_filename)
                     data15_1=[]
                     Volt15_1=[]
