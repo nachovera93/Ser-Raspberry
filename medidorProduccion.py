@@ -631,18 +631,39 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global optionsave
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==3):
-            #workbook=openpyxl.load_workbook(filename = dest_filename)
-            #sheet2 = workbook[f"Mean-{k}-{f}"]
-            #sheet2.append(list(data15_1))
+            EnergyHora_1=OneHourEnergy_1
+            EnergyHora_2=OneHourEnergy_2
+            EnergyHora_3=OneHourEnergy_3
+            EnergyHora_4=OneHourEnergy_4
+            EnergyHora_5=OneHourEnergy_5
+            EnergyHora_6=OneHourEnergy_6
+            EnergyHora_7=OneHourEnergy_7
+            EnergyHora_8=OneHourEnergy_8
+            EnergyHora_9=OneHourEnergy_9
+            
+            SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{EnergyHora_1}')
             OneHourEnergy_1=0
-            OneHourEnergy_2=0
-            OneHourEnergy_3=0
-            OneHourEnergy_4=0
-            OneHourEnergy_5=0
-            OneHourEnergy_6=0
-            OneHourEnergy_7=0
-            OneHourEnergy_8=0
+            SendDataToBroker(q=2,k=k1,f=f2,EnergiaHora=f'{EnergyHora_2}')
+            OneHourEnergy_2=0   
+            SendDataToBroker(q=3,k=k1,f=f3,EnergiaHora=f'{EnergyHora_3}')
+            OneHourEnergy_3=0   
+            SendDataToBroker(q=4,k=k2,f=f1,EnergiaHora=f'{EnergyHora_4}')
+            OneHourEnergy_4=0    
+            SendDataToBroker(q=5,k=k2,f=f2,EnergiaHora=f'{EnergyHora_5}')
+            OneHourEnergy_5=0   
+            SendDataToBroker(q=6,k=k2,f=f3,EnergiaHora=f'{EnergyHora_6}')
+            OneHourEnergy_6=0     
+            SendDataToBroker(q=7,k=k3,f=f1,EnergiaHora=f'{EnergyHora_7}')
+            OneHourEnergy_7=0     
+            SendDataToBroker(q=8,k=k3,f=f2,EnergiaHora=f'{EnergyHora_8}')
+            OneHourEnergy_8=0       
+            SendDataToBroker(q=9,k=k3,f=f3,EnergiaHora=f'{EnergyHora_9}')
             OneHourEnergy_9=0
+            workbook=openpyxl.load_workbook(filename = dest_filename)
+            sheet20 = workbook[f"Maximos por hora"] 
+            dataHour=[datetime.datetime.now(),EnergyHora_1,EnergyHora_2,EnergyHora_3,EnergyHora_4,EnergyHora_5,EnergyHora_6,EnergyHora_7,EnergyHora_8,EnergyHora_9]
+            sheet20.append(list(dataHour))
+            
     if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
             Energy_1=0
             Energy_2=0
@@ -1146,7 +1167,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
                     optionsave=1
-                    SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_1}',VoltajePromedio=f'{MeanVoltage15_1}',VoltajeMin=f'{MinVoltage15_1}',MaxCorriente=f'{MaxCurrent15_1}',PromedioCorriente=f'{MeanCurrent15_1}',MinimoCorriente=f'{MinCurrent15_1}',PotenciaMax=f'{MaxAparentPower_1}',PromedioPotenciaAparente=f'{MeanAparentPower_1}',MinPotenciaAparente=f'{MinAparentPower_1}',EnergiaHora=f'{OneHourEnergy}',Energia=f'{Energy}')
+                    SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_1}',VoltajePromedio=f'{MeanVoltage15_1}',VoltajeMin=f'{MinVoltage15_1}',MaxCorriente=f'{MaxCurrent15_1}',PromedioCorriente=f'{MeanCurrent15_1}',MinimoCorriente=f'{MinCurrent15_1}',PotenciaMax=f'{MaxAparentPower_1}',PromedioPotenciaAparente=f'{MeanAparentPower_1}',MinPotenciaAparente=f'{MinAparentPower_1}',Energia=f'{Energy}')
                     #SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f,_)
                     vt115=time.time()
                     workbook.save(filename = dest_filename)
@@ -1411,7 +1432,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet3.append(list(data15_2))
                     print(f'Data 2: Guardando Promedios')
                     optionsave=1
-                    SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_2}',VoltajePromedio=f'{MeanVoltage15_2}',VoltajeMin=f'{MinVoltage15_2}',MaxCorriente=f'{MaxCurrent15_2}',PromedioCorriente=f'{MeanCurrent15_2}',MinimoCorriente=f'{MinCurrent15_2}',PotenciaMax=f'{MaxAparentPower_2}',PromedioPotenciaAparente=f'{MeanAparentPower_2}',MinPotenciaAparente=f'{MinAparentPower_2}',EnergiaHora=f'{OneHourEnergy}',Energia=f'{Energy}')
+                    SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_2}',VoltajePromedio=f'{MeanVoltage15_2}',VoltajeMin=f'{MinVoltage15_2}',MaxCorriente=f'{MaxCurrent15_2}',PromedioCorriente=f'{MeanCurrent15_2}',MinimoCorriente=f'{MinCurrent15_2}',PotenciaMax=f'{MaxAparentPower_2}',PromedioPotenciaAparente=f'{MeanAparentPower_2}',MinPotenciaAparente=f'{MinAparentPower_2}',Energia=f'{Energy}')
                     vt215=time.time()
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
@@ -1673,7 +1694,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet4.append(list(data15_3))
                     print(f'Data 3: Guardando Promedios')
                     optionsave=1
-                    SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_3}',VoltajePromedio=f'{MeanVoltage15_3}',VoltajeMin=f'{MinVoltage15_3}',MaxCorriente=f'{MaxCurrent15_3}',PromedioCorriente=f'{MeanCurrent15_3}',MinimoCorriente=f'{MinCurrent15_3}',PotenciaMax=f'{MaxAparentPower_3}',PromedioPotenciaAparente=f'{MeanAparentPower_3}',MinPotenciaAparente=f'{MinAparentPower_3}',EnergiaHora=f'{OneHourEnergy}',Energia=f'{Energy}')
+                    SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_3}',VoltajePromedio=f'{MeanVoltage15_3}',VoltajeMin=f'{MinVoltage15_3}',MaxCorriente=f'{MaxCurrent15_3}',PromedioCorriente=f'{MeanCurrent15_3}',MinimoCorriente=f'{MinCurrent15_3}',PotenciaMax=f'{MaxAparentPower_3}',PromedioPotenciaAparente=f'{MeanAparentPower_3}',MinPotenciaAparente=f'{MinAparentPower_3}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_3=[]
@@ -3371,6 +3392,7 @@ def excelcreate():
     global sheet17
     global sheet18
     global sheet19
+    global sheet20
     from openpyxl import Workbook
     exceltime=date.today()
     book = Workbook()
@@ -3395,11 +3417,13 @@ def excelcreate():
     sheet17 = book.create_sheet(f"{k3}-{f1}") 
     sheet18 = book.create_sheet(f"{k3}-{f2}") 
     sheet19 = book.create_sheet(f"{k3}-{f3}") 
+    sheet20 = book.create_sheet(f"Maximos por hora") 
     headings0 = ['Fecha y Hora'] + list(['T° Raspberry','Uso CPU %','RAM2'])
     headings=['Fecha y Hora'] + list(['Max Voltage','Mean Voltage','Min Voltage', 'Max Current','Mean Current','Min Current','Max Active Power','Mean Active Power','Mean Active Power','Max Reactive Power','Mean Reactive Power','Min Reactive Power','Max Aparent Power','Mean Aparent Power','Min Aparent Power','Max FPReact ','Mean FPReact','Min FPReact','Max FPInduct','Mean FPInduct','Min FPInduct','Max FDVoltage','Mean FDVoltage','Min FDVoltage','Max FDCurrent','Mean FDCurrent','Min FDCurrent','Max DATVoltage','Mean DATVoltage','Min DATVoltage','Max DATCurrent','Mean DATCurrent','Min DATCurrent','OnehourEnergy','Energy'])
     headings2=['Fecha y Hora'] + list(['Voltage', 'Current','Active Power','Reactive Power','Aparent Power','FP','FDVoltage','FDCurrent','DATVoltage','DATCurrent','cos(phi)','Energy','Hour Energy'])
     headings3=['Fecha y Hora'] + list(['Voltage', 'Current','Power','Energy','Hour Energy'])
     headings4=['Fecha y Hora'] + list(['Max Voltage', 'Mean Voltage', 'Min Voltage', 'Max Current','Mean Current', 'Min Current','Max Power','Power Mean', 'Power','Total Energy','Energy acumulada en 15'])
+    headings5 = ['Fecha y Hora'] + list([f"{k1}-{f1}",f"{k1}-{f2}",f"{k1}-{f3}",f"{k2}-{f1}",f"{k2}-{f2}",f"{k2}-{f3}",f"{k3}-{f1}",f"{k3}-{f2}",f"{k3}-{f3}"])
     ceros=list([0,0,0,0,0,0,0,0,0,0,0,0])
     sheet1.append(headings0)
     sheet2.append(headings)
@@ -3439,6 +3463,7 @@ def excelcreate():
     sheet17.append(ceros)
     sheet18.append(ceros)
     sheet19.append(ceros)
+    sheet20.append(headings5)
 
     book.save(filename = dest_filename)
 
