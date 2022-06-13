@@ -638,22 +638,31 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHour))
             
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
+            print("Enviando Hora Max Energia 1")
             OneHourEnergy_1=0
             SendDataToBroker(q=2,k=k1,f=f2,EnergiaHora=f'{OneHourEnergy_2}')
+            print("Enviando Hora Max Energia 2")
             OneHourEnergy_2=0   
             SendDataToBroker(q=3,k=k1,f=f3,EnergiaHora=f'{OneHourEnergy_3}')
+            print("Enviando Hora Max Energia 3")
             OneHourEnergy_3=0   
             SendDataToBroker(q=4,k=k2,f=f1,EnergiaHora=f'{OneHourEnergy_4}')
+            print("Enviando Hora Max Energia 4")
             OneHourEnergy_4=0    
             SendDataToBroker(q=5,k=k2,f=f2,EnergiaHora=f'{OneHourEnergy_5}')
+            print("Enviando Hora Max Energia 5")
             OneHourEnergy_5=0   
             SendDataToBroker(q=6,k=k2,f=f3,EnergiaHora=f'{OneHourEnergy_6}')
+            print("Enviando Hora Max Energia 6")
             OneHourEnergy_6=0     
             SendDataToBroker(q=7,k=k3,f=f1,EnergiaHora=f'{OneHourEnergy_7}')
+            print("Enviando Hora Max Energia 7")
             OneHourEnergy_7=0     
             SendDataToBroker(q=8,k=k3,f=f2,EnergiaHora=f'{OneHourEnergy_8}')
+            print("Enviando Hora Max Energia 8")
             OneHourEnergy_8=0       
             SendDataToBroker(q=9,k=k3,f=f3,EnergiaHora=f'{OneHourEnergy_9}')
+            print("Enviando Hora Max Energia 9")
             OneHourEnergy_9=0
             
             
