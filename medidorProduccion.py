@@ -3427,7 +3427,7 @@ def excelcreate():
     sheet7.append(headings)
     sheet8.append(headings)
     sheet9.append(headings)
-    sheet10.append(heading)
+    sheet10.append(headings)
     sheet11.append(headings2)
     sheet12.append(headings2)
     sheet13.append(headings2)
