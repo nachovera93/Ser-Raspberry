@@ -72,8 +72,8 @@ print("Hora de comienzo:", horasetup)
 
 broker = '18.228.175.193'   #'192.168.1.85' #mqtt server
 port = 1883
-dId = '123321'
-passw = 'AXfeTC7aKr'
+dId = '1221'
+passw = 'DRhr4HErW6'
 webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
