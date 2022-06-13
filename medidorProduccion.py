@@ -631,38 +631,31 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global optionsave
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==3):
-            EnergyHora_1=OneHourEnergy_1
-            EnergyHora_2=OneHourEnergy_2
-            EnergyHora_3=OneHourEnergy_3
-            EnergyHora_4=OneHourEnergy_4
-            EnergyHora_5=OneHourEnergy_5
-            EnergyHora_6=OneHourEnergy_6
-            EnergyHora_7=OneHourEnergy_7
-            EnergyHora_8=OneHourEnergy_8
-            EnergyHora_9=OneHourEnergy_9
-            
-            SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{EnergyHora_1}')
-            OneHourEnergy_1=0
-            SendDataToBroker(q=2,k=k1,f=f2,EnergiaHora=f'{EnergyHora_2}')
-            OneHourEnergy_2=0   
-            SendDataToBroker(q=3,k=k1,f=f3,EnergiaHora=f'{EnergyHora_3}')
-            OneHourEnergy_3=0   
-            SendDataToBroker(q=4,k=k2,f=f1,EnergiaHora=f'{EnergyHora_4}')
-            OneHourEnergy_4=0    
-            SendDataToBroker(q=5,k=k2,f=f2,EnergiaHora=f'{EnergyHora_5}')
-            OneHourEnergy_5=0   
-            SendDataToBroker(q=6,k=k2,f=f3,EnergiaHora=f'{EnergyHora_6}')
-            OneHourEnergy_6=0     
-            SendDataToBroker(q=7,k=k3,f=f1,EnergiaHora=f'{EnergyHora_7}')
-            OneHourEnergy_7=0     
-            SendDataToBroker(q=8,k=k3,f=f2,EnergiaHora=f'{EnergyHora_8}')
-            OneHourEnergy_8=0       
-            SendDataToBroker(q=9,k=k3,f=f3,EnergiaHora=f'{EnergyHora_9}')
-            OneHourEnergy_9=0
+        
             workbook=openpyxl.load_workbook(filename = dest_filename)
             sheet20 = workbook[f"Maximos por hora"] 
-            dataHour=[datetime.datetime.now(),EnergyHora_1,EnergyHora_2,EnergyHora_3,EnergyHora_4,EnergyHora_5,EnergyHora_6,EnergyHora_7,EnergyHora_8,EnergyHora_9]
+            dataHour=[datetime.datetime.now(),OneHourEnergy_1,OneHourEnergy_2,OneHourEnergy_3,OneHourEnergy_4,OneHourEnergy_5,OneHourEnergy_6,OneHourEnergy_7,OneHourEnergy_8,OneHourEnergy_9]
             sheet20.append(list(dataHour))
+            
+            SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
+            OneHourEnergy_1=0
+            SendDataToBroker(q=2,k=k1,f=f2,EnergiaHora=f'{OneHourEnergy_2}')
+            OneHourEnergy_2=0   
+            SendDataToBroker(q=3,k=k1,f=f3,EnergiaHora=f'{OneHourEnergy_3}')
+            OneHourEnergy_3=0   
+            SendDataToBroker(q=4,k=k2,f=f1,EnergiaHora=f'{OneHourEnergy_4}')
+            OneHourEnergy_4=0    
+            SendDataToBroker(q=5,k=k2,f=f2,EnergiaHora=f'{OneHourEnergy_5}')
+            OneHourEnergy_5=0   
+            SendDataToBroker(q=6,k=k2,f=f3,EnergiaHora=f'{OneHourEnergy_6}')
+            OneHourEnergy_6=0     
+            SendDataToBroker(q=7,k=k3,f=f1,EnergiaHora=f'{OneHourEnergy_7}')
+            OneHourEnergy_7=0     
+            SendDataToBroker(q=8,k=k3,f=f2,EnergiaHora=f'{OneHourEnergy_8}')
+            OneHourEnergy_8=0       
+            SendDataToBroker(q=9,k=k3,f=f3,EnergiaHora=f'{OneHourEnergy_9}')
+            OneHourEnergy_9=0
+            
             
     if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
             Energy_1=0
