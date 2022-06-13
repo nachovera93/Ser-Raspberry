@@ -72,8 +72,8 @@ print("Hora de comienzo:", horasetup)
 
 broker = '192.168.1.85'#'18.228.175.193'    #mqtt server
 port = 1883
-dId = '123321'
-passw = 'Ya7VtQ1SCO'
+dId = '1234321'
+passw = 'jJeRJaVxr2'
 webhook_endpoint = 'http://192.168.1.85:3001/api/getdevicecredentials'
 
 
@@ -673,7 +673,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_1 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
         SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
-        #vt1=time.time() 
+        vt1=time.time() 
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,i,k1,f1)
         #{key}-{q}-{f}-{k}
     elif (i == 2):
