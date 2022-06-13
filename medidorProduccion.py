@@ -70,11 +70,11 @@ except:
 horasetup=datetime.datetime.now()
 print("Hora de comienzo:", horasetup)
 
-broker = '192.168.1.85'#'18.228.175.193'    #mqtt server
+broker = '18.228.175.193'   #'192.168.1.85' #mqtt server
 port = 1883
 dId = '123321'
-passw = 'Gj3r6HwIgA'
-webhook_endpoint = 'http://192.168.1.85:3001/api/getdevicecredentials'
+passw = 'AXfeTC7aKr'
+webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
 
 
 def get_mqtt_credentials():
@@ -3885,7 +3885,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     elif(i==8):
         if(len(BufferCurrent_8)>=5 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_8)
-            print()
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
