@@ -968,6 +968,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                 #print(f"Preparando Envio - {key}-{q} {value} {f} - {k}")
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
+                print(f'{key}-{f}-{k}')
                 for i in data["variables"]:
                     if(i["variableFullName"]==f'{key}-{f}-{k}'):
                         print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
