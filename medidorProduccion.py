@@ -629,6 +629,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global Time8a
     global Time9a
     global optionsave
+    global vt15
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==3):
         
