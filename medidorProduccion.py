@@ -664,6 +664,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             SendDataToBroker(q=9,k=k3,f=f3,EnergiaHora=f'{OneHourEnergy_9}')
             print("Enviando Hora Max Energia 9")
             OneHourEnergy_9=0
+            vt15=time.time()
             
             
     if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
@@ -899,6 +900,7 @@ vt6=time.time()
 vt7=time.time()
 vt8=time.time()
 vt9=time.time()
+vt15=time.time()
 vt115=time.time()
 vt215=time.time()
 vt315=time.time()
@@ -943,7 +945,7 @@ def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             g=0
-            global vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt
+            global vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt,vt15
             if(len(kwargs.values())<5):
                 if(q==1):
                     vt = vt1 #0 // 10
@@ -964,6 +966,9 @@ def SendDataToBroker(q,k,f,**kwargs):
                     vt = vt8
                 elif(q==9):
                     vt = vt9
+            elif(len(kwargs.values())<2):
+                    vt = vt15 #0 // 10
+                    print(f'vt {vt}')
             else:
                 if(q==1):
                     vt = vt115 #0 // 10
