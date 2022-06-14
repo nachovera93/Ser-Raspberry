@@ -1983,7 +1983,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     FDCurrent15_4=[]
                     DAT15Voltage_4=[]
                     DAT15Current_4=[]
-                    OneHourEnergy_4=0
+                    #OneHourEnergy_4=0
                elif(Access_4==1):
                     #print("paso elif 2")
                     Volt15_4.append(Vrms)
@@ -2243,7 +2243,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     FDCurrent15_5=[]
                     DAT15Voltage_5=[]
                     DAT15Current_5=[]
-                    OneHourEnergy_5=0
+                    #OneHourEnergy_5=0
                elif(Access_5==1):
                     #print("paso elif 2")
                     Volt15_5.append(Vrms)
@@ -2504,7 +2504,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     FDCurrent15_7=[]
                     DAT15Voltage_7=[]
                     DAT15Current_7=[]
-                    OneHourEnergy_7=0
+                    #OneHourEnergy_7=0
                elif(Access_7==1):
                     #print("paso elif 2")
                     Volt15_7.append(Vrms)
@@ -2764,7 +2764,7 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     FDCurrent15_8=[]
                     DAT15Voltage_8=[]
                     DAT15Current_8=[]
-                    OneHourEnergy_8=0
+                    #OneHourEnergy_8=0
                elif(Access_8==1):
                     #print("paso elif 2")
                     Volt15_8.append(Vrms)
@@ -3023,7 +3023,7 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     FDCurrent15_6=[]
                     DAT15Voltage_6=[]
                     DAT15Current_6=[]
-                    OneHourEnergy_6=0
+                    #OneHourEnergy_6=0
                elif(Access_6==1):
                     #print("paso elif 2")
                     Volt15_6.append(Vrms)
@@ -3284,7 +3284,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     FDCurrent15_9=[]
                     DAT15Voltage_9=[]
                     DAT15Current_9=[]
-                    OneHourEnergy_9=0
+                    #OneHourEnergy_9=0
                elif(Access_9==1):
                     #print("paso elif 2")
                     Volt15_9.append(Vrms)
