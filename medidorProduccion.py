@@ -953,7 +953,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             g=0
             global vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt,vt15
             print(len(kwargs.values()))
-            if(len(kwargs.values()<10 and len(kwargs.values()>2))):
+            if(len(kwargs.values()==4 )):
                 print("11")
                 if(q==1):
                     vt = vt1 #0 // 10
