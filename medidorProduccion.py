@@ -590,7 +590,7 @@ OneHourEnergy_9 = 0.0
 AparentPower = 0.0
 ActivePower = 0.0
 ReactivePower = 0.0
-
+acceshourenergy=0
 
 def Potencias(i,Irms,Vrms,potrmsCGE):
     global vt1
@@ -630,9 +630,12 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global Time9a
     global optionsave
     global vt15
+    global acceshourenergy
     TimeEnergy = datetime.datetime.now()
-    if(TimeEnergy.minute==3 or TimeEnergy.minute== 8 or TimeEnergy.minute==33 or TimeEnergy.minute==48 ):
-        
+    if(TimeEnergy.minute==4 or TimeEnergy.minute== 19 or TimeEnergy.minute==34 or TimeEnergy.minute==49 ):
+        acceshourenergy=0
+    if(TimeEnergy.minute==3 or TimeEnergy.minute== 18 or TimeEnergy.minute==33 or TimeEnergy.minute==48 ):
+        if(acceshourenergy==0):
             workbook=openpyxl.load_workbook(filename = dest_filename)
             sheet20 = workbook[f"Maximos por hora"] 
             dataHour=[datetime.datetime.now(),OneHourEnergy_1,OneHourEnergy_2,OneHourEnergy_3,OneHourEnergy_4,OneHourEnergy_5,OneHourEnergy_6,OneHourEnergy_7,OneHourEnergy_8,OneHourEnergy_9]
@@ -667,6 +670,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             OneHourEnergy_9=0
             vt15=time.time()
             dataHour=[]
+            acceshourenergy=1
             
     if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
             Energy_1=0
