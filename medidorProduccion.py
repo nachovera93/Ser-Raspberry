@@ -969,11 +969,11 @@ def SendDataToBroker(q,k,f,**kwargs):
                     vt = vt9
             if(len(kwargs.values())<2):
                     vt = vt15 #0 // 10
-                    print(f'vt {vt}')
+                    print(f'vt15 {vt}')
             else:
                 if(q==1):
                     vt = vt115 #0 // 10
-                    print(f'vt {vt}')
+                    print(f'vt115 {vt}')
                 elif(q==2):
                     vt = vt215
                 elif(q==3):
@@ -999,7 +999,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                 #print(f"Preparando Envio - {key}-{q} {value} {f} - {k}")
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
-                print(f'{key}-{f}-{k}')
+                #print(f'{key}-{f}-{k}')
                 for i in data["variables"]:
                     if(i["variableFullName"]==f'{key}-{f}-{k}'):
                         print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
