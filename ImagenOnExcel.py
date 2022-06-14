@@ -40,7 +40,9 @@ wb.save("area.xlsx")
 workbook=openpyxl.load_workbook(filename = "2022-06-03.xlsx")
 sheet19 = workbook[f"Var 9"]
 LargeSheet11=len(sheet19["FP"])
-for i in sheet19["FP"]:
-    print(i)
+codigos = [celda[0].value for celda in sheet19['M2':f'M{LargeSheet11}']]
+
+
 #Energy_1 = float(sheet19[f'm{LargeSheet11}'].value)
-#print(Energy_1)
+print(codigos)
+#caambiar lista de horizontal a vertical

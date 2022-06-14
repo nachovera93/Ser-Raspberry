@@ -633,9 +633,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global acceshourenergy
     #print([round(OneHourEnergy_1,5),round(OneHourEnergy_2,5),round(OneHourEnergy_3,5),round(OneHourEnergy_4,5),round(OneHourEnergy_5,5),round(OneHourEnergy_6,5),round(OneHourEnergy_7,5),round(OneHourEnergy_8,5),round(OneHourEnergy_9,5)])
     TimeEnergy = datetime.datetime.now()
-    if(TimeEnergy.minute==4 or TimeEnergy.minute==34):
+    if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==3 or TimeEnergy.minute==33):
+    if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
             workbook=openpyxl.load_workbook(filename = dest_filename)
             sheet20 = workbook[f"Maximos por hora"] 
