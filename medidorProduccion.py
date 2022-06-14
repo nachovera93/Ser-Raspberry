@@ -631,6 +631,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global optionsave
     global vt15
     global acceshourenergy
+    print([datetime.datetime.now(),OneHourEnergy_1,OneHourEnergy_2,OneHourEnergy_3,OneHourEnergy_4,OneHourEnergy_5,OneHourEnergy_6,OneHourEnergy_7,OneHourEnergy_8,OneHourEnergy_9])
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4 or TimeEnergy.minute==34):
         acceshourenergy=0
