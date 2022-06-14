@@ -970,7 +970,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             if(len(kwargs.values())<2):
                     vt = vt15 #0 // 10
                     print(f'vt15 {vt}')
-            else:
+            if(len(kwargs.values())<5):
                 if(q==1):
                     vt = vt115 #0 // 10
                     print(f'vt115 {vt}')
