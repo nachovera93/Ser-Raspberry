@@ -954,6 +954,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             global vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt,vt15
             print(len(kwargs.values()))
             if(len(kwargs.values()<10 and len(kwargs.values()>2))):
+                print("11")
                 if(q==1):
                     vt = vt1 #0 // 10
                     print(f'vt {vt}')
@@ -973,10 +974,12 @@ def SendDataToBroker(q,k,f,**kwargs):
                     vt = vt8
                 elif(q==9):
                     vt = vt9
-            if(len(kwargs.values())<2):
-                    vt = vt15 #0 // 10
-                    print(f'vt15 {vt}')
-            if(len(kwargs.values())>10):
+            elif(len(kwargs.values())<2):
+                print("22")
+                vt = vt15 #0 // 10
+                print(f'vt15 {vt}')
+            elif(len(kwargs.values())>9):
+                print("33")
                 if(q==1):
                     vt = vt115 #0 // 10
                     print(f'vt115 {vt}')
@@ -3520,15 +3523,15 @@ def AbrirExcel():
             LargeSheet18=len(sheet18["FP"])
             LargeSheet19=len(sheet19["FP"])
             print("Largo Excel Var 1: ",LargeSheet11)
-            Energy_1 = float(sheet11[f'k{LargeSheet11}'].value)
-            Energy_2 = float(sheet12[f'k{LargeSheet12}'].value)
-            Energy_3 = float(sheet13[f'k{LargeSheet13}'].value)
-            Energy_4 = float(sheet14[f'k{LargeSheet14}'].value)
-            Energy_5 = float(sheet15[f'k{LargeSheet15}'].value)
-            Energy_6 = float(sheet16[f'k{LargeSheet16}'].value)
-            Energy_7 = float(sheet17[f'k{LargeSheet17}'].value)
-            Energy_8 = float(sheet18[f'k{LargeSheet18}'].value)
-            Energy_9 = float(sheet19[f'k{LargeSheet19}'].value)
+            Energy_1 = float(sheet11[f'm{LargeSheet11}'].value)
+            Energy_2 = float(sheet12[f'm{LargeSheet12}'].value)
+            Energy_3 = float(sheet13[f'm{LargeSheet13}'].value)
+            Energy_4 = float(sheet14[f'm{LargeSheet14}'].value)
+            Energy_5 = float(sheet15[f'm{LargeSheet15}'].value)
+            Energy_6 = float(sheet16[f'm{LargeSheet16}'].value)
+            Energy_7 = float(sheet17[f'm{LargeSheet17}'].value)
+            Energy_8 = float(sheet18[f'm{LargeSheet18}'].value)
+            Energy_9 = float(sheet19[f'm{LargeSheet19}'].value)
             #energyBaterias = float(sheet8[f'k{largoexcelCGE-2}'].value)
             #energyPanelesDC = float(sheet10[f'k{largoexcelCGE-2}'].value)
             print(f'Valor Energia  {Energy_1} ')

@@ -4,7 +4,7 @@ from openpyxl.chart import (
     Reference,
     Series,
 )
-
+import openpyxl
 wb = Workbook()
 ws = wb.active
 
@@ -35,10 +35,9 @@ chart.set_categories(cats)
 ws.add_chart(chart, "A10")
 
 wb.save("area.xlsx")
-"""
-workbook=openpyxl.load_workbook(filename = "area.xlsx")
-sheet19 = workbook[f"sheet"]
-LargeSheet11=len(sheet19["Number"])
-Energy_1 = float(sheet19[f'k{LargeSheet11}'].value)
+
+workbook=openpyxl.load_workbook(filename = "2022-06-03.xlsx")
+sheet19 = workbook[f"Var 9"]
+LargeSheet11=len(sheet19["FP"])
+Energy_1 = float(sheet19[f'm{LargeSheet11}'].value)
 print(Energy_1)
-"""
