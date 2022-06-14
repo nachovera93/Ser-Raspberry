@@ -631,13 +631,13 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global optionsave
     global vt15
     TimeEnergy = datetime.datetime.now()
-    if(TimeEnergy.minute==3):
+    if(TimeEnergy.minute==3 or TimeEnergy.minute== 8 or TimeEnergy.minute==33 or TimeEnergy.minute==48 ):
         
             workbook=openpyxl.load_workbook(filename = dest_filename)
             sheet20 = workbook[f"Maximos por hora"] 
             dataHour=[datetime.datetime.now(),OneHourEnergy_1,OneHourEnergy_2,OneHourEnergy_3,OneHourEnergy_4,OneHourEnergy_5,OneHourEnergy_6,OneHourEnergy_7,OneHourEnergy_8,OneHourEnergy_9]
             sheet20.append(list(dataHour))
-            
+            workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
             print("Enviando Hora Max Energia 1")
             OneHourEnergy_1=0
@@ -666,7 +666,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             print("Enviando Hora Max Energia 9")
             OneHourEnergy_9=0
             vt15=time.time()
-            
+            dataHour=[]
             
     if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
             Energy_1=0
@@ -967,7 +967,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                     vt = vt8
                 elif(q==9):
                     vt = vt9
-            elif(len(kwargs.values())<2):
+            if(len(kwargs.values())<2):
                     vt = vt15 #0 // 10
                     print(f'vt {vt}')
             else:
@@ -3452,6 +3452,7 @@ def excelcreate():
     sheet17.append(headings2)
     sheet18.append(headings2)
     sheet19.append(headings2)
+    sheet20.append(headings5)
     sheet1.append(list([0,0,0]))
     sheet2.append(ceros)
     sheet3.append(ceros)
@@ -3471,7 +3472,7 @@ def excelcreate():
     sheet17.append(ceros)
     sheet18.append(ceros)
     sheet19.append(ceros)
-    sheet20.append(headings5)
+    sheet20.append(ceros)
 
     book.save(filename = dest_filename)
 
