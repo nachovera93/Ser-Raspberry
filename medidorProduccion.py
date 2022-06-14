@@ -953,9 +953,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             g=0
             global vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt,vt15
             print(len(kwargs.values()))
-            print(type(len(kwargs.values())))
-            if(len(kwargs.values()==4)):
-                print(f"11. {q}")
+            if(len(kwargs.values())==4):
                 if(q==1):
                     vt = vt1 #0 // 10
                     print(f'vt {vt}')
@@ -976,11 +974,9 @@ def SendDataToBroker(q,k,f,**kwargs):
                 elif(q==9):
                     vt = vt9
             elif(len(kwargs.values())<2):
-                print("22")
                 vt = vt15 #0 // 10
                 print(f'vt15 {vt}')
             elif(len(kwargs.values())>9):
-                print("33")
                 if(q==1):
                     vt = vt115 #0 // 10
                     print(f'vt115 {vt}')

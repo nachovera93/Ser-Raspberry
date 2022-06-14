@@ -1,3 +1,4 @@
+from ast import For
 from openpyxl import Workbook
 from openpyxl.chart import (
     AreaChart,
@@ -39,5 +40,7 @@ wb.save("area.xlsx")
 workbook=openpyxl.load_workbook(filename = "2022-06-03.xlsx")
 sheet19 = workbook[f"Var 9"]
 LargeSheet11=len(sheet19["FP"])
-Energy_1 = float(sheet19[f'm{LargeSheet11}'].value)
-print(Energy_1)
+for i in sheet19["FP"]:
+    print(i)
+#Energy_1 = float(sheet19[f'm{LargeSheet11}'].value)
+#print(Energy_1)
