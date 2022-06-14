@@ -952,7 +952,7 @@ def SendDataToBroker(q,k,f,**kwargs):
         def publish(client): 
             g=0
             global vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt,vt15
-            if(len(kwargs.values()<5) and len(kwargs.values()>2)):
+            if(len(kwargs.values()==7)):
                 if(q==1):
                     vt = vt1 #0 // 10
                     print(f'vt {vt}')
@@ -975,7 +975,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             if(len(kwargs.values())<2):
                     vt = vt15 #0 // 10
                     print(f'vt15 {vt}')
-            if(len(kwargs.values())>5):
+            if(len(kwargs.values())>10):
                 if(q==1):
                     vt = vt115 #0 // 10
                     print(f'vt115 {vt}')
