@@ -638,9 +638,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
             workbook=openpyxl.load_workbook(filename = dest_filename)
-            sheet20 = workbook[f"Max/Hora Fase 1"]
-            sheet21 = workbook[f"Max/Hora Fase 2"]
-            sheet22 = workbook[f"Max/Hora Fase 3"] 
+            sheet20 = workbook[f"MaxHora Fase 1"]
+            sheet21 = workbook[f"MaxHora Fase 2"]
+            sheet22 = workbook[f"MaxHora Fase 3"] 
             dataHourFase1=[datetime.datetime.now(),round(OneHourEnergy_1,5),round(OneHourEnergy_4,5),round(OneHourEnergy_7,5)]
             dataHourFase2=[datetime.datetime.now(),round(OneHourEnergy_2,5),round(OneHourEnergy_5,5),round(OneHourEnergy_8,5)]
             dataHourFase3=[datetime.datetime.now(),round(OneHourEnergy_3,5),round(OneHourEnergy_6,5),round(OneHourEnergy_9,5)]
@@ -3441,9 +3441,9 @@ def excelcreate():
     sheet17 = book.create_sheet(f"{k3}-{f1}") 
     sheet18 = book.create_sheet(f"{k3}-{f2}") 
     sheet19 = book.create_sheet(f"{k3}-{f3}") 
-    sheet20 = book.create_sheet(f"Max/Hora Fase 1") 
-    sheet21 = book.create_sheet(f"Max/Hora Fase 2") 
-    sheet22 = book.create_sheet(f"Max/Hora Fase 3") 
+    sheet20 = book.create_sheet(f"MaxHora Fase 1") 
+    sheet21 = book.create_sheet(f"MaxHora Fase 2") 
+    sheet22 = book.create_sheet(f"MaxHora Fase 3") 
     headings0 = ['Fecha y Hora'] + list(['T° Raspberry','Uso CPU %','RAM2','T° ESP32'])
     headings=['Fecha y Hora'] + list(['Max Voltage','Mean Voltage','Min Voltage', 'Max Current','Mean Current','Min Current','Max Active Power','Mean Active Power','Mean Active Power','Max Reactive Power','Mean Reactive Power','Min Reactive Power','Max Aparent Power','Mean Aparent Power','Min Aparent Power','Max FPReact ','Mean FPReact','Min FPReact','Max FPInduct','Mean FPInduct','Min FPInduct','Max FDVoltage','Mean FDVoltage','Min FDVoltage','Max FDCurrent','Mean FDCurrent','Min FDCurrent','Max DATVoltage','Mean DATVoltage','Min DATVoltage','Max DATCurrent','Mean DATCurrent','Min DATCurrent','OnehourEnergy','Energy'])
     headings2=['Fecha y Hora'] + list(['Voltage', 'Current','Active Power','Reactive Power','Aparent Power','FP','FDVoltage','FDCurrent','DATVoltage','DATCurrent','cos(phi)','Energy','Hour Energy'])
