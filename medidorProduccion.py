@@ -3555,7 +3555,7 @@ AbrirExcel()
 
 def VariablesBasicas(Temp_Raspberry,cpu_uso,RAM,tempESP32):                   
        workbook=openpyxl.load_workbook(filename = dest_filename)
-       sheet1 = workbook["Var 0"]
+       sheet1 = workbook["Var Dispositivos"]
        Data=[datetime.datetime.now(),Temp_Raspberry,cpu_uso,RAM,tempESP32]
        sheet1.append(list(Data))
        workbook.save(filename = dest_filename)
