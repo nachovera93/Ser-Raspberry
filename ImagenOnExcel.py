@@ -1,4 +1,4 @@
-from ast import For
+#from ast import For
 import numpy as np
 from openpyxl import Workbook
 from openpyxl.chart import (
@@ -6,66 +6,75 @@ from openpyxl.chart import (
     Reference,
     Series,
 )
+
+from datetime import date
+from datetime import time
 import openpyxl
+dest_filename = f'{date.today()}.xlsx'
+workbook=openpyxl.load_workbook(filename = dest_filename)
+sheet11 = workbook[f"Maximos por hora"]
 
-workbook=openpyxl.load_workbook(filename = "2022-06-03.xlsx")
-sheet19 = workbook[f"Var 9"]
-LargeSheet11=len(sheet19["FP"])
-codigos = [celda[0].value for celda in sheet19['M2':f'M{LargeSheet11}']]
-numbers=[]
-j=0
-for number in codigos:
-    numbers.append(j-1)
-    j=j+1
+print("Ultima columna", (sheet11.max_column))     
+
+codigos0 = [celda[0].value for celda in sheet11['A3':f'A{sheet11.max_column}']]
+horas=[]
+for hour in codigos0:
+    hora=hour.hour
+    my_time = time(hora, 0, 0)
+    horas.append(my_time)
     
-numbers=numbers[1:len(numbers)]
+#Separar fases en excel
+codigos1 = [celda[0].value for celda in sheet11['B3':f'B{sheet11.max_column}']]
+codigos2 = [celda[0].value for celda in sheet11['C3':f'C{sheet11.max_column}']]
+codigos3 = [celda[0].value for celda in sheet11['D3':f'D{sheet11.max_column}']]
+codigos4 = [celda[0].value for celda in sheet11['E3':f'E{sheet11.max_column}']]
+codigos5 = [celda[0].value for celda in sheet11['F3':f'F{sheet11.max_column}']]
+codigos6 = [celda[0].value for celda in sheet11['G3':f'G{sheet11.max_column}']]
+codigos7 = [celda[0].value for celda in sheet11['H3':f'H{sheet11.max_column}']]
+codigos8 = [celda[0].value for celda in sheet11['I3':f'I{sheet11.max_column}']]
+codigos9 = [celda[0].value for celda in sheet11['J3':f'J{sheet11.max_column}']]
+
+
 import pandas as pd
-#
-#dates=['April-10', 'April-11', 'April-12', 'April-13']
-#fruits=['Apple', 'Papaya', 'Banana', 'Mango']
-#prices=[3, 1, 2, 4]
-
-
      
-df = pd.DataFrame({'Numero':numbers,'Energia':codigos[1:len(codigos)]})
-
+df1 = pd.DataFrame({'Hora':horas,'Energia1':codigos1,
+                                 'Energia2':codigos2,
+                                 'Energia3':codigos3,
+                                 'Energia4':codigos4,
+                                 'Energia5':codigos5,
+                                 'Energia6':codigos6,
+                                 'Energia7':codigos7,
+                                 'Energia8':codigos8,
+                                 'Energia9':codigos9})
+                    
 #new_df=df.assign(Profit=6)
-print(df)
+print(df1)
 #arr = np.array(df)
 
 
 wb = Workbook()
 ws = wb.active
-
-rows = [
-    [2, 40],
-    [3, 40],
-    [4, 50],
-    [5, 30],
-    [6, 25],
-    [7, 50],
-]
-df_list=df.values.tolist()
-arr = np.array(df)
-print(type(rows))
-print(type(df_list))
+headings3=list(['Hora','Energia-Fase-1-REDCompañia', 'Energia-Fase-1-CentralFotovoltaica','Energia-Fase-1-ConsumoCliente','Energia-Fase-2-REDCompañia','Energia-Fase-2-CentralFotovoltaica','Energia-Fase-2-ConsumoCliente','Energia-Fase-3-REDCompañia','Energia-Fase-3-CentralFotovoltaica','Energia-Fase-3-ConsumoCliente'])
+ws.append(headings3)
+df_list=df1.values.tolist()
+arr = np.array(df1)
 print(np.shape(arr))
 
 for row in df_list:
     ws.append(row)
 
 chart = AreaChart()
-chart.title = "Area Chart"
+chart.title = "Energias Fase 1"
 chart.style = 13
-chart.x_axis.title = 'Test'
-chart.y_axis.title = 'Percentage'
+chart.x_axis.title = 'Hora'
+chart.y_axis.title = 'KWh'
 
-cats = Reference(ws, min_col=1, min_row=1, max_row=7)
-data = Reference(ws, min_col=2, min_row=1, max_col=3, max_row=7)
+cats = Reference(ws, min_col=1, min_row=2, max_row=f'{sheet11.max_column+1}')
+data = Reference(ws, min_col=2, min_row=1, max_col=f'{sheet11.max_column+1}', max_row=f'{sheet11.max_column+1}')
 chart.add_data(data, titles_from_data=True)
 chart.set_categories(cats)
 
-ws.add_chart(chart, "A10")
+ws.add_chart(chart, f"A{sheet11.max_column+1}")
 
 wb.save("area.xlsx")
 

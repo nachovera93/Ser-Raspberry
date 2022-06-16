@@ -638,9 +638,15 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
             workbook=openpyxl.load_workbook(filename = dest_filename)
-            sheet20 = workbook[f"Maximos por hora"] 
-            dataHour=[datetime.datetime.now(),round(OneHourEnergy_1,5),round(OneHourEnergy_2,5),round(OneHourEnergy_3,5),round(OneHourEnergy_4,5),round(OneHourEnergy_5,5),round(OneHourEnergy_6,5),round(OneHourEnergy_7,5),round(OneHourEnergy_8,5),round(OneHourEnergy_9,5)]
-            sheet20.append(list(dataHour))
+            sheet20 = workbook[f"Max/Hora Fase 1"]
+            sheet21 = workbook[f"Max/Hora Fase 2"]
+            sheet22 = workbook[f"Max/Hora Fase 3"] 
+            dataHourFase1=[datetime.datetime.now(),round(OneHourEnergy_1,5),round(OneHourEnergy_4,5),round(OneHourEnergy_7,5)]
+            dataHourFase2=[datetime.datetime.now(),round(OneHourEnergy_2,5),round(OneHourEnergy_5,5),round(OneHourEnergy_8,5)]
+            dataHourFase3=[datetime.datetime.now(),round(OneHourEnergy_3,5),round(OneHourEnergy_6,5),round(OneHourEnergy_9,5)]
+            sheet20.append(list(dataHourFase1))
+            sheet21.append(list(dataHourFase2))
+            sheet22.append(list(dataHourFase3))
             workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
             print("Enviando Hora Max Energia 1")
@@ -670,7 +676,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             print("Enviando Hora Max Energia 9")
             OneHourEnergy_9=0
             vt15=time.time()
-            dataHour=[]
+            dataHourFase1=[]
+            dataHourFase2=[]
+            dataHourFase3=[]
             acceshourenergy=1
             
     if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
@@ -3407,12 +3415,14 @@ def excelcreate():
     global sheet18
     global sheet19
     global sheet20
+    global sheet21
+    global sheet22
     from openpyxl import Workbook
     exceltime=date.today()
     book = Workbook()
     dest_filename = f'{exceltime}.xlsx'
     #sheet1 = book.active
-    sheet1  = book.create_sheet("Var 0")
+    sheet1  = book.create_sheet("Var Dispositivos")
     sheet2 = book.create_sheet(f"Mean-{k1}-{f1}")
     sheet3 = book.create_sheet(f"Mean-{k1}-{f2}")
     sheet4 = book.create_sheet(f"Mean-{k1}-{f3}")
@@ -3431,13 +3441,16 @@ def excelcreate():
     sheet17 = book.create_sheet(f"{k3}-{f1}") 
     sheet18 = book.create_sheet(f"{k3}-{f2}") 
     sheet19 = book.create_sheet(f"{k3}-{f3}") 
-    sheet20 = book.create_sheet(f"Maximos por hora") 
-    headings0 = ['Fecha y Hora'] + list(['T° Raspberry','Uso CPU %','RAM2'])
+    sheet20 = book.create_sheet(f"Max/Hora Fase 1") 
+    sheet21 = book.create_sheet(f"Max/Hora Fase 2") 
+    sheet22 = book.create_sheet(f"Max/Hora Fase 3") 
+    headings0 = ['Fecha y Hora'] + list(['T° Raspberry','Uso CPU %','RAM2','T° ESP32'])
     headings=['Fecha y Hora'] + list(['Max Voltage','Mean Voltage','Min Voltage', 'Max Current','Mean Current','Min Current','Max Active Power','Mean Active Power','Mean Active Power','Max Reactive Power','Mean Reactive Power','Min Reactive Power','Max Aparent Power','Mean Aparent Power','Min Aparent Power','Max FPReact ','Mean FPReact','Min FPReact','Max FPInduct','Mean FPInduct','Min FPInduct','Max FDVoltage','Mean FDVoltage','Min FDVoltage','Max FDCurrent','Mean FDCurrent','Min FDCurrent','Max DATVoltage','Mean DATVoltage','Min DATVoltage','Max DATCurrent','Mean DATCurrent','Min DATCurrent','OnehourEnergy','Energy'])
     headings2=['Fecha y Hora'] + list(['Voltage', 'Current','Active Power','Reactive Power','Aparent Power','FP','FDVoltage','FDCurrent','DATVoltage','DATCurrent','cos(phi)','Energy','Hour Energy'])
     headings3=['Fecha y Hora'] + list(['Voltage', 'Current','Power','Energy','Hour Energy'])
     headings4=['Fecha y Hora'] + list(['Max Voltage', 'Mean Voltage', 'Min Voltage', 'Max Current','Mean Current', 'Min Current','Max Power','Power Mean', 'Power','Total Energy','Energy acumulada en 15'])
     headings5 = ['Fecha y Hora'] + list([f"{k1}-{f1}",f"{k1}-{f2}",f"{k1}-{f3}",f"{k2}-{f1}",f"{k2}-{f2}",f"{k2}-{f3}",f"{k3}-{f1}",f"{k3}-{f2}",f"{k3}-{f3}"])
+    headings6=list(['Hora','Energia-Fase-1-REDCompañia', 'Energia-Fase-1-CentralFotovoltaica','Energia-Fase-1-ConsumoCliente','Energia-Fase-2-REDCompañia','Energia-Fase-2-CentralFotovoltaica','Energia-Fase-2-ConsumoCliente','Energia-Fase-3-REDCompañia','Energia-Fase-3-CentralFotovoltaica','Energia-Fase-3-ConsumoCliente'])
     ceros=list([0,0,0,0,0,0,0,0,0,0,0,0])
     sheet1.append(headings0)
     sheet2.append(headings)
@@ -3458,8 +3471,10 @@ def excelcreate():
     sheet17.append(headings2)
     sheet18.append(headings2)
     sheet19.append(headings2)
-    sheet20.append(headings5)
-    sheet1.append(list([0,0,0]))
+    sheet20.append(headings6)
+    sheet21.append(headings6)
+    sheet22.append(headings6)
+    sheet1.append(list([0,0,0,0,0]))
     sheet2.append(ceros)
     sheet3.append(ceros)
     sheet4.append(ceros)
@@ -3478,7 +3493,6 @@ def excelcreate():
     sheet17.append(ceros)
     sheet18.append(ceros)
     sheet19.append(ceros)
-    sheet20.append(ceros)
 
     book.save(filename = dest_filename)
 
