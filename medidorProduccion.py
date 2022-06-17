@@ -3574,17 +3574,31 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        if(i==1):
              sheet11 = workbook[f"{k}-{f}"]
              sheet11.append(list(Data))
+             rows = [
+                 ['Number', 'Batch 1', 'Batch 2'],
+                 [2, 40, 30],
+                 [3, 40, 25],
+                 [4, 50, 30],
+                 [5, 30, 10],
+                 [6, 25, 5],
+                 [7, 50, 10],
+             ]
+             
+             for row in rows:
+                 sheet11.append(row)
+             
              chart = AreaChart()
-             chart.title = "Energias Fase 1"
+             chart.title = "Area Chart"
              chart.style = 13
-             chart.x_axis.title = 'Hora'
-             chart.y_axis.title = 'KWh'
-             cats = Reference(sheet11, min_col=1, min_row=2, max_row=f"{len(sheet11['A'])+1}")
-             data = Reference(sheet11, min_col=2, min_row=1, max_col=f"{len(sheet11['A'])+1}", max_row=f"{len(sheet11['A'])+1}")
+             chart.x_axis.title = 'Test'
+             chart.y_axis.title = 'Percentage'
+             
+             cats = Reference(sheet11, min_col=1, min_row=1, max_row=7)
+             data = Reference(sheet11, min_col=2, min_row=1, max_col=3, max_row=7)
              chart.add_data(data, titles_from_data=True)
              chart.set_categories(cats)
              print("Graficando")
-             sheet11.add_chart(chart, f"{len(sheet11['A'])+1}")
+             sheet11.add_chart(chart, "A10")
        elif(i==2):
              sheet12 = workbook[f"{k}-{f}"]
              sheet12.append(list(Data))
