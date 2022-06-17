@@ -678,6 +678,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 print("Graficando Fase 3")
                 sheet22.add_chart(chart, f"A{Pos+1}")
             
+            
             workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
             print("Enviando Hora Max Energia 1")
