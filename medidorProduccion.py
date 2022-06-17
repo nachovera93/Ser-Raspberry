@@ -3584,8 +3584,8 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
                  [7, 50, 10],
              ]
              
-             for row in rows:
-                 sheet11.append(row)
+             #for row in rows:
+             #    sheet11.append(row)
              
              chart = AreaChart()
              chart.title = "Area Chart"
