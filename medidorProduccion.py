@@ -636,7 +636,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==44):
+    if(TimeEnergy.minute==4):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -650,17 +650,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            chart = AreaChart()
-            chart.title = "Energias Fase 1"
-            chart.style = 13
-            chart.x_axis.title = 'Hora'
-            chart.y_axis.title = 'KWh'
-            cats = Reference(sheet20, min_col=1, min_row=2, max_row=f"{len(sheet20['A'])+1}")
-            data = Reference(sheet20, min_col=2, min_row=1, max_col=f"{len(sheet20['A'])+1}", max_row=f"{len(sheet20['A'])+1}")
-            chart.add_data(data, titles_from_data=True)
-            chart.set_categories(cats)
             
-            sheet20.add_chart(chart, f"{len(sheet20['A'])+1}")
             
             workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
@@ -3584,6 +3574,17 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        if(i==1):
              sheet11 = workbook[f"{k}-{f}"]
              sheet11.append(list(Data))
+             chart = AreaChart()
+             chart.title = "Energias Fase 1"
+             chart.style = 13
+             chart.x_axis.title = 'Hora'
+             chart.y_axis.title = 'KWh'
+             cats = Reference(sheet11, min_col=1, min_row=2, max_row=f"{len(sheet11['A'])+1}")
+             data = Reference(sheet11, min_col=2, min_row=1, max_col=f"{len(sheet11['A'])+1}", max_row=f"{len(sheet11['A'])+1}")
+             chart.add_data(data, titles_from_data=True)
+             chart.set_categories(cats)
+             
+             sheet20.add_chart(chart, f"{len(sheet20['A'])+1}")
        elif(i==2):
              sheet12 = workbook[f"{k}-{f}"]
              sheet12.append(list(Data))
