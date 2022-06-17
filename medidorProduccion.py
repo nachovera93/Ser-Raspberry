@@ -636,7 +636,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==3):
+    if(TimeEnergy.minute==19):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -656,12 +656,12 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             chart.x_axis.title = 'Test'
             chart.y_axis.title = 'Percentage'
             Pos=len(sheet20['A'])
-            cats = Reference(sheet20, min_col=1, min_row=2, max_row=f"A{Pos}")
-            data = Reference(sheet20, min_col=2, min_row=1, max_col=f"A{Pos}", max_row=f"A{Pos}")
+            cats = Reference(sheet20, min_col=1, min_row=2, max_row=Pos)
+            data = Reference(sheet20, min_col=2, min_row=1, max_col=Pos, max_row=Pos)
             chart.add_data(data, titles_from_data=True)
             chart.set_categories(cats)
             print("Graficando")
-            #sheet20.add_chart(chart, f"A{len(sheet20['A']) }")
+            sheet20.add_chart(chart, f"A{Pos}")
             
             workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
