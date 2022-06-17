@@ -3616,7 +3616,8 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
 import os
 import base64
 import requests
-from ms_graph import generate_access_token
+from azure.identity import InteractiveBrowserCredential
+from msgraph.core import GraphClient
 
 def SendEmail():
     
