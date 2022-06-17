@@ -3619,8 +3619,8 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
 def SendEmail():
     #global dest_filename
     Lugar="Santa Cristina"
-    username = "empresasserspa@gmail.com"
-    password = "nbqpiwiwootrwffu" #"empresasserspa"
+    username = "ricardovera.93@hotmail.com  "
+    password = "temp1062.." #"empresasserspa"
     destinatario = "ricardovera.93@hotmail.com"
     #destinatario2 = "ricardovera.93@hotmail.com"
     #destinatario2 = "demetrio.vera@serm.cl"
