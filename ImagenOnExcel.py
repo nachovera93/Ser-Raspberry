@@ -10,21 +10,22 @@ import datetime
 from datetime import date
 from datetime import time
 import openpyxl
-dest_filename = f'{date.today()}.xlsx'
+dest_filename = '2022-06-16.xlsx'
 workbook=openpyxl.load_workbook(filename = dest_filename)
-sheet11 = workbook[f"MaxHora Fase 1"]
+sheet11 = workbook[f'MaxHora Fase 1']
 sheet12 = workbook[f"MaxHora Fase 2"]
 sheet13 = workbook[f"MaxHora Fase 3"]
 
 #print("Ultima columna", len(sheet11['A']))    
 codigos0 = [celda[0].value for celda in sheet11['A2':f"A{len(sheet11['A']) }"]] #{sheet11.max_column}
-datetim=datetime.datetime.now()-datetime.timedelta(minutes=3)
-horas=[]
-for hour in codigos0:
-    hora=hour.hour
-    my_time = time(hora, 0, 0)
-    horas.append(f'{datetim.hour}:{datetim.minute}')
-print(len(horas))  
+print(codigos0)
+#horas=[]
+#for hour in codigos0:
+#    print(hour)
+#    hora=hour.hour
+#    my_time = time(hora, 0, 0)
+    #horas.append(f'{datetim.hour}:{datetim.minute}')
+#print(len(horas))  
 #Separar fases en excel
 codigos1 = [celda[0].value for celda in sheet11['B2':f"B{len(sheet11['A']) }"]]
 codigos2 = [celda[0].value for celda in sheet11['C2':f"C{len(sheet12['A']) }"]]
@@ -35,9 +36,8 @@ codigos6 = [celda[0].value for celda in sheet12['D2':f"D{len(sheet13['A']) }"]]
 codigos7 = [celda[0].value for celda in sheet13['B2':f"B{len(sheet11['A']) }"]]
 codigos8 = [celda[0].value for celda in sheet13['C2':f"C{len(sheet12['A']) }"]]
 codigos9 = [celda[0].value for celda in sheet13['D2':f"D{len(sheet13['A']) }"]]
-
-import pandas as pd
-     
+"""
+import pandas as pd 
 df1 = pd.DataFrame({'Hora':horas,'Energia1':codigos1,
                                  'Energia2':codigos2,
                                  'Energia3':codigos3
@@ -50,6 +50,7 @@ df3 = pd.DataFrame({'Hora':horas,'Energia7':codigos7,
                                  'Energia8':codigos8,
                                  'Energia9':codigos9
                                  })
+"""
 #new_df=df.assign(Profit=6)
 #print(df1)
 #print(df2)
@@ -65,7 +66,7 @@ df3 = pd.DataFrame({'Hora':horas,'Energia7':codigos7,
 #sheet11.append(headings1)
 #sheet12.append(headings2)
 #sheet13.append(headings3)
-
+"""
 df_list1=df1.values.tolist()
 df_list2=df2.values.tolist()
 df_list3=df3.values.tolist()
@@ -78,7 +79,7 @@ for row in df_list2:
     sheet12.append(row)
 for row in df_list3:
     sheet13.append(row)
-
+"""
 chart = AreaChart()
 chart.title = "Energias Fase 1"
 chart.style = 13
@@ -92,7 +93,7 @@ chart.set_categories(cats)
 
 sheet11.add_chart(chart, f"A{sheet11.max_column+1}")
 
-workbook.save("area.xlsx")
+workbook.save("2022-06-16.xlsx")
 
 
 
