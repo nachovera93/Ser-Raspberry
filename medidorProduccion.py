@@ -3583,8 +3583,8 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
              data = Reference(sheet11, min_col=2, min_row=1, max_col=f"{len(sheet11['A'])+1}", max_row=f"{len(sheet11['A'])+1}")
              chart.add_data(data, titles_from_data=True)
              chart.set_categories(cats)
-             
-             sheet20.add_chart(chart, f"{len(sheet20['A'])+1}")
+             print("Graficando")
+             sheet11.add_chart(chart, f"{len(sheet11['A'])+1}")
        elif(i==2):
              sheet12 = workbook[f"{k}-{f}"]
              sheet12.append(list(Data))
