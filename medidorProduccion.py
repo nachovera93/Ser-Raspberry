@@ -636,7 +636,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==4):
+    if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -650,7 +650,18 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
+            chart = AreaChart()
+            chart.title = "Area Chart"
+            chart.style = 13
+            chart.x_axis.title = 'Test'
+            chart.y_axis.title = 'Percentage'
             
+            cats = Reference(sheet20, min_col=1, min_row=2, max_row=f"A{len(sheet20['A']) }")
+            data = Reference(sheet20, min_col=2, min_row=1, max_col=f"A{len(sheet20['A']) }", max_row=f"A{len(sheet20['A']) }")
+            chart.add_data(data, titles_from_data=True)
+            chart.set_categories(cats)
+            print("Graficando")
+            sheet20.add_chart(chart, f"A{len(sheet20['A']) }")
             
             workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
@@ -3574,31 +3585,6 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        if(i==1):
              sheet11 = workbook[f"{k}-{f}"]
              sheet11.append(list(Data))
-             rows = [
-                 ['Number', 'Batch 1', 'Batch 2'],
-                 [2, 40, 30],
-                 [3, 40, 25],
-                 [4, 50, 30],
-                 [5, 30, 10],
-                 [6, 25, 5],
-                 [7, 50, 10],
-             ]
-             
-             #for row in rows:
-             #    sheet11.append(row)
-             
-             chart = AreaChart()
-             chart.title = "Area Chart"
-             chart.style = 13
-             chart.x_axis.title = 'Test'
-             chart.y_axis.title = 'Percentage'
-             
-             cats = Reference(sheet11, min_col=1, min_row=1, max_row=7)
-             data = Reference(sheet11, min_col=2, min_row=1, max_col=3, max_row=7)
-             chart.add_data(data, titles_from_data=True)
-             chart.set_categories(cats)
-             print("Graficando")
-             sheet11.add_chart(chart, "A10")
        elif(i==2):
              sheet12 = workbook[f"{k}-{f}"]
              sheet12.append(list(Data))
