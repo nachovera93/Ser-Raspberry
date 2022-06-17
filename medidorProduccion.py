@@ -658,7 +658,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             chart.add_data(data, titles_from_data=True)
             chart.set_categories(cats)
             
-            sheet20.add_chart(chart, f"{len(sheet20['A'])+1}")
+            #sheet20.add_chart(chart, f"{len(sheet20['A'])+1}")
             
             workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
