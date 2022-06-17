@@ -3620,7 +3620,7 @@ def SendEmail():
     #global dest_filename
     Lugar="Santa Cristina"
     username = "empresasserspa@gmail.com"
-    password = "pvohyvgjdvbqfmob"#"empresasserspa"
+    password = "pvohyvgjdvbqfmob" #"empresasserspa"
     destinatario = "ricardovera.93@hotmail.com"
     #destinatario2 = "ricardovera.93@hotmail.com"
     #destinatario2 = "demetrio.vera@serm.cl"
