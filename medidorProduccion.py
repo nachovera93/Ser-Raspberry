@@ -3670,14 +3670,14 @@ def SendEmail():
         }
     }
 
-GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0'
-endpoint = GRAPH_ENDPOINT + '/me/sendMail'
-
-response = requests.post(endpoint, headers=headers, json=request_body)
-if response.status_code == 202:
-    print('Email sent')
-else:
-    print(response.reason)
+    GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0'
+    endpoint = GRAPH_ENDPOINT + '/me/sendMail'
+    
+    response = requests.post(endpoint, headers=headers, json=request_body)
+    if response.status_code == 202:
+        print('Email sent')
+    else:
+        print(response.reason)
 
 def SendEmail2():
     #global dest_filename
