@@ -2,6 +2,11 @@ import requests
 from datetime import date
 from datetime import datetime
 import json
+from openpyxl.chart import (
+    AreaChart,
+    Reference,
+    Series,
+)
 import xlsxwriter
 import random
 import time
@@ -18,13 +23,10 @@ import numpy as np
 import subprocess
 from time import sleep
 import sys
-import socket
 import RPi.GPIO as GPIO
 import time
-import glob
 import os
 import serial
-import math
 import openpyxl
 import smtplib, ssl
 import getpass
@@ -34,9 +36,7 @@ from email import encoders
 from email.mime.base import MIMEBase
 import datetime
 import matplotlib.pyplot as plt
-import collections
 import psutil
-import gzip
 """
     0: connection succeeded
     1: connection failed - incorrect protocol version
@@ -641,12 +641,25 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20 = workbook[f"MaxHora Fase 1"]
             sheet21 = workbook[f"MaxHora Fase 2"]
             sheet22 = workbook[f"MaxHora Fase 3"] 
-            dataHourFase1=[datetime.datetime.now(),round(OneHourEnergy_1,5),round(OneHourEnergy_4,5),round(OneHourEnergy_7,5)]
-            dataHourFase2=[datetime.datetime.now(),round(OneHourEnergy_2,5),round(OneHourEnergy_5,5),round(OneHourEnergy_8,5)]
-            dataHourFase3=[datetime.datetime.now(),round(OneHourEnergy_3,5),round(OneHourEnergy_6,5),round(OneHourEnergy_9,5)]
+            datetim=datetime.datetime.now()-datetime.timedelta(minutes=3)
+            dataHourFase1=[f'{datetim.hour}:{datetim.minute}',round(OneHourEnergy_1,5),round(OneHourEnergy_4,5),round(OneHourEnergy_7,5)]
+            dataHourFase2=[f'{datetim.hour}:{datetim.minute}',round(OneHourEnergy_2,5),round(OneHourEnergy_5,5),round(OneHourEnergy_8,5)]
+            dataHourFase3=[f'{datetim.hour}:{datetim.minute}',round(OneHourEnergy_3,5),round(OneHourEnergy_6,5),round(OneHourEnergy_9,5)]
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
+            chart = AreaChart()
+            chart.title = "Energias Fase 1"
+            chart.style = 13
+            chart.x_axis.title = 'Hora'
+            chart.y_axis.title = 'KWh'
+            cats = Reference(sheet20, min_col=1, min_row=2, max_row=f"{len(sheet20['A'])+1}")
+            data = Reference(sheet20, min_col=2, min_row=1, max_col=f"{len(sheet20['A'])+1}", max_row=f"{len(sheet20['A'])+1}")
+            chart.add_data(data, titles_from_data=True)
+            chart.set_categories(cats)
+            
+            sheet20.add_chart(chart, f"{len(sheet20['A'])+1}")
+            
             workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
             print("Enviando Hora Max Energia 1")
@@ -3450,7 +3463,9 @@ def excelcreate():
     headings3=['Fecha y Hora'] + list(['Voltage', 'Current','Power','Energy','Hour Energy'])
     headings4=['Fecha y Hora'] + list(['Max Voltage', 'Mean Voltage', 'Min Voltage', 'Max Current','Mean Current', 'Min Current','Max Power','Power Mean', 'Power','Total Energy','Energy acumulada en 15'])
     headings5 = ['Fecha y Hora'] + list([f"{k1}-{f1}",f"{k1}-{f2}",f"{k1}-{f3}",f"{k2}-{f1}",f"{k2}-{f2}",f"{k2}-{f3}",f"{k3}-{f1}",f"{k3}-{f2}",f"{k3}-{f3}"])
-    headings6=list(['Hora','Energia-Fase-1-REDCompañia', 'Energia-Fase-1-CentralFotovoltaica','Energia-Fase-1-ConsumoCliente','Energia-Fase-2-REDCompañia','Energia-Fase-2-CentralFotovoltaica','Energia-Fase-2-ConsumoCliente','Energia-Fase-3-REDCompañia','Energia-Fase-3-CentralFotovoltaica','Energia-Fase-3-ConsumoCliente'])
+    headingsFase1=list(['Hora','Energia-Fase-1-REDCompañia', 'Energia-Fase-1-CentralFotovoltaica','Energia-Fase-1-ConsumoCliente'])
+    headingsFase2=list(['Hora','Energia-Fase-2-REDCompañia', 'Energia-Fase-2-CentralFotovoltaica','Energia-Fase-2-ConsumoCliente'])
+    headingsFase3=list(['Hora','Energia-Fase-3-REDCompañia', 'Energia-Fase-3-CentralFotovoltaica','Energia-Fase-3-ConsumoCliente'])
     ceros=list([0,0,0,0,0,0,0,0,0,0,0,0])
     sheet1.append(headings0)
     sheet2.append(headings)
@@ -3471,9 +3486,9 @@ def excelcreate():
     sheet17.append(headings2)
     sheet18.append(headings2)
     sheet19.append(headings2)
-    sheet20.append(headings6)
-    sheet21.append(headings6)
-    sheet22.append(headings6)
+    sheet20.append(headingsFase1)
+    sheet21.append(headingsFase2)
+    sheet22.append(headingsFase3)
     sheet1.append(list([0,0,0,0,0]))
     sheet2.append(ceros)
     sheet3.append(ceros)
