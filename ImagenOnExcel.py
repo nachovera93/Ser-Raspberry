@@ -12,9 +12,9 @@ from datetime import time
 import openpyxl
 dest_filename = '2022-06-16.xlsx'
 workbook=openpyxl.load_workbook(filename = dest_filename)
-sheet11 = workbook[f'MaxHora Fase 1']
-sheet12 = workbook[f"MaxHora Fase 2"]
-sheet13 = workbook[f"MaxHora Fase 3"]
+sheet11 = workbook["MaxHora Fase 1"]
+sheet12 = workbook["MaxHora Fase 2"]
+sheet13 = workbook["MaxHora Fase 3"]
 
 #print("Ultima columna", len(sheet11['A']))    
 codigos0 = [celda[0].value for celda in sheet11['A2':f"A{len(sheet11['A']) }"]] #{sheet11.max_column}
