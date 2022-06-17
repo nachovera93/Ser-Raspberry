@@ -650,18 +650,33 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            chart = AreaChart()
-            chart.title = "Area Chart"
-            chart.style = 13
-            chart.x_axis.title = 'Test'
-            chart.y_axis.title = 'Percentage'
-            Pos=len(sheet20['A'])
-            cats = Reference(sheet20, min_col=1, min_row=2, max_row=Pos+1)
-            data = Reference(sheet20, min_col=2, min_row=1, max_col=Pos+1, max_row=Pos+1)
-            chart.add_data(data, titles_from_data=True)
-            chart.set_categories(cats)
-            print("Graficando")
-            sheet20.add_chart(chart, f"A{Pos+1}")
+            if(TimeEnergy.hour==10 and TimeEnergy.minute==3):
+                chart = AreaChart()
+                chart.title = "Area Chart"
+                chart.style = 13
+                chart.x_axis.title = 'Test'
+                chart.y_axis.title = 'Percentage'
+                Pos=len(sheet20['A'])
+                cats = Reference(sheet20, min_col=1, min_row=2, max_row=Pos+1)
+                data = Reference(sheet20, min_col=2, min_row=1, max_col=Pos+1, max_row=Pos+1)
+                chart.add_data(data, titles_from_data=True)
+                chart.set_categories(cats)
+                print("Graficando Fase 1")
+                sheet20.add_chart(chart, f"A{Pos+1}")
+                Pos=len(sheet21['A'])
+                cats = Reference(sheet21, min_col=1, min_row=2, max_row=Pos+1)
+                data = Reference(sheet21, min_col=2, min_row=1, max_col=Pos+1, max_row=Pos+1)
+                chart.add_data(data, titles_from_data=True)
+                chart.set_categories(cats)
+                print("Graficando Fase 2")
+                sheet21.add_chart(chart, f"A{Pos+1}")
+                Pos=len(sheet22['A'])
+                cats = Reference(sheet22, min_col=1, min_row=2, max_row=Pos+1)
+                data = Reference(sheet22, min_col=2, min_row=1, max_col=Pos+1, max_row=Pos+1)
+                chart.add_data(data, titles_from_data=True)
+                chart.set_categories(cats)
+                print("Graficando Fase 3")
+                sheet22.add_chart(chart, f"A{Pos+1}")
             
             workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
@@ -697,7 +712,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             dataHourFase3=[]
             acceshourenergy=1
             
-    if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
+    if(TimeEnergy.hour==0 and TimeEnergy.minute==4):
             Energy_1=0
             Energy_2=0
             Energy_3=0
@@ -980,7 +995,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             if(len(kwargs.values())==4):
                 if(q==1):
                     vt = vt1 #0 // 10
-                    print(f'vt {vt}')
+                    #print(f'vt {vt}')
                 elif(q==2):
                     vt = vt2
                 elif(q==3):
@@ -999,11 +1014,11 @@ def SendDataToBroker(q,k,f,**kwargs):
                     vt = vt9
             elif(len(kwargs.values())<2):
                 vt = vt15 #0 // 10
-                print(f'vt15 {vt}')
+                #print(f'vt15 {vt}')
             elif(len(kwargs.values())>9):
                 if(q==1):
                     vt = vt115 #0 // 10
-                    print(f'vt115 {vt}')
+                    #print(f'vt115 {vt}')
                 elif(q==2):
                     vt = vt215
                 elif(q==3):
@@ -1034,7 +1049,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                     if(i["variableFullName"]==f'{key}-{f}-{k}'):
                         print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                         freq = i["variableSendFreq"]  
-                        print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
+                        #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
                              #print(f"Entrando a envio {key}-{q}")
                              str_variable = i["variable"]
