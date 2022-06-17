@@ -4037,31 +4037,21 @@ def received():
                          
 
                  excel=datetime.datetime.now()
-                 if(excel.hour==0 and excel.minute==3):
+                 if(excel.hour==7 and excel.minute==8):
                           if(Access_1email==0):
                                  Access_1email=1
                                  print("Entro a SendEmail")
-                                 #SendEmail()
+                                 SendEmail()
                                  time.sleep(5)
                                  #os.remove(dest_filename)
                                  excelcreate()
                  else:
                      Access_1email=0
-                 """
-                 try:  
+                 if(excel.hour==0 and excel.minute==15 or excel.hour==30 or excel.minute==45 ):
                        if(client.connected_flag==True): 
-                             publish(client)
-                 except:
-                     global countbroker
-                     print(f'Count Broker: {countbroker}')
-                     if(countbroker>=71):
-                         reconnectmqtt()
-                         countbroker=0
-                     else: 
-                         countbroker=countbroker+1
-                         
-                     continue
-                 """
+                            continue
+                       else: 
+                             os.system("sudo reboot")
 
         
 if __name__ == '__main__':
