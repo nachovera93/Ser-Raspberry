@@ -655,9 +655,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             chart.style = 13
             chart.x_axis.title = 'Test'
             chart.y_axis.title = 'Percentage'
-            
-            cats = Reference(sheet11, min_col=1, min_row=2, max_row=f'{sheet11.max_column+1}')
-            data = Reference(sheet11, min_col=2, min_row=1, max_col=f'{sheet11.max_column+1}', max_row=f'{sheet11.max_column+1}')
+            Pos=len(sheet20['A'])
+            cats = Reference(sheet20, min_col=1, min_row=2, max_row=f"A{Pos}")
+            data = Reference(sheet20, min_col=2, min_row=1, max_col=f"A{Pos}", max_row=f"A{Pos}")
             chart.add_data(data, titles_from_data=True)
             chart.set_categories(cats)
             print("Graficando")
