@@ -656,12 +656,12 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             chart.x_axis.title = 'Test'
             chart.y_axis.title = 'Percentage'
             
-            cats = Reference(sheet20, min_col=1, min_row=2, max_row=f"A{len(sheet20['A']) }")
-            data = Reference(sheet20, min_col=2, min_row=1, max_col=f"A{len(sheet20['A']) }", max_row=f"A{len(sheet20['A']) }")
+            cats = Reference(sheet11, min_col=1, min_row=2, max_row=f'{sheet11.max_column+1}')
+            data = Reference(sheet11, min_col=2, min_row=1, max_col=f'{sheet11.max_column+1}', max_row=f'{sheet11.max_column+1}')
             chart.add_data(data, titles_from_data=True)
             chart.set_categories(cats)
             print("Graficando")
-            sheet20.add_chart(chart, f"A{len(sheet20['A']) }")
+            #sheet20.add_chart(chart, f"A{len(sheet20['A']) }")
             
             workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
