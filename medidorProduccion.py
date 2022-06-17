@@ -4038,7 +4038,7 @@ def received():
                          
 
                  excel=datetime.datetime.now()
-                 if(excel.hour==7 and excel.minute==38):
+                 if(excel.hour==7 and excel.minute==42):
                           if(Access_1email==0):
                                  Access_1email=1
                                  print("Entro a SendEmail")
