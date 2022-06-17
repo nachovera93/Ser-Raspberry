@@ -3612,15 +3612,31 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        workbook.save(filename = dest_filename)
        Data=[]
 
-
-
-
+import win32com.client as win32
 
 def SendEmail():
+
+    olApp = win32.Dispatch('Outlook.Application')
+    olNS = olApp.GetNameSpace('MAPI')
+    
+    # construct email item object
+    mailItem = olApp.CreateItem(0)
+    mailItem.Subject = 'Hello 123'
+    mailItem.BodyFormat = 1
+    mailItem.Body = 'Hello There'
+    mailItem.To = '<receipent email>'
+    mailItem.Sensitivity  = 2
+    # optional (account you want to use to send the email)
+    # mailItem._oleobj_.Invoke(*(64209, 0, 8, 0, olNS.Accounts.Item('<email@gmail.com')))
+    mailItem.Display()
+    # mailItem.Save()
+    # mailItem.Send()
+
+def SendEmail2():
     #global dest_filename
     Lugar="Santa Cristina"
-    username = "ricardovera.93@hotmail.com  "
-    password = "temp1062.." #"empresasserspa"
+    username = "empresasserspa@gmail.com"
+    password = "nbqpiwiwootrwffu" #"empresasserspa"
     destinatario = "ricardovera.93@hotmail.com"
     #destinatario2 = "ricardovera.93@hotmail.com"
     #destinatario2 = "demetrio.vera@serm.cl"
@@ -4038,7 +4054,7 @@ def received():
                          
 
                  excel=datetime.datetime.now()
-                 if(excel.hour==8 and excel.minute==25):
+                 if(excel.hour==8 and excel.minute==18):
                           if(Access_1email==0):
                                  Access_1email=1
                                  print("Entro a SendEmail")
