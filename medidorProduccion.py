@@ -3620,7 +3620,7 @@ def SendEmail():
     #global dest_filename
     Lugar="Santa Cristina"
     username = "empresasserspa@gmail.com"
-    password = "pvohyvgjdvbqfmob" #"empresasserspa"
+    password = "nbqpiwiwootrwffu" #"empresasserspa"
     destinatario = "ricardovera.93@hotmail.com"
     #destinatario2 = "ricardovera.93@hotmail.com"
     #destinatario2 = "demetrio.vera@serm.cl"
@@ -4038,7 +4038,7 @@ def received():
                          
 
                  excel=datetime.datetime.now()
-                 if(excel.hour==7 and excel.minute==42):
+                 if(excel.hour==8 and excel.minute==10):
                           if(Access_1email==0):
                                  Access_1email=1
                                  print("Entro a SendEmail")
