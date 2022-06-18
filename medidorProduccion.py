@@ -650,7 +650,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==12 and TimeEnergy.minute==3):
+            if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
                 chart = AreaChart()
                 chart.title = "Area Chart"
                 chart.style = 13
@@ -668,21 +668,21 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 chart3.y_axis.title = 'Percentage'
                 Pos=len(sheet20['A'])
                 cats = Reference(sheet20, min_col=1, min_row=2, max_row=Pos+1)
-                data = Reference(sheet20, min_col=2, min_row=1, max_col=5, max_row=Pos+1)
+                data = Reference(sheet20, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
                 chart.add_data(data, titles_from_data=True)
                 chart.set_categories(cats)
                 print("Graficando Fase 1")
                 sheet20.add_chart(chart, f"A{Pos+1}")
                 Pos=len(sheet21['A'])
                 cats2 = Reference(sheet21, min_col=1, min_row=2, max_row=Pos+1)
-                data2 = Reference(sheet21, min_col=2, min_row=1, max_col=5, max_row=Pos+1)
+                data2 = Reference(sheet21, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
                 chart2.add_data(data2, titles_from_data=True)
                 chart2.set_categories(cats2)
                 print("Graficando Fase 2")
                 sheet21.add_chart(chart2, f"A{Pos+1}")
                 Pos=len(sheet22['A'])
                 cats3 = Reference(sheet22, min_col=1, min_row=2, max_row=Pos+1)
-                data3 = Reference(sheet22, min_col=2, min_row=1, max_col=5, max_row=Pos+1)
+                data3 = Reference(sheet22, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
                 chart3.add_data(data3, titles_from_data=True)
                 chart3.set_categories(cats3)
                 print("Graficando Fase 3")
