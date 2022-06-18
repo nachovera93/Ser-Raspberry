@@ -650,7 +650,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==7 and TimeEnergy.minute==3):
+            if(TimeEnergy.hour==8 and TimeEnergy.minute==3):
                 chart = AreaChart()
                 chart.title = "Area Chart"
                 chart.style = 13
