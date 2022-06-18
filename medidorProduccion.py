@@ -636,7 +636,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==13):
+    if(TimeEnergy.minute==22):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -650,12 +650,22 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==23 and TimeEnergy.minute==13):
+            if(TimeEnergy.hour==23 and TimeEnergy.minute==22):
                 chart = AreaChart()
                 chart.title = "Area Chart"
                 chart.style = 13
                 chart.x_axis.title = 'Test'
                 chart.y_axis.title = 'Percentage'
+                chart2 = AreaChart()
+                chart2.title = "Area Chart"
+                chart2.style = 13
+                chart2.x_axis.title = 'Test'
+                chart2.y_axis.title = 'Percentage'
+                chart3 = AreaChart()
+                chart3.title = "Area Chart"
+                chart3.style = 13
+                chart3.x_axis.title = 'Test'
+                chart3.y_axis.title = 'Percentage'
                 Pos=len(sheet20['A'])
                 cats = Reference(sheet20, min_col=1, min_row=2, max_row=Pos+1)
                 data = Reference(sheet20, min_col=2, min_row=1, max_col=Pos+1, max_row=Pos+1)
@@ -664,19 +674,19 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 print("Graficando Fase 1")
                 sheet20.add_chart(chart, f"A{Pos+1}")
                 Pos=len(sheet21['A'])
-                cats = Reference(sheet21, min_col=1, min_row=2, max_row=Pos+1)
-                data = Reference(sheet21, min_col=2, min_row=1, max_col=Pos+1, max_row=Pos+1)
-                chart.add_data(data, titles_from_data=True)
-                chart.set_categories(cats)
+                cats2 = Reference(sheet21, min_col=1, min_row=2, max_row=Pos+1)
+                data2 = Reference(sheet21, min_col=2, min_row=1, max_col=Pos+1, max_row=Pos+1)
+                chart2.add_data(data2, titles_from_data=True)
+                chart2.set_categories(cats2)
                 print("Graficando Fase 2")
-                sheet21.add_chart(chart, f"A{Pos+1}")
+                sheet21.add_chart(chart2, f"A{Pos+1}")
                 Pos=len(sheet22['A'])
-                cats = Reference(sheet22, min_col=1, min_row=2, max_row=Pos+1)
-                data = Reference(sheet22, min_col=2, min_row=1, max_col=Pos+1, max_row=Pos+1)
-                chart.add_data(data, titles_from_data=True)
-                chart.set_categories(cats)
+                cats3 = Reference(sheet22, min_col=1, min_row=2, max_row=Pos+1)
+                data3 = Reference(sheet22, min_col=2, min_row=1, max_col=Pos+1, max_row=Pos+1)
+                chart3.add_data(data3, titles_from_data=True)
+                chart3.set_categories(cats3)
                 print("Graficando Fase 3")
-                sheet22.add_chart(chart, f"A{Pos+1}")
+                sheet22.add_chart(chart3, f"A{Pos+1}")
             
             
             workbook.save(filename = dest_filename)
