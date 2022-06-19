@@ -4142,7 +4142,7 @@ def received():
                  if(excel.minute==0 and excel.minute==15 or excel.hour==30 or excel.minute==45 ):
                        if(client.connected_flag==True): 
                            print("Conectado")
-                        continue
+                           continue
                        else: 
                            print("Reiniciar")
                            os.system("sudo reboot")
