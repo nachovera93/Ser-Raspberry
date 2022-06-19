@@ -4139,11 +4139,13 @@ def received():
                                  excelcreate()
                  else:
                      Access_1email=0
-                 if(excel.hour==0 and excel.minute==15 or excel.hour==30 or excel.minute==45 ):
+                 if(excel.minute==0 and excel.minute==15 or excel.hour==30 or excel.minute==45 ):
                        if(client.connected_flag==True): 
-                            continue
+                           print("Conectado")
+                           continue
                        else: 
-                             os.system("sudo reboot")
+                           print("Reiniciar")
+                           os.system("sudo reboot")
 
         
 if __name__ == '__main__':
