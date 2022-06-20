@@ -4139,7 +4139,7 @@ def received():
                                  excelcreate()
                  else:
                      Access_1email=0
-                 if(excel.minute==0 and excel.minute==15 or excel.hour==30 or excel.minute==45 ):
+                 if(excel.minute==4 and excel.minute==19 or excel.hour==34 or excel.minute==49 ):
                        if(client.connected_flag==True): 
                            print("Conectado")
                            continue
