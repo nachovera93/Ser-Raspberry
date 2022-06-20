@@ -128,7 +128,7 @@ def on_disconnect(client, userdata, rc):
         #get_mqtt_credentials()
         client.username_pw_set(usernamemqtt, passwordmqtt)
  
-                      
+                     
 def on_connected(client, userdata, flags, rc):
     if rc==0:
         client.connected_flag=True #set flag
@@ -4138,14 +4138,15 @@ def received():
                                  #os.remove(dest_filename)
                                  excelcreate()
                  else:
-                     Access_1email=0
-                 if(excel.minute==4 and excel.minute==19 or excel.hour==34 or excel.minute==49 ):
-                       if(client.connected_flag==True): 
-                           print("Conectado")
-                           continue
-                       else: 
+                          Access_1email=0
+                 if(excel.minute==4 and excel.minute==19 or excel.minute==34 or excel.minute==49 ):
+                     global rc
+                     if(rc == 5): 
                            print("Reiniciar")
                            os.system("sudo reboot")
+                     else: 
+                           print("Continue")
+                        
 
         
 if __name__ == '__main__':
