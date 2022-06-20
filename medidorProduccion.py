@@ -119,7 +119,7 @@ def get_mqtt_credentials():
     return True
 
 
-   
+rcConnect = 1  
 def on_disconnect(client, userdata, rc):
     if (rc != 0 and rc != 5):
         print("Unexpected disconnection, will auto-reconnect")
@@ -128,7 +128,7 @@ def on_disconnect(client, userdata, rc):
         #get_mqtt_credentials()
         client.username_pw_set(usernamemqtt, passwordmqtt)
  
-                      
+                     
 def on_connected(client, userdata, flags, rc):
     if rc==0:
         client.connected_flag=True #set flag
@@ -136,6 +136,9 @@ def on_connected(client, userdata, flags, rc):
         print("connected OK")
         print("rc =",client.connected_flag)
     else:
+        global rcConnect
+        rcConnect=rcConnect+1
+        print(f"rcConnection = {rcConnect}")
         print("Bad connection Returned code=",rc)
         client.bad_connection_flag=False
 
@@ -4138,14 +4141,14 @@ def received():
                                  #os.remove(dest_filename)
                                  excelcreate()
                  else:
-                     Access_1email=0
-                 if(excel.minute==4 and excel.minute==19 or excel.hour==34 or excel.minute==49 ):
-                       if(client.connected_flag==True): 
-                           print("Conectado")
-                           continue
-                       else: 
+                          Access_1email=0
+                 if(excel.minute==4 and excel.minute==19 or excel.minute==34 or excel.minute==49 ):
+                     if(rcConnect > 3): 
                            print("Reiniciar")
                            os.system("sudo reboot")
+                     else: 
+                           print("Continue")
+                        
 
         
 if __name__ == '__main__':
