@@ -676,20 +676,20 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 chart.set_categories(cats)
                 print("Graficando Fase 1")
                 sheet20.add_chart(chart, f"A{Pos+1}")
-                Pos=len(sheet21['A'])
-                cats2 = Reference(sheet21, min_col=1, min_row=2, max_row=Pos+1)
-                data2 = Reference(sheet21, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
+                Pos2=len(sheet21['A'])
+                cats2 = Reference(sheet21, min_col=1, min_row=2, max_row=Pos2+1)
+                data2 = Reference(sheet21, min_col=2, min_row=1, max_col=4, max_row=Pos2+1)
                 chart2.add_data(data2, titles_from_data=True)
                 chart2.set_categories(cats2)
                 print("Graficando Fase 2")
-                sheet21.add_chart(chart2, f"A{Pos+1}")
-                Pos=len(sheet22['A'])
-                cats3 = Reference(sheet22, min_col=1, min_row=2, max_row=Pos+1)
-                data3 = Reference(sheet22, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
+                sheet21.add_chart(chart2, f"A{Pos2+1}")
+                Pos3=len(sheet22['A'])
+                cats3 = Reference(sheet22, min_col=1, min_row=2, max_row=Pos3+1)
+                data3 = Reference(sheet22, min_col=2, min_row=1, max_col=4, max_row=Pos3+1)
                 chart3.add_data(data3, titles_from_data=True)
                 chart3.set_categories(cats3)
                 print("Graficando Fase 3")
-                sheet22.add_chart(chart3, f"A{Pos+1}")
+                sheet22.add_chart(chart3, f"A{Pos3+1}")
             
             
             workbook.save(filename = dest_filename)
@@ -4142,6 +4142,8 @@ def received():
                                  excelcreate()
                  else:
                           Access_1email=0
+                          
+                          
                  if(excel.minute==4 and excel.minute==19 or excel.minute==34 or excel.minute==49 ):
                      if(rcConnect > 3): 
                            print("Reiniciar")
