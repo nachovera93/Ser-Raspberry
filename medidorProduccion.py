@@ -643,7 +643,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==57):
+    if(TimeEnergy.minute==8):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -657,9 +657,26 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==17 and TimeEnergy.minute==57):
+            if(TimeEnergy.hour==18 and TimeEnergy.minute==8):
                 print("Entrando a GRAPH EXCEL")
-                GraphExcel()
+                ##Fase 1
+                chart = AreaChart()
+                chart.title = "Grafico Energias Fase 1"
+                chart.style = 13
+                chart.x_axis.title = 'Horas'
+                chart.y_axis.title = 'KWh'
+                #chart.type = "col"
+                #chart.height = 10
+                #chart.width = 30
+                Pos=len(sheet20['A'])
+                print(f' Pos A :{Pos}')
+                cats = Reference(sheet20, min_col=1, min_row=2, max_row=Pos+1)
+                data = Reference(sheet20, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
+                chart.add_data(data, titles_from_data=True)
+                chart.set_categories(cats)
+                print("Graficando Fase 1")
+                sheet20.add_chart(chart, f"F1")
+                #GraphExcel()
             
             workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
@@ -1057,26 +1074,7 @@ def SendDataToBroker(q,k,f,**kwargs):
         
 def GraphExcel():
     workbook=openpyxl.load_workbook(filename = dest_filename)
-    sheet20 = workbook[f"MaxHora Fase 1"]
-    sheet21 = workbook[f"MaxHora Fase 2"]
-    sheet22 = workbook[f"MaxHora Fase 3"] 
-    ##Fase 1
-    chart = AreaChart()
-    chart.title = "Grafico Energias Fase 1"
-    chart.style = 13
-    chart.x_axis.title = 'Horas'
-    chart.y_axis.title = 'KWh'
-    #chart.type = "col"
-    #chart.height = 10
-    #chart.width = 30
-    Pos=len(sheet20['A'])
-    print(f' Pos A :{Pos}')
-    cats = Reference(sheet20, min_col=1, min_row=2, max_row=Pos+1)
-    data = Reference(sheet20, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
-    chart.add_data(data, titles_from_data=True)
-    chart.set_categories(cats)
-    print("Graficando Fase 1")
-    sheet20.add_chart(chart, f"F1")
+    
     
     
     
