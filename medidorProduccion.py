@@ -1110,17 +1110,16 @@ def SendDataToBroker(q,k,f,**kwargs):
     
     
     
-    
-    """ 
-def HistoricalExcel():
-    today = date.today()
-    exceltime=date.today()
-    book = Workbook()
-    dest_filename = f'{exceltime}.xlsx'
-    print("El mes actual es {}".format(today.month))
-    for f in os.listdir('/home/pi/Desktop/Ser-Raspberry/'):
-            if():
-    """
+
+#def HistoricalExcel():
+#    today = date.today()
+#    exceltime=date.today()
+#    book = Workbook()
+#    dest_filename = f'{exceltime}.xlsx'
+#    print("El mes actual es {}".format(today.month))
+#    for f in os.listdir('/home/pi/Desktop/Ser-Raspberry/'):
+#            if():
+
     
             
 MaxVoltage15_1=0.0
