@@ -656,7 +656,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==20 and TimeEnergy.minute==3):
+            if(TimeEnergy.hour==21 and TimeEnergy.minute==3):
                 GraphExcel()
             
             workbook.save(filename = dest_filename)
@@ -1061,48 +1061,57 @@ def GraphExcel():
     ##Fase 1
     chart = BarChart()
     chart.title = "Grafico Energias Fase 1"
-    chart.style = 13
+    chart.style = 12
     chart.x_axis.title = 'Horas'
     chart.y_axis.title = 'KWh'
+    chart.type = "col"
+    chart.height = 10
+    chart.width = 30
     Pos=len(sheet20['A'])
     cats = Reference(sheet20, min_col=1, min_row=2, max_row=Pos+1)
     data = Reference(sheet20, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
     chart.add_data(data, titles_from_data=True)
     chart.set_categories(cats)
     print("Graficando Fase 1")
-    sheet20.add_chart(chart, f"A{Pos+1}")
+    sheet20.add_chart(chart, f"F1")
     
     
     
     ##Fase 2
     chart2 = BarChart()
     chart2.title = "Grafico Energias Fase 2"
-    chart2.style = 13
+    chart2.style = 12
     chart2.x_axis.title = 'Horas'
     chart2.y_axis.title = 'KWh'
+    chart2.type = "col"
+    chart2.height = 10
+    chart2.width = 30
     Pos2=len(sheet21['A'])
     cats2 = Reference(sheet21, min_col=1, min_row=2, max_row=Pos2+1)
     data2 = Reference(sheet21, min_col=2, min_row=1, max_col=4, max_row=Pos2+1)
     chart2.add_data(data2, titles_from_data=True)
     chart2.set_categories(cats2)
     print("Graficando Fase 2")
-    sheet21.add_chart(chart2, f"A{Pos2+1}")
+    sheet21.add_chart(chart2, f"F1")
     
     
     #Fase 3
     chart3 = BarChart()
     chart3.title = "Grafico Energias Fase 1"
-    chart3.style = 13
+    chart3.style = 12
     chart3.x_axis.title = 'Horas'
     chart3.y_axis.title = 'KWh'
+    chart3.type = "col"
+    chart3.height = 10
+    chart3.width = 30
     Pos3=len(sheet22['A'])
     cats3 = Reference(sheet22, min_col=1, min_row=2, max_row=Pos3+1)
     data3 = Reference(sheet22, min_col=2, min_row=1, max_col=4, max_row=Pos3+1)
     chart3.add_data(data3, titles_from_data=True)
     chart3.set_categories(cats3)
     print("Graficando Fase 3")
-    sheet22.add_chart(chart3, f"A{Pos3+1}") 
-    
+    sheet22.add_chart(chart3, f"F1") 
+    workbook.save(filename = dest_filename)
     
     
     """ 
@@ -4176,7 +4185,7 @@ def received():
                           
                           
                  if(excel.minute==4 and excel.minute==19 or excel.minute==34 or excel.minute==49 ):
-                     if(rcConnect > 3): 
+                     if(rcConnect > 5): 
                            print("Reiniciar")
                            os.system("sudo reboot")
                      else: 
