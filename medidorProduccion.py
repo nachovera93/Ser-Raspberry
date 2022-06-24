@@ -657,7 +657,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
+            if(TimeEnergy.hour==17 and TimeEnergy.minute==53):
+                print("Entrando a GRAPH EXCEL")
                 GraphExcel()
             
             workbook.save(filename = dest_filename)
@@ -1062,13 +1063,14 @@ def GraphExcel():
     ##Fase 1
     chart = AreaChart()
     chart.title = "Grafico Energias Fase 1"
-    chart.style = 12
+    chart.style = 13
     chart.x_axis.title = 'Horas'
     chart.y_axis.title = 'KWh'
-    chart.type = "col"
-    chart.height = 10
-    chart.width = 30
+    #chart.type = "col"
+    #chart.height = 10
+    #chart.width = 30
     Pos=len(sheet20['A'])
+    print(f' Pos A :{Pos}')
     cats = Reference(sheet20, min_col=1, min_row=2, max_row=Pos+1)
     data = Reference(sheet20, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
     chart.add_data(data, titles_from_data=True)
@@ -1081,12 +1083,12 @@ def GraphExcel():
     ##Fase 2
     chart2 = AreaChart()
     chart2.title = "Grafico Energias Fase 2"
-    chart2.style = 12
+    chart2.style = 13
     chart2.x_axis.title = 'Horas'
     chart2.y_axis.title = 'KWh'
     chart2.type = "col"
-    chart2.height = 10
-    chart2.width = 30
+    #chart2.height = 10
+    #chart2.width = 30
     Pos2=len(sheet21['A'])
     cats2 = Reference(sheet21, min_col=1, min_row=2, max_row=Pos2+1)
     data2 = Reference(sheet21, min_col=2, min_row=1, max_col=4, max_row=Pos2+1)
@@ -3822,7 +3824,7 @@ try:
 finally:
     f.close()
 
-CurrentCal=0.89
+CurrentCal=0.9
 Vrms=0.0
 Irms=0.0
 BufferVoltaje_1=[]
