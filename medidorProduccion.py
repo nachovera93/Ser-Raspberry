@@ -3,6 +3,7 @@ from datetime import date
 from datetime import datetime
 import json
 from openpyxl.chart import (
+    AreaChart,
     BarChart,
     Reference,
     Series,
@@ -656,7 +657,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==21 and TimeEnergy.minute==3):
+            if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
                 GraphExcel()
             
             workbook.save(filename = dest_filename)
@@ -1059,7 +1060,7 @@ def GraphExcel():
     sheet21 = workbook[f"MaxHora Fase 2"]
     sheet22 = workbook[f"MaxHora Fase 3"] 
     ##Fase 1
-    chart = BarChart()
+    chart = AreaChart()
     chart.title = "Grafico Energias Fase 1"
     chart.style = 12
     chart.x_axis.title = 'Horas'
@@ -1078,7 +1079,7 @@ def GraphExcel():
     
     
     ##Fase 2
-    chart2 = BarChart()
+    chart2 = AreaChart()
     chart2.title = "Grafico Energias Fase 2"
     chart2.style = 12
     chart2.x_axis.title = 'Horas'
@@ -1096,7 +1097,7 @@ def GraphExcel():
     
     
     #Fase 3
-    chart3 = BarChart()
+    chart3 = AreaChart()
     chart3.title = "Grafico Energias Fase 1"
     chart3.style = 12
     chart3.x_axis.title = 'Horas'
