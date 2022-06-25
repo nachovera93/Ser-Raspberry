@@ -657,7 +657,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==20 and TimeEnergy.minute==3):
+            if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
                 print("Entrando a GRAPH EXCEL")
                 ##Fase 1
                 chart = BarChart()
@@ -3817,7 +3817,7 @@ try:
 finally:
     f.close()
 
-CurrentCal=0.9
+CurrentCal=0.91
 Vrms=0.0
 Irms=0.0
 BufferVoltaje_1=[]
