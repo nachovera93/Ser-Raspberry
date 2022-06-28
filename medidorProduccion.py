@@ -732,7 +732,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                         x = x+1 
                         workbook=openpyxl.load_workbook(filename = f'{f}')
                         try:
-                            
+                            sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
+                            sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
+                            sheet25 = workbook[f"MaxHora Fase 3 Mensual"] 
                             sheet1 = workbook[f"REDCompañia-Fase-1"]
                             sheet2 = workbook[f"REDCompañia-Fase-2"]
                             sheet3 = workbook[f"REDCompañia-Fase-3"]
