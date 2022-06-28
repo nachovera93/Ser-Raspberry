@@ -667,9 +667,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet22.append(list(dataHourFase3))
             if(TimeEnergy.hour==20 and TimeEnergy.minute==42):
                 print("Entrando a GRAPH EXCEL")
-                sheet23 = workbook[f"MaxHora Fase 1 Diario"]
-                sheet24 = workbook[f"MaxHora Fase 2 Diario"]
-                sheet25 = workbook[f"MaxHora Fase 3 Diario"] 
+                sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
+                sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
+                sheet25 = workbook[f"MaxHora Fase 3 Mensual"] 
                 ##Fase 1
                 chart = BarChart()
                 chart.title = "Grafico Energias Fase 1"
