@@ -599,15 +599,7 @@ AparentPower = 0.0
 ActivePower = 0.0
 ReactivePower = 0.0
 acceshourenergy=0
-Energy_1_TotalMes = []
-Energy_2_TotalMes = []
-Energy_3_TotalMes = []
-Energy_4_TotalMes = []
-Energy_5_TotalMes = []
-Energy_6_TotalMes = []
-Energy_7_TotalMes = []
-Energy_8_TotalMes = []
-Energy_9_TotalMes = []
+
 def Potencias(i,Irms,Vrms,potrmsCGE):
     global vt1
     global vt2
@@ -651,7 +643,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==20):
+    if(TimeEnergy.minute==35):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -665,7 +657,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==21 and TimeEnergy.minute==20):
+            if(TimeEnergy.hour==21 and TimeEnergy.minute==35):
                 print("Entrando a GRAPH EXCEL")
                 sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
                 sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
@@ -722,6 +714,16 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 print("Graficando Fase 3")
                 sheet22.add_chart(chart3, f"F1") 
                 
+                Energy_1_TotalMes = []
+                Energy_2_TotalMes = []
+                Energy_3_TotalMes = []
+                Energy_4_TotalMes = []
+                Energy_5_TotalMes = []
+                Energy_6_TotalMes = []
+                Energy_7_TotalMes = []
+                Energy_8_TotalMes = []
+                Energy_9_TotalMes = []
+
                 dia0=date.today()
                 dia=str(dia0-timedelta(1))
                 x=0
