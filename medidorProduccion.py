@@ -643,7 +643,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==13):
+    if(TimeEnergy.minute==25):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -657,7 +657,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==19 and TimeEnergy.minute==13):
+            if(TimeEnergy.hour==19 and TimeEnergy.minute==25):
+                workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
                 sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
@@ -713,7 +714,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 chart3.set_categories(cats3)
                 print("Graficando Fase 3")
                 sheet22.add_chart(chart3, f"F1") 
-                
+                workbook.save(filename = dest_filename)
                 Energy_1_TotalMes = []
                 Energy_2_TotalMes = []
                 Energy_3_TotalMes = []
@@ -762,9 +763,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             Energy_7 = float(sheet7[f'm{LargeSheet71}'].value)
                             Energy_8 = float(sheet8[f'm{LargeSheet81}'].value)
                             Energy_9 = float(sheet9[f'm{LargeSheet91}'].value) 
-                            dataMonthFase1=[f'{dia}',round(Energy_1,5),round(Energy_2,5),round(Energy_3,5)] 
-                            dataMonthFase2=[f'{dia}',round(Energy_4,5),round(Energy_5,5),round(Energy_6,5)] 
-                            dataMonthFase3=[f'{dia}',round(Energy_7,5),round(Energy_8,5),round(Energy_9,5)] 
+                            dataMonthFase1=[f'{f[0:9]}',round(Energy_1,5),round(Energy_2,5),round(Energy_3,5)] 
+                            dataMonthFase2=[f'{f[0:9]}',round(Energy_4,5),round(Energy_5,5),round(Energy_6,5)] 
+                            dataMonthFase3=[f'{f[0:9]}',round(Energy_7,5),round(Energy_8,5),round(Energy_9,5)] 
                             sheet23.append(list(dataMonthFase1))
                             sheet24.append(list(dataMonthFase2))
                             sheet25.append(list(dataMonthFase3))
