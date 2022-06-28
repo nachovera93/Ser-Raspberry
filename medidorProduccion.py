@@ -1,5 +1,5 @@
 import requests
-from datetime import date
+from datetime import date, timedelta
 from datetime import datetime
 import json
 from openpyxl.chart import (
@@ -599,7 +599,15 @@ AparentPower = 0.0
 ActivePower = 0.0
 ReactivePower = 0.0
 acceshourenergy=0
-
+Energy_1_TotalMes = []
+Energy_2_TotalMes = []
+Energy_3_TotalMes = []
+Energy_4_TotalMes = []
+Energy_5_TotalMes = []
+Energy_6_TotalMes = []
+Energy_7_TotalMes = []
+Energy_8_TotalMes = []
+Energy_9_TotalMes = []
 def Potencias(i,Irms,Vrms,potrmsCGE):
     global vt1
     global vt2
@@ -643,13 +651,13 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==3):
+    if(TimeEnergy.minute==42):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
-            sheet20 = workbook[f"MaxHora Fase 1"]
-            sheet21 = workbook[f"MaxHora Fase 2"]
-            sheet22 = workbook[f"MaxHora Fase 3"] 
+            sheet20 = workbook[f"MaxHora Fase 1 Diario"]
+            sheet21 = workbook[f"MaxHora Fase 2 Diario"]
+            sheet22 = workbook[f"MaxHora Fase 3 Diario"] 
             datetim=datetime.datetime.now()-datetime.timedelta(minutes=3)
             dataHourFase1=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_1,5),round(OneHourEnergy_4,5),round(OneHourEnergy_7,5)]
             dataHourFase2=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_2,5),round(OneHourEnergy_5,5),round(OneHourEnergy_8,5)]
@@ -657,8 +665,11 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
+            if(TimeEnergy.hour==20 and TimeEnergy.minute==42):
                 print("Entrando a GRAPH EXCEL")
+                sheet23 = workbook[f"MaxHora Fase 1 Diario"]
+                sheet24 = workbook[f"MaxHora Fase 2 Diario"]
+                sheet25 = workbook[f"MaxHora Fase 3 Diario"] 
                 ##Fase 1
                 chart = BarChart()
                 chart.title = "Grafico Energias Fase 1"
@@ -710,8 +721,94 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 chart3.set_categories(cats3)
                 print("Graficando Fase 3")
                 sheet22.add_chart(chart3, f"F1") 
-    
-            
+                
+                dia=date.today()
+                dia=str(dia)-timedelta(1)
+                x=0
+                for f in os.listdir('/home/pi/Desktop/Ser-Raspberry/'):
+                    if(dia[5:7]==f[5:7]):
+                        x = x+1
+                        #print(f)  
+                        workbook=openpyxl.load_workbook(filename = f'{f}')
+                        try:
+                            
+                            sheet1 = workbook[f"REDCompañia-Fase-1"]
+                            sheet2 = workbook[f"REDCompañia-Fase-2"]
+                            sheet3 = workbook[f"REDCompañia-Fase-3"]
+                            sheet4 = workbook[f"CentralFotovoltaica-Fase-1"]
+                            sheet5 = workbook[f"CentralFotovoltaica-Fase-2"]
+                            sheet6 = workbook[f"CentralFotovoltaica-Fase-3"]
+                            sheet7 = workbook[f"ConsumoCliente-Fase-1"]
+                            sheet8 = workbook[f"ConsumoCliente-Fase-2"]
+                            sheet9 = workbook[f"ConsumoCliente-Fase-3"]
+                            LargeSheet11=len(sheet1["FP"])
+                            LargeSheet21=len(sheet2["FP"])
+                            LargeSheet31=len(sheet3["FP"])
+                            LargeSheet41=len(sheet4["FP"])
+                            LargeSheet51=len(sheet5["FP"])
+                            LargeSheet61=len(sheet6["FP"])
+                            LargeSheet71=len(sheet7["FP"])
+                            LargeSheet81=len(sheet8["FP"])
+                            LargeSheet91=len(sheet9["FP"])
+                            Energy_1 = float(sheet1[f'm{LargeSheet11}'].value)
+                            Energy_2 = float(sheet2[f'm{LargeSheet21}'].value)
+                            Energy_3 = float(sheet3[f'm{LargeSheet31}'].value)
+                            Energy_4 = float(sheet4[f'm{LargeSheet41}'].value)
+                            Energy_5 = float(sheet5[f'm{LargeSheet51}'].value)
+                            Energy_6 = float(sheet6[f'm{LargeSheet61}'].value)
+                            Energy_7 = float(sheet7[f'm{LargeSheet71}'].value)
+                            Energy_8 = float(sheet8[f'm{LargeSheet81}'].value)
+                            Energy_9 = float(sheet9[f'm{LargeSheet91}'].value)   
+                            Energy_1_TotalMes.append(Energy_1)
+                            Energy_2_TotalMes.append(Energy_2)
+                            Energy_3_TotalMes.append(Energy_3)
+                            Energy_4_TotalMes.append(Energy_4)
+                            Energy_5_TotalMes.append(Energy_5)
+                            Energy_6_TotalMes.append(Energy_6)
+                            Energy_7_TotalMes.append(Energy_7)
+                            Energy_8_TotalMes.append(Energy_8)
+                            Energy_9_TotalMes.append(Energy_9)
+                            print(f)
+                        except:
+                            continue
+                Suma_Mes_1=np.sum(Energy_1_TotalMes)
+                Suma_Mes_2=np.sum(Energy_2_TotalMes)
+                Suma_Mes_3=np.sum(Energy_3_TotalMes)
+                Suma_Mes_4=np.sum(Energy_4_TotalMes)
+                Suma_Mes_5=np.sum(Energy_5_TotalMes)
+                Suma_Mes_6=np.sum(Energy_6_TotalMes)
+                Suma_Mes_7=np.sum(Energy_7_TotalMes)
+                Suma_Mes_8=np.sum(Energy_8_TotalMes)
+                Suma_Mes_9=np.sum(Energy_9_TotalMes)
+                 
+                sheet23['E1'] = 'Acumulado Energia Mes REDCompañia-Fase-1'  
+                sheet23['F1'] = 'Acumulado Energia REDCompañia-Fase-2'
+                sheet23['G1'] = 'Acumulado Energia REDCompañia-Fase-3'
+                sheet24['E1'] = 'Acumulado Energia CentralFotovoltaica-Fase-1'
+                sheet24['F1'] = 'Acumulado Energia CentralFotovoltaica-Fase-2'
+                sheet24['G1'] = 'Acumulado Energia CentralFotovoltaica-Fase-3'
+                sheet25['E1'] = 'Acumulado Energia ConsumoCliente-Fase-1'
+                sheet25['F1'] = 'Acumulado Energia ConsumoCliente-Fase-2'
+                sheet25['G1'] = 'Acumulado Energia ConsumoCliente-Fase-3'
+                
+                sheet23['E2'] = Suma_Mes_1
+                sheet23['F2'] = Suma_Mes_2
+                sheet23['G2'] = Suma_Mes_3
+                sheet24['E2'] = Suma_Mes_4
+                sheet24['F2'] = Suma_Mes_5
+                sheet24['G2'] = Suma_Mes_6
+                sheet25['E2'] = Suma_Mes_7
+                sheet25['F2'] = Suma_Mes_8
+                sheet25['G2'] = Suma_Mes_9
+                Energy_1_TotalMes = []
+                Energy_2_TotalMes = []
+                Energy_3_TotalMes = []
+                Energy_4_TotalMes = []
+                Energy_5_TotalMes = []
+                Energy_6_TotalMes = []
+                Energy_7_TotalMes = []
+                Energy_8_TotalMes = []
+                Energy_9_TotalMes = []
             workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
             print("Enviando Hora Max Energia 1")
@@ -3503,16 +3600,21 @@ def excelcreate():
     book = Workbook()
     dest_filename = f'{exceltime}.xlsx'
     #sheet1 = book.active
-    sheet1  = book.create_sheet("Var Dispositivos")
-    sheet2 = book.create_sheet(f"Mean-{k1}-{f1}")
-    sheet3 = book.create_sheet(f"Mean-{k1}-{f2}")
-    sheet4 = book.create_sheet(f"Mean-{k1}-{f3}")
-    sheet5 = book.create_sheet(f"Mean-{k2}-{f1}")
-    sheet6 = book.create_sheet(f"Mean-{k2}-{f2}")
-    sheet7 = book.create_sheet(f"Mean-{k2}-{f3}")
-    sheet8 = book.create_sheet(f"Mean-{k3}-{f1}")
-    sheet9 = book.create_sheet(f"Mean-{k3}-{f2}")
-    sheet10 = book.create_sheet(f"Mean-{k3}-{f3}")
+    sheet20 = book.create_sheet(f"MaxHora Fase 1 Diario") 
+    sheet21 = book.create_sheet(f"MaxHora Fase 2 Diario") 
+    sheet22 = book.create_sheet(f"MaxHora Fase 3 Diario") 
+    sheet23 = book.create_sheet(f"MaxHora Fase 1 Mensual") 
+    sheet24 = book.create_sheet(f"MaxHora Fase 2 Mensual") 
+    sheet25 = book.create_sheet(f"MaxHora Fase 3 Mensual") 
+    sheet2 = book.create_sheet(f"15Min-{k1}-{f1}")
+    sheet3 = book.create_sheet(f"15Min-{k1}-{f2}")
+    sheet4 = book.create_sheet(f"15Min-{k1}-{f3}")
+    sheet5 = book.create_sheet(f"15Min-{k2}-{f1}")
+    sheet6 = book.create_sheet(f"15Min-{k2}-{f2}")
+    sheet7 = book.create_sheet(f"15Min-{k2}-{f3}")
+    sheet8 = book.create_sheet(f"15Min-{k3}-{f1}")
+    sheet9 = book.create_sheet(f"15Min-{k3}-{f2}")
+    sheet10 = book.create_sheet(f"15Min-{k3}-{f3}")
     sheet11 = book.create_sheet(f"{k1}-{f1}") 
     sheet12 = book.create_sheet(f"{k1}-{f2}") 
     sheet13 = book.create_sheet(f"{k1}-{f3}") 
@@ -3522,19 +3624,26 @@ def excelcreate():
     sheet17 = book.create_sheet(f"{k3}-{f1}") 
     sheet18 = book.create_sheet(f"{k3}-{f2}") 
     sheet19 = book.create_sheet(f"{k3}-{f3}") 
-    sheet20 = book.create_sheet(f"MaxHora Fase 1") 
-    sheet21 = book.create_sheet(f"MaxHora Fase 2") 
-    sheet22 = book.create_sheet(f"MaxHora Fase 3") 
-    headings0 = ['Fecha y Hora'] + list(['T° Raspberry','Uso CPU %','RAM2','T° ESP32'])
+    sheet1  = book.create_sheet("Var Dispositivos")
+    headings0 = ['Fecha y Hora'] + list(['T° Raspberry','Uso CPU %','RAM','T° ESP32'])
     headings=['Fecha y Hora'] + list(['Max Voltage','Mean Voltage','Min Voltage', 'Max Current','Mean Current','Min Current','Max Active Power','Mean Active Power','Mean Active Power','Max Reactive Power','Mean Reactive Power','Min Reactive Power','Max Aparent Power','Mean Aparent Power','Min Aparent Power','Max FPReact ','Mean FPReact','Min FPReact','Max FPInduct','Mean FPInduct','Min FPInduct','Max FDVoltage','Mean FDVoltage','Min FDVoltage','Max FDCurrent','Mean FDCurrent','Min FDCurrent','Max DATVoltage','Mean DATVoltage','Min DATVoltage','Max DATCurrent','Mean DATCurrent','Min DATCurrent','OnehourEnergy','Energy'])
     headings2=['Fecha y Hora'] + list(['Voltage', 'Current','Active Power','Reactive Power','Aparent Power','FP','FDVoltage','FDCurrent','DATVoltage','DATCurrent','cos(phi)','Energy','Hour Energy'])
     headings3=['Fecha y Hora'] + list(['Voltage', 'Current','Power','Energy','Hour Energy'])
     headings4=['Fecha y Hora'] + list(['Max Voltage', 'Mean Voltage', 'Min Voltage', 'Max Current','Mean Current', 'Min Current','Max Power','Power Mean', 'Power','Total Energy','Energy acumulada en 15'])
     headings5 = ['Fecha y Hora'] + list([f"{k1}-{f1}",f"{k1}-{f2}",f"{k1}-{f3}",f"{k2}-{f1}",f"{k2}-{f2}",f"{k2}-{f3}",f"{k3}-{f1}",f"{k3}-{f2}",f"{k3}-{f3}"])
-    headingsFase1=list(['Hora','Energia-Fase-1-REDCompañia', 'Energia-Fase-1-CentralFotovoltaica','Energia-Fase-1-ConsumoCliente'])
-    headingsFase2=list(['Hora','Energia-Fase-2-REDCompañia', 'Energia-Fase-2-CentralFotovoltaica','Energia-Fase-2-ConsumoCliente'])
-    headingsFase3=list(['Hora','Energia-Fase-3-REDCompañia', 'Energia-Fase-3-CentralFotovoltaica','Energia-Fase-3-ConsumoCliente'])
+    headingsFase1=list(['Hora','Energia-Fase-1-REDCompañia-Diario', 'Energia-Fase-1-CentralFotovoltaica-Diario','Energia-Fase-1-ConsumoCliente-Diario'])
+    headingsFase2=list(['Hora','Energia-Fase-2-REDCompañia-Diario', 'Energia-Fase-2-CentralFotovoltaica-Diario','Energia-Fase-2-ConsumoCliente-Diario'])
+    headingsFase3=list(['Hora','Energia-Fase-3-REDCompañia-Diario', 'Energia-Fase-3-CentralFotovoltaica-Diario','Energia-Fase-3-ConsumoCliente-Diario'])
+    headingsFase1_Mensual=list(['Hora','Energia-Fase-1-REDCompañia-Mensual', 'Energia-Fase-1-CentralFotovoltaica-Mensual','Energia-Fase-1-ConsumoCliente-Mensual'])
+    headingsFase2_Mensual=list(['Hora','Energia-Fase-2-REDCompañia-Mensual', 'Energia-Fase-2-CentralFotovoltaica-Mensual','Energia-Fase-2-ConsumoCliente-Mensual'])
+    headingsFase3_Mensual=list(['Hora','Energia-Fase-3-REDCompañia-Mensual', 'Energia-Fase-3-CentralFotovoltaica-Mensual','Energia-Fase-3-ConsumoCliente-Mensual'])
     ceros=list([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+    sheet20.append(headingsFase1)
+    sheet21.append(headingsFase2)
+    sheet22.append(headingsFase3)
+    sheet23.append(headingsFase1_Mensual)
+    sheet24.append(headingsFase2_Mensual)
+    sheet25.append(headingsFase3_Mensual)
     sheet1.append(headings0)
     sheet2.append(headings)
     sheet3.append(headings)
@@ -3554,9 +3663,6 @@ def excelcreate():
     sheet17.append(headings2)
     sheet18.append(headings2)
     sheet19.append(headings2)
-    sheet20.append(headingsFase1)
-    sheet21.append(headingsFase2)
-    sheet22.append(headingsFase3)
     sheet1.append(list([0,0,0,0,0]))
     sheet2.append(ceros)
     sheet3.append(ceros)
