@@ -643,7 +643,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==57):
+    if(TimeEnergy.minute==8):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -657,7 +657,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==12 and TimeEnergy.minute==57):
+            if(TimeEnergy.hour==13 and TimeEnergy.minute==8):
                 print("Entrando a GRAPH EXCEL")
                 sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
                 sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
@@ -730,7 +730,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 for f in os.listdir('/home/pi/Desktop/Ser-Raspberry/'):
                     if(dia[5:7]==f[5:7]):
                         x = x+1
-                        #print(f)  
+                        print(f)  
                         workbook=openpyxl.load_workbook(filename = f'{f}')
                         try:
                             
