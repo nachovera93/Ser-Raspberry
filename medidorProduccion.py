@@ -643,7 +643,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==38):
+    if(TimeEnergy.minute==54):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -657,7 +657,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==12 and TimeEnergy.minute==38):
+            if(TimeEnergy.hour==12 and TimeEnergy.minute==54):
                 print("Entrando a GRAPH EXCEL")
                 sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
                 sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
@@ -773,6 +773,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             print(f)
                         except:
                             continue
+                workbook=openpyxl.load_workbook(filename = dest_filename)
+                sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
+                sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
+                sheet25 = workbook[f"MaxHora Fase 3 Mensual"] 
                 Suma_Mes_1=np.sum(Energy_1_TotalMes)
                 Suma_Mes_2=np.sum(Energy_2_TotalMes)
                 Suma_Mes_3=np.sum(Energy_3_TotalMes)
@@ -782,7 +786,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 Suma_Mes_7=np.sum(Energy_7_TotalMes)
                 Suma_Mes_8=np.sum(Energy_8_TotalMes)
                 Suma_Mes_9=np.sum(Energy_9_TotalMes)
-                 
+                print(f"Suma Mes {Suma_Mes_1} {Suma_Mes_2} {Suma_Mes_3} {Suma_Mes_4} {Suma_Mes_5}")
                 sheet23['E1'] = 'Acumulado Energia Mes REDCompañia-Fase-1'  
                 sheet23['F1'] = 'Acumulado Energia REDCompañia-Fase-2'
                 sheet23['G1'] = 'Acumulado Energia REDCompañia-Fase-3'
@@ -802,6 +806,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 sheet25['E2'] = Suma_Mes_7
                 sheet25['F2'] = Suma_Mes_8
                 sheet25['G2'] = Suma_Mes_9
+                workbook.save(filename = dest_filename)
                 Energy_1_TotalMes = []
                 Energy_2_TotalMes = []
                 Energy_3_TotalMes = []
