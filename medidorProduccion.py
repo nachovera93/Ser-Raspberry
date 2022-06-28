@@ -1365,7 +1365,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_1.insert(35,Energy)
                     data15_1.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet2 = workbook[f"Mean-{k}-{f}"]
+                    sheet2 = workbook[f"15Min-{k}-{f}"]
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
                     optionsave=1
@@ -1630,7 +1630,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_2.insert(35,Energy)
                     data15_2.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet3 = workbook[f"Mean-{k}-{f}"]
+                    sheet3 = workbook[f"15Min-{k}-{f}"]
                     sheet3.append(list(data15_2))
                     print(f'Data 2: Guardando Promedios')
                     optionsave=1
@@ -1892,7 +1892,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_3.insert(35,Energy)
                     data15_3.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet4 = workbook[f"Mean-{k}-{f}"]
+                    sheet4 = workbook[f"15Min-{k}-{f}"]
                     sheet4.append(list(data15_3))
                     print(f'Data 3: Guardando Promedios')
                     optionsave=1
@@ -2153,7 +2153,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_4.insert(35,Energy)
                     data15_4.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet5 = workbook[f"Mean-{k}-{f}"]
+                    sheet5 = workbook[f"15Min-{k}-{f}"]
                     sheet5.append(list(data15_4))
                     print(f'Data 4: Guardando Promedios')
                     optionsave=1
@@ -2413,7 +2413,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_5.insert(35,Energy)
                     data15_5.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet6 = workbook[f"Mean-{k}-{f}"]
+                    sheet6 = workbook[f"15Min-{k}-{f}"]
                     sheet6.append(list(data15_5))
                     print(f'Data 5: Guardando Promedios')
                     optionsave=1
@@ -2674,7 +2674,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_7.insert(35,Energy)
                     data15_7.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet8 = workbook[f"Mean-{k}-{f}"]
+                    sheet8 = workbook[f"15Min-{k}-{f}"]
                     sheet8.append(list(data15_7))
                     print(f'Data 7: Guardando Promedios')
                     optionsave=1
@@ -2934,7 +2934,7 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_8.insert(35,Energy)
                     data15_8.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet9 = workbook[f"Mean-{k}-{f}"]
+                    sheet9 = workbook[f"15Min-{k}-{f}"]
                     sheet9.append(list(data15_8))
                     print(f'Data 8: Guardando Promedios')
                     optionsave=1
@@ -3193,7 +3193,7 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_6.insert(35,Energy)
                     data15_6.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet7 = workbook[f"Mean-{k}-{f}"]
+                    sheet7 = workbook[f"15Min-{k}-{f}"]
                     sheet7.append(list(data15_6))
                     print(f'Data 6: Guardando Promedios')
                     optionsave=1
@@ -3454,7 +3454,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_9.insert(35,Energy)
                     data15_9.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
-                    sheet10 = workbook[f"Mean-{k}-{f}"] 
+                    sheet10 = workbook[f"15Min-{k}-{f}"] 
                     sheet10.append(list(data15_9))
                     print(f'Data 9: Guardando Promedios')
                     optionsave=1
