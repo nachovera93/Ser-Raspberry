@@ -643,7 +643,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==49):
+    if(TimeEnergy.minute==5):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -657,7 +657,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==17 and TimeEnergy.minute==49):
+            if(TimeEnergy.hour==18 and TimeEnergy.minute==5):
                 print("Entrando a GRAPH EXCEL")
                 sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
                 sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
@@ -732,7 +732,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                         x = x+1 
                         workbook=openpyxl.load_workbook(filename = f'{f}')
                         try:
-                            
+                            sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
+                            sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
+                            sheet25 = workbook[f"MaxHora Fase 3 Mensual"] 
                             sheet1 = workbook[f"REDCompañia-Fase-1"]
                             sheet2 = workbook[f"REDCompañia-Fase-2"]
                             sheet3 = workbook[f"REDCompañia-Fase-3"]
