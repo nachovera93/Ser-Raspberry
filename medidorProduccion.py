@@ -643,7 +643,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==40):
+    if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -657,7 +657,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==19 and TimeEnergy.minute==40):
+            if(TimeEnergy.hour==20 and TimeEnergy.minute==3):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -735,8 +735,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                     if(dia[5:7]==f[5:7]):
                         x = x+1 
                         print(f)
-                        workbook=openpyxl.load_workbook(filename = f'{f}')
                         try:
+                            workbook=openpyxl.load_workbook(filename = f'{f}')
                             sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
                             sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
                             sheet25 = workbook[f"MaxHora Fase 3 Mensual"] 
@@ -783,10 +783,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             Energy_8_TotalMes.append(Energy_8)
                             Energy_9_TotalMes.append(Energy_9)
                             print(f)
-                            
+                            workbook.save(filename = f'{f}')
                         except:
                             continue
-                        workbook.save(filename = f'{f}')
+                        
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
                 sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
