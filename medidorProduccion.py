@@ -643,7 +643,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==5):
+    if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -657,7 +657,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==18 and TimeEnergy.minute==5):
+            if(TimeEnergy.hour==19 and TimeEnergy.minute==5):
                 print("Entrando a GRAPH EXCEL")
                 sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
                 sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
@@ -796,25 +796,25 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 Suma_Mes_8=np.sum(Energy_8_TotalMes)
                 Suma_Mes_9=np.sum(Energy_9_TotalMes)
                 print(f"Suma Mes {Suma_Mes_1} {Suma_Mes_2} {Suma_Mes_3} {Suma_Mes_4} {Suma_Mes_5}")
-                sheet23['E1'] = 'Acumulado Energia Mes REDCompañia-Fase-1'  
-                sheet23['F1'] = 'Acumulado Energia REDCompañia-Fase-2'
-                sheet23['G1'] = 'Acumulado Energia REDCompañia-Fase-3'
-                sheet24['E1'] = 'Acumulado Energia CentralFotovoltaica-Fase-1'
-                sheet24['F1'] = 'Acumulado Energia CentralFotovoltaica-Fase-2'
-                sheet24['G1'] = 'Acumulado Energia CentralFotovoltaica-Fase-3'
-                sheet25['E1'] = 'Acumulado Energia ConsumoCliente-Fase-1'
-                sheet25['F1'] = 'Acumulado Energia ConsumoCliente-Fase-2'
-                sheet25['G1'] = 'Acumulado Energia ConsumoCliente-Fase-3'
+                sheet23['F1'] = 'Acumulado Energia Mes REDCompañia-Fase-1'  
+                sheet23['G1'] = 'Acumulado Energia REDCompañia-Fase-2'
+                sheet23['H1'] = 'Acumulado Energia REDCompañia-Fase-3'
+                sheet24['F1'] = 'Acumulado Energia CentralFotovoltaica-Fase-1'
+                sheet24['G1'] = 'Acumulado Energia CentralFotovoltaica-Fase-2'
+                sheet24['H1'] = 'Acumulado Energia CentralFotovoltaica-Fase-3'
+                sheet25['F1'] = 'Acumulado Energia ConsumoCliente-Fase-1'
+                sheet25['G1'] = 'Acumulado Energia ConsumoCliente-Fase-2'
+                sheet25['H1'] = 'Acumulado Energia ConsumoCliente-Fase-3'
                 
-                sheet23['E2'] = Suma_Mes_1
-                sheet23['F2'] = Suma_Mes_2
-                sheet23['G2'] = Suma_Mes_3
-                sheet24['E2'] = Suma_Mes_4
-                sheet24['F2'] = Suma_Mes_5
-                sheet24['G2'] = Suma_Mes_6
-                sheet25['E2'] = Suma_Mes_7
-                sheet25['F2'] = Suma_Mes_8
-                sheet25['G2'] = Suma_Mes_9
+                sheet23['F2'] = Suma_Mes_1
+                sheet23['G2'] = Suma_Mes_2
+                sheet23['H2'] = Suma_Mes_3
+                sheet24['F2'] = Suma_Mes_4
+                sheet24['G2'] = Suma_Mes_5
+                sheet24['H2'] = Suma_Mes_6
+                sheet25['F2'] = Suma_Mes_7
+                sheet25['G2'] = Suma_Mes_8
+                sheet25['H2'] = Suma_Mes_9
                 workbook.save(filename = dest_filename)
                 Energy_1_TotalMes = []
                 Energy_2_TotalMes = []
