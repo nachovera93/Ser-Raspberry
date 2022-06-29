@@ -643,7 +643,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==3):
+    if(TimeEnergy.minute==29):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -657,7 +657,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==20 and TimeEnergy.minute==3):
+            if(TimeEnergy.hour==20 and TimeEnergy.minute==29):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -737,9 +737,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                         print(f)
                         try:
                             workbook=openpyxl.load_workbook(filename = f'{f}')
-                            sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
-                            sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
-                            sheet25 = workbook[f"MaxHora Fase 3 Mensual"] 
                             sheet1 = workbook[f"REDCompañia-Fase-1"]
                             sheet2 = workbook[f"REDCompañia-Fase-2"]
                             sheet3 = workbook[f"REDCompañia-Fase-3"]
@@ -770,6 +767,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             dataMonthFase1=[f'{f[0:10]}',round(Energy_1,5),round(Energy_2,5),round(Energy_3,5)] 
                             dataMonthFase2=[f'{f[0:10]}',round(Energy_4,5),round(Energy_5,5),round(Energy_6,5)] 
                             dataMonthFase3=[f'{f[0:10]}',round(Energy_7,5),round(Energy_8,5),round(Energy_9,5)] 
+                            workbook2=openpyxl.load_workbook(filename = dest_filename)
+                            sheet23 = workbook2[f"MaxHora Fase 1 Mensual"]
+                            sheet24 = workbook2[f"MaxHora Fase 2 Mensual"]
+                            sheet25 = workbook2[f"MaxHora Fase 3 Mensual"] 
                             sheet23.append(list(dataMonthFase1))
                             sheet24.append(list(dataMonthFase2))
                             sheet25.append(list(dataMonthFase3))
@@ -784,6 +785,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             Energy_9_TotalMes.append(Energy_9)
                             print(f)
                             workbook.save(filename = f'{f}')
+                            workbook2.save(filename = dest_filename)
                         except:
                             continue
                         
@@ -821,15 +823,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 sheet25['G2'] = Suma_Mes_8
                 sheet25['H2'] = Suma_Mes_9
                 workbook.save(filename = dest_filename)
-                Energy_1_TotalMes = []
-                Energy_2_TotalMes = []
-                Energy_3_TotalMes = []
-                Energy_4_TotalMes = []
-                Energy_5_TotalMes = []
-                Energy_6_TotalMes = []
-                Energy_7_TotalMes = []
-                Energy_8_TotalMes = []
-                Energy_9_TotalMes = []
+                
             workbook.save(filename = dest_filename)
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
             print("Enviando Hora Max Energia 1")
