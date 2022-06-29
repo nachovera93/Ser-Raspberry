@@ -1138,7 +1138,7 @@ def SendDataToBroker(q,k,f,**kwargs):
         def publish(client): 
             g=0
             global vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt,vt15
-            print(len(kwargs.values()))
+            #print(len(kwargs.values()))
             if(len(kwargs.values())==4):
                 if(q==1):
                     vt = vt1 #0 // 10
@@ -1194,7 +1194,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                 #print(f'{key}-{f}-{k}')
                 for i in data["variables"]:
                     if(i["variableFullName"]==f'{key}-{f}-{k}'):
-                        print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
+                        #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                         freq = i["variableSendFreq"]  
                         #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
@@ -3938,7 +3938,7 @@ try:
 finally:
     f.close()
 
-CurrentCal=0.91
+CurrentCal=0.92
 Vrms=0.0
 Irms=0.0
 BufferVoltaje_1=[]
