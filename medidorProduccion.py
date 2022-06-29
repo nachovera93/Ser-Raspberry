@@ -4149,7 +4149,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if(len(BufferCurrent_3)>=5 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_3)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            #print(f'Current cal: {CurrentCal}')
+            print(f'Current cal 4: {MediaBufferCurrent}')
             print(f'Irms {i}: {Irms}')
             #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
@@ -4162,7 +4162,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if(len(BufferCurrent_4)>=5 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_4)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            #print(f'Current cal: {CurrentCal}')
+            print(f'Current cal 4: {MediaBufferCurrent}')
             print(f'Irms {i}: {Irms}')
             #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
