@@ -637,7 +637,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==6):
+    if(TimeEnergy.minute==52):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -651,7 +651,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==14 and TimeEnergy.minute==6):
+            if(TimeEnergy.hour==14 and TimeEnergy.minute==52):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -765,24 +765,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             sheet23 = workbook2[f"Energia Fase 1 Mensual"]
                             sheet24 = workbook2[f"Energia Fase 2 Mensual"]
                             sheet25 = workbook2[f"Energia Fase 3 Mensual"] 
-                            sheet23.append(list(dataMonthFase1))
-                            chart = BarChart()
-                            chart.title = "Grafico Energias Mensuales Fase 1"
-                            chart.style = 13
-                            chart.x_axis.title = 'Fecha'
-                            chart.y_axis.title = 'KWh'
-                            chart.type = "col"
-                            chart.height = 10
-                            chart.width = 30
-                            Pos=len(sheet23['A'])
-                            print(f' Pos A :{Pos}')
-                            cats = Reference(sheet23, min_col=1, min_row=2, max_row=Pos+1)
-                            data = Reference(sheet23, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
-                            chart.add_data(data, titles_from_data=True)
-                            chart.set_categories(cats)
-                            print("Graficando Fase 1")
-                            sheet23.add_chart(chart, f"F1")
-                            
+                            sheet23.append(list(dataMonthFase1))        
                             sheet24.append(list(dataMonthFase2))
                             sheet25.append(list(dataMonthFase3))
                             Energy_1_TotalMes.append(Energy_1)
@@ -799,7 +782,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             workbook2.save(filename = dest_filename)
                         except:
                             continue
-                        
+                       
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet23 = workbook[f"Energia Fase 1 Mensual"]
                 sheet24 = workbook[f"Energia Fase 2 Mensual"]
@@ -813,6 +796,56 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 Suma_Mes_7=np.sum(Energy_7_TotalMes)
                 Suma_Mes_8=np.sum(Energy_8_TotalMes)
                 Suma_Mes_9=np.sum(Energy_9_TotalMes)
+                
+                chart = BarChart()
+                chart.title = "Grafico Energias Mensuales Fase 1"
+                chart.style = 13
+                chart.x_axis.title = 'Fecha'
+                chart.y_axis.title = 'KWh'
+                chart.type = "col"
+                chart.height = 10
+                chart.width = 30
+                Pos=len(sheet23['A'])
+                print(f' Pos A :{Pos}')
+                cats = Reference(sheet23, min_col=1, min_row=2, max_row=Pos+1)
+                data = Reference(sheet23, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
+                chart.add_data(data, titles_from_data=True)
+                chart.set_categories(cats)
+                print("Graficando Fase 1")
+                sheet23.add_chart(chart, f"I2")
+                
+                chart2 = BarChart()
+                chart2.title = "Grafico Energias Mensuales Fase 2"
+                chart2.style = 13
+                chart2.x_axis.title = 'Fecha'
+                chart2.y_axis.title = 'KWh'
+                chart2.type = "col"
+                chart2.height = 10
+                chart2.width = 30
+                Pos2=len(sheet24['A'])
+                cats2 = Reference(sheet24, min_col=1, min_row=2, max_row=Pos2+1)
+                data2 = Reference(sheet24, min_col=2, min_row=1, max_col=4, max_row=Pos2+1)
+                chart2.add_data(data2, titles_from_data=True)
+                chart2.set_categories(cats2)
+                print("Graficando Fase 2")
+                sheet21.add_chart(chart2, f"I2")
+                
+                chart3 = BarChart()
+                chart3.title = "Grafico Energias Fase 3"
+                chart3.style = 12
+                chart3.x_axis.title = 'Fecha'
+                chart3.y_axis.title = 'KWh'
+                chart3.type = "col"
+                chart3.height = 10
+                chart3.width = 30
+                Pos3=len(sheet25['A'])
+                cats3 = Reference(sheet25, min_col=1, min_row=2, max_row=Pos3+1)
+                data3 = Reference(sheet25, min_col=2, min_row=1, max_col=4, max_row=Pos3+1)
+                chart3.add_data(data3, titles_from_data=True)
+                chart3.set_categories(cats3)
+                print("Graficando Fase 3")
+                sheet22.add_chart(chart3, f"I2") 
+                
                 print(f"Suma Mes {Suma_Mes_1} {Suma_Mes_2} {Suma_Mes_3} {Suma_Mes_4} {Suma_Mes_5}")
                 sheet23['F1'] = 'Acumulado Energia Mes REDCompañia-Fase-1'  
                 sheet23['G1'] = 'Acumulado Energia REDCompañia-Fase-2'
