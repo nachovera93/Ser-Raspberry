@@ -657,9 +657,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
                 sheet21 = workbook[f"MaxHora Fase 2 Diario"]
                 sheet22 = workbook[f"MaxHora Fase 3 Diario"] 
-                sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
-                sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
-                sheet25 = workbook[f"MaxHora Fase 3 Mensual"] 
+                sheet23 = workbook[f"Energia Fase 1 Mensual"]
+                sheet24 = workbook[f"Energia Fase 2 Mensual"]
+                sheet25 = workbook[f"Energia Fase 3 Mensual"] 
                 ##Fase 1
                 chart = BarChart()
                 chart.title = "Grafico Energias Fase 1"
