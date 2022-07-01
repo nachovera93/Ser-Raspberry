@@ -637,7 +637,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==26):
+    if(TimeEnergy.minute==6):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -651,15 +651,15 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==13 and TimeEnergy.minute==26):
+            if(TimeEnergy.hour==14 and TimeEnergy.minute==6):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
                 sheet21 = workbook[f"MaxHora Fase 2 Diario"]
                 sheet22 = workbook[f"MaxHora Fase 3 Diario"] 
-                sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
-                sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
-                sheet25 = workbook[f"MaxHora Fase 3 Mensual"] 
+                sheet23 = workbook[f"Energia Fase 1 Mensual"]
+                sheet24 = workbook[f"Energia Fase 2 Mensual"]
+                sheet25 = workbook[f"Energia Fase 3 Mensual"] 
                 ##Fase 1
                 chart = BarChart()
                 chart.title = "Grafico Energias Fase 1"
