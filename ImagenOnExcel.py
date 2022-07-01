@@ -110,9 +110,16 @@ Energy_6_TotalMes = []
 Energy_7_TotalMes = []
 Energy_8_TotalMes = []
 Energy_9_TotalMes = []
+ExcelDia=[]
 #sheet22.delete_rows(11)
 ejemplo_dir = '/Users/ignaciovera/Desktop/Codigos/SER-Raspberry/Ser-Raspberry/'
 x=0
+for f in os.listdir('/Users/ignaciovera/Desktop/Codigos/SER-Raspberry/Ser-Raspberry/'):
+    if(dia[5:7]==f[5:7]):
+        ExcelDia.append(f)
+ExcelDia= sorted(ExcelDia)
+print(ExcelDia)
+""" 
 for f in os.listdir('/Users/ignaciovera/Desktop/Codigos/SER-Raspberry/Ser-Raspberry/'):
     if(dia[5:7]==f[5:7]):
         x = x+1
@@ -198,7 +205,8 @@ sheet23['G2'] = Suma_Mes_6
 sheet24['E2'] = Suma_Mes_7
 sheet24['F2'] = Suma_Mes_8
 sheet24['G2'] = Suma_Mes_9
-workbook2.save("pie.xlsx")
+workbook2.save("pie.xlsx"
+"""
 """
 from ast import For
 import numpy as np
