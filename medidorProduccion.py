@@ -637,7 +637,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==52):
+    if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -651,7 +651,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
-            if(TimeEnergy.hour==14 and TimeEnergy.minute==52):
+            if(TimeEnergy.hour==15 and TimeEnergy.minute==3):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -828,7 +828,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 chart2.add_data(data2, titles_from_data=True)
                 chart2.set_categories(cats2)
                 print("Graficando Fase 2")
-                sheet21.add_chart(chart2, f"I2")
+                sheet24.add_chart(chart2, f"I2")
                 
                 chart3 = BarChart()
                 chart3.title = "Grafico Energias Fase 3"
@@ -844,7 +844,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 chart3.add_data(data3, titles_from_data=True)
                 chart3.set_categories(cats3)
                 print("Graficando Fase 3")
-                sheet22.add_chart(chart3, f"I2") 
+                sheet25.add_chart(chart3, f"I2") 
                 
                 print(f"Suma Mes {Suma_Mes_1} {Suma_Mes_2} {Suma_Mes_3} {Suma_Mes_4} {Suma_Mes_5}")
                 sheet23['F1'] = 'Acumulado Energia Mes REDCompañia-Fase-1'  
