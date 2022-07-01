@@ -11,13 +11,11 @@ from openpyxl.chart import (
     ProjectedPieChart,
     Reference
 )
-from ast import For
 import xlsxwriter
 import random
 import time
 import paho.mqtt.client as mqtt
 import os
-import threading
 import datetime
 from scipy import interpolate
 from scipy.fft import fft, fftfreq
@@ -26,15 +24,12 @@ from scipy import signal
 from scipy.signal import savgol_filter
 import numpy as np
 import subprocess
-from time import sleep
-import sys
 import RPi.GPIO as GPIO
 import time
 import os
 import serial
 import openpyxl
 import smtplib, ssl
-import getpass
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email import encoders
@@ -112,7 +107,6 @@ def get_mqtt_credentials():
           s = json.dumps(data, indent=4, sort_keys=True)
           print(s)
           usernamemqtt = data["username"]
-          #print("username:",usernamemqtt)
           passwordmqtt = data["password"]
           topicmqtt = data["topic"]   #topico al que nos vamos a suscribir
           mqttopic = f"{topicmqtt}+/actdata"
@@ -768,10 +762,27 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             dataMonthFase2=[f'{f[0:10]}',round(Energy_4,5),round(Energy_5,5),round(Energy_6,5)] 
                             dataMonthFase3=[f'{f[0:10]}',round(Energy_7,5),round(Energy_8,5),round(Energy_9,5)] 
                             workbook2=openpyxl.load_workbook(filename = dest_filename)
-                            sheet23 = workbook2[f"MaxHora Fase 1 Mensual"]
-                            sheet24 = workbook2[f"MaxHora Fase 2 Mensual"]
-                            sheet25 = workbook2[f"MaxHora Fase 3 Mensual"] 
+                            sheet23 = workbook2[f"Energia Fase 1 Mensual"]
+                            sheet24 = workbook2[f"Energia Fase 2 Mensual"]
+                            sheet25 = workbook2[f"Energia Fase 3 Mensual"] 
                             sheet23.append(list(dataMonthFase1))
+                            chart = BarChart()
+                            chart.title = "Grafico Energias Mensuales Fase 1"
+                            chart.style = 13
+                            chart.x_axis.title = 'Fecha'
+                            chart.y_axis.title = 'KWh'
+                            chart.type = "col"
+                            chart.height = 10
+                            chart.width = 30
+                            Pos=len(sheet23['A'])
+                            print(f' Pos A :{Pos}')
+                            cats = Reference(sheet23, min_col=1, min_row=2, max_row=Pos+1)
+                            data = Reference(sheet23, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
+                            chart.add_data(data, titles_from_data=True)
+                            chart.set_categories(cats)
+                            print("Graficando Fase 1")
+                            sheet23.add_chart(chart, f"F1")
+                            
                             sheet24.append(list(dataMonthFase2))
                             sheet25.append(list(dataMonthFase3))
                             Energy_1_TotalMes.append(Energy_1)
@@ -790,9 +801,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             continue
                         
                 workbook=openpyxl.load_workbook(filename = dest_filename)
-                sheet23 = workbook[f"MaxHora Fase 1 Mensual"]
-                sheet24 = workbook[f"MaxHora Fase 2 Mensual"]
-                sheet25 = workbook[f"MaxHora Fase 3 Mensual"] 
+                sheet23 = workbook[f"Energia Fase 1 Mensual"]
+                sheet24 = workbook[f"Energia Fase 2 Mensual"]
+                sheet25 = workbook[f"Energia Fase 3 Mensual"] 
                 Suma_Mes_1=np.sum(Energy_1_TotalMes)
                 Suma_Mes_2=np.sum(Energy_2_TotalMes)
                 Suma_Mes_3=np.sum(Energy_3_TotalMes)
@@ -3618,9 +3629,9 @@ def excelcreate():
     sheet20 = book.create_sheet(f"MaxHora Fase 1 Diario") 
     sheet21 = book.create_sheet(f"MaxHora Fase 2 Diario") 
     sheet22 = book.create_sheet(f"MaxHora Fase 3 Diario") 
-    sheet23 = book.create_sheet(f"MaxHora Fase 1 Mensual") 
-    sheet24 = book.create_sheet(f"MaxHora Fase 2 Mensual") 
-    sheet25 = book.create_sheet(f"MaxHora Fase 3 Mensual") 
+    sheet23 = book.create_sheet(f"Energia Fase 1 Mensual") 
+    sheet24 = book.create_sheet(f"Energia Fase 2 Mensual") 
+    sheet25 = book.create_sheet(f"Energia Fase 3 Mensual") 
     sheet2 = book.create_sheet(f"15Min-{k1}-{f1}")
     sheet3 = book.create_sheet(f"15Min-{k1}-{f2}")
     sheet4 = book.create_sheet(f"15Min-{k1}-{f3}")
@@ -3649,9 +3660,9 @@ def excelcreate():
     headingsFase1=list(['Hora','Energia-Fase-1-REDCompañia-Diario', 'Energia-Fase-1-CentralFotovoltaica-Diario','Energia-Fase-1-ConsumoCliente-Diario'])
     headingsFase2=list(['Hora','Energia-Fase-2-REDCompañia-Diario', 'Energia-Fase-2-CentralFotovoltaica-Diario','Energia-Fase-2-ConsumoCliente-Diario'])
     headingsFase3=list(['Hora','Energia-Fase-3-REDCompañia-Diario', 'Energia-Fase-3-CentralFotovoltaica-Diario','Energia-Fase-3-ConsumoCliente-Diario'])
-    headingsFase1_Mensual=list(['Hora','Energia-Fase-1-REDCompañia-Mensual', 'Energia-Fase-1-CentralFotovoltaica-Mensual','Energia-Fase-1-ConsumoCliente-Mensual'])
-    headingsFase2_Mensual=list(['Hora','Energia-Fase-2-REDCompañia-Mensual', 'Energia-Fase-2-CentralFotovoltaica-Mensual','Energia-Fase-2-ConsumoCliente-Mensual'])
-    headingsFase3_Mensual=list(['Hora','Energia-Fase-3-REDCompañia-Mensual', 'Energia-Fase-3-CentralFotovoltaica-Mensual','Energia-Fase-3-ConsumoCliente-Mensual'])
+    headingsFase1_Mensual=list(['Dia','Energia-Fase-1-REDCompañia-Mensual', 'Energia-Fase-1-CentralFotovoltaica-Mensual','Energia-Fase-1-ConsumoCliente-Mensual'])
+    headingsFase2_Mensual=list(['Dia','Energia-Fase-2-REDCompañia-Mensual', 'Energia-Fase-2-CentralFotovoltaica-Mensual','Energia-Fase-2-ConsumoCliente-Mensual'])
+    headingsFase3_Mensual=list(['Dia','Energia-Fase-3-REDCompañia-Mensual', 'Energia-Fase-3-CentralFotovoltaica-Mensual','Energia-Fase-3-ConsumoCliente-Mensual'])
     ceros=list([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
     sheet20.append(headingsFase1)
     sheet21.append(headingsFase2)

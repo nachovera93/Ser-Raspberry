@@ -48,8 +48,6 @@ def get_mqtt_credentials():
           return False
     if(respuesta.status_code == 200):
           print("Mqtt Credentials Obtained Successfully :)   ")
-          #print("json: " ,resp.content)
-          #print('- ' * 20)
           my_bytes_value = respuesta.content      #Contenido entero del json
           my_new_string = my_bytes_value.decode("utf-8").replace("'", '"')
           data = json.loads(my_new_string)
@@ -67,49 +65,8 @@ def get_mqtt_credentials():
     return True
 
 
-def get_mqtt_credentials2():
-    global usernamemqtt2
-    global passwordmqtt2
-    global mqttopic2
-    global str_client_id2
-    global topicmqtt2
-    global data2
-    print("Getting MQTT Credentials from WebHook2")
-    time.sleep(2)
-    toSend2 = {"dId": dId2, "password": passw2}
-    respuesta2 = requests.post(webhook_endpoint, data=toSend2)
-
-    if(respuesta2.status_code < 0):
-          print("Error Sending Post Request ", respuesta2.status_code)
-          respuesta2.close()
-          return False
-    if(respuesta2.status_code != 200):
-          print("Error in response ", respuesta2.status_code)
-          respuesta2.close()
-          return False
-    if(respuesta2.status_code == 200):
-          print("Mqtt Credentials 2 Obtained Successfully :)   ")
-          #print("json: " ,resp.content)
-          #print('- ' * 20)
-          my_bytes_value2 = respuesta2.content      #Contenido entero del json
-          my_new_string2 = my_bytes_value2.decode("utf-8").replace("'", '"')
-          data2 = json.loads(my_new_string2)
-          s2 = json.dumps(data2, indent=4, sort_keys=True)
-          #print(s)
-          usernamemqtt2 = data2["username"]
-          #print("username:",usernamemqtt)
-          passwordmqtt2 = data2["password"]
-          topicmqtt2 = data2["topic"]   #topico al que nos vamos a suscribir
-          mqttopic2 = f"{topicmqtt}+/actdata"
-          str_client_id2 = f'device_{dId}_{random.randint(0, 9999)}'
-          #print(mqttopic)
-          respuesta2.close()
-          print("Ends mqtt credentials 2")
-    return True
-
 
 get_mqtt_credentials()
-#get_mqtt_credentials2()
    
 def on_disconnect(client, userdata, rc):
     if (rc != 0 and rc != 5):
@@ -132,27 +89,6 @@ def on_connected(client, userdata, flags, rc):
         print("Bad connection Returned code=",rc)
         client.bad_connection_flag=False
 
-def on_disconnect2(client, userdata, rc):
-    if (rc != 0 and rc != 5):
-        print("Unexpected disconnection, will auto-reconnect")
-    elif(rc==5):
-        print("Getting new credentials!")
-        get_mqtt_credentials2()
-        client2.username_pw_set(usernamemqtt2, passwordmqtt2)
-                      
-# The callback for when the client receives a CONNACK response from the server.
-def on_connected2(client, userdata, flags, rc):
-    # Subscribing in on_connect() means that if we lose the connection and
-    # reconnect then subscriptions will be renewed.
-    if rc==0:
-        client2.connected_flag=True #set flag
-        client2.subscribe(mqttopic2)
-        print("connected OK")
-        print("rc 2 =",client2.connected_flag)
-    else:
-        print("Bad connection Returned code=",rc)
-        client2.bad_connection_flag=False
-   
        
 client = mqtt.Client(str_client_id)   #Creación cliente
 client.connect(broker, port)     #Conexión al broker
@@ -160,13 +96,8 @@ client.on_disconnect = on_disconnect
 client.username_pw_set(usernamemqtt, passwordmqtt)
 client.on_connect = on_connected
 client.loop_start()
-time.sleep(5)
-#client2 = mqtt.Client(str_client_id2)   #Creación cliente
-#client2.connect(broker, port)     #Conexión al broker
-#client2.on_disconnect = on_disconnect2
-#client2.username_pw_set(usernamemqtt2, passwordmqtt2)
-#client2.on_connect = on_connected2
-#client2.loop_start()
+time.sleep(2)
+
 
 
 
@@ -191,10 +122,9 @@ x=time.time()
 
 def publish(client):
     
-        global b, c 
+        global b
         a=time.time()
         for i in data["variables"]:
-
             #    if(data["variables"][i]["variableType"]=="output"):
             #        continue
             if(i["variableFullName"]=="Voltaje"):
@@ -212,57 +142,8 @@ def publish(client):
                          print(f"Failed to send message to topic {topic1}")
         
                    
-            if(i["variableFullName"]=="Voltajeas"):
-                freq = i["variableSendFreq"]
-                if(a - c > freq):
-                     #print("varlastsend 1: ",varsLastSend[i])
-                     c=time.time()
-                     str_variable2 = i["variable"]
-                     topic2 = topicmqtt + str_variable2 + "/sdata"
-                     result = client.publish(topic2, temperature)
-                     status = result[0]
-                     if status == 0:
-                         print(f"Send temperatura: `{temperature}` to topic `{topic2}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic2}")
             
         
-        """
-        str_variable = data["variables"][0]["variable"]
-        print("data:",str_variable)
-        topic1 = topicmqtt + str_variable + "/sdata"
-        #msg=randomnum2()
-        result = client.publish(topic1, humedad)
-        #result: [0, 1]
-        status = result[0]
-        if status == 0:
-            print(f"Send `{humedad}` to topic `{topic1}`")
-        else:
-            print(f"Failed to send message to topic {topic1}")
-        """ 
-
-
-def publish2(client2):
-    
-        global z, x 
-        h=time.time()
-        for i in data2["variables"]:
-
-            #    if(data["variables"][i]["variableType"]=="output"):
-            #        continue
-            if(i["variableFullName"]=="Corriente-CGE"):
-                freq = i["variableSendFreq"]
-                if(h - z > freq):
-                     z=time.time()
-                     str_variable = i["variable"]
-                     topic = topicmqtt2 + str_variable + "/sdata"
-                     result = client2.publish(topic, humedad)
-                     status = result[0]
-                     
-                     if status == 0:
-                         print(f"Send humedad: `{humedad}` to topic `{topic}` con freq: {freq}")
-                     else:
-                         print(f"Failed to send message to topic {topic}")
        
                    
     
