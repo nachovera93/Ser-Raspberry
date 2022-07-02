@@ -1427,6 +1427,9 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet2 = workbook[f"15Min-{k}-{f}"]
                     sheet2.append(list(data15_1))
+                    print(MaxVoltage15_1)
+                    print(MaxCurrent15_1)
+                    print(data15_1)
                     print(f'Data 1: Guardando Promedios')
                     optionsave=1
                     SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_1}',VoltajePromedio=f'{MeanVoltage15_1}',VoltajeMin=f'{MinVoltage15_1}',MaxCorriente=f'{MaxCurrent15_1}',PromedioCorriente=f'{MeanCurrent15_1}',MinimoCorriente=f'{MinCurrent15_1}',PotenciaMax=f'{MaxAparentPower_1}',PromedioPotenciaAparente=f'{MeanAparentPower_1}',MinPotenciaAparente=f'{MinAparentPower_1}',Energia=f'{Energy}')
