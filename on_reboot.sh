@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#
 echo "loading virtualenvwrapper.sh..."  
 source `which virtualenvwrapper.sh`
 echo "accessing virtualenv..."
