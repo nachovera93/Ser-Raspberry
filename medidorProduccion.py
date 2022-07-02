@@ -1464,8 +1464,9 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
               
     else:
         Volt15_1.append(Vrms)
-        #print(Volt15_1)
+        print(f'Volt15_1: {Volt15_1}')
         Current15_1.append(Irms)
+        print(f'Current15_1: {Current15_1}')
         ActivePower15_1.append(ActivePower)
         ReactivePower15_1.append(ReactivePower)
         AparentPower15_1.append(AparentPower)
