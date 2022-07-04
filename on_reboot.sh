@@ -7,5 +7,5 @@ workon py3cv4
 cd /home/pi/Desktop/Ser-Raspberry
 echo "running Python script..."
 python pruebabash.py
-python medidorProduccion.py
+python3 medidorProduccion.py
 echo "script exiting..." 
