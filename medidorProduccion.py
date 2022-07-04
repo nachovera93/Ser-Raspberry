@@ -3807,40 +3807,7 @@ def AbrirExcel():
                 excelcreate()
                 print("No Existe")
     except:
-                dest_filename = f'{dia}.xlsx'
-                print("Creando Nuevo")
-                workbook=openpyxl.load_workbook(filename = dest_filename)
-                sheet11 = workbook[f"{k1}-{f1}"]
-                sheet12 = workbook[f"{k1}-{f2}"]
-                sheet13 = workbook[f"{k1}-{f3}"]
-                sheet14 = workbook[f"{k2}-{f1}"]
-                sheet15 = workbook[f"{k2}-{f2}"]
-                sheet16 = workbook[f"{k2}-{f3}"]
-                sheet17 = workbook[f"{k3}-{f1}"]
-                sheet18 = workbook[f"{k3}-{f2}"]
-                sheet19 = workbook[f"{k3}-{f3}"]
-                LargeSheet11=len(sheet11["FP"])
-                LargeSheet12=len(sheet12["FP"])
-                LargeSheet13=len(sheet13["FP"])
-                LargeSheet14=len(sheet14["FP"])
-                LargeSheet15=len(sheet15["FP"])
-                LargeSheet16=len(sheet16["FP"])
-                LargeSheet17=len(sheet17["FP"])
-                LargeSheet18=len(sheet18["FP"])
-                LargeSheet19=len(sheet19["FP"])
-                print("Largo Excel Var 1: ",LargeSheet11)
-                Energy_1 = float(sheet11[f'm{LargeSheet11}'].value)
-                Energy_2 = float(sheet12[f'm{LargeSheet12}'].value)
-                Energy_3 = float(sheet13[f'm{LargeSheet13}'].value)
-                Energy_4 = float(sheet14[f'm{LargeSheet14}'].value)
-                Energy_5 = float(sheet15[f'm{LargeSheet15}'].value)
-                Energy_6 = float(sheet16[f'm{LargeSheet16}'].value)
-                Energy_7 = float(sheet17[f'm{LargeSheet17}'].value)
-                Energy_8 = float(sheet18[f'm{LargeSheet18}'].value)
-                Energy_9 = float(sheet19[f'm{LargeSheet19}'].value)
-                #energyBaterias = float(sheet8[f'k{largoexcelCGE-2}'].value)
-                #energyPanelesDC = float(sheet10[f'k{largoexcelCGE-2}'].value)
-                print(f'Valor Energia  {Energy_1} ')
+                excelcreate()
 AbrirExcel()
 
 
