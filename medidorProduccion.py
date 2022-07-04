@@ -872,6 +872,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 workbook.save(filename = dest_filename)
                 
             workbook.save(filename = dest_filename)
+            np.savetxt("EnergiasRespaldo.txt", (OneHourEnergy_1, OneHourEnergy_2,OneHourEnergy_3,OneHourEnergy_4,OneHourEnergy_5,OneHourEnergy_6,OneHourEnergy_7,OneHourEnergy_8,OneHourEnergy_9))
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
             print("Enviando Hora Max Energia 1")
             OneHourEnergy_1=0
@@ -905,6 +906,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             dataHourFase3=[]
             acceshourenergy=1
             
+    if(TimeEnergy.minute==10):
+        np.savetxt("EnergiasRespaldo.txt", (OneHourEnergy_1, OneHourEnergy_2,OneHourEnergy_3,OneHourEnergy_4,OneHourEnergy_5,OneHourEnergy_6,OneHourEnergy_7,OneHourEnergy_8,OneHourEnergy_9))
+       
     if(TimeEnergy.hour==0 and TimeEnergy.minute==4):
             Energy_1=0
             Energy_2=0
