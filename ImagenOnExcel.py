@@ -111,6 +111,9 @@ Energy_7_TotalMes = []
 Energy_8_TotalMes = []
 Energy_9_TotalMes = []
 ExcelDia=[]
+with open('mi_fichero.txt', 'w') as f:
+        horaDesconexión=datetime.datetime.now()
+        f.write(f'Reinicio por desconexión: {horaDesconexión}')
 #sheet22.delete_rows(11)
 ejemplo_dir = '/Users/ignaciovera/Desktop/Codigos/SER-Raspberry/Ser-Raspberry/'
 x=0
