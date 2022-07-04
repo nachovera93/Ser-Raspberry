@@ -3765,6 +3765,7 @@ def AbrirExcel():
     global Energy_8
     global Energy_9
     
+    
     dia=date.today()
     try:
         if(os.path.exists(f'{dia}.xlsx')):
