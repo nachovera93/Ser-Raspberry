@@ -76,7 +76,7 @@ sheet22.append(list(DataHourFase1))
 sheet23.append(list(DataHourFase2))
 sheet24.append(list(DataHourFase3))
 
-
+"""
 chart = BarChart()
 chart.title = "Energias Totales Diarias"
 chart.style = 12
@@ -92,7 +92,7 @@ chart.add_data(data, titles_from_data=True)
 chart.set_categories(cats)
 
 sheet22.add_chart(chart, "K1")
-
+"""
 
 
 today = date.today()

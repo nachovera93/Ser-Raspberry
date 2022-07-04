@@ -3803,11 +3803,19 @@ def AbrirExcel():
                 #energyBaterias = float(sheet8[f'k{largoexcelCGE-2}'].value)
                 #energyPanelesDC = float(sheet10[f'k{largoexcelCGE-2}'].value)
                 print(f'Valor Energia  {Energy_1} ')
+                
         else:
                 excelcreate()
                 print("No Existe")
-    except:
+    except: 
+                os.remove(f'/home/pi/Desktop/Ser-Raspberry/{dia}.xlsx')
                 excelcreate()
+                with open('mi_fichero.txt', 'w') as f:
+                    horaComienzo=datetime.datetime.now()
+                    f.write(f'Hora comienzo con creacion de nuevo excel: {horaComienzo}')
+    with open('mi_fichero.txt', 'w') as f:
+            horaComienzo=datetime.datetime.now()
+            f.write(f'Hora comienzo: {horaComienzo}')
 AbrirExcel()
 
 
@@ -4285,88 +4293,98 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
 
 def received():
     while True:
-                 try:
+                try:
                      esp32_bytes = esp32.readline()
                      decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
-                 except:
+                except:
                      print("Error en la codificación")
                      continue
-                 np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')   
+                np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')   
                  #print(f'Largo Array {len(np_array)}')
-                 if (len(np_array) == 8402):
-                       if (np_array[0] == 11 or np_array[0] == 22 or np_array[0] == 33 or np_array[0] == 44 or np_array[0] == 55 or np_array[0] == 66 or np_array[0] == 77 or np_array[0] == 88 or np_array[0] == 99):
-                           if (np_array[0] == 11):
-                               i = 1
-                           elif (np_array[0] == 22):
-                               i = 2
-                           elif (np_array[0] == 33):
-                               i = 3
-                           elif (np_array[0] == 44):
-                               i = 4
-                           elif (np_array[0] == 55):
-                               i = 5
-                           elif (np_array[0] == 66):
-                               i = 6
-                           elif (np_array[0] == 77):
-                               i = 7
-                           elif (np_array[0] == 88):
-                               i = 8
-                           elif (np_array[0] == 99):
-                               i = 9
-                           samplings = np_array[-1]
-                           list_Voltage = (np_array[0:4200])
-                           list_Current = np_array[4201:8400]
-                           try:
-                                 TomaDatos(list_Voltage,list_Current,samplings,i)
-                           except OSError as err:
-                                 print("OS error: {0}".format(err))
-                                 continue
-                           except ValueError:
-                                 print("Error: {ValueError}")
-                                 continue
-                 if (len(np_array)>0 and len(np_array)<=2):
-                         Temp_Raspberry=cpu_temp()
-                         cpu_uso=get_cpuload()
-                         tempESP32 = np_array[0]
-                         RAM = psutil.virtual_memory()[2]
-                         VariablesBasicas(Temp_Raspberry,cpu_uso,RAM,tempESP32)
-                         if (RAM > 93):
-                              os.system("sudo reboot")
-                         print(f"Temp_Raspberry: {Temp_Raspberry}")
-                         #Temp_Raspberry_JSON = json.dumps(str_num)
-                         #Ventilador()
-                         #temphum()
-                         #distance()
-                         #str_num2 = {"value":tempESP320,"save":0}
-                         #str_num = {"value":Temp_Raspberry0,"save":0}
-                         #tempESP32 = json.dumps(str_num2)
-                         
-
-                 excel=datetime.datetime.now()
-                 if(excel.hour==0 and excel.minute==4):
-                          if(Access_1email==0):
-                                 Access_1email=1
-                                 print("Entro a SendEmail")
-                                 #SendEmail()
-                                 time.sleep(5)
-                                 #os.remove(dest_filename)
-                                 excelcreate()
-                 else:
-                          Access_1email=0
-                          
-                          
-                 if(excel.minute==4 or excel.minute==19 or excel.minute==34 or excel.minute==49 ):
-                     if(rcConnect > 5): 
-                           print("Reiniciar por desconexión")
-                           with open('mi_fichero.txt', 'w') as f:
-                               horaDesconexión=datetime.datetime.now()
-                               f.write(f'Reinicio por desconexión: {horaDesconexión}')
-                           os.system("sudo reboot")
-                     else: 
-                           print("Continue")
-                        
-
-        
+                try:
+                     if (len(np_array) == 8402):
+                           if (np_array[0] == 11 or np_array[0] == 22 or np_array[0] == 33 or np_array[0] == 44 or np_array[0] == 55 or np_array[0] == 66 or np_array[0] == 77 or np_array[0] == 88 or np_array[0] == 99):
+                               if (np_array[0] == 11):
+                                   i = 1
+                               elif (np_array[0] == 22):
+                                   i = 2
+                               elif (np_array[0] == 33):
+                                   i = 3
+                               elif (np_array[0] == 44):
+                                   i = 4
+                               elif (np_array[0] == 55):
+                                   i = 5
+                               elif (np_array[0] == 66):
+                                   i = 6
+                               elif (np_array[0] == 77):
+                                   i = 7
+                               elif (np_array[0] == 88):
+                                   i = 8
+                               elif (np_array[0] == 99):
+                                   i = 9
+                               samplings = np_array[-1]
+                               list_Voltage = (np_array[0:4200])
+                               list_Current = np_array[4201:8400]
+                               try:
+                                     TomaDatos(list_Voltage,list_Current,samplings,i)
+                               except OSError as err:
+                                     print("OS error: {0}".format(err))
+                                     continue
+                               except ValueError:
+                                     print("Error: {ValueError}")
+                                     continue
+                     if (len(np_array)>0 and len(np_array)<=2):
+                             Temp_Raspberry=cpu_temp()
+                             cpu_uso=get_cpuload()
+                             tempESP32 = np_array[0]
+                             RAM = psutil.virtual_memory()[2]
+                             VariablesBasicas(Temp_Raspberry,cpu_uso,RAM,tempESP32)
+                             if (RAM > 93):
+                                  os.system("sudo reboot")
+                             print(f"Temp_Raspberry: {Temp_Raspberry}")
+                             #Temp_Raspberry_JSON = json.dumps(str_num)
+                             #Ventilador()
+                             #temphum()
+                             #distance()
+                             #str_num2 = {"value":tempESP320,"save":0}
+                             #str_num = {"value":Temp_Raspberry0,"save":0}
+                             #tempESP32 = json.dumps(str_num2)
+                             
+    
+                     excel=datetime.datetime.now()
+                     if(excel.hour==0 and excel.minute==4):
+                              if(Access_1email==0):
+                                     Access_1email=1
+                                     print("Entro a SendEmail")
+                                     #SendEmail()
+                                     time.sleep(5)
+                                     #os.remove(dest_filename)
+                                     excelcreate()
+                     else:
+                              Access_1email=0
+                              
+                              
+                     if(excel.minute==4 or excel.minute==19 or excel.minute==34 or excel.minute==49 ):
+                         if(rcConnect > 5): 
+                               print("Reiniciar por desconexión")
+                               with open('mi_fichero.txt', 'w') as f:
+                                   horaDesconexión=datetime.datetime.now()
+                                   f.write(f'Reinicio por desconexión: {horaDesconexión}')
+                               os.system("sudo reboot")
+                         else: 
+                               print("Continue")
+                      
+                except OSError as err:
+                            print("OS error: {0}".format(err))
+                            with open('mi_fichero.txt', 'w') as f:
+                                   horaDesconexión=datetime.datetime.now()
+                                   f.write(f'Error a las OSError: {horaDesconexión} {OSError}')      
+                            continue
+                except ValueError:
+                        with open('mi_fichero.txt', 'w') as f:
+                                   horaDesconexión=datetime.datetime.now()
+                                   f.write(f'Error a las: {horaDesconexión} {ValueError}') 
+                            
 if __name__ == '__main__':
     received()
     #t = threading.Thread(target=received)
