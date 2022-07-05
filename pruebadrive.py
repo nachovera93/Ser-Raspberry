@@ -1,3 +1,4 @@
+from struct import unpack
 from openpyxl import Workbook
 from datetime import date, timedelta
 from datetime import datetime
@@ -100,7 +101,11 @@ print(ExcelDia)
 
 # Guardamos en el fichero "datos2.txt" (creándolo) dos columnas
 # que contienen los arrays x_datos e y_datos
-np.savetxt("datos2.txt", (unos))
+np.savetxt("datos2.txt", (ceros, unos))
+
+x, y= np.loadtxt("datos2.txt")
+print(x)
+print(y)
 
 # Leemos el fichero que acabamos de crear y
 # almacenamos los arrays en x e y
