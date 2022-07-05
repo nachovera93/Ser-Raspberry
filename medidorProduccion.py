@@ -3810,7 +3810,10 @@ def AbrirExcel():
                 print("No Existe")
     except: 
                 os.remove(f'/home/pi/Desktop/Ser-Raspberry/{dia}.xlsx')
-                excelcreate()
+                #excelcreate()
+                print("Creando nuevo Excel con respaldo")
+                #dest_filename = f'{dia}.xlsx'
+                dest_filename = f'Respaldo-{dia}.xlsx'
                 with open('mi_fichero.txt', 'w') as f:
                     horaComienzo=datetime.datetime.now()
                     f.write(f'Hora comienzo con creacion de nuevo excel: {horaComienzo}')
