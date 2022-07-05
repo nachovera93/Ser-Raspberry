@@ -2,6 +2,7 @@ import requests
 from datetime import date, timedelta
 from datetime import datetime
 import json
+import shutil
 from openpyxl.chart import (
     AreaChart,
     BarChart,
@@ -639,6 +640,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         acceshourenergy=0
     if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
+            shutil.copy(dest_filename, f'Respaldo-{dest_filename}')
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
             sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -872,13 +874,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 workbook.save(filename = dest_filename)
                 
             workbook.save(filename = dest_filename)
-            dia2=date.today()
-            try:
-                if(os.path.exists(f'{dia2}-respaldo.xlsx')):
-                    workbook=openpyxl.load_workbook(filename = f'{dia}-respaldo.xlsx')
-                    sheet11 = workbook[f"{k1}-{f1}"]
-            except:
-                print("No exisste")
+            
             np.savetxt("EnergiasRespaldo.txt", (OneHourEnergy_1, OneHourEnergy_2,OneHourEnergy_3,OneHourEnergy_4,OneHourEnergy_5,OneHourEnergy_6,OneHourEnergy_7,OneHourEnergy_8,OneHourEnergy_9))
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
             print("Enviando Hora Max Energia 1")
@@ -913,9 +909,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             dataHourFase3=[]
             acceshourenergy=1
             
-    if(TimeEnergy.minute==10):
-        np.savetxt("EnergiasRespaldo.txt", (OneHourEnergy_1, OneHourEnergy_2,OneHourEnergy_3,OneHourEnergy_4,OneHourEnergy_5,OneHourEnergy_6,OneHourEnergy_7,OneHourEnergy_8,OneHourEnergy_9))
-       
+   
     if(TimeEnergy.hour==0 and TimeEnergy.minute==4):
             Energy_1=0
             Energy_2=0
@@ -1437,9 +1431,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet2 = workbook[f"15Min-{k}-{f}"]
                     sheet2.append(list(data15_1))
-                    print(MaxVoltage15_1)
-                    print(MaxCurrent15_1)
-                    print(data15_1)
+                    
                     print(f'Data 1: Guardando Promedios')
                     optionsave=1
                     SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_1}',VoltajePromedio=f'{MeanVoltage15_1}',VoltajeMin=f'{MinVoltage15_1}',MaxCorriente=f'{MaxCurrent15_1}',PromedioCorriente=f'{MeanCurrent15_1}',MinimoCorriente=f'{MinCurrent15_1}',PotenciaMax=f'{MaxAparentPower_1}',PromedioPotenciaAparente=f'{MeanAparentPower_1}',MinPotenciaAparente=f'{MinAparentPower_1}',Energia=f'{Energy}')
@@ -1477,9 +1469,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
               
     else:
         Volt15_1.append(Vrms)
-        print(f'Volt15_1: {Volt15_1}')
         Current15_1.append(Irms)
-        print(f'Current15_1: {Current15_1}')
         ActivePower15_1.append(ActivePower)
         ReactivePower15_1.append(ReactivePower)
         AparentPower15_1.append(AparentPower)
@@ -3675,7 +3665,6 @@ def excelcreate():
     from openpyxl import Workbook
     exceltime=date.today()
     book = Workbook()
-    dest_filename_respaldo = f'{exceltime}-respaldo.xlsx'
     dest_filename = f'{exceltime}.xlsx'
     #sheet1 = book.active
     sheet20 = book.create_sheet(f"MaxHora Fase 1 Diario") 
