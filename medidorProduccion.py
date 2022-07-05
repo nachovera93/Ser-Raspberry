@@ -3814,12 +3814,13 @@ def AbrirExcel():
                 with open('mi_fichero.txt', 'w') as f:
                     horaComienzo=datetime.datetime.now()
                     f.write(f'Hora comienzo con creacion de nuevo excel: {horaComienzo}')
-    with open('mi_fichero.txt', 'w') as f:
-            horaComienzo=datetime.datetime.now()
-            f.write(f'Hora comienzo: {horaComienzo}')
+    
 AbrirExcel()
 
-
+with open('mi_fichero.txt', 'w') as f:
+            horaComienzo=datetime.datetime.now()
+            f.write(f'Hora comienzo fuera loop: {horaComienzo}')
+            
 def VariablesBasicas(Temp_Raspberry,cpu_uso,RAM,tempESP32):                   
        workbook=openpyxl.load_workbook(filename = dest_filename)
        sheet1 = workbook["Var Dispositivos"]
