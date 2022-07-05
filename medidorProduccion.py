@@ -640,7 +640,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         acceshourenergy=0
     if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
-            shutil.copy(dest_filename, f'Respaldo-{dest_filename}')
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
             sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -872,6 +871,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 sheet25['G2'] = Suma_Mes_8
                 sheet25['H2'] = Suma_Mes_9
                 workbook.save(filename = dest_filename)
+                shutil.copy(dest_filename, f'Respaldo-{dest_filename}')
                 
             workbook.save(filename = dest_filename)
             
