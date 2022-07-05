@@ -872,6 +872,13 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 workbook.save(filename = dest_filename)
                 
             workbook.save(filename = dest_filename)
+            dia2=date.today()
+            try:
+                if(os.path.exists(f'{dia2}-respaldo.xlsx')):
+                    workbook=openpyxl.load_workbook(filename = f'{dia}-respaldo.xlsx')
+                    sheet11 = workbook[f"{k1}-{f1}"]
+            except:
+                print("No exisste")
             np.savetxt("EnergiasRespaldo.txt", (OneHourEnergy_1, OneHourEnergy_2,OneHourEnergy_3,OneHourEnergy_4,OneHourEnergy_5,OneHourEnergy_6,OneHourEnergy_7,OneHourEnergy_8,OneHourEnergy_9))
             SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
             print("Enviando Hora Max Energia 1")
@@ -1392,10 +1399,10 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     MaxDATCurrent_1=max(DAT15Current_1)
                     MeanDATCurrent_1=np.median(DAT15Current_1)
                     MinDATCurrent_1=min(DAT15Current_1)
-                    data15_1.insert(1,MeanVoltage15_1)
+                    data15_1.insert(1,MaxVoltage15_1)
                     data15_1.insert(2,MeanVoltage15_1)
                     data15_1.insert(3,MinVoltage15_1)
-                    data15_1.insert(4,MeanCurrent15_1)
+                    data15_1.insert(4,MaxCurrent15_1)
                     data15_1.insert(5,MeanCurrent15_1)
                     data15_1.insert(6,MinCurrent15_1)
                     data15_1.insert(7,MaxActivePower_1)
@@ -3643,6 +3650,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
 
 def excelcreate():
     global dest_filename
+    global dest_filename_respaldo
     global sheet1
     global sheet2
     global sheet3
@@ -3668,6 +3676,7 @@ def excelcreate():
     from openpyxl import Workbook
     exceltime=date.today()
     book = Workbook()
+    dest_filename_respaldo = f'{exceltime}-respaldo.xlsx'
     dest_filename = f'{exceltime}.xlsx'
     #sheet1 = book.active
     sheet20 = book.create_sheet(f"MaxHora Fase 1 Diario") 

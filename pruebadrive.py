@@ -99,14 +99,18 @@ for f in os.listdir('/Users/ignaciovera/Desktop/Codigos/SER-Raspberry/Ser-Raspbe
 ExcelDia= sorted(ExcelDia)
 print(ExcelDia)
 
-# Guardamos en el fichero "datos2.txt" (creándolo) dos columnas
-# que contienen los arrays x_datos e y_datos
-np.savetxt("datos2.txt", (ceros, unos))
+f = open('datos2.txt','a')
+f.write('12')
+f.close()
+f = open ('datos2.txt','r')
+mensaje = f.read()
 
-x, y= np.loadtxt("datos2.txt")
-print(x)
-print(y)
+print(mensaje)
+f.close()
 
+archivo = open("datos2.txt")
+print(type(archivo))
+#print(archivo.read(5))
 # Leemos el fichero que acabamos de crear y
 # almacenamos los arrays en x e y
 #x, y = np.loadtxt("datos2.txt")
