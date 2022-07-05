@@ -80,11 +80,11 @@ sheet24.append(list(DataHourFase3))
 
 
 today = date.today()
-print("El mes actual es {}".format(today.month))
+#print("El mes actual es {}".format(today.month))
 mes=today.month
 dia=date.today()-timedelta(1)
 dia=str(dia)
-print(dia)
+#print(dia)
 
 ExcelDia=[]
 with open('mi_fichero.txt', 'w') as f:
@@ -97,19 +97,21 @@ for f in os.listdir('/Users/ignaciovera/Desktop/Codigos/SER-Raspberry/Ser-Raspbe
     if(dia[5:7]==f[5:7]):
         ExcelDia.append(f)
 ExcelDia= sorted(ExcelDia)
-print(ExcelDia)
+#print(ExcelDia)
 
-f = open('datos2.txt','a')
-f.write('12')
-f.close()
-f = open ('datos2.txt','r')
-mensaje = f.read()
+    
+  
+np.savetxt('sample.txt', np.array([[1, 2, 3], [4, 5, 6]])) 
+a = np.loadtxt("sample.txt", dtype=str) 
 
-print(mensaje)
-f.close()
+#array_from_file = np.genfromtxt("sample.txt", dtype=str)
+#print(a)
+#print(type(a))
 
-archivo = open("datos2.txt")
-print(type(archivo))
+import shutil
+shutil.copy('2022-06-16.xlsx', '2022-06-16-respaldo.xlsx')
+
+
 #print(archivo.read(5))
 # Leemos el fichero que acabamos de crear y
 # almacenamos los arrays en x e y

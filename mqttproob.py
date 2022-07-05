@@ -19,8 +19,8 @@ password = 'superuser'
 """
 broker = 'localhost'   #'192.168.1.85' #mqtt server
 port = 1883
-dId = '12345321'
-passw = 'pbkkuGaxzE'
+dId = '1234321'
+passw = 'OzkNt95rJw'
 webhook_endpoint = 'http://localhost:3001/api/getdevicecredentials'
 
 
@@ -109,11 +109,11 @@ def connect_mqtt():
     client.connect(broker, port)
     return client
 
-
+"""
 def publish(client):
     msg_count = 0
     while True:
-        time.sleep(15)
+        time.sleep(30)
         #msg = f"value: {msg_count}"
         str_num = {"value":msg_count}
         str_num_on = {"value": 1}
@@ -172,12 +172,12 @@ def subscribe(client: mqtt):
         
     client.subscribe(topic2)
     client.on_message = on_message
-"""   
+ 
 def run():
     #client = connect_mqtt()
-    #subscribe(client)
+    subscribe(client)
     client.loop_start()
-    #publish(client)
+    publish(client)
 
 
 if __name__ == '__main__':
