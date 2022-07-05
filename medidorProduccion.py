@@ -2,6 +2,7 @@ import requests
 from datetime import date, timedelta
 from datetime import datetime
 import json
+import shutil
 from openpyxl.chart import (
     AreaChart,
     BarChart,
@@ -639,6 +640,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         acceshourenergy=0
     if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
+            shutil.copy(dest_filename, f'Respaldo-{dest_filename}')
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
             sheet20 = workbook[f"MaxHora Fase 1 Diario"]
