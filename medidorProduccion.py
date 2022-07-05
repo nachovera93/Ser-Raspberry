@@ -872,8 +872,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 sheet25['G2'] = Suma_Mes_8
                 sheet25['H2'] = Suma_Mes_9
                 workbook.save(filename = dest_filename)
-                shutil.copy2(dest_filename, f'Respaldo-{dest_filename}')
                 
+            shutil.copy2(dest_filename, f'Respaldo-{dest_filename}')
             #workbook.save(filename = dest_filename)
             
             np.savetxt("EnergiasRespaldo.txt", (OneHourEnergy_1, OneHourEnergy_2,OneHourEnergy_3,OneHourEnergy_4,OneHourEnergy_5,OneHourEnergy_6,OneHourEnergy_7,OneHourEnergy_8,OneHourEnergy_9))
