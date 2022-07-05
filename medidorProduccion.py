@@ -1336,7 +1336,6 @@ DAT15Current_1=[]
 def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,FDCurrent,DATVoltage,DATCurrent,OneHourEnergy,Energy,i,k,f):
     global data15_1
     global Volt15_1
-    global data15_1
     global Current15_1
     global ActivePower15_1
     global ReactivePower15_1
@@ -1399,10 +1398,10 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     MaxDATCurrent_1=max(DAT15Current_1)
                     MeanDATCurrent_1=np.median(DAT15Current_1)
                     MinDATCurrent_1=min(DAT15Current_1)
-                    data15_1.insert(1,0)
+                    data15_1.insert(1,MaxVoltage15_1)
                     data15_1.insert(2,MeanVoltage15_1)
                     data15_1.insert(3,MinVoltage15_1)
-                    data15_1.insert(4,0)
+                    data15_1.insert(4,MaxCurrent15_1)
                     data15_1.insert(5,MeanCurrent15_1)
                     data15_1.insert(6,MinCurrent15_1)
                     data15_1.insert(7,MaxActivePower_1)
@@ -1701,7 +1700,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_2.insert(31,MaxDATCurrent_2)
                     data15_2.insert(32,MeanDATCurrent_2)
                     data15_2.insert(33,MinDATCurrent_2)
-                    data15_1.insert(34,OneHourEnergy)
+                    data15_2.insert(34,OneHourEnergy)
                     data15_2.insert(35,Energy)
                     data15_2.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
