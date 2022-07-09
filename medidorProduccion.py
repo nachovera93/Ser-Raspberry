@@ -3702,9 +3702,9 @@ def excelcreate():
     headingsFase1=list(['Hora','Energia-Fase-1-REDCompañia-Diario', 'Energia-Fase-1-CentralFotovoltaica-Diario','Energia-Fase-1-ConsumoCliente-Diario'])
     headingsFase2=list(['Hora','Energia-Fase-2-REDCompañia-Diario', 'Energia-Fase-2-CentralFotovoltaica-Diario','Energia-Fase-2-ConsumoCliente-Diario'])
     headingsFase3=list(['Hora','Energia-Fase-3-REDCompañia-Diario', 'Energia-Fase-3-CentralFotovoltaica-Diario','Energia-Fase-3-ConsumoCliente-Diario'])
-    headingsFase1_Mensual=list(['Dia','Energia-Fase-1-REDCompañia-Mensual', 'Energia-Fase-1-CentralFotovoltaica-Mensual','Energia-Fase-1-ConsumoCliente-Mensual'])
-    headingsFase2_Mensual=list(['Dia','Energia-Fase-2-REDCompañia-Mensual', 'Energia-Fase-2-CentralFotovoltaica-Mensual','Energia-Fase-2-ConsumoCliente-Mensual'])
-    headingsFase3_Mensual=list(['Dia','Energia-Fase-3-REDCompañia-Mensual', 'Energia-Fase-3-CentralFotovoltaica-Mensual','Energia-Fase-3-ConsumoCliente-Mensual'])
+    headingsFase1_Mensual=list(['Dia','Energia-Fase-1-REDCompañia-Mensual', 'Energia-Fase-2-REDCompañia-Mensual','Energia-Fase-3-REDCompañia-Mensual'])
+    headingsFase2_Mensual=list(['Dia','Energia-Fase-1-CentralFotovoltaica-Mensual', 'Energia-Fase-2-CentralFotovoltaica-Mensual','Energia-Fase-3-CentralFotovoltaica-Mensual'])
+    headingsFase3_Mensual=list(['Dia','Energia-Fase-1-ConsumoCliente-Mensual', 'Energia-Fase-2-ConsumoCliente-Mensual','Energia-Fase-3-ConsumoCliente-Mensual'])
     ceros=list([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
     sheet20.append(headingsFase1)
     sheet21.append(headingsFase2)
@@ -4358,12 +4358,15 @@ def received():
                              
     
                      excel=datetime.datetime.now()
-                     if(excel.hour==0 and excel.minute==4):
+                     if(excel.hour==0 and excel.minute==6):
                               if(Access_1email==0):
                                      Access_1email=1
                                      print("Entro a SendEmail")
                                      #SendEmail()
-                                     time.sleep(5)
+                                     #time.sleep(5)
+                                     with open('mi_ficheroExcel.txt', 'w') as f:
+                                         horaDesconexión=datetime.datetime.now()
+                                         f.write(f'Reinicio con nuevo excel: {horaDesconexión}')
                                      #os.remove(dest_filename)
                                      excelcreate()
                      else:
@@ -4373,7 +4376,7 @@ def received():
                      if(excel.minute==4 or excel.minute==19 or excel.minute==34 or excel.minute==49 ):
                          if(rcConnect > 5): 
                                print("Reiniciar por desconexión")
-                               with open('mi_fichero.txt', 'w') as f:
+                               with open('mi_ficheroReconnect.txt', 'w') as f:
                                    horaDesconexión=datetime.datetime.now()
                                    f.write(f'Reinicio por desconexión: {horaDesconexión}')
                                os.system("sudo reboot")
