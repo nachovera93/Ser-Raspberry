@@ -122,6 +122,15 @@ for f in os.listdir('/Users/ignaciovera/Desktop/Codigos/SER-Raspberry/Ser-Raspbe
         ExcelDia.append(f)
 ExcelDia= sorted(ExcelDia)
 print(ExcelDia)
+import  jpype     
+import  asposecells     
+
+from asposecells.api import Workbook
+workbook = Workbook("2022-06-16.xlsx")
+# Convert Excel to PDF
+workbook.save("xlsx-to-pdf.pdf", SaveFormat.PDF)
+
+
 """ 
 for f in os.listdir('/Users/ignaciovera/Desktop/Codigos/SER-Raspberry/Ser-Raspberry/'):
     if(dia[5:7]==f[5:7]):

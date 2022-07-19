@@ -1,118 +1,28 @@
-from struct import unpack
-from openpyxl import Workbook
-from datetime import date, timedelta
-from datetime import datetime
-from openpyxl.styles import Alignment  
-from openpyxl.chart import (
-    PieChart,
-    BarChart,
-    ProjectedPieChart,
-    Reference
-)
-import datetime
-import openpyxl
-from openpyxl.chart.series import DataPoint
-import os
+import gspread
+
+gc = gspread.service_account(filename='rep_medidor.json')
+print("Paso")
+#sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1lCtPvKcNnJqHzQWDFuLZk3g9oeHtigPChP5kjboQ0XU/edit#gid=0')
+sh = gc.open('Luis_Wherhahm')
+print(sh.sheet1.get('A1'))
+worksheet = sh.worksheet("Hoja 1")
+worksheet.update('B20', 'Bingo!')
+
+
+
+import socket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.settimeout(5)
+try:
+    s.connect(("www.google.com", 80))
+except (socket.gaierror, socket.timeout):
+    print("Sin conexión a internet")
+else:
+    print("Con conexión a internet")
+    s.close()
+
 import numpy as np
+array = np.array([[4, 5, 6]])
 
-
-workbook=openpyxl.load_workbook(filename = '2022-06-16.xlsx')
-sheet1 = workbook[f"REDCompañia-Fase-1"]
-sheet2 = workbook[f"REDCompañia-Fase-2"]
-sheet3 = workbook[f"REDCompañia-Fase-3"]
-sheet4 = workbook[f"CentralFotovoltaica-Fase-1"]
-sheet5 = workbook[f"CentralFotovoltaica-Fase-2"]
-sheet6 = workbook[f"CentralFotovoltaica-Fase-3"]
-sheet7 = workbook[f"ConsumoCliente-Fase-1"]
-sheet8 = workbook[f"ConsumoCliente-Fase-2"]
-sheet9 = workbook[f"ConsumoCliente-Fase-3"]
-LargeSheet11=len(sheet1["FP"])
-LargeSheet21=len(sheet2["FP"])
-LargeSheet31=len(sheet3["FP"])
-LargeSheet41=len(sheet4["FP"])
-LargeSheet51=len(sheet5["FP"])
-LargeSheet61=len(sheet6["FP"])
-LargeSheet71=len(sheet7["FP"])
-LargeSheet81=len(sheet8["FP"])
-LargeSheet91=len(sheet9["FP"])
-Energy_1 = float(sheet1[f'm{LargeSheet11}'].value)
-Energy_2 = float(sheet2[f'm{LargeSheet21}'].value)
-Energy_3 = float(sheet3[f'm{LargeSheet31}'].value)
-Energy_4 = float(sheet4[f'm{LargeSheet41}'].value)
-Energy_5 = float(sheet5[f'm{LargeSheet51}'].value)
-Energy_6 = float(sheet6[f'm{LargeSheet61}'].value)
-Energy_7 = float(sheet7[f'm{LargeSheet71}'].value)
-Energy_8 = float(sheet8[f'm{LargeSheet81}'].value)
-Energy_9 = float(sheet9[f'm{LargeSheet91}'].value)
-
-Pos=len(sheet1['A'])
-
-
-headings0 = list(['Energia1','Energia2','Energia3'])
-headings1 = list(['Energia4','Energia5','Energia6'])
-headings2 = list(['Energia7','Energia8','Energia9'])
-ceros=list([0,0,0,0,0,0,0,0,0])
-unos=list([round(Energy_1,2),round(Energy_2,2),round(Energy_3,2),round(Energy_4,2),round(Energy_5,2),round(Energy_6,2),round(Energy_7,2),round(Energy_8,2),round(Energy_9,2)])
-datetim=datetime.datetime.now()-datetime.timedelta(minutes=5)
-
-book = Workbook()
-sheet22  = book.create_sheet("Sheet1")
-sheet22.append(headings0)
-sheet23  = book.create_sheet("Sheet2")
-sheet23.append(headings1)
-sheet24  = book.create_sheet("Sheet3")
-sheet24.append(headings2)
-book.save(filename = 'pie.xlsx')
-
-
-workbook2=openpyxl.load_workbook(filename = 'pie.xlsx')
-sheet22 = workbook2[f"Sheet1"]
-sheet23 = workbook2[f"Sheet2"]
-sheet24 = workbook2[f"Sheet3"]
-
-DataHourFase1=[f'{datetim.day}-{datetim.month}-{datetim.year}',round(Energy_1,5),round(Energy_2,5),round(Energy_3,5)]
-DataHourFase2=[f'{datetim.day}-{datetim.month}-{datetim.year}',round(Energy_4,5),round(Energy_5,5),round(Energy_6,5)]
-DataHourFase3=[f'{datetim.day}-{datetim.month}-{datetim.year}',round(Energy_7,5),round(Energy_8,5),round(Energy_9,5)]
-
-sheet22.append(list(DataHourFase1))
-sheet23.append(list(DataHourFase2))
-sheet24.append(list(DataHourFase3))
-
-
-today = date.today()
-#print("El mes actual es {}".format(today.month))
-mes=today.month
-dia=date.today()-timedelta(1)
-dia=str(dia)
-#print(dia)
-
-ExcelDia=[]
-with open('mi_fichero.txt', 'w') as f:
-        horaDesconexión=datetime.datetime.now()
-        f.write(f'Reinicio por desconexión: {horaDesconexión}')
-#sheet22.delete_rows(11)
-ejemplo_dir = '/Users/ignaciovera/Desktop/Codigos/SER-Raspberry/Ser-Raspberry/'
-x=0
-for f in os.listdir('/Users/ignaciovera/Desktop/Codigos/SER-Raspberry/Ser-Raspberry/'):
-    if(dia[5:7]==f[5:7]):
-        ExcelDia.append(f)
-ExcelDia= sorted(ExcelDia)
-#print(ExcelDia)
-
-    
-  
-np.savetxt('sample.txt', np.array([[1, 2, 3], [4, 5, 6]])) 
-a = np.loadtxt("sample.txt", dtype=str) 
-
-#array_from_file = np.genfromtxt("sample.txt", dtype=str)
-#print(a)
-#print(type(a))
-
-import shutil
-shutil.copy('2022-06-16.xlsx', '2022-06-16-respaldo.xlsx')
-
-
-#print(archivo.read(5))
-# Leemos el fichero que acabamos de crear y
-# almacenamos los arrays en x e y
-#x, y = np.loadtxt("datos2.txt")
+# Write the array to worksheet starting from the A2 cell
+worksheet.update('B8', array.tolist())
