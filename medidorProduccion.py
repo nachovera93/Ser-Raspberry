@@ -871,8 +871,17 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 sheet25['F2'] = Suma_Mes_7
                 sheet25['G2'] = Suma_Mes_8
                 sheet25['H2'] = Suma_Mes_9
+                Energy_1=0
+                Energy_2=0
+                Energy_3=0
+                Energy_4=0
+                Energy_5=0
+                Energy_6=0
+                Energy_7=0
+                Energy_8=0
+                Energy_9=0
                 workbook.save(filename = dest_filename)
-                
+                excelcreate()
             shutil.copy2(dest_filename, f'Respaldo-{dest_filename}')
             #workbook.save(filename = dest_filename)
             
@@ -910,17 +919,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             dataHourFase3=[]
             acceshourenergy=1
             
-   
-    if(TimeEnergy.hour==0 and TimeEnergy.minute==4):
-            Energy_1=0
-            Energy_2=0
-            Energy_3=0
-            Energy_4=0
-            Energy_5=0
-            Energy_6=0
-            Energy_7=0
-            Energy_8=0
-            Energy_9=0
+
+            
     AparentPower = Vrms*Irms
     if (potrmsCGE>=0):
           ActivePower = Vrms*Irms*CosPhi
@@ -3811,7 +3811,7 @@ def AbrirExcel():
                 print("No Existe")
     except: 
                 os.remove(f'/home/pi/Desktop/Ser-Raspberry/{dia}.xlsx')
-                #excelcreate()
+                excelcreate()
                 print("Creando nuevo Excel con respaldo")
                 #dest_filename = f'{dia}.xlsx'
                 dest_filename = f'Respaldo-{dia}.xlsx'
@@ -4368,7 +4368,7 @@ def received():
                                          horaDesconexión=datetime.datetime.now()
                                          f.write(f'Reinicio con nuevo excel: {horaDesconexión}')
                                      #os.remove(dest_filename)
-                                     excelcreate()
+                                     #excelcreate()
                      else:
                               Access_1email=0
                               
