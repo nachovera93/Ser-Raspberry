@@ -3848,12 +3848,13 @@ DataAppend1=[]
 def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k,f):
        
        if(i==1):
+             global savedata1
              global DataAppend1
              Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
              DataAppend1.append(Data)
-             print(DataAppend1)
-             global savedata1
+             print(f"largo DAta Append: {len(DataAppend1)}")
              savedata1 = savedata1 + 1
+             print(savedata1)
              if(savedata1>=5):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet11 = workbook[f"{k}-{f}"]
@@ -3889,7 +3890,8 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        
        
     
-
+def FuncionReporteDiario():
+    print("Funcion")
 
 import os
 import base64
