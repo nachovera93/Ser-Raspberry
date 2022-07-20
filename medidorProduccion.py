@@ -4006,7 +4006,8 @@ try:
     f.write(fecha)
 finally:
     f.close()
-
+tm1=time.time()
+tm2=time.time()
 CurrentCal=0.94
 Vrms=0.0
 Irms=0.0
@@ -4035,6 +4036,8 @@ Access_1xcel=0
 countbroker=0
 
 def TomaDatos(list_Voltage,list_Current,samplings,i):
+    global tm1
+    global tm2
     global BufferVoltaje_1
     global BufferVoltaje_2
     global BufferVoltaje_3
