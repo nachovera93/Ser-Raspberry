@@ -4343,8 +4343,8 @@ def received():
                                elif (np_array[0] == 99):
                                    i = 9
                                samplings = np_array[-1]
-                               print(f'samplings {samplings}')
-                               """
+                               #print(f'samplings {samplings}')
+                               
                                list_Voltage = (np_array[0:4200])
                                list_Current = np_array[4201:8400]
                                try:
@@ -4355,7 +4355,7 @@ def received():
                                except ValueError:
                                      print("Error: {ValueError}")
                                      continue
-                                """
+                                
                      if (len(np_array)>0 and len(np_array)<=2):
                              Temp_Raspberry=cpu_temp()
                              cpu_uso=get_cpuload()
