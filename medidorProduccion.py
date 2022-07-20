@@ -941,7 +941,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_1 = AparentPower
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
-        #SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
+        SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
         #SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
         vt1=time.time() 
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,i,k1,f1)
@@ -1042,7 +1042,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         AparentPower_9 = AparentPower
         ActivePower_9 = ActivePower
         ReactivePower_9 = ReactivePower
-        #∫SaveDataCsv(Vrms,Irms,ActivePower_9,ReactivePower_9,AparentPower_9,FP_9,CosPhi_9,FDVoltage_9,FDCurrent_9,DATVoltage_9,DATCurrent_9,Energy_9,OneHourEnergy_9,i,k3,f3)
+        #SaveDataCsv(Vrms,Irms,ActivePower_9,ReactivePower_9,AparentPower_9,FP_9,CosPhi_9,FDVoltage_9,FDCurrent_9,DATVoltage_9,DATCurrent_9,Energy_9,OneHourEnergy_9,i,k3,f3)
         #SendDataToBroker(q=i,k=k3,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_9}",Energia=f"{Energy_9}")
         Maximo15min_9(Vrms,Irms,ActivePower_9,ReactivePower_9,AparentPower_9,FP_9,FDVoltage_9,FDCurrent_9,DATVoltage_9,DATCurrent_9,OneHourEnergy_9,Energy_9,i,k3,f3) 
        
@@ -3835,13 +3835,32 @@ def VariablesBasicas(Temp_Raspberry,cpu_uso,RAM,tempESP32):
        sheet1.append(list(Data))
        workbook.save(filename = dest_filename)
        Data=[]
-
+savedata1=0
+savedata2=0
+savedata3=0
+savedata4=0
+savedata5=0
+savedata6=0
+savedata7=0
+savedata8=0
+savedata9=0
+DataAppend1=[]
 def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k,f):
-       Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
-       workbook=openpyxl.load_workbook(filename = dest_filename)
+       
        if(i==1):
-             sheet11 = workbook[f"{k}-{f}"]
-             sheet11.append(list(Data))
+             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+             DataAppend1.append(Data)
+             print(DataAppend1)
+             global savedata1
+             savedata1 = savedata1 + 1
+             if(savedata1>=5):
+                workbook=openpyxl.load_workbook(filename = dest_filename)
+                sheet11 = workbook[f"{k}-{f}"]
+                sheet11.append(list(DataAppend1))
+                workbook.save(filename = dest_filename)
+                DataAppend1=[]
+                savedata1 = 0
+             Data=[]
        elif(i==2):
              sheet12 = workbook[f"{k}-{f}"]
              sheet12.append(list(Data))
@@ -3868,8 +3887,7 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
              sheet19.append(list(Data))
        
        
-       workbook.save(filename = dest_filename)
-       Data=[]
+    
 
 
 import os
