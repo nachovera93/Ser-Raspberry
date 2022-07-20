@@ -4194,6 +4194,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     if(i==1):
         if(len(BufferCurrent_1)>=3 and Vrms<240):
             tm1=time.time() #1 -> 10 ->23
+            print(tm1)
             try:
                 print(f' Tiempos de diferencia: {tm1-tm2}')
             except:
@@ -4206,6 +4207,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             Potencias(i,Irms,Vrms,potrmsCGE)     
             BufferCurrent_1=[]
             tm2=time.time() #2 -> 11
+            print(tm2)
         else:
             BufferCurrent_1.append(Irms)
     elif(i==2):
