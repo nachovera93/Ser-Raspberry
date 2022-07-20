@@ -4007,7 +4007,7 @@ try:
 finally:
     f.close()
 
-CurrentCal=0.92
+CurrentCal=0.93
 Vrms=0.0
 Irms=0.0
 BufferVoltaje_1=[]
@@ -4074,7 +4074,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     NoVoltageOffset=(list_FinalVoltage-DC_VoltageMedian)             
     Vrms=VoltajeRms(NoVoltageOffset)*0.92
     if(i==1):
-        if (len(BufferVoltaje_1)>=5):
+        if (len(BufferVoltaje_1)>=3):
             MediaBufferVoltaje=np.median(BufferVoltaje_1)
             Vrms=VoltRms(MediaBufferVoltaje)
             if(Vrms>240):
@@ -4086,7 +4086,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferVoltaje_1.append(Vrms)
     elif(i==2):
-        if (len(BufferVoltaje_2)>=5):
+        if (len(BufferVoltaje_2)>=3):
             MediaBufferVoltaje=np.median(BufferVoltaje_2)
             Vrms=VoltRms(MediaBufferVoltaje)
             if(Vrms>240):
@@ -4098,7 +4098,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferVoltaje_2.append(Vrms)
     elif(i==3):
-        if (len(BufferVoltaje_3)>=5):
+        if (len(BufferVoltaje_3)>=3):
             MediaBufferVoltaje=np.median(BufferVoltaje_3)
             Vrms=VoltRms(MediaBufferVoltaje)
             if(Vrms>240):
@@ -4110,7 +4110,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferVoltaje_3.append(Vrms)
     elif(i==4):
-        if (len(BufferVoltaje_4)>=5):
+        if (len(BufferVoltaje_4)>=3):
             MediaBufferVoltaje=np.median(BufferVoltaje_4)
             Vrms=VoltRms(MediaBufferVoltaje)
             if(Vrms>240):
@@ -4122,7 +4122,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferVoltaje_4.append(Vrms)
     elif(i==5):
-        if (len(BufferVoltaje_5)>=5):
+        if (len(BufferVoltaje_5)>=3):
             MediaBufferVoltaje=np.median(BufferVoltaje_5)
             Vrms=VoltRms(MediaBufferVoltaje)
             if(Vrms>240):
@@ -4134,7 +4134,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferVoltaje_5.append(Vrms)
     elif(i==6):
-        if (len(BufferVoltaje_6)>=5):
+        if (len(BufferVoltaje_6)>=3):
             MediaBufferVoltaje=np.median(BufferVoltaje_6)
             Vrms=VoltRms(MediaBufferVoltaje)
             if(Vrms>240):
@@ -4146,7 +4146,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferVoltaje_6.append(Vrms)
     elif(i==7):
-        if (len(BufferVoltaje_7)>=5):
+        if (len(BufferVoltaje_7)>=3):
             MediaBufferVoltaje=np.median(BufferVoltaje_7)
             Vrms=VoltRms(MediaBufferVoltaje)
             if(Vrms>240):
@@ -4158,7 +4158,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferVoltaje_7.append(Vrms)
     elif(i==8):
-        if (len(BufferVoltaje_8)>=5):
+        if (len(BufferVoltaje_8)>=3):
             MediaBufferVoltaje=np.median(BufferVoltaje_8)
             Vrms=VoltRms(MediaBufferVoltaje)
             if(Vrms>240):
@@ -4170,7 +4170,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferVoltaje_8.append(Vrms)
     elif(i==9):
-        if (len(BufferVoltaje_9)>=5):
+        if (len(BufferVoltaje_9)>=3):
             MediaBufferVoltaje=np.median(BufferVoltaje_9)
             Vrms=VoltRms(MediaBufferVoltaje)
             if(Vrms>240):
@@ -4192,7 +4192,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     Irms=CorrienteRms(NoCurrentoffset)
                                
     if(i==1):
-        if(len(BufferCurrent_1)>=5 and Vrms<240):
+        if(len(BufferCurrent_1)>=3 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_1)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -4203,7 +4203,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_1.append(Irms)
     elif(i==2):
-        if(len(BufferCurrent_2)>=5 and Vrms<240):
+        if(len(BufferCurrent_2)>=3 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_2)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -4215,7 +4215,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_2.append(Irms)
     elif(i==3):
-        if(len(BufferCurrent_3)>=5 and Vrms<240):
+        if(len(BufferCurrent_3)>=3 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_3)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Current cal 4: {MediaBufferCurrent}')
@@ -4228,7 +4228,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_3.append(Irms)
     elif(i==4):
-        if(len(BufferCurrent_4)>=5 and Vrms<240):
+        if(len(BufferCurrent_4)>=3 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_4)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Current cal 4: {MediaBufferCurrent}')
@@ -4241,7 +4241,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_4.append(Irms)
     elif(i==5):
-        if(len(BufferCurrent_5)>=5 and Vrms<240):
+        if(len(BufferCurrent_5)>=3 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_5)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -4252,7 +4252,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_5.append(Irms)
     elif(i==6):
-        if(len(BufferCurrent_6)>=5 and Vrms<240):
+        if(len(BufferCurrent_6)>=3 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_6)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -4263,7 +4263,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_6.append(Irms)
     elif(i==7):
-        if(len(BufferCurrent_7)>=5 and Vrms<240):
+        if(len(BufferCurrent_7)>=3 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_7)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -4275,7 +4275,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_7.append(Irms)
     elif(i==8):
-        if(len(BufferCurrent_8)>=5 and Vrms<240):
+        if(len(BufferCurrent_8)>=3 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_8)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -4286,7 +4286,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_8.append(Irms)
     elif(i==9):
-        if(len(BufferCurrent_9)>=5 and Vrms<240):
+        if(len(BufferCurrent_9)>=3 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_9)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
