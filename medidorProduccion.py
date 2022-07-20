@@ -4368,14 +4368,14 @@ def received():
                                
                                list_Voltage = (np_array[0:4200])
                                list_Current = np_array[4201:8400]
-                               try:
-                                     TomaDatos(list_Voltage,list_Current,samplings,i)
-                               except OSError as err:
-                                     print("OS error: {0}".format(err))
-                                     continue
-                               except ValueError:
-                                     print("Error: {ValueError}")
-                                     continue
+                               #try:
+                               TomaDatos(list_Voltage,list_Current,samplings,i)
+                               #except OSError as err:
+                               #      print("OS error: {0}".format(err))
+                               #      continue
+                               #except ValueError:
+                               #      print("Error: {ValueError}")
+                               #      continue
                                 
                      if (len(np_array)>0 and len(np_array)<=2):
                              Temp_Raspberry=cpu_temp()
