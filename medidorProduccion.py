@@ -4193,6 +4193,11 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
                                
     if(i==1):
         if(len(BufferCurrent_1)>=3 and Vrms<240):
+            tm1=time.time() #1 -> 10 ->23
+            try:
+                print(f' Tiempos de diferencia: {tm1-tm2}')
+            except:
+                print("No hay tiempos")
             MediaBufferCurrent=np.median(BufferCurrent_1)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
             print(f'Irms {i}: {Irms}')
@@ -4200,6 +4205,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
             Potencias(i,Irms,Vrms,potrmsCGE)     
             BufferCurrent_1=[]
+            tm2=time.time() #2 -> 11
         else:
             BufferCurrent_1.append(Irms)
     elif(i==2):
