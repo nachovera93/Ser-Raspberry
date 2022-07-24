@@ -3935,7 +3935,7 @@ def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHo
     #worksheet.batch_clear(["A1:B1", "C2:E2", "my_named_range"])
     #worksheet.update('B8', array.tolist())
     
-ReporteDiario()
+ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
 
 
 fecha=str(datetime.datetime.now())
