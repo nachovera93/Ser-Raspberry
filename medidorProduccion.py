@@ -3917,7 +3917,7 @@ def FuncionReporte():
         
 
     
-def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga):
+def ReporteDiario():#(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga):
     import gspread
     #print(sh.sheet1.get('A1'))
     gc = gspread.service_account(filename='rep_medidor.json')
@@ -3935,7 +3935,7 @@ def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHo
     #worksheet.batch_clear(["A1:B1", "C2:E2", "my_named_range"])
     #worksheet.update('B8', array.tolist())
     
-ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
+ReporteDiario()
 
 
 fecha=str(datetime.datetime.now())
