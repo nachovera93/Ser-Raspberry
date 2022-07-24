@@ -647,6 +647,14 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet21 = workbook[f"MaxHora Fase 2 Diario"]
             sheet22 = workbook[f"MaxHora Fase 3 Diario"] 
             datetim=datetime.datetime.now()-datetime.timedelta(minutes=3)
+            connect=FuncionReporte()
+            if(connect==1):
+                OneHourEnergy_RedCompañia=OneHourEnergy_1+OneHourEnergy_4+OneHourEnergy_7
+                OneHourEnergy_Paneles=OneHourEnergy_2+OneHourEnergy_5+OneHourEnergy_8
+                OneHourEnergy_Carga=OneHourEnergy_3+OneHourEnergy_6+OneHourEnergy_9
+                ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
+            else:
+                print("No hay conexión")
             dataHourFase1=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_1,5),round(OneHourEnergy_4,5),round(OneHourEnergy_7,5)]
             dataHourFase2=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_2,5),round(OneHourEnergy_5,5),round(OneHourEnergy_8,5)]
             dataHourFase3=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_3,5),round(OneHourEnergy_6,5),round(OneHourEnergy_9,5)]
@@ -3810,13 +3818,13 @@ def AbrirExcel():
                 excelcreate()
                 print("No Existe")
     except: 
-                os.remove(f'/home/pi/Desktop/Ser-Raspberry/{dia}.xlsx')
+                os.remove(f'/home/pi/Desktop/Ser-Raspberry/Reportes/{dia}.xlsx')
                 #excelcreate()
-                dest_filename = f'{dia}.xlsx'
-                shutil.copy2(f'Respaldo-{dest_filename}',dest_filename)
+                dest_filename = f'Reportes/{dia}.xlsx'
+                shutil.copy2(f'Respaldos/Respaldo-{dia}.xlsx',dest_filename)
                 print("Creando nuevo Excel con respaldo")
                
-                dest_filename = f'Respaldo-{dia}.xlsx'
+                #dest_filename = f'Respaldo-{dia}.xlsx'
                 with open('mi_fichero.txt', 'w') as f:
                     horaComienzo=datetime.datetime.now()
                     f.write(f'Hora comienzo con creacion de nuevo excel: {horaComienzo}')
@@ -3899,24 +3907,27 @@ def FuncionReporte():
         s.connect(("www.google.com", 80))
     except (socket.gaierror, socket.timeout):
         print("Sin conexión a internet")
+        return 0
     else:
         print("Con conexión a internet")
         s.close()
-        ReporteDiario()
+        return 1
+        
         
         
 
     
-def ReporteDiario():
+def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga):
     import gspread
     #print(sh.sheet1.get('A1'))
     gc = gspread.service_account(filename='rep_medidor.json')
     #sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1lCtPvKcNnJqHzQWDFuLZk3g9oeHtigPChP5kjboQ0XU/edit#gid=0')
     sh = gc.open('Luis_Wherhahm')
     worksheet = sh.worksheet("Hoja 1")
-    values_list = worksheet.col_values(1)
+    values_list = worksheet.col_values(5)
     print(values_list)
-    print(len(values_list))
+    Largo=len(values_list)
+    worksheet.update(f'E{Largo+1}', 'Bingo!')
     #import numpy as np
     #array = np.array([[4, 5, 6]])
     # Write the array to worksheet starting from the A2 cell
@@ -3924,7 +3935,7 @@ def ReporteDiario():
     #worksheet.batch_clear(["A1:B1", "C2:E2", "my_named_range"])
     #worksheet.update('B8', array.tolist())
     
-FuncionReporte()
+ReporteDiario()
 
 
 fecha=str(datetime.datetime.now())
