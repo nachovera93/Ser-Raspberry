@@ -942,7 +942,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
-        #SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
+        SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
         vt1=time.time() 
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,i,k1,f1)
         #{key}-{q}-{f}-{k}
@@ -3846,23 +3846,25 @@ savedata8=0
 savedata9=0
 DataAppend1=[]
 def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k,f):
-       
+       Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+       workbook=openpyxl.load_workbook(filename = dest_filename)
        if(i==1):
-             global savedata1
-             global DataAppend1
-             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
-             DataAppend1.append(Data)
-             print(f"largo DAta Append: {len(DataAppend1)}")
-             savedata1 = savedata1 + 1
-             print(savedata1)
-             if(savedata1>=5):
-                workbook=openpyxl.load_workbook(filename = dest_filename)
-                sheet11 = workbook[f"{k}-{f}"]
-                sheet11.append(list(DataAppend1))
-                workbook.save(filename = dest_filename)
-                DataAppend1=[]
-                savedata1 = 0
-             Data=[]
+             #global savedata1
+             #global DataAppend1
+             #Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+             #DataAppend1.append(Data)
+             #print(f"largo Data Append: {len(DataAppend1)}")
+             #savedata1 = savedata1 + 1
+             #print(savedata1)
+             #if(savedata1>=5):
+             #   print("Entro a savedata")
+             #   workbook=openpyxl.load_workbook(filename = dest_filename)
+            sheet11 = workbook[f"{k}-{f}"]
+            sheet11.append(list(DataAppend1))
+             #   workbook.save(filename = dest_filename)
+             #   DataAppend1=[]
+             #   savedata1 = 0
+             #Data=[]
        elif(i==2):
              sheet12 = workbook[f"{k}-{f}"]
              sheet12.append(list(Data))
@@ -3887,139 +3889,40 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        elif(i==9):
              sheet19 = workbook[f"{k}-{f}"]
              sheet19.append(list(Data))
-       
-       
+       workbook.save(filename = dest_filename)
+       Data=[]
     
-def FuncionReporteDiario():
-    print("Funcion")
-
-import os
-import base64
-import requests
-from azure.identity import InteractiveBrowserCredential
-from msgraph.core import GraphClient
-
-def SendEmail():
-    
-    
-    def draft_attachment(file_path):
-        if not os.path.exists(file_path):
-            print('file is not found')
-            return
-        
-        with open(file_path, 'rb') as upload:
-            media_content = base64.b64encode(upload.read())
-            
-        data_body = {
-            '@odata.type': '#microsoft.graph.fileAttachment',
-            'contentBytes': media_content.decode('utf-8'),
-            'name': os.path.basename(file_path)
-        }
-        return data_body
-    
-    APP_ID = '<app id>'
-    SCOPES = ['Mail.Send', 'Mail.ReadWrite']
-    
-    access_token = generate_access_token(app_id=APP_ID, scopes=SCOPES)
-    headers = {
-        'Authorization': 'Bearer ' + access_token['access_token']
-    }
-    
-    request_body = {
-        'message': {
-            # recipient list
-            'toRecipients': [
-                {
-                    'emailAddress': {
-                        'address': '<recipient email address>'
-                    }
-                }
-            ],
-            # email subject
-            'subject': 'You got an email',
-            'importance': 'normal',
-            'body': {
-                'contentType': 'HTML',
-                'content': '<b>Be Awesome</b>'
-            },
-            # include attachments
-            'attachments': [
-                draft_attachment('hello.txt'),
-                draft_attachment('image.png')
-            ]
-        }
-    }
-
-    GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0'
-    endpoint = GRAPH_ENDPOINT + '/me/sendMail'
-    
-    response = requests.post(endpoint, headers=headers, json=request_body)
-    if response.status_code == 202:
-        print('Email sent')
+def FuncionReporte():
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(5)
+    try:
+        s.connect(("www.google.com", 80))
+    except (socket.gaierror, socket.timeout):
+        print("Sin conexión a internet")
     else:
-        print(response.reason)
+        print("Con conexión a internet")
+        s.close()
+        
+        
 
-def SendEmail2():
-    #global dest_filename
-    Lugar="Santa Cristina"
-    username = "empresasserspa@gmail.com"
-    password = "nbqpiwiwootrwffu" #"empresasserspa"
-    destinatario = "ricardovera.93@hotmail.com"
-    #destinatario2 = "ricardovera.93@hotmail.com"
-    #destinatario2 = "demetrio.vera@serm.cl"
     
-    mensaje = MIMEMultipart("Alternative")
-    mensaje["Subject"] = "Reportes "+str(Lugar)+" "+str(datetime.date.today())
-    mensaje["From"] = username
-    mensaje["To"] = destinatario
-    
-    html = f"""
-    <html>
-    <body>
-         <p> Hola <i>{destinatario}</i> <br>
-         Reportes desde {Lugar} </b>
-    </body>
-    </html>
-    """
-    
-    parte_html = MIMEText(html, "html")
-    mensaje.attach(parte_html)
-    
-    archivo = dest_filename
-    
-    with open(archivo, "rb") as adjunto:
-         contenido_adjunto = MIMEBase("application", "octet-stream")
-         contenido_adjunto.set_payload(adjunto.read())
-    
-    encoders.encode_base64(contenido_adjunto)
-    
-    contenido_adjunto.add_header(
-         "Content-Disposition",
-         f"attachment; filename= {archivo}",
-    )
-
-    mensaje.attach(contenido_adjunto)
-    text = mensaje.as_string()
+def ReporteDiario():
+    import gspread
+    print(sh.sheet1.get('A1'))
+    gc = gspread.service_account(filename='rep_medidor.json')
+    #sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1lCtPvKcNnJqHzQWDFuLZk3g9oeHtigPChP5kjboQ0XU/edit#gid=0')
+    sh = gc.open('Luis_Wherhahm')
+    worksheet = sh.worksheet("Hoja 1")
+    worksheet.update('B20', 'Bingo!')
+    import numpy as np
+    array = np.array([[4, 5, 6]])
+    # Write the array to worksheet starting from the A2 cell
+    #Para borrar datos
+    #worksheet.batch_clear(["A1:B1", "C2:E2", "my_named_range"])
+    worksheet.update('B8', array.tolist())
     
     
-    context = ssl.create_default_context()
-
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-          server.login(username,password)
-          print("Sesión Iniciada Correctamente !")
-          #server.sendmail(username, destinatario, mensaje)
-          server.sendmail(username, destinatario, text)
-          #server.sendmail(username, destinatario2, text)
-          print("Mensaje Enviado Correctamente !")
-
-
-"""
-while client.connected_flag: 
-    #print("In loop")
-    #received()
-    publish(client)
-    #time.sleep(5)
-"""   
 
 
 fecha=str(datetime.datetime.now())
