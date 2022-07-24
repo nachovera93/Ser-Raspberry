@@ -3914,7 +3914,7 @@ def ReporteDiario():
     #sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1lCtPvKcNnJqHzQWDFuLZk3g9oeHtigPChP5kjboQ0XU/edit#gid=0')
     sh = gc.open('Luis_Wherhahm')
     worksheet = sh.worksheet("Hoja 1")
-    worksheet.update('B15', 'Bingo!')
+    worksheet.update('V', 'Bingo!')
     #import numpy as np
     #array = np.array([[4, 5, 6]])
     # Write the array to worksheet starting from the A2 cell
