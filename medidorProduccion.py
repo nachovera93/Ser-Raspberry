@@ -3666,7 +3666,7 @@ def excelcreate():
     from openpyxl import Workbook
     exceltime=date.today()
     book = Workbook()
-    dest_filename = f'{exceltime}.xlsx'
+    dest_filename = f'Reportes/{exceltime}.xlsx'
     #sheet1 = book.active
     sheet20 = book.create_sheet(f"MaxHora Fase 1 Diario") 
     sheet21 = book.create_sheet(f"MaxHora Fase 2 Diario") 
@@ -3770,8 +3770,8 @@ def AbrirExcel():
     
     dia=date.today()
     try:
-        if(os.path.exists(f'{dia}.xlsx')):
-                dest_filename = f'{dia}.xlsx'
+        if(os.path.exists(f'Reportes/{dia}.xlsx')):
+                dest_filename = f'Reportes/{dia}.xlsx'
                 print("Existe")
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet11 = workbook[f"{k1}-{f1}"]
@@ -3914,7 +3914,9 @@ def ReporteDiario():
     #sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1lCtPvKcNnJqHzQWDFuLZk3g9oeHtigPChP5kjboQ0XU/edit#gid=0')
     sh = gc.open('Luis_Wherhahm')
     worksheet = sh.worksheet("Hoja 1")
-    worksheet.update('V', 'Bingo!')
+    values_list = worksheet.col_values(1)
+    print(values_list)
+    print(len(values_list))
     #import numpy as np
     #array = np.array([[4, 5, 6]])
     # Write the array to worksheet starting from the A2 cell
