@@ -3922,7 +3922,7 @@ def ReporteDiario():
     #worksheet.batch_clear(["A1:B1", "C2:E2", "my_named_range"])
     #worksheet.update('B8', array.tolist())
     
-    
+FuncionReporte()
 
 
 fecha=str(datetime.datetime.now())
