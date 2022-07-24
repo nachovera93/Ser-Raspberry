@@ -886,7 +886,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             shutil.copy2(dest_filename, f'Respaldo-{dest_filename}')
             #workbook.save(filename = dest_filename)
             
-            np.savetxt("EnergiasRespaldo.txt", (OneHourEnergy_1, OneHourEnergy_2,OneHourEnergy_3,OneHourEnergy_4,OneHourEnergy_5,OneHourEnergy_6,OneHourEnergy_7,OneHourEnergy_8,OneHourEnergy_9))
             ##SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
             print("Enviando Hora Max Energia 1")
             OneHourEnergy_1=0
@@ -3903,24 +3902,25 @@ def FuncionReporte():
     else:
         print("Con conexión a internet")
         s.close()
+        ReporteDiario()
         
         
 
     
 def ReporteDiario():
     import gspread
-    print(sh.sheet1.get('A1'))
+    #print(sh.sheet1.get('A1'))
     gc = gspread.service_account(filename='rep_medidor.json')
     #sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1lCtPvKcNnJqHzQWDFuLZk3g9oeHtigPChP5kjboQ0XU/edit#gid=0')
     sh = gc.open('Luis_Wherhahm')
     worksheet = sh.worksheet("Hoja 1")
-    worksheet.update('B20', 'Bingo!')
-    import numpy as np
-    array = np.array([[4, 5, 6]])
+    worksheet.update('B15', 'Bingo!')
+    #import numpy as np
+    #array = np.array([[4, 5, 6]])
     # Write the array to worksheet starting from the A2 cell
     #Para borrar datos
     #worksheet.batch_clear(["A1:B1", "C2:E2", "my_named_range"])
-    worksheet.update('B8', array.tolist())
+    #worksheet.update('B8', array.tolist())
     
     
 

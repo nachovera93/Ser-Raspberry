@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "reportes-medidor",
+  "private_key_id": "55db93356a24cceb5b81f033fb28b4a23743d392",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC2jAJcORrGl81d\nvSk0JjT9PggJnBvoVf5nnJWjUgsAScrfzchcOq71YFTap72iwHkEk9yWA+BCwQCO\nNO0MobePVhjpiBdjDiH90diQYbO9ueYOJmfcv/h7swQMU/gPPI7NBc2yx2rtY6C0\nkDsW1TQ0TzwPmFwXVsQ6p+hOoLuXnajgUw+VksMw/KJ+hjEHAoipz7NgFB8Z6CDj\nKEDbsSU4e7FloYh7fXCxNRoEuZTjShd3we6bK2pZrOOL0Aq30643lZGQmD5Mj5gq\ntbhRMWuXwxMgHdXpVuMML3P4lN/xRX/pvqRj5qef+YKaPGur2XTDBHBzS8NBEKtG\n9Lf80TF9AgMBAAECggEAHgq9qrLFKtC5vgcO/GObTeADD53O4/YfB6s33yh14gbC\n6gEiS7dmqsA/RrrbVSkK4Yt5/oBFzIaZ0k14g58rp925/NjmTGl7g5ug4eYKYBtz\ndnmwlx5KxQTJkkPRa6SCNdCSMS1rdgTy4jRoXRIaZM9zaXegFEE1yxdt/l6qcMF8\nRWp4O+lLL9ODXr9xa/BLN5GjFhM3mfPr863fCUjgZ9PZ1rk3T+JZli7aAiqctPNT\nrZy0mSMFj4yd1aIbLowuuT3egC9Mh/3e6lQAX2HgsqnjWlhcibYLFoP/pyHKIiU9\nm9lgIU81iMXQdlK5NyYJQuirIzv0Q/gAq7TveEx2KwKBgQD3nMauS4HDDRd+pGH0\npJbXfjTQfu9QQOMquhSq33VWPo+6jJeaexIpAPWeB1IZ4b9ynhqcD8v6t4X0s1uk\nEJN/WgmEZ6qpi90CYqGGihqwgQpcf6iWz61vRM/3OobAcIUXcm6FetCQYNn/GEbR\n18OLwmkiPwuEQbTqbItT2q8VGwKBgQC8uwD3MbOA+VsvKvQny/Gj26GouOegGLON\nAm1layn0cCFyyw6m+Ha7rvSzbIHv0bOk4yODidO/XxI277eKm+uSOWzedXfY9jxK\nCWCeQ41b+rYmSQXevnTAj92E54K90hu2eIwvIR4wN4HwhZkvfwLmbalR+vmPwnVc\nVwVad6d1RwKBgFY/ucUEcBKtAL4QLD63BgPR5jupu1pM/9PmNUS/yXNdH1tvlW8t\n50l5GBUPn718MN+Pyt0Jc5fFTVfLEeS4EWiOyDnikkO0gCtQh8sBWAKbMCzAGs1N\nUbAsW/RV4pItn25nYbAE85kW41hD8IcvjOGlulE/fJd4+7ecT3vJ9Kp5AoGBAI37\nBQvyCP+TF+URJGK4C85gkWpTyHTpgFIprFDq4MIyhQdN+XTlYLVrNk2w6MOY99Oo\nyPPRAUpr5FEN3/9Xs03rA5sLtiCzhcGQ8m29lh/HKbb9onvivgSLdnPgkrvoz85j\nO9rMyGAvsgJXD1nq7Cyb/RBehdZ/zTitgqp/b6xLAoGARwCE+uoiKHU4YuW/GuHI\nP9tN1D0VPdW+GxuerBIfaUNbIX/qZrOBaaiO875bd9C6kvxn8UHxssGUUP8KiXoO\nRAEMR31lG/Tysh8ARZ5plxt5MWdL97IofhLMuyDEHHAiWSUz3/t/dakmcdxgWGgr\nGANG0c505/0yEqG5Y6h+iY8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "reportes@reportes-medidor.iam.gserviceaccount.com",
+  "client_id": "114939548267934712030",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/reportes%40reportes-medidor.iam.gserviceaccount.com"
+}
