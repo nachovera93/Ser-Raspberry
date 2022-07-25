@@ -639,7 +639,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==25):
+    if(TimeEnergy.minute==35):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -648,15 +648,11 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet22 = workbook[f"MaxHora Fase 3 Diario"] 
             datetim=datetime.datetime.now()-datetime.timedelta(minutes=3)
             connect=FuncionReporte()
-            
             if(connect==1):
-                try:
                     OneHourEnergy_RedCompañia=OneHourEnergy_1+OneHourEnergy_4+OneHourEnergy_7
                     OneHourEnergy_Paneles=OneHourEnergy_2+OneHourEnergy_5+OneHourEnergy_8
                     OneHourEnergy_Carga=OneHourEnergy_3+OneHourEnergy_6+OneHourEnergy_9
                     ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
-                except:
-                    print(".")
             else:
                     print("No hay conexión")
             
