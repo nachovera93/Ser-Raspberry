@@ -648,13 +648,18 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet22 = workbook[f"MaxHora Fase 3 Diario"] 
             datetim=datetime.datetime.now()-datetime.timedelta(minutes=3)
             connect=FuncionReporte()
+            
             if(connect==1):
-                OneHourEnergy_RedCompañia=OneHourEnergy_1+OneHourEnergy_4+OneHourEnergy_7
-                OneHourEnergy_Paneles=OneHourEnergy_2+OneHourEnergy_5+OneHourEnergy_8
-                OneHourEnergy_Carga=OneHourEnergy_3+OneHourEnergy_6+OneHourEnergy_9
-                ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
+                try:
+                    OneHourEnergy_RedCompañia=OneHourEnergy_1+OneHourEnergy_4+OneHourEnergy_7
+                    OneHourEnergy_Paneles=OneHourEnergy_2+OneHourEnergy_5+OneHourEnergy_8
+                    OneHourEnergy_Carga=OneHourEnergy_3+OneHourEnergy_6+OneHourEnergy_9
+                    ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
+                except:
+                    print(".")
             else:
-                print("No hay conexión")
+                    print("No hay conexión")
+            
             dataHourFase1=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_1,5),round(OneHourEnergy_4,5),round(OneHourEnergy_7,5)]
             dataHourFase2=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_2,5),round(OneHourEnergy_5,5),round(OneHourEnergy_8,5)]
             dataHourFase3=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_3,5),round(OneHourEnergy_6,5),round(OneHourEnergy_9,5)]
@@ -3928,9 +3933,9 @@ def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHo
     print(values_list)
     Largo=len(values_list)
     print(Largo)
-    dataHourFase1=[round(OneHourEnergy_RedCompañia,5)]
-    dataHourFase2=[round(OneHourEnergy_Paneles,5)]
-    dataHourFase3=[round(OneHourEnergy_Carga,5)]
+    dataHourFase1=np.array([round(OneHourEnergy_RedCompañia,5)])
+    dataHourFase2=np.array([round(OneHourEnergy_Paneles,5)])
+    dataHourFase3=np.array([round(OneHourEnergy_Carga,5)])
     worksheet.update(f'E{Largo+1}', f'{datetim.hour}:{datetim.minute}{datetim.minute}')
     worksheet.update(f'F{Largo+1}', dataHourFase1.tolist())
     worksheet.update(f'G{Largo+1}', dataHourFase2.tolist())
