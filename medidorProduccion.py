@@ -639,7 +639,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==50):
+    if(TimeEnergy.minute==58):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -892,7 +892,11 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 Energy_9=0
                 workbook.save(filename = dest_filename)
                 excelcreate()
-            shutil.copy2(dest_filename, f'Respaldos/Respaldo-{dest_filename}')
+            print(dest_filename)
+            try:       
+                shutil.copy2(dest_filename, f'Respaldos/Respaldo-{dest_filename}')
+            except:
+                print("Continuar")
             #workbook.save(filename = dest_filename)
             
             ##SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
