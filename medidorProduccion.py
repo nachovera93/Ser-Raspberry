@@ -639,7 +639,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==8):
+    if(TimeEnergy.minute==25):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -3933,13 +3933,13 @@ def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHo
     print(values_list)
     Largo=len(values_list)
     print(Largo)
-    dataHourFase1=np.array([round(OneHourEnergy_RedCompañia,5)])
-    dataHourFase2=np.array([round(OneHourEnergy_Paneles,5)])
-    dataHourFase3=np.array([round(OneHourEnergy_Carga,5)])
+    dataHourFase1=f'{round(OneHourEnergy_RedCompañia,5)}'
+    dataHourFase2=f'{round(OneHourEnergy_Paneles,5)}'
+    dataHourFase3=f'{round(OneHourEnergy_Carga,5)}'
     worksheet.update(f'E{Largo+1}', f'{datetim.hour}:{datetim.minute}{datetim.minute}')
-    worksheet.update(f'F{Largo+1}', dataHourFase1.tolist())
-    worksheet.update(f'G{Largo+1}', dataHourFase2.tolist())
-    worksheet.update(f'H{Largo+1}', dataHourFase3.tolist())
+    worksheet.update(f'F{Largo+1}', dataHourFase1)
+    worksheet.update(f'G{Largo+1}', dataHourFase2)
+    worksheet.update(f'H{Largo+1}', dataHourFase3)
     #import numpy as np
     #array = np.array([[4, 5, 6]])
     # Write the array to worksheet starting from the A2 cell
