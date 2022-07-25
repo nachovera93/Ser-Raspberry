@@ -639,8 +639,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==35):
+    if(TimeEnergy.minute==50):
         if(acceshourenergy==0):
+            acceshourenergy=1
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
             sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -926,7 +927,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             dataHourFase1=[]
             dataHourFase2=[]
             dataHourFase3=[]
-            acceshourenergy=1
+            
             
 
             
