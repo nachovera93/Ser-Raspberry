@@ -3927,11 +3927,12 @@ def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHo
     values_list = worksheet.col_values(5)
     print(values_list)
     Largo=len(values_list)
-    dataHour=[f'{datetim.hour}:{datetim.minute}{datetim.minute}']
+    print(Largo)
+    #dataHour=[f'{datetim.hour}:{datetim.minute}{datetim.minute}']
     dataHourFase1=[round(OneHourEnergy_RedCompañia,5)]
     dataHourFase2=[round(OneHourEnergy_Paneles,5)]
     dataHourFase3=[round(OneHourEnergy_Carga,5)]
-    worksheet.update(f'E{Largo+1}', dataHour)
+    #worksheet.update(f'E{Largo+1}', dataHour)
     worksheet.update(f'F{Largo+1}', dataHourFase1)
     worksheet.update(f'G{Largo+1}', dataHourFase2)
     worksheet.update(f'H{Largo+1}', dataHourFase3)
