@@ -12,12 +12,17 @@ datetim=datetime.datetime.now()-datetime.timedelta(minutes=3)
 datetim=json.dumps(datetim.time(), default=str)
 #=[f'{datetim.hour}:{datetim.minute}{datetim.minute}']
 print(datetime)
-worksheet.update('E12',datetim[1:6])
+worksheet.update('F13',datetim[1:6])
 
 
 values_list = worksheet.col_values(1)
 print(values_list)
 print(len(values_list))
+OneHourEnergy_RedCompañia=0.1
+array = np.array([[round(OneHourEnergy_RedCompañia,5)]])
+
+# Write the array to worksheet starting from the A2 cell
+worksheet.update('G13', array.tolist())  
 #import numpy as np
 #array = np.array([[4, 5, 6]])
 
