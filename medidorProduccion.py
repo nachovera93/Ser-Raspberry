@@ -3917,7 +3917,7 @@ def FuncionReporte():
         
 
     
-def ReporteDiario():#(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga):
+def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga):
     import gspread
     #print(sh.sheet1.get('A1'))
     gc = gspread.service_account(filename='rep_medidor.json')
@@ -3928,14 +3928,11 @@ def ReporteDiario():#(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     print(values_list)
     Largo=len(values_list)
     print(Largo)
-    #dataHour=[f'{datetim.hour}:{datetim.minute}{datetim.minute}']
-    dataHourFase1=np.array([[4, 5, 6]])
-    dataHourFase2=np.array([[4, 5, 6]])
-    dataHourFase3=np.array([[4, 5, 6]])
-    #dataHourFase1=[round(1,5)]
-    #dataHourFase2=[round(2,5)]
-    #dataHourFase3=[round(3,5)]
-    #worksheet.update(f'E{Largo+1}', dataHour)
+    dataHour=[f'{datetim.hour}:{datetim.minute}{datetim.minute}']
+    dataHourFase1=[round(OneHourEnergy_RedCompañia,5)]
+    dataHourFase2=[round(OneHourEnergy_Paneles,5)]
+    dataHourFase3=[round(OneHourEnergy_Carga,5)]
+    worksheet.update(f'E{Largo+1}', dataHour.tolist())
     worksheet.update(f'F{Largo+1}', dataHourFase1.tolist())
     worksheet.update(f'G{Largo+1}', dataHourFase2.tolist())
     worksheet.update(f'H{Largo+1}', dataHourFase3.tolist())
@@ -3946,7 +3943,7 @@ def ReporteDiario():#(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     #worksheet.batch_clear(["A1:B1", "C2:E2", "my_named_range"])
     #worksheet.update('B8', array.tolist())
     
-ReporteDiario()
+#ReporteDiario()
 
 
 fecha=str(datetime.datetime.now())
