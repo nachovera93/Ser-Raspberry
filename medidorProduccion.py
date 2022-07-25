@@ -641,7 +641,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         acceshourenergy=0
     if(TimeEnergy.minute==50):
         if(acceshourenergy==0):
-            acceshourenergy=1
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
             sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -893,7 +892,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 Energy_9=0
                 workbook.save(filename = dest_filename)
                 excelcreate()
-            shutil.copy2(dest_filename, f'Respaldo-{dest_filename}')
+            shutil.copy2(dest_filename, f'Respaldos/Respaldo-{dest_filename}')
             #workbook.save(filename = dest_filename)
             
             ##SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
@@ -927,6 +926,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             dataHourFase1=[]
             dataHourFase2=[]
             dataHourFase3=[]
+            acceshourenergy=1
             
             
 
