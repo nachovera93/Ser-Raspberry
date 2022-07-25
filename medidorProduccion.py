@@ -3936,9 +3936,9 @@ def ReporteDiario():#(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     #dataHourFase2=[round(2,5)]
     #dataHourFase3=[round(3,5)]
     #worksheet.update(f'E{Largo+1}', dataHour)
-    worksheet.update(f'F{Largo+1}', dataHourFase1)
-    worksheet.update(f'G{Largo+1}', dataHourFase2)
-    worksheet.update(f'H{Largo+1}', dataHourFase3)
+    worksheet.update(f'F{Largo+1}', dataHourFase1.tolist())
+    worksheet.update(f'G{Largo+1}', dataHourFase2.tolist())
+    worksheet.update(f'H{Largo+1}', dataHourFase3.tolist())
     #import numpy as np
     #array = np.array([[4, 5, 6]])
     # Write the array to worksheet starting from the A2 cell
