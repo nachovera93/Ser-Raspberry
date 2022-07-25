@@ -639,7 +639,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==25):
+    if(TimeEnergy.minute==35):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -3928,11 +3928,10 @@ def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHo
     print(values_list)
     Largo=len(values_list)
     print(Largo)
-    dataHour=[f'{datetim.hour}:{datetim.minute}{datetim.minute}']
     dataHourFase1=[round(OneHourEnergy_RedCompañia,5)]
     dataHourFase2=[round(OneHourEnergy_Paneles,5)]
     dataHourFase3=[round(OneHourEnergy_Carga,5)]
-    worksheet.update(f'E{Largo+1}', dataHour.tolist())
+    worksheet.update(f'E{Largo+1}', f'{datetim.hour}:{datetim.minute}{datetim.minute}')
     worksheet.update(f'F{Largo+1}', dataHourFase1.tolist())
     worksheet.update(f'G{Largo+1}', dataHourFase2.tolist())
     worksheet.update(f'H{Largo+1}', dataHourFase3.tolist())
