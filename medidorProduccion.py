@@ -3934,10 +3934,15 @@ def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHo
     print(values_list)
     Largo=len(values_list)
     print(Largo)
-    dataHourFase1=f'{round(OneHourEnergy_RedCompañia,5)}'
-    dataHourFase2=f'{round(OneHourEnergy_Paneles,5)}'
-    dataHourFase3=f'{round(OneHourEnergy_Carga,5)}'
-    worksheet.update(f'E{Largo+1}', f'{datetim.hour}:{datetim.minute}{datetim.minute}')
+    #dataHourFase1=f'{round(OneHourEnergy_RedCompañia,5)}'
+    #dataHourFase2=f'{round(OneHourEnergy_Paneles,5)}'
+    #dataHourFase3=f'{round(OneHourEnergy_Carga,5)}'
+    dataHourFase1=json.dumps(round(OneHourEnergy_RedCompañia,5), default=str)
+    dataHourFase2=json.dumps(round(OneHourEnergy_Carga,5), default=str)
+    dataHourFase3=json.dumps(round(OneHourEnergy_Paneles,5), default=str)
+    datetim=json.dumps(datetim.time(), default=str)
+    worksheet.update(f'E{Largo+1}',datetim[1:6])
+    #worksheet.update(f'E{Largo+1}', f'{datetim.hour}:{datetim.minute}{datetim.minute}')
     worksheet.update(f'F{Largo+1}', dataHourFase1)
     worksheet.update(f'G{Largo+1}', dataHourFase2)
     worksheet.update(f'H{Largo+1}', dataHourFase3)
