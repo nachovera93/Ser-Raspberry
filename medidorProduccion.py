@@ -3945,6 +3945,7 @@ def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHo
     #dataHourFase1=f'{round(OneHourEnergy_RedCompañia,5)}'
     #dataHourFase2=f'{round(OneHourEnergy_Paneles,5)}'
     #dataHourFase3=f'{round(OneHourEnergy_Carga,5)}'
+    datetim=json.dumps(datetim.time(), default=str)
     array = np.array([[round(OneHourEnergy_RedCompañia,5)]])
     array2 = np.array([[round(OneHourEnergy_Carga,5)]])
     array3 = np.array([[round(OneHourEnergy_Paneles,5)]]) 
