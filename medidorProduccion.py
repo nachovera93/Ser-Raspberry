@@ -639,7 +639,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==3):
+    if(TimeEnergy.minute==18):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -737,7 +737,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 dia0=date.today()
                 dia=str(dia0-timedelta(1))
                 x=0
-                for f in os.listdir('/home/pi/Desktop/Ser-Raspberry/'):
+                for f in os.listdir('/home/pi/Desktop/Ser-Raspberry/Reportes/'):
                     if(dia[5:7]==f[5:7]):
                         DiasExcel.append(f) 
                         print(f)
@@ -780,6 +780,14 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             sheet23 = workbook2[f"Energia Fase 1 Mensual"]
                             sheet24 = workbook2[f"Energia Fase 2 Mensual"]
                             sheet25 = workbook2[f"Energia Fase 3 Mensual"] 
+                            #connect=FuncionReporte()
+                            #if(connect==1):
+                            #        Energy_RedCompañia=Energy_1+Energy_4+Energy_7
+                            #        Energy_Paneles=Energy_2+Energy_5+Energy_8
+                            #        Energy_Carga=Energy_3+Energy_6+Energy_9
+                            #        ReporteDiario(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga)
+                            #else:
+                            #        print("No hay conexión")
                             sheet23.append(list(dataMonthFase1))        
                             sheet24.append(list(dataMonthFase2))
                             sheet25.append(list(dataMonthFase3))
