@@ -639,7 +639,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==27):
+    if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -3951,9 +3951,9 @@ def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHo
     array3 = np.array([[round(OneHourEnergy_Paneles,5)]]) 
     #datetim=json.dumps(datetim.time())
     array4 = np.array([[datetim[1:6]]])
-    worksheet.update(f'E{Largo+1}',array4.tolist())
-    worksheet.update(f'F{Largo+1}', array.tolist())
-    worksheet.update(f'G{Largo+1}', array2.tolist())
+    worksheet.update(f'F{Largo+1}',array4.tolist())
+    worksheet.update(f'G{Largo+1}', array.tolist())
+    worksheet.update(f'I{Largo+1}', array2.tolist())
     worksheet.update(f'H{Largo+1}', array3.tolist())
     #import numpy as np
     #array = np.array([[4, 5, 6]])
