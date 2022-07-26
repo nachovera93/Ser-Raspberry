@@ -3788,8 +3788,6 @@ def AbrirExcel():
     global Energy_7
     global Energy_8
     global Energy_9
-    
-    
     dia=date.today()
     try:
         if(os.path.exists(f'Reportes/{dia}.xlsx')):
@@ -3837,9 +3835,8 @@ def AbrirExcel():
                 dest_filename = f'Reportes/{dia}.xlsx'
                 shutil.copy2(f'Respaldos/Respaldo-{dia}.xlsx',dest_filename)
                 print("Creando nuevo Excel con respaldo")
-               
                 #dest_filename = f'Respaldo-{dia}.xlsx'
-                with open('mi_fichero.txt', 'w') as f:
+                with open('NuevoExcel.txt', 'w') as f:
                     horaComienzo=datetime.datetime.now()
                     f.write(f'Hora comienzo con creacion de nuevo excel: {horaComienzo}')
     
@@ -3938,7 +3935,7 @@ def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHo
     #sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1lCtPvKcNnJqHzQWDFuLZk3g9oeHtigPChP5kjboQ0XU/edit#gid=0')
     sh = gc.open('Luis_Wherhahm')
     worksheet = sh.worksheet("Hoja 1")
-    values_list = worksheet.col_values(5)
+    values_list = worksheet.col_values(6)
     print(values_list)
     Largo=len(values_list)
     print(Largo)
