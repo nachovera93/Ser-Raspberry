@@ -786,6 +786,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                                     Energy_RedCompañia=Energy_1+Energy_4+Energy_7
                                     Energy_Paneles=Energy_2+Energy_5+Energy_8
                                     Energy_Carga=Energy_3+Energy_6+Energy_9
+                                    print(f'Energias {Energy_RedCompañia}-{Energy_Paneles}-{Energy_Carga}')
                                     ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga)
                             else:
                                     print("No hay conexión")
@@ -3928,6 +3929,7 @@ def FuncionReporte():
         
         
 def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
+    print("Entrando a Reportes Diarios")
     gc = gspread.service_account(filename='rep_medidor.json')
     sh = gc.open('Luis_Wherhahm')
     worksheet = sh.worksheet("Hoja 1")
