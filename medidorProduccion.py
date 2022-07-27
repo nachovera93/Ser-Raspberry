@@ -640,7 +640,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==56):
+    if(TimeEnergy.minute==5):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -664,7 +664,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
             workbook.save(filename = dest_filename)
-            if(TimeEnergy.hour==15 and TimeEnergy.minute==56):
+            if(TimeEnergy.hour==16 and TimeEnergy.minute==5):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -781,15 +781,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             sheet23 = workbook2[f"Energia Fase 1 Mensual"]
                             sheet24 = workbook2[f"Energia Fase 2 Mensual"]
                             sheet25 = workbook2[f"Energia Fase 3 Mensual"] 
-                            connect=FuncionReporte()
-                            if(connect==1):
-                                    Energy_RedCompañia=Energy_1+Energy_4+Energy_7
-                                    Energy_Paneles=Energy_2+Energy_5+Energy_8
-                                    Energy_Carga=Energy_3+Energy_6+Energy_9
-                                    print(f'Energias {Energy_RedCompañia}-{Energy_Paneles}-{Energy_Carga}')
-                                    ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga)
-                            else:
-                                    print("No hay conexión")
                             sheet23.append(list(dataMonthFase1))        
                             sheet24.append(list(dataMonthFase2))
                             sheet25.append(list(dataMonthFase3))
@@ -807,7 +798,15 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                         except:
                             print("Error en Maximos diarios")
                             continue
-                       
+                connect=FuncionReporte()
+                if(connect==1):
+                        Energy_RedCompañia=Energy_1+Energy_4+Energy_7
+                        Energy_Paneles=Energy_2+Energy_5+Energy_8
+                        Energy_Carga=Energy_3+Energy_6+Energy_9
+                        print(f'Energias {Energy_RedCompañia}-{Energy_Paneles}-{Energy_Carga}')
+                        ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga)
+                else:
+                        print("No hay conexión")      
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet23 = workbook[f"Energia Fase 1 Mensual"]
                 sheet24 = workbook[f"Energia Fase 2 Mensual"]
