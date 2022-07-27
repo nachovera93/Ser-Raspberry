@@ -12,6 +12,7 @@ from openpyxl.chart import (
     ProjectedPieChart,
     Reference
 )
+import gspread
 import xlsxwriter
 import random
 import time
@@ -652,7 +653,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                     OneHourEnergy_RedCompañia=OneHourEnergy_1+OneHourEnergy_4+OneHourEnergy_7
                     OneHourEnergy_Paneles=OneHourEnergy_2+OneHourEnergy_5+OneHourEnergy_8
                     OneHourEnergy_Carga=OneHourEnergy_3+OneHourEnergy_6+OneHourEnergy_9
-                    ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
+                    ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
             else:
                     print("No hay conexión")
             
@@ -780,14 +781,14 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             sheet23 = workbook2[f"Energia Fase 1 Mensual"]
                             sheet24 = workbook2[f"Energia Fase 2 Mensual"]
                             sheet25 = workbook2[f"Energia Fase 3 Mensual"] 
-                            #connect=FuncionReporte()
-                            #if(connect==1):
-                            #        Energy_RedCompañia=Energy_1+Energy_4+Energy_7
-                            #        Energy_Paneles=Energy_2+Energy_5+Energy_8
-                            #        Energy_Carga=Energy_3+Energy_6+Energy_9
-                            #        ReporteDiario(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga)
-                            #else:
-                            #        print("No hay conexión")
+                            connect=FuncionReporte()
+                            if(connect==1):
+                                    Energy_RedCompañia=Energy_1+Energy_4+Energy_7
+                                    Energy_Paneles=Energy_2+Energy_5+Energy_8
+                                    Energy_Carga=Energy_3+Energy_6+Energy_9
+                                    ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga)
+                            else:
+                                    print("No hay conexión")
                             sheet23.append(list(dataMonthFase1))        
                             sheet24.append(list(dataMonthFase2))
                             sheet25.append(list(dataMonthFase3))
@@ -3926,10 +3927,27 @@ def FuncionReporte():
         
         
         
-
+def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
+    gc = gspread.service_account(filename='rep_medidor.json')
+    sh = gc.open('Luis_Wherhahm')
+    worksheet = sh.worksheet("Hoja 1")
+    values_list = worksheet.col_values(2)
+    Largo=len(values_list)
+    array = np.array([[round(Energy_RedCompañia,5)]])
+    array2 = np.array([[round(Energy_Paneles,5)]])
+    array3 = np.array([[round(Energy_Carga,5)]]) 
+    datetim=json.dumps(datetim, default=str)
+    array4 = np.array([[datetim[1:11]]])
+    worksheet.update(f'A{Largo+1}',array4.tolist())
+    worksheet.update(f'B{Largo+1}', array.tolist())
+    worksheet.update(f'C{Largo+1}', array2.tolist())
+    worksheet.update(f'D{Largo+1}', array3.tolist())
+    values_list = worksheet.col_values(6)
+    Largo=len(values_list)
+    worksheet.batch_clear([f"F2:F{Largo+1}",f"G2:G{Largo+1}",f"H2:H{Largo+1}",f"I2:I{Largo+1}"])
     
-def ReporteDiario(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga):
-    import gspread
+def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga):
+    
     #print(sh.sheet1.get('A1'))
     gc = gspread.service_account(filename='rep_medidor.json')
     #sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1lCtPvKcNnJqHzQWDFuLZk3g9oeHtigPChP5kjboQ0XU/edit#gid=0')
