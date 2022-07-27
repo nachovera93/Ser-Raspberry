@@ -640,7 +640,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==49):
+    if(TimeEnergy.minute==56):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -664,7 +664,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
             workbook.save(filename = dest_filename)
-            if(TimeEnergy.hour==15 and TimeEnergy.minute==49):
+            if(TimeEnergy.hour==15 and TimeEnergy.minute==56):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -746,7 +746,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 for f in DiasExcel:
                         x = x+1 
                         try:
-                            workbook=openpyxl.load_workbook(filename = f'{f}')
+                            workbook=openpyxl.load_workbook(filename = f'Reportes/{f}')
                             sheet1 = workbook[f"REDCompañia-Fase-1"]
                             sheet2 = workbook[f"REDCompañia-Fase-2"]
                             sheet3 = workbook[f"REDCompañia-Fase-3"]
@@ -802,8 +802,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             Energy_7_TotalMes.append(Energy_7)
                             Energy_8_TotalMes.append(Energy_8)
                             Energy_9_TotalMes.append(Energy_9)
-                            print(f)
-                            workbook.save(filename = f'{f}')
+                            workbook.save(filename = f'Reportes/{f}')
                             workbook2.save(filename = dest_filename)
                         except:
                             print("Error en Maximos diarios")
@@ -903,7 +902,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 Energy_9=0
                 workbook.save(filename = dest_filename)
                 excelcreate()
-            print(dest_filename)
+            print(f'Dest {dest_filename}')
             try:       
                 shutil.copy2(dest_filename, f'Respaldos/Respaldo-{dest_filename}')
             except:
