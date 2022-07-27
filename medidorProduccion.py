@@ -806,6 +806,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             workbook.save(filename = f'{f}')
                             workbook2.save(filename = dest_filename)
                         except:
+                            print("Error en Maximos diarios")
                             continue
                        
                 workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -4212,7 +4213,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if(len(BufferCurrent_3)>=3 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_3)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            print(f'Current cal 4: {MediaBufferCurrent}')
+            #print(f'Current cal 4: {MediaBufferCurrent}')
             print(f'Irms {i}: {Irms}')
             #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
@@ -4225,7 +4226,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         if(len(BufferCurrent_4)>=3 and Vrms<240):
             MediaBufferCurrent=np.median(BufferCurrent_4)
             Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            print(f'Current cal 4: {MediaBufferCurrent}')
+            #print(f'Current cal 4: {MediaBufferCurrent}')
             print(f'Irms {i}: {Irms}')
             #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
             CurrentFFT(NoCurrentoffset,samplings,i,Irms)
