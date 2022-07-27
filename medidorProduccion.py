@@ -664,7 +664,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
             workbook.save(filename = dest_filename)
-            if(TimeEnergy.hour==16 and TimeEnergy.minute==13):
+            if(TimeEnergy.hour==17 and TimeEnergy.minute==18):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
