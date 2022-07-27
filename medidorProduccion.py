@@ -640,7 +640,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==5):
+    if(TimeEnergy.minute==10):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -664,7 +664,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
             workbook.save(filename = dest_filename)
-            if(TimeEnergy.hour==16 and TimeEnergy.minute==5):
+            if(TimeEnergy.hour==16 and TimeEnergy.minute==10):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -744,8 +744,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                         print(f)
                 DiasExcel=sorted(DiasExcel)
                 for f in DiasExcel:
-                        x = x+1 
-                        try:
+                            x = x+1 
+                        #try:
                             workbook=openpyxl.load_workbook(filename = f'Reportes/{f}')
                             sheet1 = workbook[f"REDCompañia-Fase-1"]
                             sheet2 = workbook[f"REDCompañia-Fase-2"]
@@ -795,9 +795,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             Energy_9_TotalMes.append(Energy_9)
                             workbook.save(filename = f'Reportes/{f}')
                             workbook2.save(filename = dest_filename)
-                        except:
+                        #except:
                             print("Error en Maximos diarios")
-                            continue
+                            #continue
                 connect=FuncionReporte()
                 if(connect==1):
                         Energy_RedCompañia=Energy_1+Energy_4+Energy_7
@@ -4179,7 +4179,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
     if(i==1):
         if(len(BufferCurrent_1)>=3 and Vrms<240):
             tm1=time.time() #1 -> 10 ->23
-            print(tm1)
             try:
                 print(f' Tiempos de diferencia: {tm1-tm2}')
             except:
@@ -4192,7 +4191,6 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
             Potencias(i,Irms,Vrms,potrmsCGE)     
             BufferCurrent_1=[]
             tm2=time.time() #2 -> 11
-            print(tm2)
         else:
             BufferCurrent_1.append(Irms)
     elif(i==2):
