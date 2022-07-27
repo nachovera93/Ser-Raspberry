@@ -746,6 +746,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 for f in DiasExcel:
                             x = x+1 
                         #try:
+                            print(x)
                             workbook=openpyxl.load_workbook(filename = f'Reportes/{f}')
                             sheet1 = workbook[f"REDCompañia-Fase-1"]
                             sheet2 = workbook[f"REDCompañia-Fase-2"]
@@ -793,6 +794,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             Energy_7_TotalMes.append(Energy_7)
                             Energy_8_TotalMes.append(Energy_8)
                             Energy_9_TotalMes.append(Energy_9)
+                            print(f'dest filename = {dest_filename}')
                             workbook.save(filename = f'Reportes/{f}')
                             workbook2.save(filename = dest_filename)
                         #except:
