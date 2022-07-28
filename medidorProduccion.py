@@ -640,7 +640,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==18):
+    if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -664,7 +664,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
             workbook.save(filename = dest_filename)
-            if(TimeEnergy.hour==17 and TimeEnergy.minute==18):
+            if(TimeEnergy.hour==15 and TimeEnergy.minute==3):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -904,11 +904,11 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 Energy_8=0
                 Energy_9=0
                 workbook.save(filename = dest_filename)
-                #excelcreate()
-            print(f'Dest {dest_filename}')
+                excelcreate()
             timef=date.today()
             try:       
                 shutil.copy2(dest_filename, f'Respaldos/Respaldo-{timef}.xlsx')
+                print("Archivo Copiado")
             except:
                 print("Continuar")
             #workbook.save(filename = dest_filename)
@@ -3952,36 +3952,25 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
     Largo=len(values_list)
     worksheet.batch_clear([f"F2:F{Largo+1}",f"G2:G{Largo+1}",f"H2:H{Largo+1}",f"I2:I{Largo+1}"])
     
-def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga):
     
-    #print(sh.sheet1.get('A1'))
+def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga):
     gc = gspread.service_account(filename='rep_medidor.json')
-    #sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1lCtPvKcNnJqHzQWDFuLZk3g9oeHtigPChP5kjboQ0XU/edit#gid=0')
     sh = gc.open('Luis_Wherhahm')
     worksheet = sh.worksheet("Hoja 1")
     values_list = worksheet.col_values(6)
     print(values_list)
     Largo=len(values_list)
     print(Largo)
-    #dataHourFase1=f'{round(OneHourEnergy_RedCompañia,5)}'
-    #dataHourFase2=f'{round(OneHourEnergy_Paneles,5)}'
-    #dataHourFase3=f'{round(OneHourEnergy_Carga,5)}'
     datetim=json.dumps(datetim.time(), default=str)
     array = np.array([[round(OneHourEnergy_RedCompañia,5)]])
     array2 = np.array([[round(OneHourEnergy_Carga,5)]])
     array3 = np.array([[round(OneHourEnergy_Paneles,5)]]) 
-    #datetim=json.dumps(datetim.time())
     array4 = np.array([[datetim[1:6]]])
     worksheet.update(f'F{Largo+1}',array4.tolist())
     worksheet.update(f'G{Largo+1}', array.tolist())
     worksheet.update(f'I{Largo+1}', array2.tolist())
     worksheet.update(f'H{Largo+1}', array3.tolist())
-    #import numpy as np
-    #array = np.array([[4, 5, 6]])
-    # Write the array to worksheet starting from the A2 cell
-    #Para borrar datos
-    #worksheet.batch_clear(["A1:B1", "C2:E2", "my_named_range"])
-    #worksheet.update('B8', array.tolist())
+   
     
 #ReporteDiario()
 
