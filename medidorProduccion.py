@@ -664,7 +664,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
             workbook.save(filename = dest_filename)
-            if(TimeEnergy.hour==15 and TimeEnergy.minute==3):
+            if(TimeEnergy.hour==13 and TimeEnergy.minute==29):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -3870,25 +3870,27 @@ savedata8=0
 savedata9=0
 DataAppend1=[]
 def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k,f):
-       Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
-       workbook=openpyxl.load_workbook(filename = dest_filename)
+       #Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+       #workbook=openpyxl.load_workbook(filename = dest_filename)
        if(i==1):
-             #global savedata1
-             #global DataAppend1
-             #Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
-             #DataAppend1.append(Data)
-             #print(f"largo Data Append: {len(DataAppend1)}")
-             #savedata1 = savedata1 + 1
-             #print(savedata1)
-             #if(savedata1>=5):
-             #   print("Entro a savedata")
-             #   workbook=openpyxl.load_workbook(filename = dest_filename)
-            sheet11 = workbook[f"{k}-{f}"]
-            sheet11.append(list(DataAppend1))
-             #   workbook.save(filename = dest_filename)
-             #   DataAppend1=[]
-             #   savedata1 = 0
-             #Data=[]
+             global savedata1
+             global DataAppend1
+             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+             DataAppend1.append(Data)
+             print(f"largo Data Append: {len(DataAppend1)}")
+             savedata1 = savedata1 + 1
+             print(savedata1)
+             if(savedata1>=5):
+                print("Entro a savedata")
+                workbook=openpyxl.load_workbook(filename = dest_filename)
+                sheet11 = workbook[f"{k}-{f}"]
+                for i in DataAppend1:
+                    sheet11.append(i)
+                #sheet11.append(list(DataAppend1))
+                workbook.save(filename = dest_filename)
+                DataAppend1=[]
+                savedata1 = 0
+             Data=[]
        elif(i==2):
              sheet12 = workbook[f"{k}-{f}"]
              sheet12.append(list(Data))
@@ -3913,7 +3915,7 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        elif(i==9):
              sheet19 = workbook[f"{k}-{f}"]
              sheet19.append(list(Data))
-       workbook.save(filename = dest_filename)
+       #workbook.save(filename = dest_filename)
        Data=[]
     
 def FuncionReporte():
