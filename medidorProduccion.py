@@ -640,7 +640,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==40):
+    if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -3882,6 +3882,7 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
              print(savedata1)
              if(savedata1>=5):
                 print("Entro a savedata")
+                print(f"Abriendo {dest_filename}")
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet11 = workbook[f"{k}-{f}"]
                 for i in DataAppend1:
