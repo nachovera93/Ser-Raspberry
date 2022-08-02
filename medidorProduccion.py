@@ -4060,7 +4060,7 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
     worksheet.update(f'E{Largo+1}', array4.tolist())
     values_list = worksheet.col_values(6)
     Largo=len(values_list)
-    worksheet.batch_clear([f"F2:F{Largo+1}",f"G2:G{Largo+1}",f"H2:H{Largo+1}",f"I2:I{Largo+1}"])
+    #worksheet.batch_clear([f"F2:F{Largo+1}",f"G2:G{Largo+1}",f"H2:H{Largo+1}",f"I2:I{Largo+1}"])
     
     
 def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga):
