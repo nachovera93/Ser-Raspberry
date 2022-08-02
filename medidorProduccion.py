@@ -640,7 +640,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==55):
+    if(TimeEnergy.minute==7):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -664,7 +664,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
             workbook.save(filename = dest_filename)
-            if(TimeEnergy.hour==13 and TimeEnergy.minute==55):
+            if(TimeEnergy.hour==15 and TimeEnergy.minute==7):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -4052,9 +4052,8 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
         array2 = np.array([[round(Energy_Paneles,5)]])
         array3 = np.array([[round(Energy_Carga,5)]]) 
         array4 = np.array([[round(val,1)]]) 
-        #datetim=json.dumps(datetim)
-        array5 = np.array(datetim)
-        worksheet.update(f'A{Largo+1}',array5.tolist())
+        datetim=json.dumps(datetim, default=str)
+        worksheet.update(f'A{Largo+1}',datetim)
         worksheet.update(f'B{Largo+1}', array.tolist())
         worksheet.update(f'C{Largo+1}', array2.tolist())
         worksheet.update(f'D{Largo+1}', array3.tolist())

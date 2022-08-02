@@ -42,10 +42,29 @@ for i in lst:
 
 book.save(filename = dest_filename)
 
+datetim=datetime.datetime.now()-datetime.timedelta(days=1)
 
-
-
-val = float(worksheet.acell('B2').value)
-print(val)
-#yast lan
-#vicibox10:~ # install-vicibox
+gc = gspread.service_account(filename='rep_medidor.json')
+sh = gc.open('Luis_Wherhahm')
+worksheet = sh.worksheet("Hoja 1")
+values_list = worksheet.col_values(2)
+Largo=len(values_list)
+val = float(worksheet.acell('T2').value)*1.0
+array = np.array([[round(0.0,5)]])
+print(array)
+array2 = np.array([[round(0.0,5)]])
+array3 = np.array([[round(0.0,5)]]) 
+array4 = np.array([[round(val,1)]]) 
+#datetim=json.dumps(datetim)
+dia=datetim.date()
+print(dia)
+datetim=json.dumps(dia, default=str)
+array5 = np.array([dia])
+print(array5)
+worksheet.update(f'A{Largo+1}',datetim)
+worksheet.update(f'B{Largo+1}', array.tolist())
+worksheet.update(f'C{Largo+1}', array2.tolist())
+worksheet.update(f'D{Largo+1}', array3.tolist())
+worksheet.update(f'E{Largo+1}', array4.tolist())
+values_list = worksheet.col_values(6)
+Largo=len(values_list)
