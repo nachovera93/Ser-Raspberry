@@ -4050,7 +4050,7 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
     array = np.array([[round(Energy_RedCompañia,5)]])
     array2 = np.array([[round(Energy_Paneles,5)]])
     array3 = np.array([[round(Energy_Carga,5)]]) 
-    array4 = np.array([[round(val,5)]]) 
+    array4 = np.array([[round(val,1)]]) 
     datetim=json.dumps(datetim, default=str)
     array4 = np.array([[datetim[1:11]]])
     worksheet.update(f'A{Largo+1}',array4.tolist())
