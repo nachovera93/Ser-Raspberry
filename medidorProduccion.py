@@ -640,7 +640,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
         acceshourenergy=0
-    if(TimeEnergy.minute==10):
+    if(TimeEnergy.minute==19):
         if(acceshourenergy==0):
             print("Entrando a graficar")
             workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -664,7 +664,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
             workbook.save(filename = dest_filename)
-            if(TimeEnergy.hour==13 and TimeEnergy.minute==10):
+            if(TimeEnergy.hour==13 and TimeEnergy.minute==19):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
@@ -4071,7 +4071,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     print(values_list)
     Largo=len(values_list)
     print(Largo)
-    datetim=json.dumps(datetim.time(), default=str)
+    datetim=json.dumps(datetim)
     array = np.array([[round(OneHourEnergy_RedCompañia,5)]])
     array2 = np.array([[round(OneHourEnergy_Carga,5)]])
     array3 = np.array([[round(OneHourEnergy_Paneles,5)]]) 
