@@ -43,8 +43,9 @@ for i in lst:
 book.save(filename = dest_filename)
 
 
-import datetime
-datetim=datetime.datetime.now()-datetime.timedelta(days=1)
-print(datetim.date())
+
+
+val = float(worksheet.acell('B2').value)
+print(val)
 #yast lan
 #vicibox10:~ # install-vicibox

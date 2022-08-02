@@ -4046,7 +4046,7 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
     worksheet = sh.worksheet("Hoja 1")
     values_list = worksheet.col_values(2)
     Largo=len(values_list)
-    val = worksheet.acell('T2').value
+    val = float(worksheet.acell('T2').value)
     array = np.array([[round(Energy_RedCompañia,5)]])
     array2 = np.array([[round(Energy_Paneles,5)]])
     array3 = np.array([[round(Energy_Carga,5)]]) 
