@@ -653,7 +653,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                     OneHourEnergy_RedCompañia=OneHourEnergy_1+OneHourEnergy_4+OneHourEnergy_7
                     OneHourEnergy_Paneles=OneHourEnergy_2+OneHourEnergy_5+OneHourEnergy_8
                     OneHourEnergy_Carga=OneHourEnergy_3+OneHourEnergy_6+OneHourEnergy_9
-                    ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
+                    ReporteDiarioHora(datetim.hour,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
             else:
                     print("No hay conexión")
             
@@ -807,8 +807,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                         Energy_RedCompañia=Energy_1+Energy_4+Energy_7
                         Energy_Paneles=Energy_2+Energy_5+Energy_8
                         Energy_Carga=Energy_3+Energy_6+Energy_9
+                        datetim=datetime.datetime.now()-datetime.timedelta(days=1)
                         print(f'Energias {Energy_RedCompañia}-{Energy_Paneles}-{Energy_Carga}')
-                        ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga)
+                        ReporteDiarioDia(datetim.date(),Energy_RedCompañia,Energy_Paneles,Energy_Carga)
                 else:
                         print("No hay conexión")      
                 workbook=openpyxl.load_workbook(filename = dest_filename)
@@ -4045,15 +4046,18 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
     worksheet = sh.worksheet("Hoja 1")
     values_list = worksheet.col_values(2)
     Largo=len(values_list)
+    val = worksheet.acell('T2').value
     array = np.array([[round(Energy_RedCompañia,5)]])
     array2 = np.array([[round(Energy_Paneles,5)]])
     array3 = np.array([[round(Energy_Carga,5)]]) 
+    array4 = np.array([[round(val,5)]]) 
     datetim=json.dumps(datetim, default=str)
     array4 = np.array([[datetim[1:11]]])
     worksheet.update(f'A{Largo+1}',array4.tolist())
     worksheet.update(f'B{Largo+1}', array.tolist())
     worksheet.update(f'C{Largo+1}', array2.tolist())
     worksheet.update(f'D{Largo+1}', array3.tolist())
+    worksheet.update(f'E{Largo+1}', array4.tolist())
     values_list = worksheet.col_values(6)
     Largo=len(values_list)
     worksheet.batch_clear([f"F2:F{Largo+1}",f"G2:G{Largo+1}",f"H2:H{Largo+1}",f"I2:I{Largo+1}"])

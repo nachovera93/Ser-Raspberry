@@ -43,5 +43,8 @@ for i in lst:
 book.save(filename = dest_filename)
 
 
-yast lan
-vicibox10:~ # install-vicibox
+import datetime
+datetim=datetime.datetime.now()-datetime.timedelta(days=1)
+print(datetim.date())
+#yast lan
+#vicibox10:~ # install-vicibox
