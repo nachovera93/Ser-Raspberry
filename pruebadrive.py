@@ -66,3 +66,7 @@ worksheet.update(f'D{Largo+1}', array3.tolist())
 worksheet.update(f'E{Largo+1}', array4.tolist())
 values_list = worksheet.col_values(6)
 Largo=len(values_list)
+
+
+
+#EAALGJZCNm6ecBAAjKHES85sGlO2sqpNDpleJJ1ZCbw5V6KMNaBLxuifk9tyHl9ZAWrC7nzWZCYq88LRdYNuYG8ZAyw99ZCbtKtrZBOSNyyCU3yubeO6zfOLI9817bLgaA7tE65FjT91CiiK7v475ZC4SkM5t2IgQpFMkiJMqgoXaGgKW8VGHzpo9

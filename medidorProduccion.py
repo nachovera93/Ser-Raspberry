@@ -650,9 +650,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             datetim=datetime.datetime.now()-datetime.timedelta(minutes=3)
             connect=FuncionReporte()
             if(connect==1):
-                    OneHourEnergy_RedCompañia=OneHourEnergy_1+OneHourEnergy_4+OneHourEnergy_7
-                    OneHourEnergy_Paneles=OneHourEnergy_2+OneHourEnergy_5+OneHourEnergy_8
-                    OneHourEnergy_Carga=OneHourEnergy_3+OneHourEnergy_6+OneHourEnergy_9
+                    OneHourEnergy_Paneles=OneHourEnergy_4+OneHourEnergy_5+OneHourEnergy_6
+                    OneHourEnergy_Carga=OneHourEnergy_1+OneHourEnergy_2+OneHourEnergy_3
+                    OneHourEnergy_RedCompañia=OneHourEnergy_Carga-OneHourEnergy_Paneles
                     ReporteDiarioHora(datetim.hour,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
             else:
                     print("No hay conexión")
@@ -804,13 +804,14 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 print("Salio for") 
                 connect=FuncionReporte()
                 if(connect==1):
-                        Energy_RedCompañia=Energy_1+Energy_4+Energy_7
-                        Energy_Paneles=Energy_2+Energy_5+Energy_8
-                        Energy_Carga=Energy_3+Energy_6+Energy_9
+                        Energy_Paneles=Energy_4+Energy_5+Energy_6
+                        Energy_Carga=Energy_1+Energy_2+Energy_3
+                        Energy_RedCompañia=Energy_Carga-Energy_Paneles
                         datetim=datetime.datetime.now()-datetime.timedelta(days=1)
                         print(f'Energias {Energy_RedCompañia}-{Energy_Paneles}-{Energy_Carga}')
                         ReporteDiarioDia(datetim.date(),Energy_RedCompañia,Energy_Paneles,Energy_Carga)
                 else:
+                        
                         print("No hay conexión")      
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet23 = workbook[f"Energia Fase 1 Mensual"]
@@ -4038,7 +4039,22 @@ def FuncionReporte():
         return 1
         
         
-        
+def ReportePotencias15(datetim,MaxPotencia,i):
+    try:
+        gc = gspread.service_account(filename='rep_medidor.json')
+        sh = gc.open('Luis_Wherhahm')
+        worksheet = sh.worksheet("Hoja 1")
+        array5=np.array(str(datetim))
+        if(i==1):
+            values_list = worksheet.col_values(31)
+            Largo=len(values_list)
+            array = np.array([[round(MaxPotencia,1)]])
+            worksheet.update(f'AF{Largo+1}',array.tolist())
+    except:
+        print("No insrto Potencia en google sheets")
+            
+       
+                     
 def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
     print("Entrando a Reportes Diarios")
     try:
@@ -4062,10 +4078,11 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
         values_list = worksheet.col_values(6)
         Largo=len(values_list)
         print("Insertando Datos")
+        worksheet.batch_clear([f"F2:F{Largo+1}",f"G2:G{Largo+1}",f"H2:H{Largo+1}",f"I2:I{Largo+1}"])
+    
     except:
         print("Error al isertar datos")
-    #worksheet.batch_clear([f"F2:F{Largo+1}",f"G2:G{Largo+1}",f"H2:H{Largo+1}",f"I2:I{Largo+1}"])
-    
+    #
     
 def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga):
     gc = gspread.service_account(filename='rep_medidor.json')
@@ -4087,7 +4104,26 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
    
     
 #ReporteDiario()
-
+def EnviarNotificaciones():
+    from requests.structures import CaseInsensitiveDict
+    try:
+        url = "https://graph.facebook.com/v13.0/109774185165076/messages"
+        
+        headers = CaseInsensitiveDict()
+        headers["Authorization"] = "Bearer EAALGJZCNm6ecBAAjKHES85sGlO2sqpNDpleJJ1ZCbw5V6KMNaBLxuifk9tyHl9ZAWrC7nzWZCYq88LRdYNuYG8ZAyw99ZCbtKtrZBOSNyyCU3yubeO6zfOLI9817bLgaA7tE65FjT91CiiK7v475ZC4SkM5t2IgQpFMkiJMqgoXaGgKW8VGHzpo9"
+        headers["Content-Type"] = "application/json"
+        
+        data = """
+        { "messaging_product": "whatsapp","preview_url": false,
+          "recipient_type": "individual",
+         "to": "56945959125",
+         "type": "text","text": {"preview_url": false,"body": "Hola que sucedes"} }"""
+        
+        
+        resp = requests.post(url, headers=headers, data=data)
+        print(resp.status_code)
+    except:
+        print("No pudo enviar wsp")
 
 fecha=str(datetime.datetime.now())
 
