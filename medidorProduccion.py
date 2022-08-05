@@ -656,10 +656,12 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                     ReporteDiarioHora(datetim.hour,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
             else:
                     print("No hay conexión")
-            
-            dataHourFase1=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_1,5),round(OneHourEnergy_4,5),round(OneHourEnergy_7,5)]
-            dataHourFase2=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_2,5),round(OneHourEnergy_5,5),round(OneHourEnergy_8,5)]
-            dataHourFase3=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_3,5),round(OneHourEnergy_6,5),round(OneHourEnergy_9,5)]
+            OneHourEnergy_Red_Fase1=OneHourEnergy_1-OneHourEnergy_4
+            OneHourEnergy_Red_Fase2=OneHourEnergy_2-OneHourEnergy_5
+            OneHourEnergy_Red_Fase3=OneHourEnergy_3-OneHourEnergy_6
+            dataHourFase1=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_Red_Fase1,5),round(OneHourEnergy_1,5),round(OneHourEnergy_4,5)]
+            dataHourFase2=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_Red_Fase2,5),round(OneHourEnergy_2,5),round(OneHourEnergy_5,5)]
+            dataHourFase3=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_Red_Fase3,5),round(OneHourEnergy_3,5),round(OneHourEnergy_6,5)]
             sheet20.append(list(dataHourFase1))
             sheet21.append(list(dataHourFase2))
             sheet22.append(list(dataHourFase3))
@@ -776,9 +778,12 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             Energy_7 = float(sheet7[f'm{LargeSheet71}'].value)
                             Energy_8 = float(sheet8[f'm{LargeSheet81}'].value)
                             Energy_9 = float(sheet9[f'm{LargeSheet91}'].value) 
-                            dataMonthFase1=[f'{f[0:10]}',round(Energy_1,5),round(Energy_2,5),round(Energy_3,5)] 
-                            dataMonthFase2=[f'{f[0:10]}',round(Energy_4,5),round(Energy_5,5),round(Energy_6,5)] 
-                            dataMonthFase3=[f'{f[0:10]}',round(Energy_7,5),round(Energy_8,5),round(Energy_9,5)] 
+                            Energy_Red1=Energy_1-Energy_4
+                            Energy_Red2=Energy_2-Energy_5
+                            Energy_Red3=Energy_3-Energy_6
+                            dataMonthFase1=[f'{f[0:10]}',round(Energy_Red1,5),round(Energy_1,5),round(Energy_4,5)] 
+                            dataMonthFase2=[f'{f[0:10]}',round(Energy_Red2,5),round(Energy_2,5),round(Energy_5,5)] 
+                            dataMonthFase3=[f'{f[0:10]}',round(Energy_Red3,5),round(Energy_3,5),round(Energy_6,5)] 
                             workbook2=openpyxl.load_workbook(filename = dest_filename)
                             sheet23 = workbook2[f"Energia Fase 1 Mensual"]
                             sheet24 = workbook2[f"Energia Fase 2 Mensual"]
@@ -4050,6 +4055,7 @@ def ReportePotencias15(datetim,MaxPotencia,i):
             Largo=len(values_list)
             array = np.array([[round(MaxPotencia,1)]])
             worksheet.update(f'AF{Largo+1}',array.tolist())
+            worksheet.update(f'AE{Largo+1}',array5.tolist())
     except:
         print("No insrto Potencia en google sheets")
             
