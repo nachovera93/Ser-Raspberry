@@ -4169,6 +4169,8 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     print(values_list)
     Largo=len(values_list)
     print(Largo)
+    array5 = np.array([[round(OneHourEnergy_Paneles,5)]])
+    worksheet.update(f'AN{Largo+1}', array5.tolist())
     #datetim=json.dumps(datetim)
     if(OneHourEnergy_RedCompañia<0):
         OneHourEnergy_RedCompañia=0
@@ -4183,13 +4185,15 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
         OneHourEnergy_Paneles=0
         array = np.array([[round(OneHourEnergy_Paneles,5)]]) 
         worksheet.update(f'I{Largo+1}', array.tolist())
-        
+    
     array = np.array([[round(OneHourEnergy_RedCompañia,5)]])
     array2 = np.array([[round(OneHourEnergy_Carga,5)]])
     array4 = np.array(datetim)
+    
     worksheet.update(f'F{Largo+1}',array4.tolist())
     worksheet.update(f'G{Largo+1}', array.tolist())
     worksheet.update(f'J{Largo+1}', array2.tolist())
+    
    
     
 #ReporteDiario()
