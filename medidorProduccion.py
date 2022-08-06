@@ -4057,7 +4057,7 @@ def ReportePotencias15(MaxPotencia,i):
         gc = gspread.service_account(filename='rep_medidor.json')
         sh = gc.open('Luis_Wherhahm')
         worksheet = sh.worksheet("Hoja 1")
-        values_list = worksheet.col_values(31)
+        values_list = worksheet.col_values(32)
         Largo=len(values_list)
         array = np.array([[round(MaxPotencia,5)]])
         datetim=datetime.datetime.now()
@@ -4133,6 +4133,8 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     Largo=len(values_list)
     print(Largo)
     #datetim=json.dumps(datetim)
+    if(OneHourEnergy_RedCompañia<0):
+        OneHourEnergy_RedCompañia=0
     array = np.array([[round(OneHourEnergy_RedCompañia,5)]])
     array2 = np.array([[round(OneHourEnergy_Carga,5)]])
     array3 = np.array([[round(OneHourEnergy_Paneles,5)]]) 
