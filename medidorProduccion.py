@@ -4057,8 +4057,6 @@ def ReportePotencias15(MaxPotencia,i):
         gc = gspread.service_account(filename='rep_medidor.json')
         sh = gc.open('Luis_Wherhahm')
         worksheet = sh.worksheet("Hoja 1")
-        values_list = worksheet.col_values(32)
-        Largo=len(values_list)
         array = np.array([[round(MaxPotencia,5)]])
         datetim=datetime.datetime.now()
         if(datetim.minute<20 and datetim.minute>4):
@@ -4070,25 +4068,43 @@ def ReportePotencias15(MaxPotencia,i):
         elif(datetim.minute<50 and datetim.minute>34):
             minute=45
         if(i==1):
+            values_list = worksheet.col_values(32)
+            Largo=len(values_list)
             array5=np.array(f'{datetim.hour}:{minute}')
             worksheet.update(f'AF{Largo+1}',array5.tolist())
             worksheet.update(f'AG{Largo+1}',array.tolist())
         if(i==2):
+            values_list = worksheet.col_values(34)
+            Largo=len(values_list)
             worksheet.update(f'AH{Largo+1}',array.tolist())
         if(i==3):
+            values_list = worksheet.col_values(35)
+            Largo=len(values_list)
             worksheet.update(f'AI{Largo+1}',array.tolist())
         if(i==4):
+            values_list = worksheet.col_values(36)
+            Largo=len(values_list)
             worksheet.update(f'AJ{Largo+1}',array.tolist())
         if(i==5):
+            values_list = worksheet.col_values(37)
+            Largo=len(values_list)
             worksheet.update(f'AK{Largo+1}',array.tolist())
         if(i==6):
+            values_list = worksheet.col_values(38)
+            Largo=len(values_list)
             worksheet.update(f'AL{Largo+1}',array.tolist())
         if(i==7):
-            worksheet.update(f'AL{Largo+1}',array.tolist())
+            values_list = worksheet.col_values(39)
+            Largo=len(values_list)
+            worksheet.update(f'AM{Largo+1}',array.tolist())
         if(i==8):
-            worksheet.update(f'AL{Largo+1}',array.tolist())
+            values_list = worksheet.col_values(40)
+            Largo=len(values_list)
+            worksheet.update(f'AN{Largo+1}',array.tolist())
         if(i==9):
-            worksheet.update(f'AL{Largo+1}',array.tolist())
+            values_list = worksheet.col_values(41)
+            Largo=len(values_list)
+            worksheet.update(f'AO{Largo+1}',array.tolist())
                     
     except:
         print("No insrto Potencia en google sheets")
@@ -4135,14 +4151,24 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     #datetim=json.dumps(datetim)
     if(OneHourEnergy_RedCompañia<0):
         OneHourEnergy_RedCompañia=0
+        array = np.array([[round(OneHourEnergy_Paneles,5)]]) 
+        worksheet.update(f'I{Largo+1}', array.tolist())
+        OneHourEnergy_Paneles=0
+        array = np.array([[round(OneHourEnergy_Paneles,5)]]) 
+        worksheet.update(f'H{Largo+1}', array.tolist())
+    else:
+        array = np.array([[round(OneHourEnergy_Paneles,5)]]) 
+        worksheet.update(f'H{Largo+1}', array.tolist())
+        OneHourEnergy_Paneles=0
+        array = np.array([[round(OneHourEnergy_Paneles,5)]]) 
+        worksheet.update(f'I{Largo+1}', array.tolist())
+        
     array = np.array([[round(OneHourEnergy_RedCompañia,5)]])
     array2 = np.array([[round(OneHourEnergy_Carga,5)]])
-    array3 = np.array([[round(OneHourEnergy_Paneles,5)]]) 
     array4 = np.array(datetim)
     worksheet.update(f'F{Largo+1}',array4.tolist())
     worksheet.update(f'G{Largo+1}', array.tolist())
-    worksheet.update(f'I{Largo+1}', array2.tolist())
-    worksheet.update(f'H{Largo+1}', array3.tolist())
+    worksheet.update(f'J{Largo+1}', array2.tolist())
    
     
 #ReporteDiario()
