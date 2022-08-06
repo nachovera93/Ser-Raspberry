@@ -3809,6 +3809,16 @@ def AbrirExcel():
     global Energy_7
     global Energy_8
     global Energy_9
+    global OneHourEnergy_1
+    global OneHourEnergy_2
+    global OneHourEnergy_3
+    global OneHourEnergy_4
+    global OneHourEnergy_5
+    global OneHourEnergy_6
+    global OneHourEnergy_7
+    global OneHourEnergy_8
+    global OneHourEnergy_9
+    
     dia=date.today()
     try:
         if(os.path.exists(f'Reportes/{dia}.xlsx')):
@@ -3843,6 +3853,17 @@ def AbrirExcel():
                 Energy_7 = float(sheet17[f'm{LargeSheet17}'].value)
                 Energy_8 = float(sheet18[f'm{LargeSheet18}'].value)
                 Energy_9 = float(sheet19[f'm{LargeSheet19}'].value)
+                datetim=datetime.datetime.now()
+                if(datetim.minute > 4):
+                    OneHourEnergy_1 = float(sheet11[f'n{LargeSheet11}'].value)
+                    OneHourEnergy_2 = float(sheet12[f'n{LargeSheet12}'].value)
+                    OneHourEnergy_3 = float(sheet13[f'n{LargeSheet13}'].value)
+                    OneHourEnergy_4 = float(sheet14[f'n{LargeSheet14}'].value)
+                    OneHourEnergy_5 = float(sheet15[f'n{LargeSheet15}'].value)
+                    OneHourEnergy_6 = float(sheet16[f'n{LargeSheet16}'].value)
+                    OneHourEnergy_7 = float(sheet17[f'n{LargeSheet17}'].value)
+                    OneHourEnergy_8 = float(sheet18[f'n{LargeSheet18}'].value)
+                    OneHourEnergy_9 = float(sheet19[f'n{LargeSheet19}'].value)
                 #energyBaterias = float(sheet8[f'k{largoexcelCGE-2}'].value)
                 #energyPanelesDC = float(sheet10[f'k{largoexcelCGE-2}'].value)
                 print(f'Valor Energia  {Energy_1} ')
