@@ -746,8 +746,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                         print(f)
                 DiasExcel=sorted(DiasExcel)
                 for f in DiasExcel:
-                            x = x+1 
-                        #try:
+                        x = x+1 
+                        try:
                             print(x)
                             workbook=openpyxl.load_workbook(filename = f'Reportes/{f}')
                             print(f'Cargando Reportes/{f}')
@@ -803,7 +803,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             print(f'dest filename = {dest_filename}')
                             workbook.save(filename = f'Reportes/{f}')
                             workbook2.save(filename = dest_filename)
-                        #except:
+                        except:
                             print("Error en Maximos diarios")
                             #continue
                 print("Salio for") 
@@ -1467,7 +1467,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet2 = workbook[f"15Min-{k}-{f}"]
                     sheet2.append(list(data15_1))
-                    
+                    ReportePotencias15(MaxAparentPower_1,1)
                     print(f'Data 1: Guardando Promedios')
                     optionsave=1
                     #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_1}',VoltajePromedio=f'{MeanVoltage15_1}',VoltajeMin=f'{MinVoltage15_1}',MaxCorriente=f'{MaxCurrent15_1}',PromedioCorriente=f'{MeanCurrent15_1}',MinimoCorriente=f'{MinCurrent15_1}',PotenciaMax=f'{MaxAparentPower_1}',PromedioPotenciaAparente=f'{MeanAparentPower_1}',MinPotenciaAparente=f'{MinAparentPower_1}',Energia=f'{Energy}')
@@ -1732,6 +1732,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet3 = workbook[f"15Min-{k}-{f}"]
                     sheet3.append(list(data15_2))
+                    ReportePotencias15(MaxAparentPower_2,2)
                     print(f'Data 2: Guardando Promedios')
                     optionsave=1
                     #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_2}',VoltajePromedio=f'{MeanVoltage15_2}',VoltajeMin=f'{MinVoltage15_2}',MaxCorriente=f'{MaxCurrent15_2}',PromedioCorriente=f'{MeanCurrent15_2}',MinimoCorriente=f'{MinCurrent15_2}',PotenciaMax=f'{MaxAparentPower_2}',PromedioPotenciaAparente=f'{MeanAparentPower_2}',MinPotenciaAparente=f'{MinAparentPower_2}',Energia=f'{Energy}')
@@ -1995,6 +1996,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet4 = workbook[f"15Min-{k}-{f}"]
                     sheet4.append(list(data15_3))
                     print(f'Data 3: Guardando Promedios')
+                    ReportePotencias15(MaxAparentPower_3,3)
                     optionsave=1
                     #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_3}',VoltajePromedio=f'{MeanVoltage15_3}',VoltajeMin=f'{MinVoltage15_3}',MaxCorriente=f'{MaxCurrent15_3}',PromedioCorriente=f'{MeanCurrent15_3}',MinimoCorriente=f'{MinCurrent15_3}',PotenciaMax=f'{MaxAparentPower_3}',PromedioPotenciaAparente=f'{MeanAparentPower_3}',MinPotenciaAparente=f'{MinAparentPower_3}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
@@ -2255,6 +2257,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet5 = workbook[f"15Min-{k}-{f}"]
                     sheet5.append(list(data15_4))
+                    ReportePotencias15(MaxAparentPower_4,4)
                     print(f'Data 4: Guardando Promedios')
                     optionsave=1
                     #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_4}',VoltajePromedio=f'{MeanVoltage15_4}',VoltajeMin=f'{MinVoltage15_4}',MaxCorriente=f'{MaxCurrent15_4}',PromedioCorriente=f'{MeanCurrent15_4}',MinimoCorriente=f'{MinCurrent15_4}',PotenciaMax=f'{MaxAparentPower_4}',PromedioPotenciaAparente=f'{MeanAparentPower_4}',MinPotenciaAparente=f'{MinAparentPower_4}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
@@ -2515,6 +2518,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet6 = workbook[f"15Min-{k}-{f}"]
                     sheet6.append(list(data15_5))
+                    ReportePotencias15(MaxAparentPower_5,5)
                     print(f'Data 5: Guardando Promedios')
                     optionsave=1
                     #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_5}',VoltajePromedio=f'{MeanVoltage15_5}',VoltajeMin=f'{MinVoltage15_5}',MaxCorriente=f'{MaxCurrent15_5}',PromedioCorriente=f'{MeanCurrent15_5}',MinimoCorriente=f'{MinCurrent15_5}',PotenciaMax=f'{MaxAparentPower_5}',PromedioPotenciaAparente=f'{MeanAparentPower_5}',MinPotenciaAparente=f'{MinAparentPower_5}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
@@ -2776,6 +2780,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet8 = workbook[f"15Min-{k}-{f}"]
                     sheet8.append(list(data15_7))
+                    ReportePotencias15(MaxAparentPower_7,7)
                     print(f'Data 7: Guardando Promedios')
                     optionsave=1
                     #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_7}',VoltajePromedio=f'{MeanVoltage15_7}',VoltajeMin=f'{MinVoltage15_7}',MaxCorriente=f'{MaxCurrent15_7}',PromedioCorriente=f'{MeanCurrent15_7}',MinimoCorriente=f'{MinCurrent15_7}',PotenciaMax=f'{MaxAparentPower_7}',PromedioPotenciaAparente=f'{MeanAparentPower_7}',MinPotenciaAparente=f'{MinAparentPower_7}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
@@ -3037,6 +3042,7 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet9 = workbook[f"15Min-{k}-{f}"]
                     sheet9.append(list(data15_8))
                     print(f'Data 8: Guardando Promedios')
+                    ReportePotencias15(MaxAparentPower_8,8)
                     optionsave=1
                     #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_8}',VoltajePromedio=f'{MeanVoltage15_8}',VoltajeMin=f'{MinVoltage15_8}',MaxCorriente=f'{MaxCurrent15_8}',PromedioCorriente=f'{MeanCurrent15_8}',MinimoCorriente=f'{MinCurrent15_8}',PotenciaMax=f'{MaxAparentPower_8}',PromedioPotenciaAparente=f'{MeanAparentPower_8}',MinPotenciaAparente=f'{MinAparentPower_8}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
@@ -3296,6 +3302,7 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet7 = workbook[f"15Min-{k}-{f}"]
                     sheet7.append(list(data15_6))
                     print(f'Data 6: Guardando Promedios')
+                    ReportePotencias15(MaxAparentPower_6,6)
                     optionsave=1
                     #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_6}',VoltajePromedio=f'{MeanVoltage15_6}',VoltajeMin=f'{MinVoltage15_6}',MaxCorriente=f'{MaxCurrent15_6}',PromedioCorriente=f'{MeanCurrent15_6}',MinimoCorriente=f'{MinCurrent15_6}',PotenciaMax=f'{MaxAparentPower_6}',PromedioPotenciaAparente=f'{MeanAparentPower_6}',MinPotenciaAparente=f'{MinAparentPower_6}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
@@ -3557,6 +3564,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet10 = workbook[f"15Min-{k}-{f}"] 
                     sheet10.append(list(data15_9))
                     print(f'Data 9: Guardando Promedios')
+                    ReportePotencias15(MaxAparentPower_9,9)
                     optionsave=1
                     ###SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_9}',VoltajePromedio=f'{MeanVoltage15_9}',VoltajeMin=f'{MinVoltage15_9}',MaxCorriente=f'{MaxCurrent15_9}',PromedioCorriente=f'{MeanCurrent15_9}',MinimoCorriente=f'{MinCurrent15_9}',PotenciaMax=f'{MaxAparentPower_9}',PromedioPotenciaAparente=f'{MeanAparentPower_9}',MinPotenciaAparente=f'{MinAparentPower_9}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
@@ -4044,18 +4052,44 @@ def FuncionReporte():
         return 1
         
         
-def ReportePotencias15(datetim,MaxPotencia,i):
+def ReportePotencias15(MaxPotencia,i):
     try:
         gc = gspread.service_account(filename='rep_medidor.json')
         sh = gc.open('Luis_Wherhahm')
         worksheet = sh.worksheet("Hoja 1")
-        array5=np.array(str(datetim))
+        values_list = worksheet.col_values(31)
+        Largo=len(values_list)
+        array = np.array([[round(MaxPotencia,5)]])
+        datetim=datetime.datetime.now()
+        if(datetim.minute<20 and datetim.minute>4):
+            minute=15
+        elif(datetim.minute>0 and datetim.minute<4 ):
+            minute=0
+        elif(datetim.minute>20 and datetim.minute<34):
+            minute=30
+        elif(datetim.minute<50 and datetim.minute>34):
+            minute=45
         if(i==1):
-            values_list = worksheet.col_values(31)
-            Largo=len(values_list)
-            array = np.array([[round(MaxPotencia,1)]])
-            worksheet.update(f'AF{Largo+1}',array.tolist())
-            worksheet.update(f'AE{Largo+1}',array5.tolist())
+            array5=np.array(f'{datetim.hour}:{minute}')
+            worksheet.update(f'AF{Largo+1}',array5.tolist())
+            worksheet.update(f'AG{Largo+1}',array.tolist())
+        if(i==2):
+            worksheet.update(f'AH{Largo+1}',array.tolist())
+        if(i==3):
+            worksheet.update(f'AI{Largo+1}',array.tolist())
+        if(i==4):
+            worksheet.update(f'AJ{Largo+1}',array.tolist())
+        if(i==5):
+            worksheet.update(f'AK{Largo+1}',array.tolist())
+        if(i==6):
+            worksheet.update(f'AL{Largo+1}',array.tolist())
+        if(i==7):
+            worksheet.update(f'AL{Largo+1}',array.tolist())
+        if(i==8):
+            worksheet.update(f'AL{Largo+1}',array.tolist())
+        if(i==9):
+            worksheet.update(f'AL{Largo+1}',array.tolist())
+                    
     except:
         print("No insrto Potencia en google sheets")
             
