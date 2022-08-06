@@ -64,8 +64,7 @@ def BorrarArchivos():
 
 try:                           
      esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
-     esp32.flushInput()
-try:                           
+     esp32.flushInput()                          
      esp32 = serial.Serial('/dev/ttyUSB2', 230400, timeout=0.5)
      esp32.flushInput()
 except:
