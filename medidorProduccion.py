@@ -4132,7 +4132,7 @@ def ReportePotencias15(MaxPotencia,i):
         print("No insrto Potencia en google sheets")
             
        
-                     
+BT1=73.5              
 def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
     print("Entrando a Reportes Diarios")
     try:
@@ -4142,21 +4142,24 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
         values_list = worksheet.col_values(2)
         Largo=len(values_list)
         print(datetim)
-        val = float(worksheet.acell('T2').value)*Energy_RedCompañia
+        #ValorDia=Energy_RedCompañia*BT1
+        val = float(worksheet.acell('U2').value)*Energy_RedCompañia
         array = np.array([[round(Energy_RedCompañia,5)]])
         array2 = np.array([[round(Energy_Paneles,5)]])
         array3 = np.array([[round(Energy_Carga,5)]]) 
-        array4 = np.array([[round(val,1)]]) 
+        array6 = np.array([[round(val,1)]]) 
+        #array6= np.array([[ValorDia(val,1)]]) 
         array5=np.array(str(datetim))
         worksheet.update(f'A{Largo+1}',array5.tolist())
         worksheet.update(f'B{Largo+1}', array.tolist())
         worksheet.update(f'C{Largo+1}', array2.tolist())
         worksheet.update(f'D{Largo+1}', array3.tolist())
-        worksheet.update(f'E{Largo+1}', array4.tolist())
+        worksheet.update(f'E{Largo+1}', array6.tolist())
         values_list = worksheet.col_values(6)
         Largo=len(values_list)
         print("Insertando Datos")
-        worksheet.batch_clear([f"F2:F{Largo+1}",f"G2:G{Largo+1}",f"H2:H{Largo+1}",f"I2:I{Largo+1}"])
+        worksheet.batch_clear([f"F2:F{Largo+1}",f"G2:G{Largo+1}",f"H2:H{Largo+1}",f"I2:I{Largo+1}",f"J2:J{Largo+1}"])
+        worksheet.batch_clear([f"AF2:AF{Largo+1}",f"AG2:AG{Largo+1}",f"AH2:AH{Largo+1}",f"AI2:AI{Largo+1}",f"AJ2:AJ{Largo+1}",f"AK2:AK{Largo+1}",f"AL2:AL{Largo+1}"])
     
     except:
         print("Error al isertar datos")
