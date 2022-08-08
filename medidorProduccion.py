@@ -4096,7 +4096,7 @@ def ReportePotencias15():
         gc = gspread.service_account(filename='rep_medidor.json')
         sh = gc.open('Luis_Wherhahm')
         worksheet = sh.worksheet("Hoja 1")
-        print()
+        print(f'MaxAparentPower_1 {MaxAparentPower_1}')
         array1 = np.array([[MaxAparentPower_1]])
         array2 = np.array([[MaxAparentPower_2]])
         array3 = np.array([[MaxAparentPower_3]])
