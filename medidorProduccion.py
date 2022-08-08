@@ -4555,7 +4555,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
         else:
             BufferCurrent_9.append(Irms)
 
-
+Access_pot=0
 def received():
     while True:
                 try:
@@ -4636,9 +4636,14 @@ def received():
                           
                      if(excel.minute==4 or excel.minute==19 or excel.minute==34 or excel.minute==49 ):
                          try:
-                            ReportePotencias15()
+                              if(Access_pot==0):
+                                     Access_pot=1
+                                     ReportePotencias15()
                          except:
-                            print(".")      
+                            print(".") 
+                     else:
+                            Access_pot=0
+                              
                          
                      """    
                      if(excel.minute==4 or excel.minute==19 or excel.minute==34 or excel.minute==49 ):
