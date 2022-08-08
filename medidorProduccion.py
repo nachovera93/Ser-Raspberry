@@ -1381,6 +1381,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     #global OneHourEnergy_1
     global optionsave
     global vt115
+    global MaxAparentPower_1
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47): 
                if(Access_1 == 0):
@@ -1646,6 +1647,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     #global OneHourEnergy_2
     global optionsave
     global vt215
+    global MaxAparentPower_2
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_2 == 0):
@@ -1909,6 +1911,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_3
     #global OneHourEnergy_3
     global optionsave
+    global MaxAparentPower_3
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_3 == 0):
@@ -2171,6 +2174,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_4
     global OneHourEnergy_4
     global optionsave
+    global MaxAparentPower_4
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_4 == 0):
@@ -2432,6 +2436,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_5
     global OneHourEnergy_5
     global optionsave
+    global MaxAparentPower_5
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_5 == 0):
@@ -2694,6 +2699,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_7
     global OneHourEnergy_7
     global optionsave
+    global MaxAparentPower_7
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_7 == 0):
@@ -2955,6 +2961,7 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_8
     global OneHourEnergy_8
     global optionsave
+    global MaxAparentPower_8
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_8 == 0):
@@ -3215,6 +3222,7 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_6
     global OneHourEnergy_6
     global optionsave
+    global MaxAparentPower_6
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_6 == 0):
@@ -3477,6 +3485,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_9
     global OneHourEnergy_9
     global optionsave
+    global MaxAparentPower_9
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
                if(Access_9 == 0):
@@ -4073,13 +4082,30 @@ def FuncionReporte():
         s.close()
         return 1
         
-        
-def ReportePotencias15(MaxPotencia,i):
+MaxAparentPower_1=0
+MaxAparentPower_2=0
+MaxAparentPower_3=0
+MaxAparentPower_4=0
+MaxAparentPower_5=0
+MaxAparentPower_6=0
+MaxAparentPower_7=0
+MaxAparentPower_8=0
+MaxAparentPower_9=0
+def ReportePotencias15():
     try:
         gc = gspread.service_account(filename='rep_medidor.json')
         sh = gc.open('Luis_Wherhahm')
         worksheet = sh.worksheet("Hoja 1")
-        array = np.array([[round(MaxPotencia,5)]])
+        
+        array1 = np.array([[round(MaxAparentPower_1,2)]])
+        array2 = np.array([[round(MaxAparentPower_2,2)]])
+        array3 = np.array([[round(MaxAparentPower_3,2)]])
+        array4 = np.array([[round(MaxAparentPower_4,2)]])
+        array5 = np.array([[round(MaxAparentPower_5,2)]])
+        array6 = np.array([[round(MaxAparentPower_6,2)]])
+        array7 = np.array([[round(MaxAparentPower_7,2)]])
+        array8 = np.array([[round(MaxAparentPower_8,2)]])
+        array9 = np.array([[round(MaxAparentPower_9,2)]])
         datetim=datetime.datetime.now()
         if(datetim.minute<20 and datetim.minute>4):
             minute=15
@@ -4092,41 +4118,41 @@ def ReportePotencias15(MaxPotencia,i):
         if(i==1):
             values_list = worksheet.col_values(32)
             Largo=len(values_list)
-            array5=np.array(f'{datetim.hour}:{minute}')
-            worksheet.update(f'AF{Largo+1}',array5.tolist())
-            worksheet.update(f'AG{Largo+1}',array.tolist())
-        if(i==2):
+            arraytime=np.array(f'{datetim.hour}:{minute}')
+            worksheet.update(f'AF{Largo+1}',arraytime.tolist())
+            worksheet.update(f'AG{Largo+1}',array1.tolist())
+        elif(i==2):
             values_list = worksheet.col_values(34)
             Largo=len(values_list)
-            worksheet.update(f'AH{Largo+1}',array.tolist())
-        if(i==3):
+            worksheet.update(f'AH{Largo+1}',array2.tolist())
+        elif(i==3):
             values_list = worksheet.col_values(35)
             Largo=len(values_list)
-            worksheet.update(f'AI{Largo+1}',array.tolist())
-        if(i==4):
+            worksheet.update(f'AI{Largo+1}',array3.tolist())
+        elif(i==4):
             values_list = worksheet.col_values(36)
             Largo=len(values_list)
-            worksheet.update(f'AJ{Largo+1}',array.tolist())
-        if(i==5):
+            worksheet.update(f'AJ{Largo+1}',array4.tolist())
+        elif(i==5):
             values_list = worksheet.col_values(37)
             Largo=len(values_list)
-            worksheet.update(f'AK{Largo+1}',array.tolist())
-        if(i==6):
+            worksheet.update(f'AK{Largo+1}',array5.tolist())
+        elif(i==6):
             values_list = worksheet.col_values(38)
             Largo=len(values_list)
-            worksheet.update(f'AL{Largo+1}',array.tolist())
-        if(i==7):
+            worksheet.update(f'AL{Largo+1}',array6.tolist())
+        elif(i==7):
             values_list = worksheet.col_values(39)
             Largo=len(values_list)
-            worksheet.update(f'AM{Largo+1}',array.tolist())
-        if(i==8):
+            worksheet.update(f'AM{Largo+1}',array7.tolist())
+        elif(i==8):
             values_list = worksheet.col_values(40)
             Largo=len(values_list)
-            worksheet.update(f'AN{Largo+1}',array.tolist())
-        if(i==9):
+            worksheet.update(f'AN{Largo+1}',array8.tolist())
+        elif(i==9):
             values_list = worksheet.col_values(41)
             Largo=len(values_list)
-            worksheet.update(f'AO{Largo+1}',array.tolist())
+            worksheet.update(f'AO{Largo+1}',array9.tolist())
                     
     except:
         print("No insrto Potencia en google sheets")
@@ -4607,7 +4633,13 @@ def received():
                                      #excelcreate()
                      else:
                               Access_1email=0
-                              
+                          
+                     if(excel.minute==4 or excel.minute==19 or excel.minute==34 or excel.minute==49 ):
+                         try:
+                            ReportePotencias15()
+                         except:
+                            print(".")      
+                         
                      """    
                      if(excel.minute==4 or excel.minute==19 or excel.minute==34 or excel.minute==49 ):
                          if(rcConnect > 5): 
