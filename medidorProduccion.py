@@ -4083,7 +4083,7 @@ MaxAparentPower_7=0
 MaxAparentPower_8=0
 MaxAparentPower_9=0
 def ReportePotencias15():
-    try:
+    #try:
         gc = gspread.service_account(filename='rep_medidor.json')
         sh = gc.open('Luis_Wherhahm')
         worksheet = sh.worksheet("Hoja 1")
@@ -4140,8 +4140,8 @@ def ReportePotencias15():
             Largo=len(values_list)
             worksheet.update(f'AO{Largo+1}',array9.tolist())
         """            
-    except:
-        print("No insrto Potencia en google sheets")
+    #except:
+    #    print("No insrto Potencia en google sheets")
             
        
 BT1=73.5              
