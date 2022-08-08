@@ -4110,7 +4110,7 @@ def ReportePotencias15():
         if(datetim.minute<20 and datetim.minute>4):
             minute=15
         elif(datetim.minute>0 and datetim.minute<4 ):
-            minute=0
+            minute=00
         elif(datetim.minute>20 and datetim.minute<34):
             minute=30
         elif(datetim.minute<50 and datetim.minute>34):
