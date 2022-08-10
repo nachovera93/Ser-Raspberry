@@ -1330,7 +1330,7 @@ f3="Fase-3"
 #Voltaje-Fase-3-ConsumoCliente // Corriente-Fase-3-ConsumoCliente // Potencia-Fase-3-ConsumoCliente // Potencia-Fase-3-ConsumoCliente
 #VoltajeMax-Fase-3-ConsumoCliente // VoltajePromedio-Fase-3-ConsumoCliente // VoltajeMin-Fase-3-ConsumoCliente // CorrienteMax-Fase-3-ConsumoCliente // PotenciaMax-Fase-3-ConsumoCliente // EnergiaMax-Fase-3-ConsumoCliente
 
-def #SendDataToBroker(q,k,f,**kwargs):
+def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             g=0
