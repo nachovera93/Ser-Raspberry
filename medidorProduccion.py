@@ -1008,7 +1008,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             CorrienteCarga=[]
             contadorcorriente=1
             if(contadorcorriente2==1):
-                SumaCorrientesRed=CorrienteCarga-CorrientePaneles
+                SumaCorrientesRed=CorrienteCarga-CorrientesPaneles
                 if(SumaCorrientesRed<0):
                     SumaCorrientesRed=0
                 SendDataToBroker(q=2,k=k1,f=f1,Potencia_Red=f'{SumaCorrientesRed}')
@@ -1041,7 +1041,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             AparentPower_6 = AparentPower
             aparentPowerPaneles.insert(2,AparentPower_6)
         if(len(CorrientePaneles)>=3):
-            CorrientesPaneles=np.sum(CorrientesPaneles)
+            CorrientesPaneles=np.sum(CorrientePaneles)
             SendDataToBroker(q=6,k=k1,f=f1,Corriente_Paneles=f'{CorrientesPaneles}')
             CorrientePaneles=[]
             contadorcorriente2=1
