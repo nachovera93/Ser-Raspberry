@@ -1012,7 +1012,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             CorrienteCarga=[]
             contadorcorriente=1
             if(contadorcorriente2==1):
-                SumaCorrientesRed=CorrienteCarga-CorrientesPaneles
+                SumaCorrientesRed=CorrientesCarga-CorrientesPaneles
                 if(SumaCorrientesRed<0):
                     SumaCorrientesRed=0
                 SendDataToBroker(q=2,k=k1,f=f1,Potencia_Red=f'{SumaCorrientesRed}')
