@@ -1056,22 +1056,25 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 #SendDataToBroker(q=2,k=k1,f=f1,Corriente_Red=f'{SumaCorrientesRed}')
         if(len(aparentPowerPaneles)>=3):
             SumaPotenciasPaneles=np.sum(aparentPowerPaneles)
-            topic = "62f3d5563f5269001b12058a/123321/varname2/sdata"
+            topic = topicmqtt + "varname2/sdata"
             str_num = {"value":SumaPotenciasPaneles,"save":1}
             valueJson = json.dumps(str_num)
-            result = client.publish(topic, valueJson)
-            status = result[0]            
-            if status == 0:
-                print(f"Send SumaPotenciasPaneles - {SumaPotenciasPaneles}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
-            else:
-                print(f"Failed to send message to topic {topic}") 
+            client.publish(topic, valueJson)
             #SendDataToBroker(q=7,k=k1,f=f1,Potencia_Paneles=f'{SumaPotenciasPaneles}')
             aparentPowerPaneles=[]
             contadorpot2=1
             if(contadorpot==1):
                 SumaPotenciasRed=SumaPotenciasCarga-SumaPotenciasPaneles
+                topic = topicmqtt + "varname3/sdata"
+                str_num = {"value":SumaPotenciasRed,"save":1}
+                valueJson = json.dumps(str_num)
+                client.publish(topic, valueJson)
                 #SendDataToBroker(q=4,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
                 ##SendDataToBroker(q=5,k=k1,f=f1,Voltaje=f"{Vrms}")
+                topic = "62f3d5563f5269001b12058a/123321/4mu4jqUieD/sdata"
+                str_num = {"value":SumaPotenciasRed,"save":1}
+                valueJson = json.dumps(str_num)
+                client.publish(topic, valueJson)
                 
 
         
