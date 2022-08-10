@@ -608,6 +608,8 @@ contadorpot=0
 contadorpot2=0
 contadorcorriente2=0
 contadorcorriente=0
+CorrientesCarga=0
+CorrientesPaneles=0
 def Potencias(i,Irms,Vrms,potrmsCGE):
     global vt1
     global vt2
@@ -657,6 +659,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global CorrientePaneles
     global aparentPowerPaneles
     global aparentPower
+    global CorrientesCarga
+    global CorrientesPaneles
     #print([round(OneHourEnergy_1,5),round(OneHourEnergy_2,5),round(OneHourEnergy_3,5),round(OneHourEnergy_4,5),round(OneHourEnergy_5,5),round(OneHourEnergy_6,5),round(OneHourEnergy_7,5),round(OneHourEnergy_8,5),round(OneHourEnergy_9,5)])
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
