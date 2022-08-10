@@ -597,7 +597,17 @@ AparentPower = 0.0
 ActivePower = 0.0
 ReactivePower = 0.0
 acceshourenergy=0
-
+aparentPower=[]
+CorrienteCarga=[]
+CorrientePaneles=[]
+aparentPowerPaneles=[]
+SumaPotenciasCarga=0
+SumaPotenciasPaneles=0
+SumaPotenciasRed=0
+contadorpot=0
+contadorpot2=0
+contadorcorriente2=0
+contadorcorriente=0
 def Potencias(i,Irms,Vrms,potrmsCGE):
     global vt1
     global vt2
@@ -660,6 +670,11 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             OneHourEnergy_Red_Fase1=OneHourEnergy_1-OneHourEnergy_4
             OneHourEnergy_Red_Fase2=OneHourEnergy_2-OneHourEnergy_5
             OneHourEnergy_Red_Fase3=OneHourEnergy_3-OneHourEnergy_6
+            
+            SendDataToBroker(q=1,k=k1,f=f1,Energia_Total_Red=f'{OneHourEnergy_RedCompañia}')
+            SendDataToBroker(q=1,k=k1,f=f1,Energia_Paneles=f'{OneHourEnergy_Paneles}')
+            SendDataToBroker(q=1,k=k1,f=f1,Energia_Total_Carga=f'{OneHourEnergy_Carga}')
+            
             dataHourFase1=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_Red_Fase1,5),round(OneHourEnergy_1,5),round(OneHourEnergy_4,5)]
             dataHourFase2=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_Red_Fase2,5),round(OneHourEnergy_2,5),round(OneHourEnergy_5,5)]
             dataHourFase3=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_Red_Fase3,5),round(OneHourEnergy_3,5),round(OneHourEnergy_6,5)]
@@ -919,6 +934,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 print("Archivo Copiado")
             except:
                 print("Continuar")
+                
+            
             #workbook.save(filename = dest_filename)
             
             ##SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
@@ -955,9 +972,91 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             acceshourenergy=1
             
             
-
-            
+           
     AparentPower = Vrms*Irms
+    if(i==1 or i==2 or i==3):
+        global SumaPotenciasCarga
+        global contadorpot
+        global contadorcorriente
+        contadorpot=0
+        contadorcorriente=0     
+        if(i==1):
+           Corriente1=Irms
+           CorrienteCarga.insert(0,Corriente1)
+           AparentPower_1 = AparentPower
+           aparentPower.insert(0,AparentPower_1)
+        if(i==2):
+            Corriente2=Irms
+            CorrienteCarga.insert(1,Corriente2)
+            AparentPower_2 = AparentPower
+            aparentPower.insert(1,AparentPower_2)
+        if(i==3):
+            Corriente3=Irms
+            CorrienteCarga.insert(2,Corriente3)
+            AparentPower_3 = AparentPower
+            aparentPower.insert(2,AparentPower_3)
+        if(len(CorrienteCarga)>=3):
+            CorrientesCarga=np.sum(CorrienteCarga)
+            SendDataToBroker(q=1,k=k1,f=f1,Corriente_Carga=f'{CorrientesCarga}')
+            CorrienteCarga=[]
+            contadorcorriente=1
+            if(contadorcorriente2==1):
+                SumaCorrientesRed=CorrienteCarga-CorrientePaneles
+                if(SumaCorrientesRed<0):
+                    SumaCorrientesRed=0
+                SendDataToBroker(q=1,k=k1,f=f1,Potencia_Red=f'{SumaCorrientesRed}')
+        if(len(aparentPower)>=3):
+            SumaPotenciasCarga=np.sum(aparentPower)
+            SendDataToBroker(q=1,k=k1,f=f1,Potencia_Carga=f'{SumaPotenciasCarga}')
+            contadorpot=1
+            aparentPower=[]
+            if(contadorpot2==1):
+                SumaPotenciasRed=SumaPotenciasCarga-SumaPotenciasPaneles
+                SendDataToBroker(q=1,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
+                SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}")
+            
+    if(i==4 or i==5 or i==6):
+        global SumaPotenciasPaneles
+        global contadorpot2
+        contadorpot2=0
+        contadorcorriente2=0 
+        if(i==4):
+           Corriente4=Irms
+           CorrientePaneles.insert(0,Corriente4)
+           AparentPower_4 = AparentPower
+           aparentPowerPaneles.insert(0,AparentPower_4)
+        elif(i==5):
+            Corriente5=Irms
+            CorrientePaneles.insert(1,Corriente5)
+            AparentPower_5 = AparentPower
+            aparentPowerPaneles.insert(1,AparentPower_5)
+        elif(i==6):
+            Corriente6=Irms
+            CorrientePaneles.insert(2,Corriente6)
+            AparentPower_6 = AparentPower
+            aparentPowerPaneles.insert(2,AparentPower_6)
+        if(len(CorrientePaneles)>=3):
+            CorrientesPaneles=np.sum(CorrientesPaneles)
+            SendDataToBroker(q=1,k=k1,f=f1,Corriente_Paneles=f'{CorrientesPaneles}')
+            CorrientePaneles=[]
+            contadorcorriente2=1
+            if(contadorcorriente==1):
+                SumaCorrientesRed=CorrientesCarga-CorrientesPaneles
+                if(SumaCorrientesRed<0):
+                    SumaCorrientesRed=0
+                SendDataToBroker(q=1,k=k1,f=f1,Corriente_Red=f'{SumaCorrientesRed}')
+        if(len(aparentPowerPaneles)>=3):
+            SumaPotenciasPaneles=np.sum(aparentPowerPaneles)
+            SendDataToBroker(q=1,k=k1,f=f1,Potencia_Paneles=f'{SumaPotenciasPaneles}')
+            aparentPowerPaneles=[]
+            contadorpot2=1
+            if(contadorpot==1):
+                SumaPotenciasRed=SumaPotenciasCarga-SumaPotenciasPaneles
+                SendDataToBroker(q=1,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
+                SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}")
+                
+
+        
     if (potrmsCGE>=0):
           ActivePower = Vrms*Irms*CosPhi
           ActivePower = np.abs(ActivePower)
