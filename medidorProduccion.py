@@ -73,11 +73,11 @@ except:
 horasetup=datetime.datetime.now()
 print("Hora de comienzo:", horasetup)
 
-broker = '18.228.175.193'   #'192.168.1.85' #mqtt server
+broker = '54.94.243.121'   #'192.168.1.85' #mqtt server
 port = 1883
-dId = '123454321'
-passw = 'RyfwT0cRAX'
-webhook_endpoint = 'http://18.228.175.193:3001/api/getdevicecredentials'
+dId = '123321'
+passw = '1mYpU7XzEg'
+webhook_endpoint = 'http://54.94.243.121:3001/api/getdevicecredentials'
 
 
 def get_mqtt_credentials():
@@ -143,7 +143,7 @@ def on_connected(client, userdata, flags, rc):
         print("Bad connection Returned code=",rc)
         client.bad_connection_flag=False
 
-"""
+
 get_mqtt_credentials()     
 client = mqtt.Client(str_client_id)   #Creación cliente
 client.connect(broker, port)     #Conexión al broker
@@ -151,7 +151,7 @@ client.on_disconnect = on_disconnect
 client.username_pw_set(usernamemqtt, passwordmqtt)
 client.on_connect = on_connected
 client.loop_start()
-"""
+
 
 
 def get_cpuload():
@@ -1004,16 +1004,16 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 SumaCorrientesRed=CorrienteCarga-CorrientePaneles
                 if(SumaCorrientesRed<0):
                     SumaCorrientesRed=0
-                SendDataToBroker(q=1,k=k1,f=f1,Potencia_Red=f'{SumaCorrientesRed}')
+                SendDataToBroker(q=2,k=k1,f=f1,Potencia_Red=f'{SumaCorrientesRed}')
         if(len(aparentPower)>=3):
             SumaPotenciasCarga=np.sum(aparentPower)
-            SendDataToBroker(q=1,k=k1,f=f1,Potencia_Carga=f'{SumaPotenciasCarga}')
+            SendDataToBroker(q=3,k=k1,f=f1,Potencia_Carga=f'{SumaPotenciasCarga}')
             contadorpot=1
             aparentPower=[]
             if(contadorpot2==1):
                 SumaPotenciasRed=SumaPotenciasCarga-SumaPotenciasPaneles
-                SendDataToBroker(q=1,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
-                SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}")
+                SendDataToBroker(q=4,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
+                SendDataToBroker(q=5,k=k1,f=f1,Voltaje=f"{Vrms}")
             
     if(i==4 or i==5 or i==6):
         global SumaPotenciasPaneles
@@ -1037,23 +1037,23 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             aparentPowerPaneles.insert(2,AparentPower_6)
         if(len(CorrientePaneles)>=3):
             CorrientesPaneles=np.sum(CorrientesPaneles)
-            SendDataToBroker(q=1,k=k1,f=f1,Corriente_Paneles=f'{CorrientesPaneles}')
+            SendDataToBroker(q=6,k=k1,f=f1,Corriente_Paneles=f'{CorrientesPaneles}')
             CorrientePaneles=[]
             contadorcorriente2=1
             if(contadorcorriente==1):
                 SumaCorrientesRed=CorrientesCarga-CorrientesPaneles
                 if(SumaCorrientesRed<0):
                     SumaCorrientesRed=0
-                SendDataToBroker(q=1,k=k1,f=f1,Corriente_Red=f'{SumaCorrientesRed}')
+                SendDataToBroker(q=2,k=k1,f=f1,Corriente_Red=f'{SumaCorrientesRed}')
         if(len(aparentPowerPaneles)>=3):
             SumaPotenciasPaneles=np.sum(aparentPowerPaneles)
-            SendDataToBroker(q=1,k=k1,f=f1,Potencia_Paneles=f'{SumaPotenciasPaneles}')
+            SendDataToBroker(q=7,k=k1,f=f1,Potencia_Paneles=f'{SumaPotenciasPaneles}')
             aparentPowerPaneles=[]
             contadorpot2=1
             if(contadorpot==1):
                 SumaPotenciasRed=SumaPotenciasCarga-SumaPotenciasPaneles
-                SendDataToBroker(q=1,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
-                SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}")
+                SendDataToBroker(q=4,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
+                SendDataToBroker(q=5,k=k1,f=f1,Voltaje=f"{Vrms}")
                 
 
         
@@ -1381,7 +1381,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                 valueJson = json.dumps(str_num)
                 #print(f'{key}-{f}-{k}')
                 for i in data["variables"]:
-                    if(i["variableFullName"]==f'{key}-{f}-{k}'):
+                    if(i["variableFullName"]==f'{key}'):
                         #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                         freq = i["variableSendFreq"]  
                         #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
@@ -1392,7 +1392,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                              result = client.publish(topic, valueJson)
                              status = result[0]            
                              if status == 0:
-                                 print(f"Send {key}-{f}-{k} {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
+                                 print(f"Send {key} - {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}")       
 
