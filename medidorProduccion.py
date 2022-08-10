@@ -685,9 +685,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             OneHourEnergy_Red_Fase2=OneHourEnergy_2-OneHourEnergy_5
             OneHourEnergy_Red_Fase3=OneHourEnergy_3-OneHourEnergy_6
             
-            SendDataToBroker(q=1,k=k1,f=f1,Energia_Total_Red=f'{OneHourEnergy_RedCompañia}')
-            SendDataToBroker(q=1,k=k1,f=f1,Energia_Paneles=f'{OneHourEnergy_Paneles}')
-            SendDataToBroker(q=1,k=k1,f=f1,Energia_Total_Carga=f'{OneHourEnergy_Carga}')
+            #SendDataToBroker(q=1,k=k1,f=f1,Energia_Total_Red=f'{OneHourEnergy_RedCompañia}')
+            #SendDataToBroker(q=1,k=k1,f=f1,Energia_Paneles=f'{OneHourEnergy_Paneles}')
+            #SendDataToBroker(q=1,k=k1,f=f1,Energia_Total_Carga=f'{OneHourEnergy_Carga}')
             
             dataHourFase1=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_Red_Fase1,5),round(OneHourEnergy_1,5),round(OneHourEnergy_4,5)]
             dataHourFase2=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_Red_Fase2,5),round(OneHourEnergy_2,5),round(OneHourEnergy_5,5)]
@@ -952,31 +952,31 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             
             #workbook.save(filename = dest_filename)
             
-            ##SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
+            ###SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
             print("Enviando Hora Max Energia 1")
             OneHourEnergy_1=0
-            #SendDataToBroker(q=2,k=k1,f=f2,EnergiaHora=f'{OneHourEnergy_2}')
+            ##SendDataToBroker(q=2,k=k1,f=f2,EnergiaHora=f'{OneHourEnergy_2}')
             print("Enviando Hora Max Energia 2")
             OneHourEnergy_2=0   
-            #SendDataToBroker(q=3,k=k1,f=f3,EnergiaHora=f'{OneHourEnergy_3}')
+            ##SendDataToBroker(q=3,k=k1,f=f3,EnergiaHora=f'{OneHourEnergy_3}')
             print("Enviando Hora Max Energia 3")
             OneHourEnergy_3=0   
-            #SendDataToBroker(q=4,k=k2,f=f1,EnergiaHora=f'{OneHourEnergy_4}')
+            ##SendDataToBroker(q=4,k=k2,f=f1,EnergiaHora=f'{OneHourEnergy_4}')
             print("Enviando Hora Max Energia 4")
             OneHourEnergy_4=0    
-            #SendDataToBroker(q=5,k=k2,f=f2,EnergiaHora=f'{OneHourEnergy_5}')
+            ##SendDataToBroker(q=5,k=k2,f=f2,EnergiaHora=f'{OneHourEnergy_5}')
             print("Enviando Hora Max Energia 5")
             OneHourEnergy_5=0   
-            #SendDataToBroker(q=6,k=k2,f=f3,EnergiaHora=f'{OneHourEnergy_6}')
+            ##SendDataToBroker(q=6,k=k2,f=f3,EnergiaHora=f'{OneHourEnergy_6}')
             print("Enviando Hora Max Energia 6")
             OneHourEnergy_6=0     
-            #SendDataToBroker(q=7,k=k3,f=f1,EnergiaHora=f'{OneHourEnergy_7}')
+            ##SendDataToBroker(q=7,k=k3,f=f1,EnergiaHora=f'{OneHourEnergy_7}')
             print("Enviando Hora Max Energia 7")
             OneHourEnergy_7=0     
-            #SendDataToBroker(q=8,k=k3,f=f2,EnergiaHora=f'{OneHourEnergy_8}')
+            ##SendDataToBroker(q=8,k=k3,f=f2,EnergiaHora=f'{OneHourEnergy_8}')
             print("Enviando Hora Max Energia 8")
             OneHourEnergy_8=0       
-            #SendDataToBroker(q=9,k=k3,f=f3,EnergiaHora=f'{OneHourEnergy_9}')
+            ##SendDataToBroker(q=9,k=k3,f=f3,EnergiaHora=f'{OneHourEnergy_9}')
             print("Enviando Hora Max Energia 9")
             OneHourEnergy_9=0
             vt15=time.time()
@@ -1008,23 +1008,23 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             aparentPower.insert(2,AparentPower_3)
         if(len(CorrienteCarga)>=3):
             CorrientesCarga=np.sum(CorrienteCarga)
-            SendDataToBroker(q=1,k=k1,f=f1,Corriente_Carga=f'{CorrientesCarga}')
+            #SendDataToBroker(q=1,k=k1,f=f1,Corriente_Carga=f'{CorrientesCarga}')
             CorrienteCarga=[]
             contadorcorriente=1
             if(contadorcorriente2==1):
                 SumaCorrientesRed=CorrientesCarga-CorrientesPaneles
                 if(SumaCorrientesRed<0):
                     SumaCorrientesRed=0
-                SendDataToBroker(q=2,k=k1,f=f1,Potencia_Red=f'{SumaCorrientesRed}')
+                #SendDataToBroker(q=2,k=k1,f=f1,Potencia_Red=f'{SumaCorrientesRed}')
         if(len(aparentPower)>=3):
             SumaPotenciasCarga=np.sum(aparentPower)
-            SendDataToBroker(q=3,k=k1,f=f1,Potencia_Carga=f'{SumaPotenciasCarga}')
+            #SendDataToBroker(q=3,k=k1,f=f1,Potencia_Carga=f'{SumaPotenciasCarga}')
             contadorpot=1
             aparentPower=[]
             if(contadorpot2==1):
                 SumaPotenciasRed=SumaPotenciasCarga-SumaPotenciasPaneles
-                SendDataToBroker(q=4,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
-                SendDataToBroker(q=5,k=k1,f=f1,Voltaje=f"{Vrms}")
+                #SendDataToBroker(q=4,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
+                #SendDataToBroker(q=5,k=k1,f=f1,Voltaje=f"{Vrms}")
             
     if(i==4 or i==5 or i==6):
         contadorpot2=0
@@ -1046,23 +1046,23 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             aparentPowerPaneles.insert(2,AparentPower_6)
         if(len(CorrientePaneles)>=3):
             CorrientesPaneles=np.sum(CorrientePaneles)
-            SendDataToBroker(q=6,k=k1,f=f1,Corriente_Paneles=f'{CorrientesPaneles}')
+            #SendDataToBroker(q=6,k=k1,f=f1,Corriente_Paneles=f'{CorrientesPaneles}')
             CorrientePaneles=[]
             contadorcorriente2=1
             if(contadorcorriente==1):
                 SumaCorrientesRed=CorrientesCarga-CorrientesPaneles
                 if(SumaCorrientesRed<0):
                     SumaCorrientesRed=0
-                SendDataToBroker(q=2,k=k1,f=f1,Corriente_Red=f'{SumaCorrientesRed}')
+                #SendDataToBroker(q=2,k=k1,f=f1,Corriente_Red=f'{SumaCorrientesRed}')
         if(len(aparentPowerPaneles)>=3):
             SumaPotenciasPaneles=np.sum(aparentPowerPaneles)
-            SendDataToBroker(q=7,k=k1,f=f1,Potencia_Paneles=f'{SumaPotenciasPaneles}')
+            #SendDataToBroker(q=7,k=k1,f=f1,Potencia_Paneles=f'{SumaPotenciasPaneles}')
             aparentPowerPaneles=[]
             contadorpot2=1
             if(contadorpot==1):
                 SumaPotenciasRed=SumaPotenciasCarga-SumaPotenciasPaneles
-                SendDataToBroker(q=4,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
-                SendDataToBroker(q=5,k=k1,f=f1,Voltaje=f"{Vrms}")
+                #SendDataToBroker(q=4,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
+                ##SendDataToBroker(q=5,k=k1,f=f1,Voltaje=f"{Vrms}")
                 
 
         
@@ -1085,7 +1085,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
-        #SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
+        ##SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
         vt1=time.time() 
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,i,k1,f1)
         #{key}-{q}-{f}-{k}
@@ -1099,7 +1099,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_2 = ActivePower
         ReactivePower_2 = ReactivePower 
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i,k1,f2)
-        #SendDataToBroker(q=i,k=k1,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_2}",Energia=f"{Energy_2}")
+        ##SendDataToBroker(q=i,k=k1,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_2}",Energia=f"{Energy_2}")
         vt2=time.time() 
         Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,i,k1,f2)       
     elif (i == 3):
@@ -1112,7 +1112,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_3 = ActivePower
         ReactivePower_3 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,CosPhi_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3,OneHourEnergy_3,i,k1,f3)
-        #SendDataToBroker(q=i,k=k1,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_3}",Energia=f"{Energy_3}")
+        ##SendDataToBroker(q=i,k=k1,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_3}",Energia=f"{Energy_3}")
         vt3=time.time() 
         Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,OneHourEnergy_3,Energy_3,i,k1,f3)             
     elif (i == 4):
@@ -1125,8 +1125,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_4 = ActivePower
         ReactivePower_4 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,CosPhi_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,Energy_4,OneHourEnergy_4,i,k2,f1)
-        #SendDataToBroker(q=i,k=k2,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_4}",Energia=f"{Energy_4}")
         ##SendDataToBroker(q=i,k=k2,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_4}",Energia=f"{Energy_4}")
+        ###SendDataToBroker(q=i,k=k2,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_4}",Energia=f"{Energy_4}")
         Maximo15min_4(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,OneHourEnergy_4,Energy_4,i,k2,f1)              
     elif (i == 5):
         Time5b = datetime.datetime.now()
@@ -1138,7 +1138,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_5 = ActivePower
         ReactivePower_5 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,CosPhi_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,Energy_5,OneHourEnergy_5,i,k2,f2)
-        #SendDataToBroker(q=i,k=k2,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_5}",Energia=f"{Energy_5}")
+        ##SendDataToBroker(q=i,k=k2,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_5}",Energia=f"{Energy_5}")
         Maximo15min_5(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,OneHourEnergy_5,Energy_5,i,k2,f2)               
     elif (i == 6):
         Time6b = datetime.datetime.now()
@@ -1150,7 +1150,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_6 = ActivePower
         ReactivePower_6 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,CosPhi_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,Energy_6,OneHourEnergy_6,i,k2,f3)
-        #SendDataToBroker(q=i,k=k2,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_6}",Energia=f"{Energy_6}")
+        ##SendDataToBroker(q=i,k=k2,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_6}",Energia=f"{Energy_6}")
         Maximo15min_6(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,OneHourEnergy_6,Energy_6,i,k2,f3)           
     elif (i == 7):
         Time7b = datetime.datetime.now()
@@ -1162,7 +1162,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_7 = ActivePower
         ReactivePower_7 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_7,ReactivePower_7,AparentPower_7,FP_7,CosPhi_7,FDVoltage_7,FDCurrent_7,DATVoltage_7,DATCurrent_7,Energy_7,OneHourEnergy_7,i,k3,f1)
-        #SendDataToBroker(q=i,k=k3,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_7}",Energia=f"{Energy_7}")
+        ##SendDataToBroker(q=i,k=k3,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_7}",Energia=f"{Energy_7}")
         Maximo15min_7(Vrms,Irms,ActivePower_7,ReactivePower_7,AparentPower_7,FP_7,FDVoltage_7,FDCurrent_7,DATVoltage_7,DATCurrent_7,OneHourEnergy_7,Energy_7,i,k3,f1)           
     elif (i == 8):
         Time8b = datetime.datetime.now()
@@ -1174,7 +1174,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_8 = ActivePower
         ReactivePower_8 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_8,ReactivePower_8,AparentPower_8,FP_8,CosPhi_8,FDVoltage_8,FDCurrent_8,DATVoltage_8,DATCurrent_8,Energy_8,OneHourEnergy_8,i,k3,f2)
-        #SendDataToBroker(q=i,k=k3,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_8}",Energia=f"{Energy_8}")
+        ##SendDataToBroker(q=i,k=k3,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_8}",Energia=f"{Energy_8}")
         Maximo15min_8(Vrms,Irms,ActivePower_8,ReactivePower_8,AparentPower_8,FP_8,FDVoltage_8,FDCurrent_8,DATVoltage_8,DATCurrent_8,OneHourEnergy_8,Energy_8,i,k3,f2)             
     elif (i == 9):
         Time9b = datetime.datetime.now()
@@ -1186,7 +1186,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_9 = ActivePower
         ReactivePower_9 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_9,ReactivePower_9,AparentPower_9,FP_9,CosPhi_9,FDVoltage_9,FDCurrent_9,DATVoltage_9,DATCurrent_9,Energy_9,OneHourEnergy_9,i,k3,f3)
-        #SendDataToBroker(q=i,k=k3,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_9}",Energia=f"{Energy_9}")
+        ##SendDataToBroker(q=i,k=k3,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_9}",Energia=f"{Energy_9}")
         Maximo15min_9(Vrms,Irms,ActivePower_9,ReactivePower_9,AparentPower_9,FP_9,FDVoltage_9,FDCurrent_9,DATVoltage_9,DATCurrent_9,OneHourEnergy_9,Energy_9,i,k3,f3) 
        
     
@@ -1330,7 +1330,7 @@ f3="Fase-3"
 #Voltaje-Fase-3-ConsumoCliente // Corriente-Fase-3-ConsumoCliente // Potencia-Fase-3-ConsumoCliente // Potencia-Fase-3-ConsumoCliente
 #VoltajeMax-Fase-3-ConsumoCliente // VoltajePromedio-Fase-3-ConsumoCliente // VoltajeMin-Fase-3-ConsumoCliente // CorrienteMax-Fase-3-ConsumoCliente // PotenciaMax-Fase-3-ConsumoCliente // EnergiaMax-Fase-3-ConsumoCliente
 
-def SendDataToBroker(q,k,f,**kwargs):
+def #SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             g=0
@@ -1579,8 +1579,8 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
                     optionsave=1
-                    #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_1}',VoltajePromedio=f'{MeanVoltage15_1}',VoltajeMin=f'{MinVoltage15_1}',MaxCorriente=f'{MaxCurrent15_1}',PromedioCorriente=f'{MeanCurrent15_1}',MinimoCorriente=f'{MinCurrent15_1}',PotenciaMax=f'{MaxAparentPower_1}',PromedioPotenciaAparente=f'{MeanAparentPower_1}',MinPotenciaAparente=f'{MinAparentPower_1}',Energia=f'{Energy}')
-                    ##SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f,_)
+                    ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_1}',VoltajePromedio=f'{MeanVoltage15_1}',VoltajeMin=f'{MinVoltage15_1}',MaxCorriente=f'{MaxCurrent15_1}',PromedioCorriente=f'{MeanCurrent15_1}',MinimoCorriente=f'{MinCurrent15_1}',PotenciaMax=f'{MaxAparentPower_1}',PromedioPotenciaAparente=f'{MeanAparentPower_1}',MinPotenciaAparente=f'{MinAparentPower_1}',Energia=f'{Energy}')
+                    ###SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f,_)
                     vt115=time.time()
                     workbook.save(filename = dest_filename)
                     data15_1=[]
@@ -1844,7 +1844,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet3.append(list(data15_2))
                     print(f'Data 2: Guardando Promedios')
                     optionsave=1
-                    #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_2}',VoltajePromedio=f'{MeanVoltage15_2}',VoltajeMin=f'{MinVoltage15_2}',MaxCorriente=f'{MaxCurrent15_2}',PromedioCorriente=f'{MeanCurrent15_2}',MinimoCorriente=f'{MinCurrent15_2}',PotenciaMax=f'{MaxAparentPower_2}',PromedioPotenciaAparente=f'{MeanAparentPower_2}',MinPotenciaAparente=f'{MinAparentPower_2}',Energia=f'{Energy}')
+                    ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_2}',VoltajePromedio=f'{MeanVoltage15_2}',VoltajeMin=f'{MinVoltage15_2}',MaxCorriente=f'{MaxCurrent15_2}',PromedioCorriente=f'{MeanCurrent15_2}',MinimoCorriente=f'{MinCurrent15_2}',PotenciaMax=f'{MaxAparentPower_2}',PromedioPotenciaAparente=f'{MeanAparentPower_2}',MinPotenciaAparente=f'{MinAparentPower_2}',Energia=f'{Energy}')
                     vt215=time.time()
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
@@ -2107,7 +2107,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet4.append(list(data15_3))
                     print(f'Data 3: Guardando Promedios')
                     optionsave=1
-                    #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_3}',VoltajePromedio=f'{MeanVoltage15_3}',VoltajeMin=f'{MinVoltage15_3}',MaxCorriente=f'{MaxCurrent15_3}',PromedioCorriente=f'{MeanCurrent15_3}',MinimoCorriente=f'{MinCurrent15_3}',PotenciaMax=f'{MaxAparentPower_3}',PromedioPotenciaAparente=f'{MeanAparentPower_3}',MinPotenciaAparente=f'{MinAparentPower_3}',Energia=f'{Energy}')
+                    ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_3}',VoltajePromedio=f'{MeanVoltage15_3}',VoltajeMin=f'{MinVoltage15_3}',MaxCorriente=f'{MaxCurrent15_3}',PromedioCorriente=f'{MeanCurrent15_3}',MinimoCorriente=f'{MinCurrent15_3}',PotenciaMax=f'{MaxAparentPower_3}',PromedioPotenciaAparente=f'{MeanAparentPower_3}',MinPotenciaAparente=f'{MinAparentPower_3}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_3=[]
@@ -2369,7 +2369,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet5.append(list(data15_4))
                     print(f'Data 4: Guardando Promedios')
                     optionsave=1
-                    #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_4}',VoltajePromedio=f'{MeanVoltage15_4}',VoltajeMin=f'{MinVoltage15_4}',MaxCorriente=f'{MaxCurrent15_4}',PromedioCorriente=f'{MeanCurrent15_4}',MinimoCorriente=f'{MinCurrent15_4}',PotenciaMax=f'{MaxAparentPower_4}',PromedioPotenciaAparente=f'{MeanAparentPower_4}',MinPotenciaAparente=f'{MinAparentPower_4}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
+                    ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_4}',VoltajePromedio=f'{MeanVoltage15_4}',VoltajeMin=f'{MinVoltage15_4}',MaxCorriente=f'{MaxCurrent15_4}',PromedioCorriente=f'{MeanCurrent15_4}',MinimoCorriente=f'{MinCurrent15_4}',PotenciaMax=f'{MaxAparentPower_4}',PromedioPotenciaAparente=f'{MeanAparentPower_4}',MinPotenciaAparente=f'{MinAparentPower_4}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_4=[]
@@ -2630,7 +2630,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet6.append(list(data15_5))
                     print(f'Data 5: Guardando Promedios')
                     optionsave=1
-                    #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_5}',VoltajePromedio=f'{MeanVoltage15_5}',VoltajeMin=f'{MinVoltage15_5}',MaxCorriente=f'{MaxCurrent15_5}',PromedioCorriente=f'{MeanCurrent15_5}',MinimoCorriente=f'{MinCurrent15_5}',PotenciaMax=f'{MaxAparentPower_5}',PromedioPotenciaAparente=f'{MeanAparentPower_5}',MinPotenciaAparente=f'{MinAparentPower_5}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
+                    ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_5}',VoltajePromedio=f'{MeanVoltage15_5}',VoltajeMin=f'{MinVoltage15_5}',MaxCorriente=f'{MaxCurrent15_5}',PromedioCorriente=f'{MeanCurrent15_5}',MinimoCorriente=f'{MinCurrent15_5}',PotenciaMax=f'{MaxAparentPower_5}',PromedioPotenciaAparente=f'{MeanAparentPower_5}',MinPotenciaAparente=f'{MinAparentPower_5}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_5=[]
@@ -2892,7 +2892,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet8.append(list(data15_7))
                     print(f'Data 7: Guardando Promedios')
                     optionsave=1
-                    #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_7}',VoltajePromedio=f'{MeanVoltage15_7}',VoltajeMin=f'{MinVoltage15_7}',MaxCorriente=f'{MaxCurrent15_7}',PromedioCorriente=f'{MeanCurrent15_7}',MinimoCorriente=f'{MinCurrent15_7}',PotenciaMax=f'{MaxAparentPower_7}',PromedioPotenciaAparente=f'{MeanAparentPower_7}',MinPotenciaAparente=f'{MinAparentPower_7}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
+                    ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_7}',VoltajePromedio=f'{MeanVoltage15_7}',VoltajeMin=f'{MinVoltage15_7}',MaxCorriente=f'{MaxCurrent15_7}',PromedioCorriente=f'{MeanCurrent15_7}',MinimoCorriente=f'{MinCurrent15_7}',PotenciaMax=f'{MaxAparentPower_7}',PromedioPotenciaAparente=f'{MeanAparentPower_7}',MinPotenciaAparente=f'{MinAparentPower_7}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_7=[]
@@ -3153,7 +3153,7 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet9.append(list(data15_8))
                     print(f'Data 8: Guardando Promedios')
                     optionsave=1
-                    #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_8}',VoltajePromedio=f'{MeanVoltage15_8}',VoltajeMin=f'{MinVoltage15_8}',MaxCorriente=f'{MaxCurrent15_8}',PromedioCorriente=f'{MeanCurrent15_8}',MinimoCorriente=f'{MinCurrent15_8}',PotenciaMax=f'{MaxAparentPower_8}',PromedioPotenciaAparente=f'{MeanAparentPower_8}',MinPotenciaAparente=f'{MinAparentPower_8}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
+                    ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_8}',VoltajePromedio=f'{MeanVoltage15_8}',VoltajeMin=f'{MinVoltage15_8}',MaxCorriente=f'{MaxCurrent15_8}',PromedioCorriente=f'{MeanCurrent15_8}',MinimoCorriente=f'{MinCurrent15_8}',PotenciaMax=f'{MaxAparentPower_8}',PromedioPotenciaAparente=f'{MeanAparentPower_8}',MinPotenciaAparente=f'{MinAparentPower_8}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_8=[]
@@ -3413,7 +3413,7 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet7.append(list(data15_6))
                     print(f'Data 6: Guardando Promedios')
                     optionsave=1
-                    #SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_6}',VoltajePromedio=f'{MeanVoltage15_6}',VoltajeMin=f'{MinVoltage15_6}',MaxCorriente=f'{MaxCurrent15_6}',PromedioCorriente=f'{MeanCurrent15_6}',MinimoCorriente=f'{MinCurrent15_6}',PotenciaMax=f'{MaxAparentPower_6}',PromedioPotenciaAparente=f'{MeanAparentPower_6}',MinPotenciaAparente=f'{MinAparentPower_6}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
+                    ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_6}',VoltajePromedio=f'{MeanVoltage15_6}',VoltajeMin=f'{MinVoltage15_6}',MaxCorriente=f'{MaxCurrent15_6}',PromedioCorriente=f'{MeanCurrent15_6}',MinimoCorriente=f'{MinCurrent15_6}',PotenciaMax=f'{MaxAparentPower_6}',PromedioPotenciaAparente=f'{MeanAparentPower_6}',MinPotenciaAparente=f'{MinAparentPower_6}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_6=[]
@@ -3675,7 +3675,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet10.append(list(data15_9))
                     print(f'Data 9: Guardando Promedios')
                     optionsave=1
-                    ###SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_9}',VoltajePromedio=f'{MeanVoltage15_9}',VoltajeMin=f'{MinVoltage15_9}',MaxCorriente=f'{MaxCurrent15_9}',PromedioCorriente=f'{MeanCurrent15_9}',MinimoCorriente=f'{MinCurrent15_9}',PotenciaMax=f'{MaxAparentPower_9}',PromedioPotenciaAparente=f'{MeanAparentPower_9}',MinPotenciaAparente=f'{MinAparentPower_9}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
+                    ####SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_9}',VoltajePromedio=f'{MeanVoltage15_9}',VoltajeMin=f'{MinVoltage15_9}',MaxCorriente=f'{MaxCurrent15_9}',PromedioCorriente=f'{MeanCurrent15_9}',MinimoCorriente=f'{MinCurrent15_9}',PotenciaMax=f'{MaxAparentPower_9}',PromedioPotenciaAparente=f'{MeanAparentPower_9}',MinPotenciaAparente=f'{MinAparentPower_9}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_9=[]
