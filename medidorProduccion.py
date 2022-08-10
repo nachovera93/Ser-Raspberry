@@ -647,6 +647,12 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global optionsave
     global vt15
     global acceshourenergy
+    global SumaPotenciasPaneles
+    global contadorpot2
+    global SumaPotenciasCarga
+    global contadorpot
+    global contadorcorriente
+    global contadorcorriente2
     #print([round(OneHourEnergy_1,5),round(OneHourEnergy_2,5),round(OneHourEnergy_3,5),round(OneHourEnergy_4,5),round(OneHourEnergy_5,5),round(OneHourEnergy_6,5),round(OneHourEnergy_7,5),round(OneHourEnergy_8,5),round(OneHourEnergy_9,5)])
     TimeEnergy = datetime.datetime.now()
     if(TimeEnergy.minute==4):
@@ -975,9 +981,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
            
     AparentPower = Vrms*Irms
     if(i==1 or i==2 or i==3):
-        global SumaPotenciasCarga
-        global contadorpot
-        global contadorcorriente
         contadorpot=0
         contadorcorriente=0     
         if(i==1):
@@ -1016,8 +1019,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 SendDataToBroker(q=5,k=k1,f=f1,Voltaje=f"{Vrms}")
             
     if(i==4 or i==5 or i==6):
-        global SumaPotenciasPaneles
-        global contadorpot2
         contadorpot2=0
         contadorcorriente2=0 
         if(i==4):
