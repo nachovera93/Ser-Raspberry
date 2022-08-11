@@ -610,6 +610,7 @@ contadorcorriente2=0
 contadorcorriente=0
 CorrientesCarga=0
 CorrientesPaneles=0
+EnergyFactor=2.8
 def Potencias(i,Irms,Vrms,potrmsCGE):
     global vt1
     global vt2
@@ -678,7 +679,14 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                     OneHourEnergy_Paneles=OneHourEnergy_4+OneHourEnergy_5+OneHourEnergy_6
                     OneHourEnergy_Carga=OneHourEnergy_1+OneHourEnergy_2+OneHourEnergy_3
                     OneHourEnergy_RedCompañia=OneHourEnergy_Carga-OneHourEnergy_Paneles
-                    ReporteDiarioHora(datetim.hour,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga)
+                    OneHourEnergy_Carga_Fase1=OneHourEnergy_1
+                    OneHourEnergy_Carga_Fase2=OneHourEnergy_2
+                    OneHourEnergy_Carga_Fase3=OneHourEnergy_3
+                    OneHourEnergy_Paneles_Fase1=OneHourEnergy_4
+                    OneHourEnergy_Paneles_Fase2=OneHourEnergy_5
+                    OneHourEnergy_Paneles_Fase3=OneHourEnergy_6
+                    
+                    ReporteDiarioHora(datetim.hour,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3)
             else:
                     print("No hay conexión")
             OneHourEnergy_Red_Fase1=OneHourEnergy_1-OneHourEnergy_4
@@ -1080,8 +1088,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     if (i == 1):
         Time1b = datetime.datetime.now()
         delta=(((Time1b - Time1a).microseconds)/1000+((Time1b - Time1a).seconds)*1000)/10000000000
-        Energy_1 += np.abs(AparentPower*delta*2.9) #ActivePower
-        OneHourEnergy_1 += np.abs(AparentPower*delta*2.9) #ActivePower
+        Energy_1 += np.abs(AparentPower*delta*EnergyFactor) #ActivePower
+        OneHourEnergy_1 += np.abs(AparentPower*delta*EnergyFactor) #ActivePower
         Time1a = datetime.datetime.now()
         AparentPower_1 = AparentPower
         ActivePower_1 = ActivePower
@@ -1094,8 +1102,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 2):
         Time2b = datetime.datetime.now()
         delta=(((Time2b - Time2a).microseconds)/1000+((Time2b - Time2a).seconds)*1000)/10000000000
-        Energy_2 += np.abs(AparentPower*delta*2.9)
-        OneHourEnergy_2 += np.abs(AparentPower*delta*2.9)
+        Energy_2 += np.abs(AparentPower*delta*EnergyFactor)
+        OneHourEnergy_2 += np.abs(AparentPower*delta*EnergyFactor)
         Time2a = datetime.datetime.now()
         AparentPower_2 = AparentPower
         ActivePower_2 = ActivePower
@@ -1107,8 +1115,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 3):
         Time3b = datetime.datetime.now()
         delta=(((Time3b - Time3a).microseconds)/1000+((Time3b - Time3a).seconds)*1000)/10000000000
-        Energy_3 += np.abs(AparentPower*delta*2.9)
-        OneHourEnergy_3 += np.abs(AparentPower*delta*2.9)
+        Energy_3 += np.abs(AparentPower*delta*EnergyFactor)
+        OneHourEnergy_3 += np.abs(AparentPower*delta*EnergyFactor)
         Time3a = datetime.datetime.now()
         AparentPower_3 = AparentPower
         ActivePower_3 = ActivePower
@@ -1120,8 +1128,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 4):
         Time4b = datetime.datetime.now()
         delta=(((Time4b - Time4a).microseconds)/1000+((Time4b - Time4a).seconds)*1000)/10000000000
-        Energy_4 += np.abs(AparentPower*delta*2.9)
-        OneHourEnergy_4 += np.abs(AparentPower*delta*2.9)
+        Energy_4 += np.abs(AparentPower*delta*EnergyFactor)
+        OneHourEnergy_4 += np.abs(AparentPower*delta*EnergyFactor)
         Time4a = datetime.datetime.now()
         AparentPower_4 = AparentPower
         ActivePower_4 = ActivePower
@@ -1133,8 +1141,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 5):
         Time5b = datetime.datetime.now()
         delta=(((Time5b - Time5a).microseconds)/1000+((Time5b - Time5a).seconds)*1000)/10000000000
-        Energy_5 += np.abs(AparentPower*delta*2.9)
-        OneHourEnergy_5 += np.abs(AparentPower*delta*2.9)
+        Energy_5 += np.abs(AparentPower*delta*EnergyFactor)
+        OneHourEnergy_5 += np.abs(AparentPower*delta*EnergyFactor)
         Time5a = datetime.datetime.now()
         AparentPower_5 = AparentPower
         ActivePower_5 = ActivePower
@@ -1145,8 +1153,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 6):
         Time6b = datetime.datetime.now()
         delta=(((Time6b - Time6a).microseconds)/1000+((Time6b - Time6a).seconds)*1000)/10000000000
-        Energy_6 += np.abs(AparentPower*delta*2.9)
-        OneHourEnergy_6 += np.abs(AparentPower*delta*2.9)
+        Energy_6 += np.abs(AparentPower*delta*EnergyFactor)
+        OneHourEnergy_6 += np.abs(AparentPower*delta*EnergyFactor)
         Time6a = datetime.datetime.now()
         AparentPower_6 = AparentPower
         ActivePower_6 = ActivePower
@@ -1157,8 +1165,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 7):
         Time7b = datetime.datetime.now()
         delta=(((Time7b - Time7a).microseconds)/1000+((Time7b - Time7a).seconds)*1000)/10000000000
-        Energy_7 += np.abs(AparentPower*delta*2.9)
-        OneHourEnergy_7 += np.abs(AparentPower*delta*2.9)
+        Energy_7 += np.abs(AparentPower*delta*EnergyFactor)
+        OneHourEnergy_7 += np.abs(AparentPower*delta*EnergyFactor)
         Time7a = datetime.datetime.now()
         AparentPower_7 = AparentPower
         ActivePower_7 = ActivePower
@@ -1169,8 +1177,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 8):
         Time8b = datetime.datetime.now()
         delta=(((Time8b - Time8a).microseconds)/1000+((Time8b - Time8a).seconds)*1000)/10000000000
-        Energy_8 += np.abs(AparentPower*delta*2.9)
-        OneHourEnergy_8 += np.abs(AparentPower*delta*2.9)
+        Energy_8 += np.abs(AparentPower*delta*EnergyFactor)
+        OneHourEnergy_8 += np.abs(AparentPower*delta*EnergyFactor)
         Time8a = datetime.datetime.now()
         AparentPower_8 = AparentPower
         ActivePower_8 = ActivePower
@@ -1181,8 +1189,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     elif (i == 9):
         Time9b = datetime.datetime.now()
         delta=(((Time9b - Time9a).microseconds)/1000+((Time9b - Time9a).seconds)*1000)/10000000000
-        Energy_9 += np.abs(AparentPower*delta*2.9)
-        OneHourEnergy_9 += np.abs(AparentPower*delta*2.9)
+        Energy_9 += np.abs(AparentPower*delta*EnergyFactor)
+        OneHourEnergy_9 += np.abs(AparentPower*delta*EnergyFactor)
         Time9a = datetime.datetime.now()
         AparentPower_9 = AparentPower
         ActivePower_9 = ActivePower
@@ -4265,7 +4273,7 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
         Largo=len(values_list)
         print(datetim)
         #ValorDia=Energy_RedCompañia*BT1
-        val = float(worksheet.acell('U2').value)*Energy_RedCompañia
+        val = float(worksheet.acell('V2').value)*Energy_RedCompañia
         array = np.array([[round(Energy_RedCompañia,5)]])
         array2 = np.array([[round(Energy_Paneles,5)]])
         array3 = np.array([[round(Energy_Carga,5)]]) 
@@ -4281,13 +4289,15 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
         Largo=len(values_list)
         print("Insertando Datos")
         worksheet.batch_clear([f"F2:F{Largo+1}",f"G2:G{Largo+1}",f"H2:H{Largo+1}",f"I2:I{Largo+1}",f"J2:J{Largo+1}"])
-        worksheet.batch_clear([f"AF2:AF{Largo+1}",f"AG2:AG{Largo+1}",f"AH2:AH{Largo+1}",f"AI2:AI{Largo+1}",f"AJ2:AJ{Largo+1}",f"AK2:AK{Largo+1}",f"AL2:AL{Largo+1}"])
+        values_list = worksheet.col_values(33)
+        Largo=len(values_list)
+        worksheet.batch_clear([f"AG2:AG{Largo+1}",f"AH2:AH{Largo+1}",f"AI2:AI{Largo+1}",f"AJ2:AJ{Largo+1}",f"AK2:AK{Largo+1}",f"AL2:AL{Largo+1}",f"AM2:AM{Largo+1}"])
     
     except:
         print("Error al isertar datos")
     #
     
-def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga):
+def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3):
     gc = gspread.service_account(filename='rep_medidor.json')
     sh = gc.open('Luis_Wherhahm')
     worksheet = sh.worksheet("Hoja 1")
@@ -4296,7 +4306,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     Largo=len(values_list)
     print(Largo)
     array5 = np.array([[round(OneHourEnergy_Paneles,5)]])
-    worksheet.update(f'AN{Largo+1}', array5.tolist())
+    worksheet.update(f'J{Largo+1}', array5.tolist())
     #datetim=json.dumps(datetim)
     if(OneHourEnergy_RedCompañia<0):
         OneHourEnergy_RedCompañia=0
@@ -4316,9 +4326,9 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     array2 = np.array([[round(OneHourEnergy_Carga,5)]])
     array4 = np.array(datetim)
     
-    worksheet.update(f'F{Largo+1}',array4.tolist())
-    worksheet.update(f'G{Largo+1}', array.tolist())
-    worksheet.update(f'J{Largo+1}', array2.tolist())
+    worksheet.update(f'F{Largo+1}',array4.tolist()) #Hora
+    worksheet.update(f'G{Largo+1}', array.tolist())  # Red
+    worksheet.update(f'K{Largo+1}', array2.tolist()) #Carga
     
    
     
