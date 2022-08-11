@@ -4241,7 +4241,7 @@ def ReportePotencias15():
         values_list = worksheet.col_values(38)
         Largo=len(values_list)
         worksheet.update(f'AL{Largo+1}',array5.tolist())
-        values_list = worksheet.col_values(49)
+        values_list = worksheet.col_values(39)
         Largo=len(values_list)
         worksheet.update(f'AM{Largo+1}',array6.tolist())
         """
