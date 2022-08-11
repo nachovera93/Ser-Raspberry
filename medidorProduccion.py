@@ -4326,7 +4326,30 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     array2 = np.array([[round(OneHourEnergy_Carga,5)]])
     array4 = np.array(datetim)
     
+    ###Energías de cada fase
+    array6 = np.array([[round(OneHourEnergy_Carga_Fase1,5)]])
+    worksheet.update(f'AR{Largo+1}', array6.tolist())
+    array7 = np.array([[round(OneHourEnergy_Carga_Fase2,5)]])
+    worksheet.update(f'AS{Largo+1}', array7.tolist())
+    array8 = np.array([[round(OneHourEnergy_Carga_Fase3,5)]])
+    worksheet.update(f'AT{Largo+1}', array8.tolist())
+    array9 = np.array([[round(OneHourEnergy_Paneles_Fase1,5)]])
+    worksheet.update(f'AU{Largo+1}', array9.tolist())
+    array10 = np.array([[round(OneHourEnergy_Paneles_Fase2,5)]])
+    worksheet.update(f'AV{Largo+1}', array10.tolist())
+    array11 = np.array([[round(OneHourEnergy_Paneles_Fase3,5)]])
+    worksheet.update(f'AW{Largo+1}', array11.tolist())
+    #array6 = np.array([[round(OneHourEnergy_Red_Fase1,5)]])
+    #worksheet.update(f'J{Largo+1}', array6.tolist())
+    #array6 = np.array([[round(OneHourEnergy_Red_Fase1,5)]])
+    #worksheet.update(f'J{Largo+1}', array6.tolist())
+    #array6 = np.array([[round(OneHourEnergy_Red_Fase1,5)]])
+    #worksheet.update(f'J{Largo+1}', array6.tolist())
+    
+    
+    
     worksheet.update(f'F{Largo+1}',array4.tolist()) #Hora
+    worksheet.update(f'AN{Largo+1}',array4.tolist()) #Hora
     worksheet.update(f'G{Largo+1}', array.tolist())  # Red
     worksheet.update(f'K{Largo+1}', array2.tolist()) #Carga
     
