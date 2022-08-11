@@ -4216,13 +4216,13 @@ def ReportePotencias15():
         #array8 = np.array([[MaxAparentPower_8]])
         #array9 = np.array([[MaxAparentPower_9]])
         datetim=datetime.datetime.now()
-        if(datetim.minute<20 and datetim.minute>4):
+        if(datetim.minute<21 and datetim.minute>7):
             minute=15
-        elif(datetim.minute>0 and datetim.minute<4 ):
+        elif(datetim.minute>0 and datetim.minute<6 ):
             minute=00
-        elif(datetim.minute>20 and datetim.minute<34):
+        elif(datetim.minute>21 and datetim.minute<36):
             minute=30
-        elif(datetim.minute<50 and datetim.minute>34):
+        elif(datetim.minute<52 and datetim.minute>36):
             minute=45
         values_list = worksheet.col_values(33)
         Largo=len(values_list)
@@ -4686,6 +4686,7 @@ def TomaDatos(list_Voltage,list_Current,samplings,i):
 
 Access_pot=0
 def received():
+    global Access_pot
     while True:
                 try:
                      esp32_bytes = esp32.readline()
@@ -4763,7 +4764,7 @@ def received():
                      else:
                               Access_1email=0
                           
-                     if(excel.minute==4 or excel.minute==19 or excel.minute==34 or excel.minute==49 ):
+                     if(excel.minute==5 or excel.minute==20 or excel.minute==35 or excel.minute==50 ):
                          try:
                               if(Access_pot==0):
                                      Access_pot=1
