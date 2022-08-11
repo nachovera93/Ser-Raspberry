@@ -4224,7 +4224,7 @@ def ReportePotencias15():
             minute=30
         elif(datetim.minute<50 and datetim.minute>34):
             minute=45
-        values_list = worksheet.col_values(32)
+        values_list = worksheet.col_values(33)
         Largo=len(values_list)
         arraytime=np.array(f'{datetim.hour}:{minute}')
         worksheet.update(f'AF{Largo+1}',arraytime.tolist())
