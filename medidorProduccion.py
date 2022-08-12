@@ -4217,7 +4217,7 @@ def ReportePotencias15():
         #array9 = np.array([[MaxAparentPower_9]])
         datetim=datetime.datetime.now()-datetime.timedelta(minutes=5)
         Hora=datetim.strftime('%H:%M')
-
+        x = time.time() #timestamp
         if(datetim.minute<21 and datetim.minute>7):
             minute=15
         elif(datetim.minute>0 and datetim.minute<6 ):
@@ -4230,6 +4230,7 @@ def ReportePotencias15():
         Largo=len(values_list)
         #arraytime=np.array(f'{datetim.hour}:{minute}')
         worksheet.update(f'AG{Largo+1}',Hora)
+        worksheet.update(f'AY{Largo+1}',x)
         worksheet.update(f'AH{Largo+1}',array1.tolist())
         values_list = worksheet.col_values(35)
         Largo=len(values_list)
