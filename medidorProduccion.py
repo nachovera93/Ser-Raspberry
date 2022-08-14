@@ -1413,7 +1413,35 @@ def SendDataToBroker(q,k,f,**kwargs):
                              if status == 0:
                                  print(f"Send {key} - {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
-                                 print(f"Failed to send message to topic {topic}")       
+                                 print(f"Failed to send message to topic {topic}") 
+                    elif(i["variableFullName2"]==f'{key}'):
+                        #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
+                        freq = i["variableSendFreq"]  
+                        #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
+                        if(timeToSend - vt > float(freq)): 
+                             #print(f"Entrando a envio {key}-{q}")
+                             str_variable = i["variable2"]
+                             topic = topicmqtt + str_variable + "/sdata"
+                             result = client.publish(topic, valueJson)
+                             status = result[0]            
+                             if status == 0:
+                                 print(f"Send {key} - {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
+                             else:
+                                 print(f"Failed to send message to topic {topic}")         
+                    elif(i["variableFullName3"]==f'{key}'):
+                        #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
+                        freq = i["variableSendFreq"]  
+                        #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
+                        if(timeToSend - vt > float(freq)): 
+                             #print(f"Entrando a envio {key}-{q}")
+                             str_variable = i["variable3"]
+                             topic = topicmqtt + str_variable + "/sdata"
+                             result = client.publish(topic, valueJson)
+                             status = result[0]            
+                             if status == 0:
+                                 print(f"Send {key} - {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
+                             else:
+                                 print(f"Failed to send message to topic {topic}")         
 
         try:  
             if(client.connected_flag==True): 
@@ -4217,7 +4245,7 @@ def ReportePotencias15():
         #array9 = np.array([[MaxAparentPower_9]])
         datetim=datetime.datetime.now()-datetime.timedelta(minutes=5)
         Hora=datetim.strftime('%H:%M')
-        x = time.time() #timestamp
+        """
         if(datetim.minute<21 and datetim.minute>7):
             minute=15
         elif(datetim.minute>0 and datetim.minute<6 ):
@@ -4226,11 +4254,11 @@ def ReportePotencias15():
             minute=30
         elif(datetim.minute<52 and datetim.minute>36):
             minute=45
+            """
         values_list = worksheet.col_values(33)
         Largo=len(values_list)
         #arraytime=np.array(f'{datetim.hour}:{minute}')
-        worksheet.update(f'AG{Largo+1}',Hora)
-        worksheet.update(f'AY{Largo+1}',x)
+        worksheet.update(f'AG{Largo+1}',datetim)
         worksheet.update(f'AH{Largo+1}',array1.tolist())
         values_list = worksheet.col_values(35)
         Largo=len(values_list)
@@ -4291,7 +4319,7 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
         values_list = worksheet.col_values(6)
         Largo=len(values_list)
         print("Insertando Datos")
-        worksheet.batch_clear([f"F2:F{Largo+1}",f"G2:G{Largo+1}",f"H2:H{Largo+1}",f"I2:I{Largo+1}",f"J2:J{Largo+1}"])
+        worksheet.batch_clear([f"F2:F{Largo+1}",f"G2:G{Largo+1}",f"H2:H{Largo+1}",f"I2:I{Largo+1}",f"J2:J{Largo+1}",f"K2:K{Largo+1}"])
         values_list = worksheet.col_values(33)
         Largo=len(values_list)
         worksheet.batch_clear([f"AG2:AG{Largo+1}",f"AH2:AH{Largo+1}",f"AI2:AI{Largo+1}",f"AJ2:AJ{Largo+1}",f"AK2:AK{Largo+1}",f"AL2:AL{Largo+1}",f"AM2:AM{Largo+1}"])
@@ -4311,7 +4339,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     array5 = np.array([[round(OneHourEnergy_Paneles,5)]])
     worksheet.update(f'J{Largo+1}', array5.tolist())
     datetim=datetime.datetime.now()-datetime.timedelta(minutes=3)
-    Hora=datetim.strftime('%H:%M')
+    #Hora=datetim.strftime('%H:%M')
     #datetim=json.dumps(datetim)
     if(OneHourEnergy_RedCompañia<0):
         OneHourEnergy_RedCompañia=0
@@ -4353,8 +4381,8 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     
     
     
-    worksheet.update(f'F{Largo+1}',Hora) #Hora
-    worksheet.update(f'AN{Largo+1}',Hora) #Hora
+    worksheet.update(f'F{Largo+1}',datetim) #Hora
+    worksheet.update(f'AN{Largo+1}',datetim) #Hora
     worksheet.update(f'G{Largo+1}', array.tolist())  # Red
     worksheet.update(f'K{Largo+1}', array2.tolist()) #Carga
     
