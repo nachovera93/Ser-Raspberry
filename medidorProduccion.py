@@ -4342,7 +4342,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     print(Largo)
     array5 = np.array([[round(OneHourEnergy_Paneles,5)]])
     worksheet.update(f'J{Largo+1}', array5.tolist())
-    datetim=datetime.datetime.now()-datetime.timedelta(minutes=3)
+    datetim=str(datetime.datetime.now()-datetime.timedelta(minutes=3))
     #Hora=datetim.strftime('%H:%M')
     #datetim=json.dumps(datetim)
     if(OneHourEnergy_RedCompañia<0):
