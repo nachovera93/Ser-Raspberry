@@ -4243,9 +4243,12 @@ def ReportePotencias15():
         #array7 = np.array([[MaxAparentPower_7]])
         #array8 = np.array([[MaxAparentPower_8]])
         #array9 = np.array([[MaxAparentPower_9]])
-        datetim=datetime.datetime.now()-datetime.timedelta(minutes=5)
-        Hora=datetim.strftime('%H:%M')
-        x = time.time() #timestamp
+        datetim=str(datetime.datetime.now()-datetime.timedelta(minutes=5))
+        #worksheet.update(f'A12',datetim[0:19])
+        #datetim=datetime.datetime.now()-datetime.timedelta(minutes=5)
+        #Hora=datetim.strftime('%H:%M')
+        #x = time.time() #timestamp
+        """
         if(datetim.minute<21 and datetim.minute>7):
             minute=15
         elif(datetim.minute>0 and datetim.minute<6 ):
@@ -4254,10 +4257,11 @@ def ReportePotencias15():
             minute=30
         elif(datetim.minute<52 and datetim.minute>36):
             minute=45
+            """
         values_list = worksheet.col_values(33)
         Largo=len(values_list)
         #arraytime=np.array(f'{datetim.hour}:{minute}')
-        worksheet.update(f'AG{Largo+1}',Hora)
+        worksheet.update(f'AG{Largo+1}',datetim[0:19])
         worksheet.update(f'AH{Largo+1}',array1.tolist())
         values_list = worksheet.col_values(35)
         Largo=len(values_list)
@@ -4322,6 +4326,7 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
         values_list = worksheet.col_values(33)
         Largo=len(values_list)
         worksheet.batch_clear([f"AG2:AG{Largo+1}",f"AH2:AH{Largo+1}",f"AI2:AI{Largo+1}",f"AJ2:AJ{Largo+1}",f"AK2:AK{Largo+1}",f"AL2:AL{Largo+1}",f"AM2:AM{Largo+1}"])
+        worksheet.batch_clear([f"AN2:AN{Largo+1}",f"AO2:AO{Largo+1}",f"AP2:AP{Largo+1}",f"AQ2:AQ{Largo+1}",f"AR2:AR{Largo+1}",f"AS2:AS{Largo+1}",f"AT2:AT{Largo+1}",f"AU2:AU{Largo+1}",f"AV2:AV{Largo+1}",f"AW2:AW{Largo+1}"])
     
     except:
         print("Error al isertar datos")
@@ -4338,7 +4343,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     array5 = np.array([[round(OneHourEnergy_Paneles,5)]])
     worksheet.update(f'J{Largo+1}', array5.tolist())
     datetim=datetime.datetime.now()-datetime.timedelta(minutes=3)
-    Hora=datetim.strftime('%H:%M')
+    #Hora=datetim.strftime('%H:%M')
     #datetim=json.dumps(datetim)
     if(OneHourEnergy_RedCompañia<0):
         OneHourEnergy_RedCompañia=0
@@ -4380,8 +4385,8 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     
     
     
-    worksheet.update(f'F{Largo+1}',Hora) #Hora
-    worksheet.update(f'AN{Largo+1}',Hora) #Hora
+    worksheet.update(f'F{Largo+1}',datetim[0:19]) #Hora
+    worksheet.update(f'AN{Largo+1}',datetim[0:19]) #Hora
     worksheet.update(f'G{Largo+1}', array.tolist())  # Red
     worksheet.update(f'K{Largo+1}', array2.tolist()) #Carga
     
