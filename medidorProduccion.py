@@ -75,8 +75,8 @@ print("Hora de comienzo:", horasetup)
 
 broker = '54.94.243.121'   #'192.168.1.85' #mqtt server
 port = 1883
-dId = '123321'
-passw = '1mYpU7XzEg'
+dId = '121212'
+passw = 'x0ZLpgmciV'
 webhook_endpoint = 'http://54.94.243.121:3001/api/getdevicecredentials'
 
 
@@ -1096,6 +1096,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_1 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
         ##SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
+        SendDataToBroker(q=i,k=k3,f=f1,Potencia_Fase_1_Carga=f"{AparentPower_1}")
         vt1=time.time() 
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,i,k1,f1)
         #{key}-{q}-{f}-{k}
@@ -1110,6 +1111,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_2 = ReactivePower 
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i,k1,f2)
         ##SendDataToBroker(q=i,k=k1,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_2}",Energia=f"{Energy_2}")
+        SendDataToBroker(q=i,k=k3,f=f1,Potencia_Fase_2_Carga=f"{AparentPower_2}")
         vt2=time.time() 
         Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,i,k1,f2)       
     elif (i == 3):
@@ -1123,6 +1125,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_3 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,CosPhi_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3,OneHourEnergy_3,i,k1,f3)
         ##SendDataToBroker(q=i,k=k1,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_3}",Energia=f"{Energy_3}")
+        SendDataToBroker(q=i,k=k3,f=f1,Potencia_Fase_3_Carga=f"{AparentPower_3}")
         vt3=time.time() 
         Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,OneHourEnergy_3,Energy_3,i,k1,f3)             
     elif (i == 4):
@@ -1137,6 +1140,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         SaveDataCsv(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,CosPhi_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,Energy_4,OneHourEnergy_4,i,k2,f1)
         ##SendDataToBroker(q=i,k=k2,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_4}",Energia=f"{Energy_4}")
         ###SendDataToBroker(q=i,k=k2,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_4}",Energia=f"{Energy_4}")
+        SendDataToBroker(q=i,k=k3,f=f1,Potencia_Fase_1_Paneles=f"{AparentPower_4}")
         Maximo15min_4(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,OneHourEnergy_4,Energy_4,i,k2,f1)              
     elif (i == 5):
         Time5b = datetime.datetime.now()
@@ -1149,6 +1153,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_5 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,CosPhi_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,Energy_5,OneHourEnergy_5,i,k2,f2)
         ##SendDataToBroker(q=i,k=k2,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_5}",Energia=f"{Energy_5}")
+        SendDataToBroker(q=i,k=k3,f=f1,Potencia_Fase_2_Paneles=f"{AparentPower_5}")
         Maximo15min_5(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,OneHourEnergy_5,Energy_5,i,k2,f2)               
     elif (i == 6):
         Time6b = datetime.datetime.now()
@@ -1161,6 +1166,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_6 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,CosPhi_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,Energy_6,OneHourEnergy_6,i,k2,f3)
         ##SendDataToBroker(q=i,k=k2,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_6}",Energia=f"{Energy_6}")
+        SendDataToBroker(q=i,k=k3,f=f1,Potencia_Fase_3_Paneles=f"{AparentPower_6}")
         Maximo15min_6(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,OneHourEnergy_6,Energy_6,i,k2,f3)           
     elif (i == 7):
         Time7b = datetime.datetime.now()
@@ -1312,33 +1318,33 @@ vt915=time.time()
 
 
 optionsave=1
-k1="REDCompañia"
+k1="RED"
 k2="CentralFotovoltaica"
-k3="ConsumoCliente"
+k3="Carga"
 f1="Fase-1"
 f2="Fase-2"
 f3="Fase-3"
 #{key}-{f}-{k} 90 Variables
 #Voltaje-Fase-1-REDCompañia // Corriente-Fase-1-REDCompañia // Potencia-Fase-1-REDCompañia // Potencia-Fase-1-REDCompañia
-#VoltajeMax-Fase-1-REDCompañia // VoltajePromedio-Fase-1-REDCompañia // VoltajeMin-Fase-1-REDCompañia // CorrienteMax-Fase-1-REDCompañia // PotenciaMax-Fase-1-REDCompañia // EnergiaMax-Fase-1-REDCompañia
+#VoltajeMax-Fase-1-REDCompañia // VoltajePromedio-Fase-1-REDCompañia // VoltajeMin-Fase-1-REDCompañia // CorrienteMax-Fase-1-REDCompañia // PotenciaMax-Fase-1-REDCompañia // Energia-Fase-1-REDCompañia
 #Voltaje-Fase-2-REDCompañia // Corriente-Fase-2-REDCompañia // Potencia-Fase-2-REDCompañia // Potencia-Fase-2-REDCompañia
-#VoltajeMax-Fase-2-REDCompañia // VoltajePromedio-Fase-2-REDCompañia // VoltajeMin-Fase-2-REDCompañia // CorrienteMax-Fase-2-REDCompañia // PotenciaMax-Fase-2-REDCompañia // EnergiaMax-Fase-2-REDCompañia
+#VoltajeMax-Fase-2-REDCompañia // VoltajePromedio-Fase-2-REDCompañia // VoltajeMin-Fase-2-REDCompañia // CorrienteMax-Fase-2-REDCompañia // PotenciaMax-Fase-2-REDCompañia // Energia-Fase-2-REDCompañia
 #Voltaje-Fase-3-REDCompañia // Corriente-Fase-3-REDCompañia // Potencia-Fase-3-REDCompañia // Potencia-Fase-3-REDCompañia
-#VoltajeMax-Fase-3-REDCompañia // VoltajePromedio-Fase-3-REDCompañia // VoltajeMin-Fase-3-REDCompañia // CorrienteMax-Fase-3-REDCompañia // PotenciaMax-Fase-3-REDCompañia // EnergiaMax-Fase-3-REDCompañia
+#VoltajeMax-Fase-3-REDCompañia // VoltajePromedio-Fase-3-REDCompañia // VoltajeMin-Fase-3-REDCompañia // CorrienteMax-Fase-3-REDCompañia // PotenciaMax-Fase-3-REDCompañia // Energia-Fase-3-REDCompañia
 
 #Voltaje-Fase-1-CentralFotovoltaica // Corriente-Fase-1-CentralFotovoltaica // Potencia-Fase-1-CentralFotovoltaica // Potencia-Fase-1-CentralFotovoltaica
-#VoltajeMax-Fase-1-CentralFotovoltaica // VoltajePromedio-Fase-1-CentralFotovoltaica // VoltajeMin-Fase-1-CentralFotovoltaica // CorrienteMax-Fase-1-CentralFotovoltaica // PotenciaMax-Fase-1-CentralFotovoltaica // EnergiaMax-Fase-1-CentralFotovoltaica
+#VoltajeMax-Fase-1-CentralFotovoltaica // VoltajePromedio-Fase-1-CentralFotovoltaica // VoltajeMin-Fase-1-CentralFotovoltaica // CorrienteMax-Fase-1-CentralFotovoltaica // PotenciaMax-Fase-1-CentralFotovoltaica // Energia-Fase-1-CentralFotovoltaica
 #Voltaje-Fase-2-CentralFotovoltaica // Corriente-Fase-2-CentralFotovoltaica // Potencia-Fase-2-CentralFotovoltaica // Potencia-Fase-2-CentralFotovoltaica
-#VoltajeMax-Fase-2-CentralFotovoltaica // VoltajePromedio-Fase-2-CentralFotovoltaica // VoltajeMin-Fase-2-CentralFotovoltaica // CorrienteMax-Fase-2-CentralFotovoltaica // PotenciaMax-Fase-2-CentralFotovoltaica // EnergiaMax-Fase-2-CentralFotovoltaica
+#VoltajeMax-Fase-2-CentralFotovoltaica // VoltajePromedio-Fase-2-CentralFotovoltaica // VoltajeMin-Fase-2-CentralFotovoltaica // CorrienteMax-Fase-2-CentralFotovoltaica // PotenciaMax-Fase-2-CentralFotovoltaica // Energia-Fase-2-CentralFotovoltaica
 #Voltaje-Fase-3-CentralFotovoltaica // Corriente-Fase-3-CentralFotovoltaica // Potencia-Fase-3-CentralFotovoltaica // Potencia-Fase-3-CentralFotovoltaica
-#VoltajeMax-Fase-3-CentralFotovoltaica // VoltajePromedio-Fase-3-CentralFotovoltaica // VoltajeMin-Fase-3-CentralFotovoltaica // CorrienteMax-Fase-3-CentralFotovoltaica // PotenciaMax-Fase-3-CentralFotovoltaica // EnergiaMax-Fase-3-CentralFotovoltaica
+#VoltajeMax-Fase-3-CentralFotovoltaica // VoltajePromedio-Fase-3-CentralFotovoltaica // VoltajeMin-Fase-3-CentralFotovoltaica // CorrienteMax-Fase-3-CentralFotovoltaica // PotenciaMax-Fase-3-CentralFotovoltaica // Energia-Fase-3-CentralFotovoltaica
 
 #Voltaje-Fase-1-ConsumoCliente // Corriente-Fase-1-ConsumoCliente // Potencia-Fase-1-ConsumoCliente // Potencia-Fase-1-ConsumoCliente
-#VoltajeMax-Fase-1-ConsumoCliente // VoltajePromedio-Fase-1-ConsumoCliente // VoltajeMin-Fase-1-ConsumoCliente // CorrienteMax-Fase-1-ConsumoCliente // PotenciaMax-Fase-1-ConsumoCliente // EnergiaMax-Fase-1-ConsumoCliente
+#VoltajeMax-Fase-1-ConsumoCliente // VoltajePromedio-Fase-1-ConsumoCliente // VoltajeMin-Fase-1-ConsumoCliente // CorrienteMax-Fase-1-ConsumoCliente // PotenciaMax-Fase-1-ConsumoCliente // Energia-Fase-1-ConsumoCliente
 #Voltaje-Fase-2-ConsumoCliente // Corriente-Fase-2-ConsumoCliente // Potencia-Fase-2-ConsumoCliente // Potencia-Fase-2-ConsumoCliente
-#VoltajeMax-Fase-2-ConsumoCliente // VoltajePromedio-Fase-2-ConsumoCliente // VoltajeMin-Fase-2-ConsumoCliente // CorrienteMax-Fase-2-ConsumoCliente // PotenciaMax-Fase-2-ConsumoCliente // EnergiaMax-Fase-2-ConsumoCliente
+#VoltajeMax-Fase-2-ConsumoCliente // VoltajePromedio-Fase-2-ConsumoCliente // VoltajeMin-Fase-2-ConsumoCliente // CorrienteMax-Fase-2-ConsumoCliente // PotenciaMax-Fase-2-ConsumoCliente // Energia-Fase-2-ConsumoCliente
 #Voltaje-Fase-3-ConsumoCliente // Corriente-Fase-3-ConsumoCliente // Potencia-Fase-3-ConsumoCliente // Potencia-Fase-3-ConsumoCliente
-#VoltajeMax-Fase-3-ConsumoCliente // VoltajePromedio-Fase-3-ConsumoCliente // VoltajeMin-Fase-3-ConsumoCliente // CorrienteMax-Fase-3-ConsumoCliente // PotenciaMax-Fase-3-ConsumoCliente // EnergiaMax-Fase-3-ConsumoCliente
+#VoltajeMax-Fase-3-ConsumoCliente // VoltajePromedio-Fase-3-ConsumoCliente // VoltajeMin-Fase-3-ConsumoCliente // CorrienteMax-Fase-3-ConsumoCliente // PotenciaMax-Fase-3-ConsumoCliente // Energia-Fase-3-ConsumoCliente
 
 def SendDataToBroker(q,k,f,**kwargs):
         
@@ -4362,7 +4368,12 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     array = np.array([[round(OneHourEnergy_RedCompañia,5)]])
     array2 = np.array([[round(OneHourEnergy_Carga,5)]])
     #array4 = np.array(datetim)
-    
+    val = worksheet.acell('AD2').value
+    SendDataToBroker(q=1,k=k1,f=f1,Energia_Red=f"{val}")
+    val2 = worksheet.acell('AE2').value
+    SendDataToBroker(q=2,k=k2,f=f2,Energia_Paneles=f"{val3}")
+    val3 = worksheet.acell('AF2').value
+    SendDataToBroker(q=2,k=k3,f=f3,Energia_Carga=f"{val3}")
     ###Energías de cada fase
     array6 = np.array([[round(OneHourEnergy_Carga_Fase1,5)]])
     worksheet.update(f'AR{Largo+1}', array6.tolist())
