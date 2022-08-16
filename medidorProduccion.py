@@ -1423,7 +1423,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                         freq = i["variableSendFreq"]  
                           #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
-                             print(f'Tiempo1 {round(timeToSend - vt)}')
+                             print(f'Tiempo1 {key} {round(timeToSend - vt)}')
                              #print(f"Enviando {key} {value}")
                              str_variable = i["variable"]
                              topic = topicmqtt + str_variable + "/sdata"
@@ -4159,6 +4159,9 @@ DataAppend6=[]
 DataAppend7=[]
 DataAppend8=[]
 DataAppend9=[]
+EnergyCarga=0
+Energy_Red=0
+Energy_Paneles=0
 def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy,i,k,f):
        global EnergyCarga,Energy_Red,Energy_Paneles
        #Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
