@@ -17,11 +17,11 @@ client_id = f'python-mqtt-{random.randint(0, 1000)}'
 username = 'superuser'
 password = 'superuser'
 """
-broker = 'localhost'   #'192.168.1.85' #mqtt server
+broker = '54.94.243.121'   #'192.168.1.85' #mqtt server
 port = 1883
-dId = '1212'
-passw = 'G9SncAnmA8'
-webhook_endpoint = 'http://localhost:3001/api/getdevicecredentials'
+dId = '121212'
+passw = 'x0ZLpgmciV'
+webhook_endpoint = 'http://54.94.243.121:3001/api/getdevicecredentials'
 
 
 def get_mqtt_credentials():
@@ -179,6 +179,35 @@ def subscribe(client: mqtt):
     #client.loop_start()
     #publish(client)
 
+def hola():
+    #print(data["variables"])
+    for i in data["variables"]:
+            print(i)
+            if(i["variableFullName"]==f'Energia_Paneles'):
+                print(f"Preparando Envio en publish de variable Energia_Paneles")
+            if(i["variableFullName"]==f'Energia_Carga'):
+                print(f"Preparando Envio en publish de variable Energia_carga")
+              
+            
+            if "variableFullName2" in i: # Imprime lo de abajo
+                   print("existe variableFullName2") 
+                   if(i["variableFullName2"]==f'Potencia_Fase_2_Paneles'):
+                       print("Existe")
+            #    print(f"Preparando Envio en publish de variable Potencia_Fase_1_Paneles")
+            
+            #elif(i["variableFullName2"]==f'Potencia_Fase_1_Paneles'):
+            #    print(f"Preparando Envio en publish de variable Potencia_Fase_1_Paneles")
+            #    #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
+            #    freq = i["variableSendFreq"]  
+            #    #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
+            #    
+            #elif(i["variableFullName3"]==f'Potencia_Fase_3_Paneles'):
+            #    print(f"Preparando Envio en publish de variable Potencia_Fase_3_Paneles")
+            #    #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
+            #    freq = i["variableSendFreq"]  
+            #    #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
+                
 
+hola()
 #if __name__ == '__main__':
     #run()
