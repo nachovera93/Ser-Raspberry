@@ -1425,7 +1425,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  print(f"Send {key} - {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}") 
-                    if "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
+                    elif "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                                 #print(f"Preparando Envio en publish de variable {key} {value}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
@@ -1433,7 +1433,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                 #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
                                 if(timeToSend - vt > float(freq)): 
                                      #print(f"Entrando a envio {key}-{q}")
-                                     print(f"Enviando {key} {value}")
+                                     #print(f"Enviando {key} {value}")
                                      str_variable = i["variable2"]
                                      topic = topicmqtt + str_variable + "/sdata"
                                      result = client.publish(topic, valueJson)
@@ -1442,7 +1442,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                          print(f"Send {key} - {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                                      else:
                                          print(f"Failed to send message to topic {topic}")         
-                    if "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
+                    elif "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                                 #print(f"Preparando Envio en publish de variable {key} {value}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
