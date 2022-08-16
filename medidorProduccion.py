@@ -1360,7 +1360,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             
             if(q==1):
                 vt = vt1
-                print(vt1)
+                print(round(vt1))
             elif(q==2):
                 vt = vt2
             elif(q==3):
