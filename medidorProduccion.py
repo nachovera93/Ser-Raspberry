@@ -1316,13 +1316,12 @@ vt715=time.time()
 vt815=time.time()
 vt915=time.time()
 
-
-optionsave=1
-k1="RED"
-k2="CentralFotovoltaica"
-k3="Carga"
-f1="Fase-1"
-f2="Fase-2"
+optionsave=1	
+k1="RED-Compañia"	
+k2="Central-Fotovoltaica"	
+k3="Consumo-Cliente"	
+f1="Fase-1"	
+f2="Fase-2"	
 f3="Fase-3"
 #{key}-{f}-{k} 90 Variables
 #Voltaje-Fase-1-REDCompañia // Corriente-Fase-1-REDCompañia // Potencia-Fase-1-REDCompañia // Potencia-Fase-1-REDCompañia
@@ -1401,7 +1400,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             for key, value in kwargs.items():
                 g=g+1
                 #print(f'g = {g}')
-                #print(f"Preparando Envio - {key}-{q} {value} {f} - {k}")
+                print(f"Preparando Envio - {key} {value}")
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 #print(f'{key}-{f}-{k}')
