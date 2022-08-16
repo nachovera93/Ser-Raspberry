@@ -1417,7 +1417,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                     #print(f' variablefullname 1 {i["variableFullName"]}')
                     #print(i)
                     #print(f' variablefullname 3 {i["variableFullName3"]}')
-                    #print(f'{key}')
+                    print(f'{key}')
                     if(i["variableFullName"]==f'{key}'):
                         print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt > float(freq)}")
                         freq = i["variableSendFreq"]  
@@ -1457,7 +1457,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  vt11 = time.time()
                              elif(q==12):
                                  vt12 = time.time()        
-                    elif "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
+                    if "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                                 print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt > float(freq)}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
@@ -1499,7 +1499,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                          vt11 = time.time()
                                      elif(q==12):
                                          vt12 = time.time()         
-                    elif "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
+                    if "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                                 print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt > float(freq)}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
