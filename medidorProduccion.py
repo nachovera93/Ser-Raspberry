@@ -1363,7 +1363,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             
             if(q==1):
                 vt = vt1
-                print(round(vt1))
+                #print(round(vt1))
             elif(q==2):
                 vt = vt2
             elif(q==3):
@@ -4196,8 +4196,6 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
                 #print("Entro a savedata")
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet11 = workbook[f"{k}-{f}"]
-                EnergyCarga=OneHourEnergy_1+OneHourEnergy_2+OneHourEnergy_3
-                SendDataToBroker(q=12,k=k3,f=f1,Energia_Carga=f"{EnergyCarga}")
                 for i in DataAppend1:
                     sheet11.append(i)
                 #sheet11.append(list(DataAppend1))
@@ -4245,10 +4243,6 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
              if(savedata4>=5):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet14 = workbook[f"{k}-{f}"]
-                Energy_Paneles=OneHourEnergy_4+OneHourEnergy_5+OneHourEnergy_6
-                SendDataToBroker(q=11,k=k3,f=f1,Energy_Paneles=f"{Energy_Paneles}")
-                Energy_Red=EnergyCarga-Energy_Paneles
-                SendDataToBroker(q=10,k=k3,f=f1,Energy_Red=f"{Energy_Red}")
                 for i in DataAppend4:
                     sheet14.append(i)
                 workbook.save(filename = dest_filename)
