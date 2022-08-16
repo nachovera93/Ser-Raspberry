@@ -4370,7 +4370,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     val = worksheet.acell('AD2').value
     SendDataToBroker(q=1,k=k1,f=f1,Energia_Red=f"{val}")
     val2 = worksheet.acell('AE2').value
-    SendDataToBroker(q=2,k=k2,f=f2,Energia_Paneles=f"{val3}")
+    SendDataToBroker(q=2,k=k2,f=f2,Energia_Paneles=f"{val2}")
     val3 = worksheet.acell('AF2').value
     SendDataToBroker(q=2,k=k3,f=f3,Energia_Carga=f"{val3}")
     ###Energías de cada fase
