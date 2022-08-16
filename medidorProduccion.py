@@ -1306,6 +1306,10 @@ vt6=time.time()
 vt7=time.time()
 vt8=time.time()
 vt9=time.time()
+vt10=time.time()
+vt11=time.time()
+vt12=time.time()
+
 vt15=time.time()
 vt115=time.time()
 vt215=time.time()
@@ -1414,12 +1418,11 @@ def SendDataToBroker(q,k,f,**kwargs):
                 #print(f'{key}-{f}-{k}')
                 for i in data["variables"]:
                     #print("Entro For")
-                    print(f' variablefullname 1 {i["variableFullName"]}')
+                    #print(f' variablefullname 1 {i["variableFullName"]}')
                     #print(i)
                     #print(f' variablefullname 3 {i["variableFullName3"]}')
-                    print(f'{key}')
+                    #print(f'{key}')
                     if(i["variableFullName"]==f'{key}'):
-                        print("entro")
                         print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt}")
                         freq = i["variableSendFreq"]  
                           #10-0=10 // 20-10=10 
@@ -1458,9 +1461,9 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  vt11 = time.time()
                              elif(q==12):
                                  vt12 = time.time()        
-                    if "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
+                    elif "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
-                                print("entro2")
+                              
                                 print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                                 freq = i["variableSendFreq"]  
@@ -1501,9 +1504,9 @@ def SendDataToBroker(q,k,f,**kwargs):
                                          vt11 = time.time()
                                      elif(q==12):
                                          vt12 = time.time()         
-                    if "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
+                    elif "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
-                                print("entro3")
+                             
                                 print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                                 freq = i["variableSendFreq"]  
