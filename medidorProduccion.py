@@ -1408,12 +1408,12 @@ def SendDataToBroker(q,k,f,**kwargs):
             for key, value in kwargs.items():
                 #g=g+1
                 #print(f'g = {g}')
-                print(f"Preparando Envio 0  - {key} {value}")
+                #print(f"Preparando Envio 0  - {key} {value}")
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 #print(f'{key}-{f}-{k}')
                 for i in data["variables"]:
-                    #print("Entro For")
+                    print("Entro For")
                     #print(f' variablefullname 1 {i["variableFullName"]}')
                     #print(i)
                     #print(f' variablefullname 3 {i["variableFullName3"]}')
