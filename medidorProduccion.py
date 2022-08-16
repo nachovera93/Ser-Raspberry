@@ -1350,28 +1350,34 @@ def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             #g=0
-            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt,vt15
+            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt,vt15
             #print(len(kwargs.values()))
-            if(len(kwargs.values())==4):
-                if(q==1):
-                    vt = vt1 #0 // 10
-                    #print(f'vt {vt}')
-                elif(q==2):
-                    vt = vt2
-                elif(q==3):
-                    vt = vt3
-                elif(q==4):
-                    vt = vt4
-                elif(q==5):
-                    vt = vt5
-                elif(q==6):
-                    vt = vt6
-                elif(q==7):
-                    vt = vt7
-                elif(q==8):
-                    vt = vt8
-                elif(q==9):
-                    vt = vt9
+            #if(len(kwargs.values())==4):
+            if(q==1):
+                vt = vt1
+            elif(q==2):
+                vt = vt2
+            elif(q==3):
+                vt = vt3
+            elif(q==4):
+                vt = vt4
+            elif(q==5):
+                vt = vt5
+            elif(q==6):
+                vt = vt6
+            elif(q==7):
+                vt = vt7
+            elif(q==8):
+                vt = vt8
+            elif(q==9):
+                vt = vt9
+            elif(q==10):
+                vt = vt10
+            elif(q==11):
+                vt = vt11
+            elif(q==12):
+                vt = vt12
+            """
             elif(len(kwargs.values())<2):
                 vt = vt15 #0 // 10
                 #print(f'vt15 {vt}')
@@ -1395,6 +1401,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                     vt = vt815
                 elif(q==9):
                     vt = vt915
+            """
             timeToSend=time.time() #10 // 20
             #print(f'timetoSend: {round(timeToSend)}')
             #print(f'Largo Kwargs {len(kwargs.values())}')
@@ -1414,8 +1421,9 @@ def SendDataToBroker(q,k,f,**kwargs):
                     if(i["variableFullName"]==f'{key}'):
                         #print(f"Preparando Envio en publish de variable {key} {value}")
                         freq = i["variableSendFreq"]  
-                        #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
+                          #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
+                             print(f'Tiempo1 {round(timeToSend - vt)}')
                              #print(f"Enviando {key} {value}")
                              str_variable = i["variable"]
                              topic = topicmqtt + str_variable + "/sdata"
@@ -1443,6 +1451,12 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  vt8 = time.time()
                              elif(q==9):
                                  vt9 = time.time()
+                             elif(q==10):
+                                 vt10 = time.time()
+                             elif(q==11):
+                                 vt11 = time.time()
+                             elif(q==12):
+                                 vt12 = time.time()        
                     elif "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                                 #print(f"Preparando Envio en publish de variable {key} {value}")
@@ -1450,6 +1464,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                 freq = i["variableSendFreq"]  
                                 #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
                                 if(timeToSend - vt > float(freq)): 
+                                     print(f'Tiempo2 {round(timeToSend - vt)}')
                                      #print(f"Entrando a envio {key}-{q}")
                                      #print(f"Enviando {key} {value}")
                                      str_variable = i["variable2"]
@@ -1477,14 +1492,21 @@ def SendDataToBroker(q,k,f,**kwargs):
                                      elif(q==8):
                                          vt8 = time.time()
                                      elif(q==9):
-                                         vt9 = time.time()        
+                                         vt9 = time.time()
+                                     elif(q==10):
+                                         vt10 = time.time()
+                                     elif(q==11):
+                                         vt11 = time.time()
+                                     elif(q==12):
+                                         vt12 = time.time()         
                     elif "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                                 #print(f"Preparando Envio en publish de variable {key} {value}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                                 freq = i["variableSendFreq"]  
                                 #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
-                                if(timeToSend - vt > float(freq)): 
+                                if(timeToSend - vt > float(freq)):
+                                     print(f'Tiempo3 {round(timeToSend - vt)}') 
                                      #print(f"Entrando a envio {key}-{q}")
                                      #print(f"Enviando {key} {value}")
                                      str_variable = i["variable3"]
@@ -1513,7 +1535,12 @@ def SendDataToBroker(q,k,f,**kwargs):
                                          vt8 = time.time()
                                      elif(q==9):
                                          vt9 = time.time()        
-                            
+                                     elif(q==10):
+                                         vt10 = time.time()
+                                     elif(q==11):
+                                         vt11 = time.time()
+                                     elif(q==12):
+                                         vt12 = time.time()                           
 
         try:  
             if(client.connected_flag==True): 
@@ -4132,13 +4159,14 @@ DataAppend6=[]
 DataAppend7=[]
 DataAppend8=[]
 DataAppend9=[]
-def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k,f):
+def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy,i,k,f):
+    global EnergyCarga,Energy_Red,Energy_Paneles
        #Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
        #workbook=openpyxl.load_workbook(filename = dest_filename)
        if(i==1):
              global savedata1
              global DataAppend1
-             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy,5)]                    
              DataAppend1.append(Data)
              #print(f"largo Data Append: {len(DataAppend1)}")
              savedata1 = savedata1 + 1
@@ -4147,6 +4175,8 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
                 #print("Entro a savedata")
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet11 = workbook[f"{k}-{f}"]
+                EnergyCarga=OneHourEnergy_1+OneHourEnergy_2+OneHourEnergy_3
+                SendDataToBroker(q=12,k=k3,f=f1,Energia_Carga=f"{EnergyCarga}")
                 for i in DataAppend1:
                     sheet11.append(i)
                 #sheet11.append(list(DataAppend1))
@@ -4154,10 +4184,11 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
                 DataAppend1=[]
                 savedata1 = 0
              Data=[]
+             
        elif(i==2):
              global savedata2
              global DataAppend2
-             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy,5)]                    
              DataAppend2.append(Data)
              savedata2 = savedata2 + 1
              if(savedata2>=5):
@@ -4172,7 +4203,7 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        elif(i==3):
              global savedata3
              global DataAppend3
-             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy,5)]                    
              DataAppend3.append(Data)
              savedata3 = savedata3 + 1
              if(savedata3>=5):
@@ -4187,22 +4218,27 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        elif(i==4):
              global savedata4
              global DataAppend4
-             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy,5)]                    
              DataAppend4.append(Data)
              savedata4 = savedata4 + 1
              if(savedata4>=5):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet14 = workbook[f"{k}-{f}"]
+                Energy_Paneles=OneHourEnergy_4+OneHourEnergy_5+OneHourEnergy_6
+                SendDataToBroker(q=11,k=k3,f=f1,Energy_Paneles=f"{Energy_Paneles}")
+                Energy_Red=EnergyCarga-Energy_Paneles
+                SendDataToBroker(q=10,k=k3,f=f1,Energy_Red=f"{Energy_Red}")
                 for i in DataAppend4:
                     sheet14.append(i)
                 workbook.save(filename = dest_filename)
                 DataAppend4=[]
                 savedata4 = 0
              Data=[]
+             
        elif(i==5):
              global savedata5
              global DataAppend5
-             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy,5)]                    
              DataAppend5.append(Data)
              savedata5 = savedata5 + 1
              if(savedata5>=5):
@@ -4217,7 +4253,7 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        elif(i==6):
              global savedata6
              global DataAppend6
-             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy,5)]                    
              DataAppend6.append(Data)
              savedata6 = savedata6 + 1
              if(savedata6>=5):
@@ -4232,7 +4268,7 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        elif(i==7):
              global savedata7
              global DataAppend7
-             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy,5)]                    
              DataAppend7.append(Data)
              savedata7 = savedata7 + 1
              if(savedata7>=5):
@@ -4247,7 +4283,7 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        elif(i==8):
              global savedata8
              global DataAppend8
-             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy,5)]                    
              DataAppend8.append(Data)
              savedata8 = savedata8 + 1
              if(savedata8>=5):
@@ -4262,7 +4298,7 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
        elif(i==9):
              global savedata9
              global DataAppend9
-             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
+             Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy,5)]                    
              DataAppend9.append(Data)
              savedata9 = savedata9 + 1
              if(savedata9>=5):
