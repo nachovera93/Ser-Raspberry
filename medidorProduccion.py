@@ -117,7 +117,7 @@ def get_mqtt_credentials():
           #print(mqttopic)
           respuesta.close()
           print("Ends mqtt credentials")
-          print(data["variables"])
+          
     return True
 
 
@@ -1408,7 +1408,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                 for i in data["variables"]:
                     print("Entro For")
                     print(f' variablefullname 1 {i["variableFullName"]}')
-                    #print(f' variablefullname 2 {i["variableFullName2"]}')
+                    print(i)
                     #print(f' variablefullname 3 {i["variableFullName3"]}')
                     print(f'{key}')
                     if(i["variableFullName"]==f'{key}'):
