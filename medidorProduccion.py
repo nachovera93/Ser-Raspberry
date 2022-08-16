@@ -1400,7 +1400,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             for key, value in kwargs.items():
                 g=g+1
                 #print(f'g = {g}')
-                #print(f"Preparando Envio - {key} {value}")
+                print(f"Preparando Envio 0  - {key} {value}")
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 #print(f'{key}-{f}-{k}')
