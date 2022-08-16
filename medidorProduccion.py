@@ -1349,8 +1349,8 @@ f3="Fase-3"
 def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
-            g=0
-            global vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt,vt15
+            #g=0
+            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt,vt15
             #print(len(kwargs.values()))
             if(len(kwargs.values())==4):
                 if(q==1):
@@ -1399,7 +1399,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             #print(f'timetoSend: {round(timeToSend)}')
             #print(f'Largo Kwargs {len(kwargs.values())}')
             for key, value in kwargs.items():
-                g=g+1
+                #g=g+1
                 #print(f'g = {g}')
                 #print(f"Preparando Envio 0  - {key} {value}")
                 str_num = {"value":value,"save":optionsave}
@@ -1425,6 +1425,24 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  print(f"Send {key} - {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}") 
+                             if(q==1):
+                                 vt1 = time.time() 
+                             elif(q==2):
+                                 vt2 = time.time()
+                             elif(q==3):
+                                 vt3 = time.time()
+                             elif(q==4):
+                                 vt4 = time.time()
+                             elif(q==5):
+                                 vt5 = time.time()
+                             elif(q==6):
+                                 vt6 = time.time()
+                             elif(q==7):
+                                 vt7 = time.time()
+                             elif(q==8):
+                                 vt8 = time.time()
+                             elif(q==9):
+                                 vt9 = time.time()
                     elif "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                                 #print(f"Preparando Envio en publish de variable {key} {value}")
@@ -1441,7 +1459,25 @@ def SendDataToBroker(q,k,f,**kwargs):
                                      if status == 0:
                                          print(f"Send {key} - {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                                      else:
-                                         print(f"Failed to send message to topic {topic}")         
+                                         print(f"Failed to send message to topic {topic}") 
+                                     if(q==1):
+                                         vt1 = time.time() 
+                                     elif(q==2):
+                                         vt2 = time.time()
+                                     elif(q==3):
+                                         vt3 = time.time()
+                                     elif(q==4):
+                                         vt4 = time.time()
+                                     elif(q==5):
+                                         vt5 = time.time()
+                                     elif(q==6):
+                                         vt6 = time.time()
+                                     elif(q==7):
+                                         vt7 = time.time()
+                                     elif(q==8):
+                                         vt8 = time.time()
+                                     elif(q==9):
+                                         vt9 = time.time()        
                     elif "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                                 #print(f"Preparando Envio en publish de variable {key} {value}")
@@ -1458,7 +1494,26 @@ def SendDataToBroker(q,k,f,**kwargs):
                                      if status == 0:
                                          print(f"Send {key} - {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                                      else:
-                                         print(f"Failed to send message to topic {topic}")          
+                                         print(f"Failed to send message to topic {topic}") 
+                                     if(q==1):
+                                         vt1 = time.time() 
+                                     elif(q==2):
+                                         vt2 = time.time()
+                                     elif(q==3):
+                                         vt3 = time.time()
+                                     elif(q==4):
+                                         vt4 = time.time()
+                                     elif(q==5):
+                                         vt5 = time.time()
+                                     elif(q==6):
+                                         vt6 = time.time()
+                                     elif(q==7):
+                                         vt7 = time.time()
+                                     elif(q==8):
+                                         vt8 = time.time()
+                                     elif(q==9):
+                                         vt9 = time.time()        
+                            
 
         try:  
             if(client.connected_flag==True): 
