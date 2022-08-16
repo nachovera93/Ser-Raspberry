@@ -1309,6 +1309,9 @@ vt9=time.time()
 vt10=time.time()
 vt11=time.time()
 vt12=time.time()
+vt13=time.time()
+vt14=time.time()
+vt15=time.time()
 
 vt15=time.time()
 vt115=time.time()
@@ -1354,7 +1357,7 @@ def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             #g=0
-            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt,vt15
+            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt13,vt14,vt,vt15
             #print(len(kwargs.values()))
             #if(len(kwargs.values())==4):
             
@@ -1383,6 +1386,12 @@ def SendDataToBroker(q,k,f,**kwargs):
                 vt = vt11
             elif(q==12):
                 vt = vt12
+            elif(q==13):
+                vt = vt13
+            elif(q==14):
+                vt = vt14
+            elif(q==15):
+                vt = vt15
             """
             elif(len(kwargs.values())<2):
                 vt = vt15 #0 // 10
@@ -1452,7 +1461,13 @@ def SendDataToBroker(q,k,f,**kwargs):
                              elif(q==11):
                                  vt11 = time.time()
                              elif(q==12):
-                                 vt12 = time.time()        
+                                 vt12 = time.time()  
+                             elif(q==13):
+                                 vt13 = time.time()
+                             elif(q==14):
+                                 vt14 = time.time()
+                             elif(q==15):
+                                 vt15 = time.time()      
                     elif "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                               
@@ -1491,7 +1506,13 @@ def SendDataToBroker(q,k,f,**kwargs):
                                      elif(q==11):
                                          vt11 = time.time()
                                      elif(q==12):
-                                         vt12 = time.time()         
+                                         vt12 = time.time()
+                                     elif(q==13):
+                                         vt13 = time.time()
+                                     elif(q==14):
+                                         vt14 = time.time()
+                                     elif(q==15):
+                                         vt15 = time.time()           
                     elif "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                              
@@ -1531,7 +1552,13 @@ def SendDataToBroker(q,k,f,**kwargs):
                                      elif(q==11):
                                          vt11 = time.time()
                                      elif(q==12):
-                                         vt12 = time.time()                           
+                                         vt12 = time.time() 
+                                     elif(q==13):
+                                         vt13 = time.time()
+                                     elif(q==14):
+                                         vt14 = time.time()
+                                     elif(q==15):
+                                         vt15 = time.time()                          
 
         try:  
             if(client.connected_flag==True): 
@@ -4258,6 +4285,13 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
                 workbook.save(filename = dest_filename)
                 DataAppend6=[]
                 savedata6 = 0
+                valCarga = Energy_1+Energy_2+Energy_3
+                valPaneles = Energy_4+Energy_5+Energy_6
+                valRed = valCarga-valPaneles
+                SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{valRed}")
+                SendDataToBroker(q=14,k=k2,f=f2,Energia_Paneles=f"{valPaneles}")
+                SendDataToBroker(q=15,k=k3,f=f3,Energia_Carga=f"{valCarga}")
+                
              Data=[]
        elif(i==7):
              global savedata7
@@ -4464,12 +4498,6 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     array = np.array([[round(OneHourEnergy_RedCompañia,5)]])
     array2 = np.array([[round(OneHourEnergy_Carga,5)]])
     #array4 = np.array(datetim)
-    val = worksheet.acell('AD2').value
-    SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{val}")
-    val2 = worksheet.acell('AE2').value
-    SendDataToBroker(q=14,k=k2,f=f2,Energia_Paneles=f"{val2}")
-    val3 = worksheet.acell('AF2').value
-    SendDataToBroker(q=15,k=k3,f=f3,Energia_Carga=f"{val3}")
     ###Energías de cada fase
     array6 = np.array([[round(OneHourEnergy_Carga_Fase1,5)]])
     worksheet.update(f'AR{Largo+1}', array6.tolist())
