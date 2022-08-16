@@ -1317,9 +1317,9 @@ vt815=time.time()
 vt915=time.time()
 
 optionsave=1	
-k1="RED-Compañia"	
-k2="Central-Fotovoltaica"	
-k3="Consumo-Cliente"	
+k1="REDCompañia"	
+k2="CentralFotovoltaica"	
+k3="ConsumoCliente"	
 f1="Fase-1"	
 f2="Fase-2"	
 f3="Fase-3"
