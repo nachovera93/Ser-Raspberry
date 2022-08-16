@@ -1419,7 +1419,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                     #print(f' variablefullname 3 {i["variableFullName3"]}')
                     #print(f'{key}')
                     if(i["variableFullName"]==f'{key}'):
-                        #print(f"Preparando Envio en publish de variable {key} {value}")
+                        print(f"Preparando Envio en publish de variable {key} {value}")
                         freq = i["variableSendFreq"]  
                           #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
@@ -1459,7 +1459,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  vt12 = time.time()        
                     elif "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
-                                #print(f"Preparando Envio en publish de variable {key} {value}")
+                                print(f"Preparando Envio en publish de variable {key} {value}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                                 freq = i["variableSendFreq"]  
                                 #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
@@ -1501,7 +1501,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                          vt12 = time.time()         
                     elif "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
-                                #print(f"Preparando Envio en publish de variable {key} {value}")
+                                print(f"Preparando Envio en publish de variable {key} {value}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                                 freq = i["variableSendFreq"]  
                                 #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
