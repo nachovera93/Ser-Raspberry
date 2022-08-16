@@ -1413,7 +1413,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                 valueJson = json.dumps(str_num)
                 #print(f'{key}-{f}-{k}')
                 for i in data["variables"]:
-                    print("Entro For")
+                    #print("Entro For")
                     print(f' variablefullname 1 {i["variableFullName"]}')
                     #print(i)
                     #print(f' variablefullname 3 {i["variableFullName3"]}')
