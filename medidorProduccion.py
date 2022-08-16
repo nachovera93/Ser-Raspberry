@@ -1419,11 +1419,11 @@ def SendDataToBroker(q,k,f,**kwargs):
                     #print(f' variablefullname 3 {i["variableFullName3"]}')
                     #print(f'{key}')
                     if(i["variableFullName"]==f'{key}'):
-                        print(f"Preparando Envio en publish de variable {key} {value}")
+                        print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt > float(freq)}")
                         freq = i["variableSendFreq"]  
                           #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
-                             print(f'Tiempo1 {key} {round(timeToSend - vt)}')
+                             #print(f'Tiempo1 {key} {round(timeToSend - vt)}')
                              #print(f"Enviando {key} {value}")
                              str_variable = i["variable"]
                              topic = topicmqtt + str_variable + "/sdata"
@@ -1459,12 +1459,12 @@ def SendDataToBroker(q,k,f,**kwargs):
                                  vt12 = time.time()        
                     elif "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
-                                print(f"Preparando Envio en publish de variable {key} {value}")
+                                print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt > float(freq)}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                                 freq = i["variableSendFreq"]  
                                 #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
                                 if(timeToSend - vt > float(freq)): 
-                                     print(f'Tiempo2 {round(timeToSend - vt)}')
+                                     #print(f'Tiempo2 {round(timeToSend - vt)}')
                                      #print(f"Entrando a envio {key}-{q}")
                                      #print(f"Enviando {key} {value}")
                                      str_variable = i["variable2"]
@@ -1501,12 +1501,12 @@ def SendDataToBroker(q,k,f,**kwargs):
                                          vt12 = time.time()         
                     elif "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
-                                print(f"Preparando Envio en publish de variable {key} {value}")
+                                print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt > float(freq)}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                                 freq = i["variableSendFreq"]  
                                 #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
                                 if(timeToSend - vt > float(freq)):
-                                     print(f'Tiempo3 {round(timeToSend - vt)}') 
+                                     #print(f'Tiempo3 {round(timeToSend - vt)}') 
                                      #print(f"Entrando a envio {key}-{q}")
                                      #print(f"Enviando {key} {value}")
                                      str_variable = i["variable3"]
