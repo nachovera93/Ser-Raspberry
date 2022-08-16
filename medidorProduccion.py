@@ -1400,17 +1400,17 @@ def SendDataToBroker(q,k,f,**kwargs):
             for key, value in kwargs.items():
                 g=g+1
                 #print(f'g = {g}')
-                print(f"Preparando Envio - {key} {value}")
+                #print(f"Preparando Envio - {key} {value}")
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 #print(f'{key}-{f}-{k}')
                 for i in data["variables"]:
                     if(i["variableFullName"]==f'{key}'):
-                        #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
+                        print(f"Preparando Envio en publish de variable {key} {value}")
                         freq = i["variableSendFreq"]  
                         #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
-                             #print(f"Entrando a envio {key}-{q}")
+                             print(f"Enviando {key} {value}")
                              str_variable = i["variable"]
                              topic = topicmqtt + str_variable + "/sdata"
                              result = client.publish(topic, valueJson)
@@ -1420,11 +1420,13 @@ def SendDataToBroker(q,k,f,**kwargs):
                              else:
                                  print(f"Failed to send message to topic {topic}") 
                     elif(i["variableFullName2"]==f'{key}'):
+                        print(f"Preparando Envio en publish de variable {key} {value}")
                         #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                         freq = i["variableSendFreq"]  
                         #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
                              #print(f"Entrando a envio {key}-{q}")
+                             print(f"Enviando {key} {value}")
                              str_variable = i["variable2"]
                              topic = topicmqtt + str_variable + "/sdata"
                              result = client.publish(topic, valueJson)
@@ -1434,11 +1436,13 @@ def SendDataToBroker(q,k,f,**kwargs):
                              else:
                                  print(f"Failed to send message to topic {topic}")         
                     elif(i["variableFullName3"]==f'{key}'):
+                        print(f"Preparando Envio en publish de variable {key} {value}")
                         #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                         freq = i["variableSendFreq"]  
                         #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
                              #print(f"Entrando a envio {key}-{q}")
+                             print(f"Enviando {key} {value}")
                              str_variable = i["variable3"]
                              topic = topicmqtt + str_variable + "/sdata"
                              result = client.publish(topic, valueJson)
