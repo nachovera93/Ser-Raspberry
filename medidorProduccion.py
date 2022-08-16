@@ -117,6 +117,7 @@ def get_mqtt_credentials():
           #print(mqttopic)
           respuesta.close()
           print("Ends mqtt credentials")
+          print(data["variables"])
     return True
 
 
