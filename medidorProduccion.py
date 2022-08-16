@@ -1412,25 +1412,15 @@ def SendDataToBroker(q,k,f,**kwargs):
             #print(f'timetoSend: {round(timeToSend)}')
             #print(f'Largo Kwargs {len(kwargs.values())}')
             for key, value in kwargs.items():
-                #g=g+1
-                #print(f'g = {g}')
-                #print(f"Preparando Envio 0  - {key} {value}")
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
-                #print(f'{key}-{f}-{k}')
                 for i in data["variables"]:
-                    #print("Entro For")
-                    #print(f' variablefullname 1 {i["variableFullName"]}')
-                    #print(i)
-                    #print(f' variablefullname 3 {i["variableFullName3"]}')
-                    #print(f'{key}')
                     if(i["variableFullName"]==f'{key}'):
                         print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt}")
                         freq = i["variableSendFreq"]  
                           #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
                              #print(f'Tiempo1 {key} {round(timeToSend - vt)}')
-                             #print(f"Enviando {key} {value}")
                              str_variable = i["variable"]
                              topic = topicmqtt + str_variable + "/sdata"
                              result = client.publish(topic, valueJson)
@@ -1469,11 +1459,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                 print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                                 freq = i["variableSendFreq"]  
-                                #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
                                 if(timeToSend - vt > float(freq)): 
-                                     #print(f'Tiempo2 {round(timeToSend - vt)}')
-                                     #print(f"Entrando a envio {key}-{q}")
-                                     #print(f"Enviando {key} {value}")
                                      str_variable = i["variable2"]
                                      topic = topicmqtt + str_variable + "/sdata"
                                      result = client.publish(topic, valueJson)
@@ -1514,9 +1500,6 @@ def SendDataToBroker(q,k,f,**kwargs):
                                 freq = i["variableSendFreq"]  
                                 #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
                                 if(timeToSend - vt > float(freq)):
-                                     #print(f'Tiempo3 {round(timeToSend - vt)}') 
-                                     #print(f"Entrando a envio {key}-{q}")
-                                     #print(f"Enviando {key} {value}")
                                      str_variable = i["variable3"]
                                      topic = topicmqtt + str_variable + "/sdata"
                                      result = client.publish(topic, valueJson)
@@ -4482,11 +4465,11 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     array2 = np.array([[round(OneHourEnergy_Carga,5)]])
     #array4 = np.array(datetim)
     val = worksheet.acell('AD2').value
-    SendDataToBroker(q=1,k=k1,f=f1,Energia_Red=f"{val}")
+    SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{val}")
     val2 = worksheet.acell('AE2').value
-    SendDataToBroker(q=2,k=k2,f=f2,Energia_Paneles=f"{val2}")
+    SendDataToBroker(q=14,k=k2,f=f2,Energia_Paneles=f"{val2}")
     val3 = worksheet.acell('AF2').value
-    SendDataToBroker(q=2,k=k3,f=f3,Energia_Carga=f"{val3}")
+    SendDataToBroker(q=15,k=k3,f=f3,Energia_Carga=f"{val3}")
     ###Energías de cada fase
     array6 = np.array([[round(OneHourEnergy_Carga_Fase1,5)]])
     worksheet.update(f'AR{Largo+1}', array6.tolist())
