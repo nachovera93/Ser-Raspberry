@@ -1406,6 +1406,8 @@ def SendDataToBroker(q,k,f,**kwargs):
                 #print(f'{key}-{f}-{k}')
                 for i in data["variables"]:
                     print(i["variableFullName"])
+                    print(i["variableFullName2"])
+                    print(i["variableFullName3"])
                     print(f'{key}')
                     if(i["variableFullName"]==f'{key}'):
                         print(f"Preparando Envio en publish de variable {key} {value}")
@@ -4079,11 +4081,11 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
              global DataAppend1
              Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
              DataAppend1.append(Data)
-             print(f"largo Data Append: {len(DataAppend1)}")
+             #print(f"largo Data Append: {len(DataAppend1)}")
              savedata1 = savedata1 + 1
-             print(savedata1)
+             #print(savedata1)
              if(savedata1>=5):
-                print("Entro a savedata")
+                #print("Entro a savedata")
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet11 = workbook[f"{k}-{f}"]
                 for i in DataAppend1:
