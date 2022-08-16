@@ -1405,6 +1405,8 @@ def SendDataToBroker(q,k,f,**kwargs):
                 valueJson = json.dumps(str_num)
                 #print(f'{key}-{f}-{k}')
                 for i in data["variables"]:
+                    print(i["variableFullName"])
+                    print(f'{key}')
                     if(i["variableFullName"]==f'{key}'):
                         print(f"Preparando Envio en publish de variable {key} {value}")
                         freq = i["variableSendFreq"]  
