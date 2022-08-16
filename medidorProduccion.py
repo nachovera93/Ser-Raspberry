@@ -1357,8 +1357,10 @@ def SendDataToBroker(q,k,f,**kwargs):
             global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt,vt15
             #print(len(kwargs.values()))
             #if(len(kwargs.values())==4):
+            
             if(q==1):
                 vt = vt1
+                print(vt1)
             elif(q==2):
                 vt = vt2
             elif(q==3):
