@@ -1401,7 +1401,7 @@ def SendDataToBroker(q,k,f,**kwargs):
             for key, value in kwargs.items():
                 g=g+1
                 #print(f'g = {g}')
-                print(f"Preparando Envio 0  - {key} {value}")
+                #print(f"Preparando Envio 0  - {key} {value}")
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
                 #print(f'{key}-{f}-{k}')
@@ -1412,7 +1412,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                     #print(f' variablefullname 3 {i["variableFullName3"]}')
                     #print(f'{key}')
                     if(i["variableFullName"]==f'{key}'):
-                        print(f"Preparando Envio en publish de variable {key} {value}")
+                        #print(f"Preparando Envio en publish de variable {key} {value}")
                         freq = i["variableSendFreq"]  
                         #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
