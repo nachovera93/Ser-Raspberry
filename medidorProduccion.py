@@ -1425,7 +1425,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                 valueJson = json.dumps(str_num)
                 for i in data["variables"]:
                     if(i["variableFullName"]==f'{key}'):
-                        print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt}")
+                        #print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt}")
                         freq = i["variableSendFreq"]  
                           #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
@@ -1435,7 +1435,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                              result = client.publish(topic, valueJson)
                              status = result[0]            
                              if status == 0:
-                                 print(f"Send {key} - {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
+                                 print(f"Send {key} - {value} - {topic}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}") 
                              if(q==1):
@@ -1480,7 +1480,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                      result = client.publish(topic, valueJson)
                                      status = result[0]            
                                      if status == 0:
-                                         print(f"Send {key} - {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
+                                         print(f"Send {key} - {value} - {topic}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                                      else:
                                          print(f"Failed to send message to topic {topic}") 
                                      if(q==1):
@@ -1526,7 +1526,7 @@ def SendDataToBroker(q,k,f,**kwargs):
                                      result = client.publish(topic, valueJson)
                                      status = result[0]            
                                      if status == 0:
-                                         print(f"Send {key} - {value}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
+                                         print(f"Send {key} - {value} - {topic}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                                      else:
                                          print(f"Failed to send message to topic {topic}") 
                                      if(q==1):
@@ -4282,6 +4282,8 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
                 valCarga = Energy_1+Energy_2+Energy_3
                 valPaneles = Energy_4+Energy_5+Energy_6
                 valRed = valCarga-valPaneles
+                if(valRed<0):
+                    valRed=0
                 SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{valRed}")
                 SendDataToBroker(q=14,k=k2,f=f2,Energia_Paneles=f"{valPaneles}")
                 SendDataToBroker(q=15,k=k3,f=f3,Energia_Carga=f"{valCarga}")
