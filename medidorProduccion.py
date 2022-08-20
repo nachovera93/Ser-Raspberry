@@ -611,7 +611,7 @@ contadorcorriente2=0
 contadorcorriente=0
 CorrientesCarga=0
 CorrientesPaneles=0
-EnergyFactor=2.8
+EnergyFactor=2.5
 def Potencias(i,Irms,Vrms,potrmsCGE):
     global vt1
     global vt2
@@ -1313,7 +1313,9 @@ vt13=time.time()
 vt14=time.time()
 vt15=time.time()
 
-vt15=time.time()
+vt16=time.time()
+vt17=time.time()
+vt18=time.time()
 vt115=time.time()
 vt215=time.time()
 vt315=time.time()
@@ -1357,7 +1359,7 @@ def SendDataToBroker(q,k,f,**kwargs):
         
         def publish(client): 
             #g=0
-            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt13,vt14,vt,vt15
+            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt13,vt14,vt,vt15,vt16,vt17,vt18
             #print(len(kwargs.values()))
             #if(len(kwargs.values())==4):
             
@@ -1392,6 +1394,12 @@ def SendDataToBroker(q,k,f,**kwargs):
                 vt = vt14
             elif(q==15):
                 vt = vt15
+            elif(q==16):
+                vt = vt16
+            elif(q==17):
+                vt = vt17
+            elif(q==18):
+                vt = vt18
             """
             elif(len(kwargs.values())<2):
                 vt = vt15 #0 // 10
@@ -1467,7 +1475,13 @@ def SendDataToBroker(q,k,f,**kwargs):
                              elif(q==14):
                                  vt14 = time.time()
                              elif(q==15):
-                                 vt15 = time.time()      
+                                 vt15 = time.time() 
+                             elif(q==16):
+                                 vt16 = time.time() 
+                             elif(q==17):
+                                 vt17 = time.time() 
+                             elif(q==18):
+                                 vt18 = time.time()      
                     elif "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                               
@@ -1512,7 +1526,13 @@ def SendDataToBroker(q,k,f,**kwargs):
                                      elif(q==14):
                                          vt14 = time.time()
                                      elif(q==15):
-                                         vt15 = time.time()           
+                                         vt15 = time.time() 
+                                     elif(q==16):
+                                          vt16 = time.time() 
+                                     elif(q==17):
+                                         vt17 = time.time() 
+                                     elif(q==18):
+                                         vt18 = time.time()          
                     elif "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                              
@@ -1558,7 +1578,13 @@ def SendDataToBroker(q,k,f,**kwargs):
                                      elif(q==14):
                                          vt14 = time.time()
                                      elif(q==15):
-                                         vt15 = time.time()                          
+                                         vt15 = time.time() 
+                                     elif(q==16):
+                                          vt16 = time.time() 
+                                     elif(q==17):
+                                         vt17 = time.time() 
+                                     elif(q==18):
+                                         vt18 = time.time()                         
 
         try:  
             if(client.connected_flag==True): 
@@ -4180,8 +4206,9 @@ DataAppend9=[]
 EnergyCarga=0
 Energy_Red=0
 Energy_Paneles=0
+valRed=0
 def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy,i,k,f):
-       global EnergyCarga,Energy_Red,Energy_Paneles
+       global EnergyCarga,Energy_Red,Energy_Paneles,valRed
        #Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
        #workbook=openpyxl.load_workbook(filename = dest_filename)
        if(i==1):
@@ -4281,9 +4308,11 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
                 savedata6 = 0
                 valCarga = Energy_1+Energy_2+Energy_3
                 valPaneles = Energy_4+Energy_5+Energy_6
-                valRed = valCarga-valPaneles
-                if(valRed<0):
+                if(valCarga-valPaneles<0):
                     valRed=0
+                #else:
+                #    valRed = valCarga-valPaneles
+                
                 SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{valRed}")
                 SendDataToBroker(q=14,k=k2,f=f2,Energia_Paneles=f"{valPaneles}")
                 SendDataToBroker(q=15,k=k3,f=f3,Energia_Carga=f"{valCarga}")
@@ -4474,6 +4503,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     print(Largo)
     array5 = np.array([[round(OneHourEnergy_Paneles,5)]])
     worksheet.update(f'J{Largo+1}', array5.tolist())
+    SendDataToBroker(q=18,k=k2,f=f2,Energia_Paneles_Hora=f"{OneHourEnergy_Paneles}")
     datetim=str(datetime.datetime.now()-datetime.timedelta(minutes=3))
     #Hora=datetim.strftime('%H:%M')
     #datetim=json.dumps(datetim)
@@ -4519,7 +4549,9 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     worksheet.update(f'F{Largo+1}',datetim[0:19]) #Hora
     worksheet.update(f'AN{Largo+1}',datetim[0:19]) #Hora
     worksheet.update(f'G{Largo+1}', array.tolist())  # Red
+    SendDataToBroker(q=16,k=k1,f=f1,Energia_Red_Hora=f"{OneHourEnergy_RedCompañia}")
     worksheet.update(f'K{Largo+1}', array2.tolist()) #Carga
+    SendDataToBroker(q=17,k=k1,f=f1,Energia_Carga_Hora=f"{OneHourEnergy_Carga}")
     
    
     
