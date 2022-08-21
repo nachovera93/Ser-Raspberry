@@ -687,10 +687,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                     OneHourEnergy_Paneles_Fase2=OneHourEnergy_5
                     OneHourEnergy_Paneles_Fase3=OneHourEnergy_6
                     #if(OneHourEnergy_Carga-OneHourEnergy_Paneles<0):
-                    #    ReporteDiarioHora(datetim.hour,None,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3)
+                      #ReporteDiarioHora(datetim.hour,None,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3)
                     #else:
                     #    OneHourEnergy_RedCompañia=OneHourEnergy_Carga-OneHourEnergy_Paneles
-                    #    ReporteDiarioHora(datetim.hour,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3)
+                    ReporteDiarioHora(datetim.hour,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3)
             else:
                     print("No hay conexión")
             OneHourEnergy_Red_Fase1=OneHourEnergy_1-OneHourEnergy_4
