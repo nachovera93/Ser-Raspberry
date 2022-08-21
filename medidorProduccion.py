@@ -665,7 +665,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global CorrientesPaneles
     #print([round(OneHourEnergy_1,5),round(OneHourEnergy_2,5),round(OneHourEnergy_3,5),round(OneHourEnergy_4,5),round(OneHourEnergy_5,5),round(OneHourEnergy_6,5),round(OneHourEnergy_7,5),round(OneHourEnergy_8,5),round(OneHourEnergy_9,5)])
     TimeEnergy = datetime.datetime.now()
-    if(TimeEnergy.minute==4):
+    if(TimeEnergy.minute==4 or TimeEnergy.minute==5 or TimeEnergy.minute==7):
         acceshourenergy=0
     if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
@@ -679,24 +679,22 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             if(connect==1):
                     OneHourEnergy_Paneles=OneHourEnergy_4+OneHourEnergy_5+OneHourEnergy_6
                     OneHourEnergy_Carga=OneHourEnergy_1+OneHourEnergy_2+OneHourEnergy_3
-                    OneHourEnergy_RedCompañia=OneHourEnergy_Carga-OneHourEnergy_Paneles
                     OneHourEnergy_Carga_Fase1=OneHourEnergy_1
                     OneHourEnergy_Carga_Fase2=OneHourEnergy_2
                     OneHourEnergy_Carga_Fase3=OneHourEnergy_3
                     OneHourEnergy_Paneles_Fase1=OneHourEnergy_4
                     OneHourEnergy_Paneles_Fase2=OneHourEnergy_5
                     OneHourEnergy_Paneles_Fase3=OneHourEnergy_6
-                    
-                    ReporteDiarioHora(datetim.hour,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3)
+                    if(OneHourEnergy_Carga-OneHourEnergy_Paneles<0):
+                        ReporteDiarioHora(datetim.hour,None,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3)
+                    else:
+                        OneHourEnergy_RedCompañia=OneHourEnergy_Carga-OneHourEnergy_Paneles
+                        ReporteDiarioHora(datetim.hour,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3)
             else:
                     print("No hay conexión")
             OneHourEnergy_Red_Fase1=OneHourEnergy_1-OneHourEnergy_4
             OneHourEnergy_Red_Fase2=OneHourEnergy_2-OneHourEnergy_5
             OneHourEnergy_Red_Fase3=OneHourEnergy_3-OneHourEnergy_6
-            
-            #SendDataToBroker(q=1,k=k1,f=f1,Energia_Total_Red=f'{OneHourEnergy_RedCompañia}')
-            #SendDataToBroker(q=1,k=k1,f=f1,Energia_Paneles=f'{OneHourEnergy_Paneles}')
-            #SendDataToBroker(q=1,k=k1,f=f1,Energia_Total_Carga=f'{OneHourEnergy_Carga}')
             
             dataHourFase1=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_Red_Fase1,5),round(OneHourEnergy_1,5),round(OneHourEnergy_4,5)]
             dataHourFase2=[f'{datetim.hour}:{datetim.minute}{datetim.minute}',round(OneHourEnergy_Red_Fase2,5),round(OneHourEnergy_2,5),round(OneHourEnergy_5,5)]
@@ -958,37 +956,17 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             except:
                 print("Continuar")
                 
-            
             #workbook.save(filename = dest_filename)
-            
-            ###SendDataToBroker(q=1,k=k1,f=f1,EnergiaHora=f'{OneHourEnergy_1}')
-            print("Enviando Hora Max Energia 1")
             OneHourEnergy_1=0
-            ##SendDataToBroker(q=2,k=k1,f=f2,EnergiaHora=f'{OneHourEnergy_2}')
-            print("Enviando Hora Max Energia 2")
             OneHourEnergy_2=0   
-            ##SendDataToBroker(q=3,k=k1,f=f3,EnergiaHora=f'{OneHourEnergy_3}')
-            print("Enviando Hora Max Energia 3")
             OneHourEnergy_3=0   
-            ##SendDataToBroker(q=4,k=k2,f=f1,EnergiaHora=f'{OneHourEnergy_4}')
-            print("Enviando Hora Max Energia 4")
             OneHourEnergy_4=0    
-            ##SendDataToBroker(q=5,k=k2,f=f2,EnergiaHora=f'{OneHourEnergy_5}')
-            print("Enviando Hora Max Energia 5")
             OneHourEnergy_5=0   
-            ##SendDataToBroker(q=6,k=k2,f=f3,EnergiaHora=f'{OneHourEnergy_6}')
-            print("Enviando Hora Max Energia 6")
             OneHourEnergy_6=0     
-            ##SendDataToBroker(q=7,k=k3,f=f1,EnergiaHora=f'{OneHourEnergy_7}')
-            print("Enviando Hora Max Energia 7")
-            OneHourEnergy_7=0     
-            ##SendDataToBroker(q=8,k=k3,f=f2,EnergiaHora=f'{OneHourEnergy_8}')
-            print("Enviando Hora Max Energia 8")
-            OneHourEnergy_8=0       
-            ##SendDataToBroker(q=9,k=k3,f=f3,EnergiaHora=f'{OneHourEnergy_9}')
-            print("Enviando Hora Max Energia 9")
-            OneHourEnergy_9=0
-            vt15=time.time()
+            #OneHourEnergy_7=0     
+            #OneHourEnergy_8=0       
+            #OneHourEnergy_9=0
+            #vt15=time.time()
             dataHourFase1=[]
             dataHourFase2=[]
             dataHourFase3=[]
@@ -4207,8 +4185,9 @@ EnergyCarga=0
 Energy_Red=0
 Energy_Paneles=0
 valRed=0
+valRedAcumulada=0
 def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy,i,k,f):
-       global EnergyCarga,Energy_Red,Energy_Paneles,valRed
+       global EnergyCarga,Energy_Red,Energy_Paneles,valRed,valRedAcumulada
        #Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
        #workbook=openpyxl.load_workbook(filename = dest_filename)
        if(i==1):
@@ -4308,8 +4287,11 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
                 savedata6 = 0
                 valCarga = Energy_1+Energy_2+Energy_3
                 valPaneles = Energy_4+Energy_5+Energy_6
-                if(valCarga-valPaneles<0):
-                    valRed=0
+                valRed = valCarga-valPaneles
+                if(valCarga-valPaneles<0):     
+                    valRed=valRedAcumulada
+                if(valCarga-valPaneles>0):
+                    valRedAcumulada=valRedAcumulada+(valRed)  #2.37
                 #else:
                 #    valRed = valCarga-valPaneles
                 
@@ -4498,9 +4480,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     sh = gc.open('Luis_Wherhahm')
     worksheet = sh.worksheet("Hoja 1")
     values_list = worksheet.col_values(6)
-    print(values_list)
     Largo=len(values_list)
-    print(Largo)
     array5 = np.array([[round(OneHourEnergy_Paneles,5)]])
     worksheet.update(f'J{Largo+1}', array5.tolist())
     SendDataToBroker(q=18,k=k2,f=f2,Energia_Paneles_Hora=f"{OneHourEnergy_Paneles}")
@@ -4508,7 +4488,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     #Hora=datetim.strftime('%H:%M')
     #datetim=json.dumps(datetim)
     if(OneHourEnergy_RedCompañia<0):
-        OneHourEnergy_RedCompañia=0
+        OneHourEnergy_RedCompañia=0.1
         array = np.array([[round(OneHourEnergy_Paneles,5)]]) 
         worksheet.update(f'I{Largo+1}', array.tolist())
         OneHourEnergy_Paneles=0
