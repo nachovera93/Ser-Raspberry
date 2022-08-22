@@ -4291,7 +4291,7 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
                 valRed = valCarga-valPaneles
                 if(valCarga-valPaneles<0):     
                     valRed=valRedAcumulada
-                if(valCarga-valPaneles>0):
+                else:
                     valRedAcumulada=valRedAcumulada+(valRed) 
                 #else:
                 #    valRed = valCarga-valPaneles
