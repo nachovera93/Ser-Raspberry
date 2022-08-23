@@ -4286,8 +4286,8 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
                 workbook.save(filename = dest_filename)
                 DataAppend6=[]
                 savedata6 = 0
-                valCarga = Energy_1+Energy_2+Energy_3
-                valPaneles = Energy_4+Energy_5+Energy_6
+                #valCarga = Energy_1+Energy_2+Energy_3
+                #valPaneles = Energy_4+Energy_5+Energy_6
                 #∫if(valCarga-valPaneles<0):     
                 ##valRed = valCarga-valPaneles
                 #    valRed=valRedAcumulada
@@ -4297,8 +4297,8 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
                 ##    valRed = valCarga-valPaneles
                 #
                 #SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{valRed}")
-                SendDataToBroker(q=14,k=k2,f=f2,Energia_Paneles=f"{valPaneles}")
-                SendDataToBroker(q=15,k=k3,f=f3,Energia_Carga=f"{valCarga}")
+                #SendDataToBroker(q=14,k=k2,f=f2,Energia_Paneles=f"{valPaneles}")
+                #SendDataToBroker(q=15,k=k3,f=f3,Energia_Carga=f"{valCarga}")
                 
              Data=[]
        elif(i==7):
@@ -4535,6 +4535,10 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     SendDataToBroker(q=17,k=k1,f=f1,Energia_Carga_Hora=f"{OneHourEnergy_Carga}")
     val = float(worksheet.acell('AD2').value)
     SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{val}")
+    valCarga = float(worksheet.acell('AF2').value)#Energy_1+Energy_2+Energy_3
+    valPaneles = float(worksheet.acell('AE2').value)#Energy_4+Energy_5+Energy_6
+    SendDataToBroker(q=14,k=k2,f=f2,Energia_Paneles=f"{valPaneles}")
+    SendDataToBroker(q=15,k=k3,f=f3,Energia_Carga=f"{valCarga}")
     
    
     
