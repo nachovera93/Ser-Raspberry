@@ -4288,15 +4288,15 @@ def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosP
                 savedata6 = 0
                 valCarga = Energy_1+Energy_2+Energy_3
                 valPaneles = Energy_4+Energy_5+Energy_6
-                valRed = valCarga-valPaneles
-                if(valCarga-valPaneles<0):     
-                    valRed=valRedAcumulada
-                else:
-                    valRedAcumulada=valRedAcumulada+(valRed) 
+                #∫if(valCarga-valPaneles<0):     
+                ##valRed = valCarga-valPaneles
+                #    valRed=valRedAcumulada
                 #else:
-                #    valRed = valCarga-valPaneles
-                
-                SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{valRed}")
+                #    valRedAcumulada=valRedAcumulada+(valRed) 
+                ##else:
+                ##    valRed = valCarga-valPaneles
+                #
+                #SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{valRed}")
                 SendDataToBroker(q=14,k=k2,f=f2,Energia_Paneles=f"{valPaneles}")
                 SendDataToBroker(q=15,k=k3,f=f3,Energia_Carga=f"{valCarga}")
                 
@@ -4533,6 +4533,8 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     SendDataToBroker(q=16,k=k1,f=f1,Energia_Red_Hora=f"{OneHourEnergy_RedCompañia}")
     worksheet.update(f'K{Largo+1}', array2.tolist()) #Carga
     SendDataToBroker(q=17,k=k1,f=f1,Energia_Carga_Hora=f"{OneHourEnergy_Carga}")
+    val = float(worksheet.acell('AD2').value)
+    SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{val}")
     
    
     
