@@ -4962,7 +4962,7 @@ def received():
                             Access_pot=0
                               
                          
-                     """    
+                        
                      if(excel.minute==4 or excel.minute==19 or excel.minute==34 or excel.minute==49 ):
                          if(rcConnect > 5): 
                                print("Reiniciar por desconexión")
@@ -4972,7 +4972,7 @@ def received():
                                os.system("sudo reboot")
                          else: 
                                print("Continue")
-                     """ 
+                      
                 except OSError as err:
                             print("OS error: {0}".format(err))
                             with open('mi_fichero.txt', 'w') as f:
