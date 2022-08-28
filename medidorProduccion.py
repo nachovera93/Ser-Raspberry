@@ -613,7 +613,7 @@ CorrientesCarga=0
 CorrientesPaneles=0
 EnergyFactor=2.5
 def Potencias(i,Irms,Vrms,potrmsCGE):
-    global vt1,vt2,vt3,vt4,vt5,vt6
+    global vt1,vt2,vt3,vt4,vt5,vt6,vt12
     global a
     global Energy
     global Energy_1
@@ -840,8 +840,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             workbook2.save(filename = dest_filename)
                         except:
                             print("Error en Maximos diarios")
-                            #continue
-                print("Salio for") 
                 connect=FuncionReporte()
                 if(connect==1):
                         Energy_Paneles=Energy_4+Energy_5+Energy_6
@@ -850,8 +848,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                         datetim=datetime.datetime.now()-datetime.timedelta(days=1)
                         print(f'Energias {Energy_RedCompañia}-{Energy_Paneles}-{Energy_Carga}')
                         ReporteDiarioDia(datetim.date(),Energy_RedCompañia,Energy_Paneles,Energy_Carga)
-                else:
-                        
+                else:      
                         print("No hay conexión")      
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet23 = workbook[f"Energia Fase 1 Mensual"]
@@ -969,11 +966,24 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             dataHourFase3=[]
             acceshourenergy=1
             
-            
-           
-    AparentPower = Vrms*Irms
-        
-    if (potrmsCGE>=0):
+    """
+    if(TimeEnergy.minute==0 or TimeEnergy.minute==5 or TimeEnergy.minute==10 or TimeEnergy.minute==15 or TimeEnergy.minute==20 or TimeEnergy.minute==25 or TimeEnergy.minute==30 or TimeEnergy.minute==35 or TimeEnergy.minute==40 or TimeEnergy.minute==45 or TimeEnergy.minute==50 or TimeEnergy.minute==55):
+            connect=FuncionReporte()
+            if(connect==1):
+                    OneHourEnergy_Paneles=OneHourEnergy_4+OneHourEnergy_5+OneHourEnergy_6
+                    OneHourEnergy_Carga=OneHourEnergy_1+OneHourEnergy_2+OneHourEnergy_3
+                    OneHourEnergy_RedCompañia=OneHourEnergy_Carga-OneHourEnergy_Paneles
+                    if(OneHourEnergy_Carga-OneHourEnergy_RedCompañia<0):
+                        Inyectando=1
+                    else:
+                        Inyectando=0
+                    vt12=SendDataToBroker(vt12,Inyectando_Consumiendo=f"{Inyectando}")
+            else:
+                    print("No hay conexión")
+    """          
+    
+    AparentPower = Vrms*Irms               
+    if(potrmsCGE>=0):
           ActivePower = Vrms*Irms*CosPhi
           ActivePower = np.abs(ActivePower)
     else:
@@ -1192,7 +1202,7 @@ def graphVoltage(list_fftVoltage,list_FinalCurrent,samplings,i):
     
 
 
-vt=time.time()
+#vt=time.time()
 vt1=time.time()
 vt2=time.time()
 vt3=time.time()
@@ -1220,6 +1230,7 @@ f3="Fase-3"
 
 def SendDataToBroker(vt,**kwargs):
         def publish(client): 
+            global vt
             #global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt13,vt14,vt,vt15,vt16,vt17,vt18
             #print(len(kwargs.values()))
             #if(len(kwargs.values())==4):
