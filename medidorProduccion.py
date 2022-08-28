@@ -1297,7 +1297,8 @@ def SendDataToBroker(vt,**kwargs):
             if(client.connected_flag==True): 
                 publish(client)
         except:
-            pass
+            print("client.connected_flag False")
+            #pass
 
 #    if(data["variables"][i]["variableType"]=="output"):
 #        continue
