@@ -1228,10 +1228,12 @@ f1="Fase-1"
 f2="Fase-2"	
 f3="Fase-3"
 vttime=time.time()
+
 def SendDataToBroker(vt,**kwargs):
+        global vttime
         vttime=vt
-        print("Entro")
         def publish(client): 
+            global vttime
             #global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt13,vt14,vt,vt15,vt16,vt17,vt18
             #print(len(kwargs.values()))
             print(f" vttime {vttime}")
