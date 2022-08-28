@@ -1231,9 +1231,11 @@ vttime=time.time()
 def SendDataToBroker(vt,**kwargs):
         global vttime
         vttime=vt
+        print("Entro")
         def publish(client): 
             #global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt13,vt14,vt,vt15,vt16,vt17,vt18
             #print(len(kwargs.values()))
+            print(f" vttime {vttime}")
             #if(len(kwargs.values())==4):
             timeToSend=time.time() #10 // 20
             for key, value in kwargs.items():
