@@ -1202,7 +1202,7 @@ def graphVoltage(list_fftVoltage,list_FinalCurrent,samplings,i):
     
 
 
-#vt=time.time()
+vt=time.time()
 vt1=time.time()
 vt2=time.time()
 vt3=time.time()
@@ -1227,10 +1227,11 @@ k3="ConsumoCliente"
 f1="Fase-1"	
 f2="Fase-2"	
 f3="Fase-3"
-
+vttime=time.time()
 def SendDataToBroker(vt,**kwargs):
+        global vttime
+        vttime=vt
         def publish(client): 
-            global vt
             #global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt13,vt14,vt,vt15,vt16,vt17,vt18
             #print(len(kwargs.values()))
             #if(len(kwargs.values())==4):
@@ -1242,7 +1243,7 @@ def SendDataToBroker(vt,**kwargs):
                     if(i["variableFullName"]==f'{key}'):
                         #print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt}")
                         freq = i["variableSendFreq"]  
-                        if(timeToSend - vt > float(freq)): 
+                        if(timeToSend - vttime > float(freq)): 
                              #print(f'Tiempo1 {key} {round(timeToSend - vt)}')
                              str_variable = i["variable"]
                              topic = topicmqtt + str_variable + "/sdata"
@@ -1252,15 +1253,15 @@ def SendDataToBroker(vt,**kwargs):
                                  print(f"Send {key} - {value} - {topic}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
                                  print(f"Failed to send message to topic {topic}")   
-                             vt=time.time()
-                             return vt
+                             vttime=time.time()
+                             return vttime
                
                     elif "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                                 print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                                 freq = i["variableSendFreq"]  
-                                if(timeToSend - vt > float(freq)): 
+                                if(timeToSend - vttime > float(freq)): 
                                      str_variable = i["variable2"]
                                      topic = topicmqtt + str_variable + "/sdata"
                                      result = client.publish(topic, valueJson)
@@ -1269,7 +1270,8 @@ def SendDataToBroker(vt,**kwargs):
                                          print(f"Send {key} - {value} - {topic}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                                      else:
                                          print(f"Failed to send message to topic {topic}")   
-                                     return vt       
+                                     vttime=time.time()
+                                     return vttime       
                     elif "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                              
@@ -1277,7 +1279,7 @@ def SendDataToBroker(vt,**kwargs):
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                                 freq = i["variableSendFreq"]  
                                 #print(f'Tiempo {round(timeToSend - vt)}')  #10-0=10 // 20-10=10 
-                                if(timeToSend - vt > float(freq)):
+                                if(timeToSend - vttime > float(freq)):
                                      str_variable = i["variable3"]
                                      topic = topicmqtt + str_variable + "/sdata"
                                      result = client.publish(topic, valueJson)
@@ -1286,8 +1288,9 @@ def SendDataToBroker(vt,**kwargs):
                                          print(f"Send {key} - {value} - {topic}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                                      else:
                                          print(f"Failed to send message to topic {topic}") 
-                                     return vt
-            return vt 
+                                     vttime=time.time()
+                                     return vttime
+            return vttime 
         try:  
             if(client.connected_flag==True): 
                 publish(client)
