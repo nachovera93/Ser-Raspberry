@@ -127,7 +127,7 @@ def on_disconnect(client, userdata, rc):
         print("Unexpected disconnection, will auto-reconnect")
     elif(rc==5):
         print("Getting new credentials!")
-        #get_mqtt_credentials()
+        get_mqtt_credentials()
         client.username_pw_set(usernamemqtt, passwordmqtt)
  
                      
