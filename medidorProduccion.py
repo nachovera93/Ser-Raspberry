@@ -1293,12 +1293,13 @@ def SendDataToBroker(vt,**kwargs):
                                      vttime=time.time()
                                      return vttime
             return vttime 
-        try:  
-            if(client.connected_flag==True): 
-                publish(client)
-        except:
-            print(f"client.connected_flag {client.connected_flag}")
-            #pass
+        publish(client)
+        #try:  
+        #    if(client.connected_flag==True): 
+        #        
+        #except:
+        #    print(f"client.connected_flag {client.connected_flag}")
+        #    #pass
 
 #    if(data["variables"][i]["variableType"]=="output"):
 #        continue
