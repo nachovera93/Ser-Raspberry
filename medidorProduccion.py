@@ -612,8 +612,23 @@ contadorcorriente=0
 CorrientesCarga=0
 CorrientesPaneles=0
 EnergyFactor=2.5
+vt1=time.time()
+vt2=time.time()
+vt3=time.time()
+vt4=time.time()
+vt5=time.time()
+vt6=time.time()
+vt7=time.time()
+vt8=time.time()
+vt9=time.time()
+vt10=time.time()
+vt11=time.time()
+vt12=time.time()
+vt13=time.time()
+vt14=time.time()
+vt15=time.time()
 def Potencias(i,Irms,Vrms,potrmsCGE):
-    global vt1,vt2,vt3,vt4,vt5,vt6,vt12
+    global vt2,vt3,vt4,vt5,vt6,vt12
     global a
     global Energy
     global Energy_1
@@ -993,6 +1008,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     ReactivePower = Vrms*Irms*np.sin(PhaseVoltage-PhaseCurrent)
     optionsave=1
     if (i == 1):
+        global vt1
         Time1b = datetime.datetime.now()
         delta=(((Time1b - Time1a).microseconds)/1000+((Time1b - Time1a).seconds)*1000)/10000000000
         Energy_1 += np.abs(AparentPower*delta*EnergyFactor) #ActivePower
@@ -1202,22 +1218,7 @@ def graphVoltage(list_fftVoltage,list_FinalCurrent,samplings,i):
     
 
 
-vt=time.time()
-vt1=time.time()
-vt2=time.time()
-vt3=time.time()
-vt4=time.time()
-vt5=time.time()
-vt6=time.time()
-vt7=time.time()
-vt8=time.time()
-vt9=time.time()
-vt10=time.time()
-vt11=time.time()
-vt12=time.time()
-vt13=time.time()
-vt14=time.time()
-vt15=time.time()
+
 
 
 optionsave=1	
@@ -1294,13 +1295,12 @@ def SendDataToBroker(vt,**kwargs):
                                      vttime=time.time()
                                      return vttime
             return vttime 
-        publish(client)
-        #try:  
-        #    if(client.connected_flag==True): 
-        #        
-        #except:
-        #    print(f"client.connected_flag {client.connected_flag}")
-        #    #pass
+        try:  
+            if(client.connected_flag==True):   
+                publish(client)
+        except:
+            print(f"client.connected_flag {client.connected_flag}")
+            #pass
 
 #    if(data["variables"][i]["variableType"]=="output"):
 #        continue
