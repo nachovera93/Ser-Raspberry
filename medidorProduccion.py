@@ -613,9 +613,7 @@ CorrientesCarga=0
 CorrientesPaneles=0
 EnergyFactor=2.5
 def Potencias(i,Irms,Vrms,potrmsCGE):
-    global vt1
-    global vt2
-    global vt3
+    global vt1,vt2,vt3,vt4,vt5,vt6
     global a
     global Energy
     global Energy_1
@@ -665,7 +663,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
     global CorrientesPaneles
     #print([round(OneHourEnergy_1,5),round(OneHourEnergy_2,5),round(OneHourEnergy_3,5),round(OneHourEnergy_4,5),round(OneHourEnergy_5,5),round(OneHourEnergy_6,5),round(OneHourEnergy_7,5),round(OneHourEnergy_8,5),round(OneHourEnergy_9,5)])
     TimeEnergy = datetime.datetime.now()
-    if(TimeEnergy.minute==4 or TimeEnergy.minute==5 or TimeEnergy.minute==7):
+    if(TimeEnergy.minute==4 or TimeEnergy.minute==5 or TimeEnergy.minute==6 or TimeEnergy.minute==7 or TimeEnergy.minute==10 or TimeEnergy.minute==12 or TimeEnergy.minute==13 or TimeEnergy.minute==15 or TimeEnergy.minute==19):
         acceshourenergy=0
     if(TimeEnergy.minute==3):
         if(acceshourenergy==0):
@@ -706,7 +704,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             workbook.save(filename = dest_filename)
             if(TimeEnergy.hour==0 and TimeEnergy.minute==3):
                 workbook=openpyxl.load_workbook(filename = dest_filename)
-                print("Entrando a GRAPH EXCEL")
                 sheet20 = workbook[f"MaxHora Fase 1 Diario"]
                 sheet21 = workbook[f"MaxHora Fase 2 Diario"]
                 sheet22 = workbook[f"MaxHora Fase 3 Diario"] 
@@ -884,7 +881,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 data = Reference(sheet23, min_col=2, min_row=1, max_col=4, max_row=Pos+1)
                 chart.add_data(data, titles_from_data=True)
                 chart.set_categories(cats)
-                print("Graficando Fase 1")
+                #print("Graficando Fase 1")
                 sheet23.add_chart(chart, f"I2")
                 
                 chart2 = BarChart()
@@ -900,7 +897,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 data2 = Reference(sheet24, min_col=2, min_row=1, max_col=4, max_row=Pos2+1)
                 chart2.add_data(data2, titles_from_data=True)
                 chart2.set_categories(cats2)
-                print("Graficando Fase 2")
+                #print("Graficando Fase 2")
                 sheet24.add_chart(chart2, f"I2")
                 
                 chart3 = BarChart()
@@ -916,10 +913,10 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                 data3 = Reference(sheet25, min_col=2, min_row=1, max_col=4, max_row=Pos3+1)
                 chart3.add_data(data3, titles_from_data=True)
                 chart3.set_categories(cats3)
-                print("Graficando Fase 3")
+                #print("Graficando Fase 3")
                 sheet25.add_chart(chart3, f"I2") 
                 
-                print(f"Suma Mes {Suma_Mes_1} {Suma_Mes_2} {Suma_Mes_3} {Suma_Mes_4} {Suma_Mes_5}")
+                #print(f"Suma Mes {Suma_Mes_1} {Suma_Mes_2} {Suma_Mes_3} {Suma_Mes_4} {Suma_Mes_5}")
                 sheet23['F1'] = 'Acumulado Energia Mes REDCompañia-Fase-1'  
                 sheet23['G1'] = 'Acumulado Energia REDCompañia-Fase-2'
                 sheet23['H1'] = 'Acumulado Energia REDCompañia-Fase-3'
@@ -967,7 +964,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             #OneHourEnergy_7=0     
             #OneHourEnergy_8=0       
             #OneHourEnergy_9=0
-            #vt15=time.time()
             dataHourFase1=[]
             dataHourFase2=[]
             dataHourFase3=[]
@@ -976,85 +972,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             
            
     AparentPower = Vrms*Irms
-    """
-    if(i==1 or i==2 or i==3):
-        contadorpot=0
-        contadorcorriente=0     
-        if(i==1):
-           Corriente1=Irms
-           CorrienteCarga.insert(0,Corriente1)
-           AparentPower_1 = AparentPower
-           aparentPower.insert(0,AparentPower_1)
-        if(i==2):
-            Corriente2=Irms
-            CorrienteCarga.insert(1,Corriente2)
-            AparentPower_2 = AparentPower
-            aparentPower.insert(1,AparentPower_2)
-        if(i==3):
-            Corriente3=Irms
-            CorrienteCarga.insert(2,Corriente3)
-            AparentPower_3 = AparentPower
-            aparentPower.insert(2,AparentPower_3)
-        if(len(CorrienteCarga)>=3):
-            CorrientesCarga=np.sum(CorrienteCarga)
-            #SendDataToBroker(q=1,k=k1,f=f1,Corriente_Carga=f'{CorrientesCarga}')
-            CorrienteCarga=[]
-            contadorcorriente=1
-            if(contadorcorriente2==1):
-                SumaCorrientesRed=CorrientesCarga-CorrientesPaneles
-                if(SumaCorrientesRed<0):
-                    SumaCorrientesRed=0
-                #SendDataToBroker(q=2,k=k1,f=f1,Potencia_Red=f'{SumaCorrientesRed}')
-        if(len(aparentPower)>=3):
-            SumaPotenciasCarga=np.sum(aparentPower)
-            #SendDataToBroker(q=3,k=k1,f=f1,Potencia_Carga=f'{SumaPotenciasCarga}')
-            contadorpot=1
-            aparentPower=[]
-            if(contadorpot2==1):
-                SumaPotenciasRed=SumaPotenciasCarga-SumaPotenciasPaneles
-                #SendDataToBroker(q=4,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
-                #SendDataToBroker(q=5,k=k1,f=f1,Voltaje=f"{Vrms}")
-            
-    if(i==4 or i==5 or i==6):
-        contadorpot2=0
-        contadorcorriente2=0 
-        if(i==4):
-           Corriente4=Irms
-           CorrientePaneles.insert(0,Corriente4)
-           AparentPower_4 = AparentPower
-           aparentPowerPaneles.insert(0,AparentPower_4)
-        elif(i==5):
-            Corriente5=Irms
-            CorrientePaneles.insert(1,Corriente5)
-            AparentPower_5 = AparentPower
-            aparentPowerPaneles.insert(1,AparentPower_5)
-        elif(i==6):
-            Corriente6=Irms
-            CorrientePaneles.insert(2,Corriente6)
-            AparentPower_6 = AparentPower
-            aparentPowerPaneles.insert(2,AparentPower_6)
-        if(len(CorrientePaneles)>=3):
-            CorrientesPaneles=np.sum(CorrientePaneles)
-            #SendDataToBroker(q=6,k=k1,f=f1,Corriente_Paneles=f'{CorrientesPaneles}')
-            CorrientePaneles=[]
-            contadorcorriente2=1
-            if(contadorcorriente==1):
-                SumaCorrientesRed=CorrientesCarga-CorrientesPaneles
-                if(SumaCorrientesRed<0):
-                    SumaCorrientesRed=0
-                #SendDataToBroker(q=2,k=k1,f=f1,Corriente_Red=f'{SumaCorrientesRed}')
-        if(len(aparentPowerPaneles)>=3):
-            SumaPotenciasPaneles=np.sum(aparentPowerPaneles)
-            #SendDataToBroker(q=7,k=k1,f=f1,Potencia_Paneles=f'{SumaPotenciasPaneles}')
-            aparentPowerPaneles=[]
-            contadorpot2=1
-            if(contadorpot==1):
-                SumaPotenciasRed=SumaPotenciasCarga-SumaPotenciasPaneles
-                #SendDataToBroker(q=4,k=k1,f=f1,Potencia_Red=f'{SumaPotenciasRed}')
-                ##SendDataToBroker(q=5,k=k1,f=f1,Voltaje=f"{Vrms}")
-        """     
-                
-
         
     if (potrmsCGE>=0):
           ActivePower = Vrms*Irms*CosPhi
@@ -1076,7 +993,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_1 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
         ##SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
-        SendDataToBroker(q=i,k=k3,f=f1,Potencia_Fase_1_Carga=f"{AparentPower_1}")
+        vt1=SendDataToBroker(vt1,Potencia_Fase_1_Carga=f"{AparentPower_1}")
         #vt1=time.time() 
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,i,k1,f1)
         #{key}-{q}-{f}-{k}
@@ -1091,7 +1008,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_2 = ReactivePower 
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i,k1,f2)
         ##SendDataToBroker(q=i,k=k1,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_2}",Energia=f"{Energy_2}")
-        SendDataToBroker(q=i,k=k3,f=f1,Potencia_Fase_2_Carga=f"{AparentPower_2}")
+        vt2=SendDataToBroker(vt2,Potencia_Fase_2_Carga=f"{AparentPower_2}")
         #vt2=time.time() 
         Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,i,k1,f2)       
     elif (i == 3):
@@ -1105,7 +1022,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_3 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,CosPhi_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3,OneHourEnergy_3,i,k1,f3)
         ##SendDataToBroker(q=i,k=k1,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_3}",Energia=f"{Energy_3}")
-        SendDataToBroker(q=i,k=k3,f=f1,Potencia_Fase_3_Carga=f"{AparentPower_3}")
+        vt3=SendDataToBroker(vt3,Potencia_Fase_3_Carga=f"{AparentPower_3}")
         #vt3=time.time() 
         Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,OneHourEnergy_3,Energy_3,i,k1,f3)             
     elif (i == 4):
@@ -1120,7 +1037,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         SaveDataCsv(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,CosPhi_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,Energy_4,OneHourEnergy_4,i,k2,f1)
         ##SendDataToBroker(q=i,k=k2,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_4}",Energia=f"{Energy_4}")
         ###SendDataToBroker(q=i,k=k2,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_4}",Energia=f"{Energy_4}")
-        SendDataToBroker(q=i,k=k3,f=f1,Potencia_Fase_1_Paneles=f"{AparentPower_4}")
+        vt4=SendDataToBroker(vt4,Potencia_Fase_1_Paneles=f"{AparentPower_4}")
         Maximo15min_4(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,OneHourEnergy_4,Energy_4,i,k2,f1)              
     elif (i == 5):
         Time5b = datetime.datetime.now()
@@ -1133,7 +1050,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_5 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,CosPhi_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,Energy_5,OneHourEnergy_5,i,k2,f2)
         ##SendDataToBroker(q=i,k=k2,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_5}",Energia=f"{Energy_5}")
-        SendDataToBroker(q=i,k=k3,f=f1,Potencia_Fase_2_Paneles=f"{AparentPower_5}")
+        vt5=SendDataToBroker(vt5,Potencia_Fase_2_Paneles=f"{AparentPower_5}")
         Maximo15min_5(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,OneHourEnergy_5,Energy_5,i,k2,f2)               
     elif (i == 6):
         Time6b = datetime.datetime.now()
@@ -1146,7 +1063,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_6 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,CosPhi_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,Energy_6,OneHourEnergy_6,i,k2,f3)
         ##SendDataToBroker(q=i,k=k2,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_6}",Energia=f"{Energy_6}")
-        SendDataToBroker(q=i,k=k3,f=f1,Potencia_Fase_3_Paneles=f"{AparentPower_6}")
+        vt6=SendDataToBroker(vt6,Potencia_Fase_3_Paneles=f"{AparentPower_6}")
         Maximo15min_6(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,OneHourEnergy_6,Energy_6,i,k2,f3)           
     elif (i == 7):
         Time7b = datetime.datetime.now()
@@ -1292,18 +1209,6 @@ vt13=time.time()
 vt14=time.time()
 vt15=time.time()
 
-vt16=time.time()
-vt17=time.time()
-vt18=time.time()
-vt115=time.time()
-vt215=time.time()
-vt315=time.time()
-vt415=time.time()
-vt515=time.time()
-vt615=time.time()
-vt715=time.time()
-vt815=time.time()
-vt915=time.time()
 
 optionsave=1	
 k1="REDCompañia"	
@@ -1312,101 +1217,13 @@ k3="ConsumoCliente"
 f1="Fase-1"	
 f2="Fase-2"	
 f3="Fase-3"
-#{key}-{f}-{k} 90 Variables
-#Voltaje-Fase-1-REDCompañia // Corriente-Fase-1-REDCompañia // Potencia-Fase-1-REDCompañia // Potencia-Fase-1-REDCompañia
-#VoltajeMax-Fase-1-REDCompañia // VoltajePromedio-Fase-1-REDCompañia // VoltajeMin-Fase-1-REDCompañia // CorrienteMax-Fase-1-REDCompañia // PotenciaMax-Fase-1-REDCompañia // Energia-Fase-1-REDCompañia
-#Voltaje-Fase-2-REDCompañia // Corriente-Fase-2-REDCompañia // Potencia-Fase-2-REDCompañia // Potencia-Fase-2-REDCompañia
-#VoltajeMax-Fase-2-REDCompañia // VoltajePromedio-Fase-2-REDCompañia // VoltajeMin-Fase-2-REDCompañia // CorrienteMax-Fase-2-REDCompañia // PotenciaMax-Fase-2-REDCompañia // Energia-Fase-2-REDCompañia
-#Voltaje-Fase-3-REDCompañia // Corriente-Fase-3-REDCompañia // Potencia-Fase-3-REDCompañia // Potencia-Fase-3-REDCompañia
-#VoltajeMax-Fase-3-REDCompañia // VoltajePromedio-Fase-3-REDCompañia // VoltajeMin-Fase-3-REDCompañia // CorrienteMax-Fase-3-REDCompañia // PotenciaMax-Fase-3-REDCompañia // Energia-Fase-3-REDCompañia
 
-#Voltaje-Fase-1-CentralFotovoltaica // Corriente-Fase-1-CentralFotovoltaica // Potencia-Fase-1-CentralFotovoltaica // Potencia-Fase-1-CentralFotovoltaica
-#VoltajeMax-Fase-1-CentralFotovoltaica // VoltajePromedio-Fase-1-CentralFotovoltaica // VoltajeMin-Fase-1-CentralFotovoltaica // CorrienteMax-Fase-1-CentralFotovoltaica // PotenciaMax-Fase-1-CentralFotovoltaica // Energia-Fase-1-CentralFotovoltaica
-#Voltaje-Fase-2-CentralFotovoltaica // Corriente-Fase-2-CentralFotovoltaica // Potencia-Fase-2-CentralFotovoltaica // Potencia-Fase-2-CentralFotovoltaica
-#VoltajeMax-Fase-2-CentralFotovoltaica // VoltajePromedio-Fase-2-CentralFotovoltaica // VoltajeMin-Fase-2-CentralFotovoltaica // CorrienteMax-Fase-2-CentralFotovoltaica // PotenciaMax-Fase-2-CentralFotovoltaica // Energia-Fase-2-CentralFotovoltaica
-#Voltaje-Fase-3-CentralFotovoltaica // Corriente-Fase-3-CentralFotovoltaica // Potencia-Fase-3-CentralFotovoltaica // Potencia-Fase-3-CentralFotovoltaica
-#VoltajeMax-Fase-3-CentralFotovoltaica // VoltajePromedio-Fase-3-CentralFotovoltaica // VoltajeMin-Fase-3-CentralFotovoltaica // CorrienteMax-Fase-3-CentralFotovoltaica // PotenciaMax-Fase-3-CentralFotovoltaica // Energia-Fase-3-CentralFotovoltaica
-
-#Voltaje-Fase-1-ConsumoCliente // Corriente-Fase-1-ConsumoCliente // Potencia-Fase-1-ConsumoCliente // Potencia-Fase-1-ConsumoCliente
-#VoltajeMax-Fase-1-ConsumoCliente // VoltajePromedio-Fase-1-ConsumoCliente // VoltajeMin-Fase-1-ConsumoCliente // CorrienteMax-Fase-1-ConsumoCliente // PotenciaMax-Fase-1-ConsumoCliente // Energia-Fase-1-ConsumoCliente
-#Voltaje-Fase-2-ConsumoCliente // Corriente-Fase-2-ConsumoCliente // Potencia-Fase-2-ConsumoCliente // Potencia-Fase-2-ConsumoCliente
-#VoltajeMax-Fase-2-ConsumoCliente // VoltajePromedio-Fase-2-ConsumoCliente // VoltajeMin-Fase-2-ConsumoCliente // CorrienteMax-Fase-2-ConsumoCliente // PotenciaMax-Fase-2-ConsumoCliente // Energia-Fase-2-ConsumoCliente
-#Voltaje-Fase-3-ConsumoCliente // Corriente-Fase-3-ConsumoCliente // Potencia-Fase-3-ConsumoCliente // Potencia-Fase-3-ConsumoCliente
-#VoltajeMax-Fase-3-ConsumoCliente // VoltajePromedio-Fase-3-ConsumoCliente // VoltajeMin-Fase-3-ConsumoCliente // CorrienteMax-Fase-3-ConsumoCliente // PotenciaMax-Fase-3-ConsumoCliente // Energia-Fase-3-ConsumoCliente
-
-def SendDataToBroker(q,k,f,**kwargs):
-        
+def SendDataToBroker(vt,**kwargs):
         def publish(client): 
-            #g=0
-            global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt13,vt14,vt,vt15,vt16,vt17,vt18
+            #global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt13,vt14,vt,vt15,vt16,vt17,vt18
             #print(len(kwargs.values()))
             #if(len(kwargs.values())==4):
-            
-            if(q==1):
-                vt = vt1
-                #print(round(vt1))
-            elif(q==2):
-                vt = vt2
-            elif(q==3):
-                vt = vt3
-            elif(q==4):
-                vt = vt4
-            elif(q==5):
-                vt = vt5
-            elif(q==6):
-                vt = vt6
-            elif(q==7):
-                vt = vt7
-            elif(q==8):
-                vt = vt8
-            elif(q==9):
-                vt = vt9
-            elif(q==10):
-                vt = vt10
-            elif(q==11):
-                vt = vt11
-            elif(q==12):
-                vt = vt12
-            elif(q==13):
-                vt = vt13
-            elif(q==14):
-                vt = vt14
-            elif(q==15):
-                vt = vt15
-            elif(q==16):
-                vt = vt16
-            elif(q==17):
-                vt = vt17
-            elif(q==18):
-                vt = vt18
-            """
-            elif(len(kwargs.values())<2):
-                vt = vt15 #0 // 10
-                #print(f'vt15 {vt}')
-            elif(len(kwargs.values())>9):
-                if(q==1):
-                    vt = vt115 #0 // 10
-                    #print(f'vt115 {vt}')
-                elif(q==2):
-                    vt = vt215
-                elif(q==3):
-                    vt = vt315
-                elif(q==4):
-                    vt = vt415
-                elif(q==5):
-                    vt = vt515
-                elif(q==6):
-                    vt = vt615
-                elif(q==7):
-                    vt = vt715
-                elif(q==8):
-                    vt = vt815
-                elif(q==9):
-                    vt = vt915
-            """
             timeToSend=time.time() #10 // 20
-            #print(f'timetoSend: {round(timeToSend)}')
-            #print(f'Largo Kwargs {len(kwargs.values())}')
             for key, value in kwargs.items():
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
@@ -1414,7 +1231,6 @@ def SendDataToBroker(q,k,f,**kwargs):
                     if(i["variableFullName"]==f'{key}'):
                         #print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt}")
                         freq = i["variableSendFreq"]  
-                          #10-0=10 // 20-10=10 
                         if(timeToSend - vt > float(freq)): 
                              #print(f'Tiempo1 {key} {round(timeToSend - vt)}')
                              str_variable = i["variable"]
@@ -1424,46 +1240,12 @@ def SendDataToBroker(q,k,f,**kwargs):
                              if status == 0:
                                  print(f"Send {key} - {value} - {topic}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                              else:
-                                 print(f"Failed to send message to topic {topic}") 
-                             if(q==1):
-                                 vt1 = time.time() 
-                             elif(q==2):
-                                 vt2 = time.time()
-                             elif(q==3):
-                                 vt3 = time.time()
-                             elif(q==4):
-                                 vt4 = time.time()
-                             elif(q==5):
-                                 vt5 = time.time()
-                             elif(q==6):
-                                 vt6 = time.time()
-                             elif(q==7):
-                                 vt7 = time.time()
-                             elif(q==8):
-                                 vt8 = time.time()
-                             elif(q==9):
-                                 vt9 = time.time()
-                             elif(q==10):
-                                 vt10 = time.time()
-                             elif(q==11):
-                                 vt11 = time.time()
-                             elif(q==12):
-                                 vt12 = time.time()  
-                             elif(q==13):
-                                 vt13 = time.time()
-                             elif(q==14):
-                                 vt14 = time.time()
-                             elif(q==15):
-                                 vt15 = time.time() 
-                             elif(q==16):
-                                 vt16 = time.time() 
-                             elif(q==17):
-                                 vt17 = time.time() 
-                             elif(q==18):
-                                 vt18 = time.time()      
+                                 print(f"Failed to send message to topic {topic}")   
+                             vt=time.time()
+                             return vt
+               
                     elif "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
-                              
                                 print(f"Preparando Envio en publish de variable {key} {value} {timeToSend - vt}")
                                 #print(f"Preparando Envio en publish de variable {key}-{q}-{f}-{k}")
                                 freq = i["variableSendFreq"]  
@@ -1475,43 +1257,8 @@ def SendDataToBroker(q,k,f,**kwargs):
                                      if status == 0:
                                          print(f"Send {key} - {value} - {topic}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                                      else:
-                                         print(f"Failed to send message to topic {topic}") 
-                                     if(q==1):
-                                         vt1 = time.time() 
-                                     elif(q==2):
-                                         vt2 = time.time()
-                                     elif(q==3):
-                                         vt3 = time.time()
-                                     elif(q==4):
-                                         vt4 = time.time()
-                                     elif(q==5):
-                                         vt5 = time.time()
-                                     elif(q==6):
-                                         vt6 = time.time()
-                                     elif(q==7):
-                                         vt7 = time.time()
-                                     elif(q==8):
-                                         vt8 = time.time()
-                                     elif(q==9):
-                                         vt9 = time.time()
-                                     elif(q==10):
-                                         vt10 = time.time()
-                                     elif(q==11):
-                                         vt11 = time.time()
-                                     elif(q==12):
-                                         vt12 = time.time()
-                                     elif(q==13):
-                                         vt13 = time.time()
-                                     elif(q==14):
-                                         vt14 = time.time()
-                                     elif(q==15):
-                                         vt15 = time.time() 
-                                     elif(q==16):
-                                          vt16 = time.time() 
-                                     elif(q==17):
-                                         vt17 = time.time() 
-                                     elif(q==18):
-                                         vt18 = time.time()          
+                                         print(f"Failed to send message to topic {topic}")   
+                                     return vt       
                     elif "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                              
@@ -1528,43 +1275,8 @@ def SendDataToBroker(q,k,f,**kwargs):
                                          print(f"Send {key} - {value} - {topic}")#`{valueJson}` to topic `{topic}` freq: {freq} to {key}-{q} ")  
                                      else:
                                          print(f"Failed to send message to topic {topic}") 
-                                     if(q==1):
-                                         vt1 = time.time() 
-                                     elif(q==2):
-                                         vt2 = time.time()
-                                     elif(q==3):
-                                         vt3 = time.time()
-                                     elif(q==4):
-                                         vt4 = time.time()
-                                     elif(q==5):
-                                         vt5 = time.time()
-                                     elif(q==6):
-                                         vt6 = time.time()
-                                     elif(q==7):
-                                         vt7 = time.time()
-                                     elif(q==8):
-                                         vt8 = time.time()
-                                     elif(q==9):
-                                         vt9 = time.time()        
-                                     elif(q==10):
-                                         vt10 = time.time()
-                                     elif(q==11):
-                                         vt11 = time.time()
-                                     elif(q==12):
-                                         vt12 = time.time() 
-                                     elif(q==13):
-                                         vt13 = time.time()
-                                     elif(q==14):
-                                         vt14 = time.time()
-                                     elif(q==15):
-                                         vt15 = time.time() 
-                                     elif(q==16):
-                                          vt16 = time.time() 
-                                     elif(q==17):
-                                         vt17 = time.time() 
-                                     elif(q==18):
-                                         vt18 = time.time()                         
-
+                                     return vt
+            return vt 
         try:  
             if(client.connected_flag==True): 
                 publish(client)
@@ -4392,16 +4104,7 @@ def ReportePotencias15():
         #datetim=datetime.datetime.now()-datetime.timedelta(minutes=5)
         #Hora=datetim.strftime('%H:%M')
         #x = time.time() #timestamp
-        """
-        if(datetim.minute<21 and datetim.minute>7):
-            minute=15
-        elif(datetim.minute>0 and datetim.minute<6 ):
-            minute=00
-        elif(datetim.minute>21 and datetim.minute<36):
-            minute=30
-        elif(datetim.minute<52 and datetim.minute>36):
-            minute=45
-            """
+       
         values_list = worksheet.col_values(33)
         Largo=len(values_list)
         #arraytime=np.array(f'{datetim.hour}:{minute}')
@@ -4422,20 +4125,7 @@ def ReportePotencias15():
         values_list = worksheet.col_values(39)
         Largo=len(values_list)
         worksheet.update(f'AM{Largo+1}',array6.tolist())
-        """
-        elif(i==7):
-            values_list = worksheet.col_values(39)
-            Largo=len(values_list)
-            worksheet.update(f'AM{Largo+1}',array7.tolist())
-        elif(i==8):
-            values_list = worksheet.col_values(40)
-            Largo=len(values_list)
-            worksheet.update(f'AN{Largo+1}',array8.tolist())
-        elif(i==9):
-            values_list = worksheet.col_values(41)
-            Largo=len(values_list)
-            worksheet.update(f'AO{Largo+1}',array9.tolist())
-        """            
+       
     except:
         print("No insrto Potencia en google sheets")
             
@@ -4477,6 +4167,7 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
     #
     
 def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3):
+    global vt10, vt11
     gc = gspread.service_account(filename='rep_medidor.json')
     sh = gc.open('Luis_Wherhahm')
     worksheet = sh.worksheet("Hoja 1")
@@ -4484,7 +4175,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     Largo=len(values_list)
     array5 = np.array([[round(OneHourEnergy_Paneles,5)]])
     worksheet.update(f'J{Largo+1}', array5.tolist())
-    SendDataToBroker(q=18,k=k2,f=f2,Energia_Paneles_Hora=f"{OneHourEnergy_Paneles}")
+    vt10=SendDataToBroker(vt10,Energia_Paneles_Hora=f"{OneHourEnergy_Paneles}")
     datetim=str(datetime.datetime.now()-datetime.timedelta(minutes=3))
     #Hora=datetim.strftime('%H:%M')
     #datetim=json.dumps(datetim)
@@ -4530,16 +4221,15 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     worksheet.update(f'F{Largo+1}',datetim[0:19]) #Hora
     worksheet.update(f'AN{Largo+1}',datetim[0:19]) #Hora
     worksheet.update(f'G{Largo+1}', array.tolist())  # Red
-    SendDataToBroker(q=16,k=k1,f=f1,Energia_Red_Hora=f"{OneHourEnergy_RedCompañia}")
     worksheet.update(f'K{Largo+1}', array2.tolist()) #Carga
-    SendDataToBroker(q=17,k=k1,f=f1,Energia_Carga_Hora=f"{OneHourEnergy_Carga}")
+    #vt12=SendDataToBroker(vt12,Energia_Carga_Hora=f"{OneHourEnergy_Carga}")
     val = float(worksheet.acell('AD2').value)
-    SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{val}")
+    #vt13=SendDataToBroker(vt13,Energia_Red=f"{val}")
     valCarga = float(worksheet.acell('AF2').value)#Energy_1+Energy_2+Energy_3
     valPaneles = float(worksheet.acell('AE2').value)#Energy_4+Energy_5+Energy_6
-    SendDataToBroker(q=14,k=k2,f=f2,Energia_Paneles=f"{valPaneles}")
-    SendDataToBroker(q=15,k=k3,f=f3,Energia_Carga=f"{valCarga}")
-    
+    #vt14=SendDataToBroker(vt14,)
+    #vt15=SendDataToBroker(vt15,)
+    vt11=SendDataToBroker(vt11,Energia_Red_Hora=f"{OneHourEnergy_RedCompañia}",Energia_Carga=f"{valCarga}",Energia_Paneles=f"{valPaneles}",Energia_Carga_Hora=f"{OneHourEnergy_Carga}")
    
     
 #ReporteDiario()
@@ -4966,9 +4656,9 @@ def received():
                      if(excel.minute==4 or excel.minute==19 or excel.minute==34 or excel.minute==49 ):
                          if(rcConnect > 5): 
                                print("Reiniciar por desconexión")
-                               with open('mi_ficheroReconnect.txt', 'w') as f:
+                               with open('Reconexiones.txt', 'a') as f:
                                    horaDesconexión=datetime.datetime.now()
-                                   f.write(f'Reinicio por desconexión: {horaDesconexión}')
+                                   f.write(f'Reinicio por desconexión: {horaDesconexión} \r\n')
                                os.system("sudo reboot")
                          else: 
                                print("Continue")
