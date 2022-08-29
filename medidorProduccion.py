@@ -1267,7 +1267,7 @@ def SendDataToBroker(vt,**kwargs):
                              else:
                                  print(f"Failed to send message to topic {topic}")   
                              vttime=time.time()
-                             return vttime
+                             #return vttime
                
                     elif "variableFullName2" in i and i["variableFullName2"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
@@ -1284,7 +1284,7 @@ def SendDataToBroker(vt,**kwargs):
                                      else:
                                          print(f"Failed to send message to topic {topic}")   
                                      vttime=time.time()
-                                     return vttime       
+                                     #return vttime       
                     elif "variableFullName3" in i and i["variableFullName3"]==f'{key}': # Imprime lo de abajo
                             #if(i["variableFullName2"]==f'{key}'):
                              
@@ -1302,11 +1302,10 @@ def SendDataToBroker(vt,**kwargs):
                                      else:
                                          print(f"Failed to send message to topic {topic}") 
                                      vttime=time.time()
-                                     return vttime
-            print(f'VT {vt}')
-            print(f'VTIME{vttime}')
-            return vttime 
+                                     #return vttime
         publish(client)
+        return vttime 
+        
         #try:  
         #    if(client.connected_flag==True):   
         #        
