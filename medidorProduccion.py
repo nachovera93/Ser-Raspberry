@@ -1245,6 +1245,7 @@ def SendDataToBroker(vt,**kwargs):
             print(f" vttime {vttime}")
             #if(len(kwargs.values())==4):
             timeToSend=time.time() #10 // 20
+            print(timeToSend - vttime)
             for key, value in kwargs.items():
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
