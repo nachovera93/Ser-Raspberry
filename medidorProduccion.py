@@ -1039,7 +1039,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         #vt2=time.time() 
         Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,i,k1,f2)       
     elif (i == 3):
-        global vt2
+        global vt3
         Time3b = datetime.datetime.now()
         delta=(((Time3b - Time3a).microseconds)/1000+((Time3b - Time3a).seconds)*1000)/10000000000
         Energy_3 += np.abs(AparentPower*delta*EnergyFactor)
