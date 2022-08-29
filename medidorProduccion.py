@@ -1020,7 +1020,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
         ##SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
         vt1=SendDataToBroker(vt1,Potencia_Fase_1_Carga=f"{AparentPower_1}")
-        print(f'VT1 {vt1}')
+        #print(f'VT1 {vt1}')
         #vt1=time.time() 
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,i,k1,f1)
         #{key}-{q}-{f}-{k}
@@ -1037,7 +1037,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i,k1,f2)
         ##SendDataToBroker(q=i,k=k1,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_2}",Energia=f"{Energy_2}")
         vt2=SendDataToBroker(vt2,Potencia_Fase_2_Carga=f"{AparentPower_2}")
-        print(f'VT2 {vt2}')
+        #print(f'VT2 {vt2}')
         #vt2=time.time() 
         Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,i,k1,f2)       
     elif (i == 3):
@@ -1244,11 +1244,11 @@ def SendDataToBroker(vt,**kwargs):
             global vttime
             #global vt1,vt2,vt3,vt4,vt5,vt6,vt7,vt8,vt9,vt10,vt11,vt12,vt13,vt14,vt,vt15,vt16,vt17,vt18
             #print(len(kwargs.values()))
-            print(f" vttime {vttime}")
+            #print(f" vttime {vttime}")
             #if(len(kwargs.values())==4):
             timeToSend=time.time() #10 // 20
-            print(timeToSend)
-            print(timeToSend - vttime)
+            #print(timeToSend)
+            #print(timeToSend - vttime)
             for key, value in kwargs.items():
                 str_num = {"value":value,"save":optionsave}
                 valueJson = json.dumps(str_num)
@@ -1303,16 +1303,16 @@ def SendDataToBroker(vt,**kwargs):
                                          print(f"Failed to send message to topic {topic}") 
                                      vttime=time.time()
                                      #return vttime
-        publish(client)
-        return vttime 
         
-        #try:  
-        #    if(client.connected_flag==True):   
-        #        
-        #except:
-        #    print(f"client.connected_flag {client.connected_flag}")
-        #    #pass
-
+         
+        
+        try:  
+            if(client.connected_flag==True):   
+                publish(client)
+        except:
+            print(f"client.connected_flag {client.connected_flag}")
+            #pass
+        return vttime
 #    if(data["variables"][i]["variableType"]=="output"):
 #        continue
         
