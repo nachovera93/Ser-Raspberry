@@ -1303,6 +1303,8 @@ def SendDataToBroker(vt,**kwargs):
                                          print(f"Failed to send message to topic {topic}") 
                                      vttime=time.time()
                                      return vttime
+            print(f'VT {vt}')
+            print(f'VTIME{vttime}')
             return vttime 
         publish(client)
         #try:  
