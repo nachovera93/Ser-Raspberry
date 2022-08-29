@@ -628,7 +628,7 @@ vt13=time.time()
 vt14=time.time()
 vt15=time.time()
 def Potencias(i,Irms,Vrms,potrmsCGE):
-    global vt2,vt3,vt4,vt5,vt6,vt12
+    #global vt2,vt3,vt4,vt5,vt6,vt12
     global a
     global Energy
     global Energy_1
@@ -1024,6 +1024,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,i,k1,f1)
         #{key}-{q}-{f}-{k}
     elif (i == 2):
+        global vt2
         Time2b = datetime.datetime.now()
         delta=(((Time2b - Time2a).microseconds)/1000+((Time2b - Time2a).seconds)*1000)/10000000000
         Energy_2 += np.abs(AparentPower*delta*EnergyFactor)
@@ -1038,6 +1039,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         #vt2=time.time() 
         Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,i,k1,f2)       
     elif (i == 3):
+        global vt2
         Time3b = datetime.datetime.now()
         delta=(((Time3b - Time3a).microseconds)/1000+((Time3b - Time3a).seconds)*1000)/10000000000
         Energy_3 += np.abs(AparentPower*delta*EnergyFactor)
@@ -1052,6 +1054,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         #vt3=time.time() 
         Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,OneHourEnergy_3,Energy_3,i,k1,f3)             
     elif (i == 4):
+        global vt4
         Time4b = datetime.datetime.now()
         delta=(((Time4b - Time4a).microseconds)/1000+((Time4b - Time4a).seconds)*1000)/10000000000
         Energy_4 += np.abs(AparentPower*delta*EnergyFactor)
@@ -1066,6 +1069,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         vt4=SendDataToBroker(vt4,Potencia_Fase_1_Paneles=f"{AparentPower_4}")
         Maximo15min_4(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,OneHourEnergy_4,Energy_4,i,k2,f1)              
     elif (i == 5):
+        global vt5
         Time5b = datetime.datetime.now()
         delta=(((Time5b - Time5a).microseconds)/1000+((Time5b - Time5a).seconds)*1000)/10000000000
         Energy_5 += np.abs(AparentPower*delta*EnergyFactor)
@@ -1079,6 +1083,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         vt5=SendDataToBroker(vt5,Potencia_Fase_2_Paneles=f"{AparentPower_5}")
         Maximo15min_5(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,OneHourEnergy_5,Energy_5,i,k2,f2)               
     elif (i == 6):
+        global vt6
         Time6b = datetime.datetime.now()
         delta=(((Time6b - Time6a).microseconds)/1000+((Time6b - Time6a).seconds)*1000)/10000000000
         Energy_6 += np.abs(AparentPower*delta*EnergyFactor)
