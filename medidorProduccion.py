@@ -4260,7 +4260,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     #else:
     #    valRed = valCarga-valPaneles
     
-    SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{valRed}")
+    #SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{valRed}")
 
     #vt13=SendDataToBroker(vt13,Energia_Red=f"{val}")
     #valCarga = float(worksheet.acell('AF2').value)#Energy_1+Energy_2+Energy_3
