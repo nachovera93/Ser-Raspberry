@@ -39,6 +39,7 @@ from email.mime.base import MIMEBase
 import datetime
 import matplotlib.pyplot as plt
 import psutil
+from connector import iot_ser_db
 """
     0: connection succeeded
     1: connection failed - incorrect protocol version
@@ -3930,7 +3931,7 @@ Energy_Paneles=0
 valRed=0
 valRedAcumulada=0
 def SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy,i,k,f):
-       global EnergyCarga,Energy_Red,Energy_Paneles,valRed,valRedAcumulada
+       global EnergyCarga,Energy_Red,Energy_Paneles,valRed
        #Data=[datetime.datetime.now(),round(Vrms,2), round(Irms,2), round(ActivePower_1,2), round(ReactivePower_1,2), round(AparentPower_1,2), round(FP_1,2), round(CosPhi_1,2), round(FDVoltage_1,2), round(FDCurrent_1,2), round(DATVoltage_1,2), round(DATCurrent_1,2), round(Energy_1,5), round(OneHourEnergy_1,5)]                    
        #workbook=openpyxl.load_workbook(filename = dest_filename)
        if(i==1):
@@ -4197,7 +4198,7 @@ def ReporteDiarioDia(datetim,Energy_RedCompañia,Energy_Paneles,Energy_Carga):
     #
     
 def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3):
-    global vt10, vt11
+    global vt10, vt11, valRedAcumulada
     gc = gspread.service_account(filename='rep_medidor.json')
     sh = gc.open('Luis_Wherhahm')
     worksheet = sh.worksheet("Hoja 1")
@@ -4253,13 +4254,27 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     worksheet.update(f'G{Largo+1}', array.tolist())  # Red
     worksheet.update(f'K{Largo+1}', array2.tolist()) #Carga
     #vt12=SendDataToBroker(vt12,Energia_Carga_Hora=f"{OneHourEnergy_Carga}")
-    val = float(worksheet.acell('AD2').value)
+    #val = float(worksheet.acell('AD2').value)
+
+    
+    #else:
+    #    valRed = valCarga-valPaneles
+    
+    SendDataToBroker(q=13,k=k1,f=f1,Energia_Red=f"{valRed}")
+
     #vt13=SendDataToBroker(vt13,Energia_Red=f"{val}")
-    valCarga = float(worksheet.acell('AF2').value)#Energy_1+Energy_2+Energy_3
-    valPaneles = float(worksheet.acell('AE2').value)#Energy_4+Energy_5+Energy_6
+    #valCarga = float(worksheet.acell('AF2').value)#Energy_1+Energy_2+Energy_3
+    #valPaneles = float(worksheet.acell('AE2').value)#Energy_4+Energy_5+Energy_6
+    valCarga = OneHourEnergy_Carga_Fase1+OneHourEnergy_Carga_Fase2+OneHourEnergy_Carga_Fase3
+    valPaneles = OneHourEnergy_Paneles_Fase1+OneHourEnergy_Paneles_Fase2+OneHourEnergy_Paneles_Fase3
+    if(valCarga-valPaneles<0):     
+        valRed=valRedAcumulada
+    else:
+        valRed = valCarga-valPaneles
+        valRedAcumulada=valRedAcumulada+(valRed) 
     #vt14=SendDataToBroker(vt14,)
     #vt15=SendDataToBroker(vt15,)
-    vt11=SendDataToBroker(vt11,Energia_Red_Hora=f"{OneHourEnergy_RedCompañia}",Energia_Carga=f"{valCarga}",Energia_Paneles=f"{valPaneles}",Energia_Carga_Hora=f"{OneHourEnergy_Carga}")
+    vt11=SendDataToBroker(vt11,Energia_Red_Hora=f"{OneHourEnergy_RedCompañia}",Energia_Red= f'{valRed}',Energia_Carga=f"{valCarga}",Energia_Paneles=f"{valPaneles}",Energia_Carga_Hora=f"{OneHourEnergy_Carga}")
    
     
 #ReporteDiario()
