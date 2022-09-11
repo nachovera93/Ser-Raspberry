@@ -39,7 +39,7 @@ from email.mime.base import MIMEBase
 import datetime
 import matplotlib.pyplot as plt
 import psutil
-from connector import iot_ser_db
+#from connector import iot_ser_db
 """
     0: connection succeeded
     1: connection failed - incorrect protocol version
