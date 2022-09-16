@@ -1494,18 +1494,18 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_1.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet2 = workbook[f"15Min-{k}-{f}"]
-                    dict = { "time":timest(),"MaxVoltage15_1": MaxVoltage15_1, "MeanVoltage15_1": MeanVoltage15_1,"MinVoltage15_1":MinVoltage15_1,
-                    "MaxCurrent15_1": MaxCurrent15_1, "MeanCurrent15_1": MeanCurrent15_1,"MinCurrent15_1":MinCurrent15_1,
-                    "MaxActivePower_1":MaxActivePower_1,"MeanActivePower_1":MeanActivePower_1,"MinActivePower_1":MinActivePower_1,
-                    "MaxReactivePower_1":MaxReactivePower_1,"MeanReactivePower_1":MeanReactivePower_1,"MinReactivePower_1":MinReactivePower_1,
-                    "MaxAparentPower_1":MaxAparentPower_1,"MeanAparentPower_1":MeanAparentPower_1,"MinAparentPower_1":MinAparentPower_1,
-                    "MaxFPInductive_1":MaxFPInductive_1,"MeanFPInductive_1":MeanFPInductive_1,"MinFPInductive_1":MinFPInductive_1,
-                    "MaxFPReactive_1":MaxFPReactive_1,"MeanFPReactive_1":MeanFPReactive_1,"MinFPReactive_1":MinFPReactive_1,
-                    "MaxFDVoltage_1":MaxFDVoltage_1,"MeanFDVoltage_1":MeanFDVoltage_1,"MinFDVoltage_1":MinFDVoltage_1,
-                    "MaxFDCurrent_1":MaxFDCurrent_1,"MeanFDCurrent_1":MeanFDCurrent_1,"MinFDCurrent_1":MinFDCurrent_1,
-                    "MaxDATVoltage_1":MaxDATVoltage_1,"MeanDATVoltage_1":MeanDATVoltage_1,"MinDATVoltage_1":MinDATVoltage_1,
-                    "MaxDATCurrent_1":MaxDATCurrent_1,"MeanDATCurrent_1":MeanDATCurrent_1,"MinDATCurrent_1":MinDATCurrent_1,
-                    "OneHourEnergy_1":OneHourEnergy,"Energy_1":Energy
+                    dict = { 'time':timest(),'MaxVoltage15_1': MaxVoltage15_1, 'MeanVoltage15_1': MeanVoltage15_1,'MinVoltage15_1':MinVoltage15_1,
+                    'MaxCurrent15_1': MaxCurrent15_1, 'MeanCurrent15_1': MeanCurrent15_1,'MinCurrent15_1':MinCurrent15_1,
+                    'MaxActivePower_1':MaxActivePower_1,'MeanActivePower_1':MeanActivePower_1,'MinActivePower_1':MinActivePower_1,
+                    'MaxReactivePower_1':MaxReactivePower_1,'MeanReactivePower_1':MeanReactivePower_1,'MinReactivePower_1':MinReactivePower_1,
+                    'MaxAparentPower_1':MaxAparentPower_1,'MeanAparentPower_1':MeanAparentPower_1,'MinAparentPower_1':MinAparentPower_1,
+                    'MaxFPInductive_1':MaxFPInductive_1,'MeanFPInductive_1':MeanFPInductive_1,'MinFPInductive_1':MinFPInductive_1,
+                    'MaxFPReactive_1':MaxFPReactive_1,'MeanFPReactive_1':MeanFPReactive_1,'MinFPReactive_1':MinFPReactive_1,
+                    'MaxFDVoltage_1':MaxFDVoltage_1,'MeanFDVoltage_1':MeanFDVoltage_1,'MinFDVoltage_1':MinFDVoltage_1,
+                    'MaxFDCurrent_1':MaxFDCurrent_1,'MeanFDCurrent_1':MeanFDCurrent_1,'MinFDCurrent_1':MinFDCurrent_1,
+                    'MaxDATVoltage_1':MaxDATVoltage_1,'MeanDATVoltage_1':MeanDATVoltage_1,'MinDATVoltage_1':MinDATVoltage_1,
+                    'MaxDATCurrent_1':MaxDATCurrent_1,'MeanDATCurrent_1':MeanDATCurrent_1,'MinDATCurrent_1':MinDATCurrent_1,
+                    'OneHourEnergy_1':OneHourEnergy,'Energy_1':Energy
                     }
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
