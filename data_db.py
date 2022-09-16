@@ -5,9 +5,9 @@ db = iot_ser_db()
 
 def list_data_db_insert(data):
     try:
-        print(data)
+        print(list(data))
         col_use = db.historic_data
-        col_use.insert_many(data)
+        col_use.insert_many(list(data))
         #list_db = col_use.find({"userId": userId})
     except Exception as e:
         print(f"Excepcion en Insertar datos a mongo: {str(e)} ")
