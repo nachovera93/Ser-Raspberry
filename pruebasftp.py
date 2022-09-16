@@ -1,3 +1,4 @@
+#from sys import orig_argv
 from matplotlib import test
 import pymongo
 import datetime
@@ -19,27 +20,30 @@ print("conectando a monngo")
 db = mydb["haddacloud-v2"]
 
 #"""
-#mycol = db["deudors"]
-#mycol.drop()
-#
-#mycol = db["debts"]
-#mycol.drop()
-#
-#mycol = db["debts_custom_fields"]
-#mycol.drop()
-#
-#mycol = db["custom_fields"]
-#mycol.drop()
-#
-#mycol = db["phones"]
-#mycol.drop()
+##mycol = db["deudors"]
+##mycol.drop()
+##
+##mycol = db["debts"]
+##mycol.drop()
+##
+##mycol = db["debts_custom_fields"]
+##mycol.drop()
+##
+##mycol = db["custom_fields"]
+##mycol.drop()
+##
+##mycol = db["phones"]
+##mycol.drop()
 #"""
 
 #print(db.list_collection_names())
+p=0
+dia=15
+organization_id=18
 print("--------------------- DEUDORS ---------------------------")
 mycol = db.deudors
 #test_range = mycol.find({ "created_at": {"$gte" : datetime(2022, 9, 5), "$lt": datetime(2022, 9, 5)}})
-list_db = mycol.find({"organization_id": 17,  "created_at": {"$gte" : datetime(2022, 9, 10)}})  #, "$lt": datetime(2022, 9, 5)}
+list_db = mycol.find({"organization_id": organization_id,  "created_at": {"$gte" : datetime(2022, 9, dia)}})  #, "$lt": datetime(2022, 9, 5)}
 list = []
 list_filtered = []
 c=0
@@ -56,7 +60,7 @@ print("----------------------- DEBTS ---------------------------")
 
 mycol = db.debts
 #test_range = mycol.find({ "created_at": {"$gte" : datetime(2022, 9, 5), "$lt": datetime(2022, 9, 5)}})
-list_db = mycol.find({"organization_id": 14,  "created_at": {"$gte" : datetime(2022, 9, 10)}})  #, "$lt": datetime(2022, 9, 5)}
+list_db = mycol.find({"organization_id": organization_id,  "created_at": {"$gte" : datetime(2022, 9, dia)}})  #, "$lt": datetime(2022, 9, 5)}
 list = []
 list_filtered = []
 v=0
@@ -74,7 +78,7 @@ print("--------------------- CUSTOM FIELDS ---------------------")
 
 mycol = db.custom_fields
 #test_range = mycol.find({ "created_at": {"$gte" : datetime(2022, 9, 5), "$lt": datetime(2022, 9, 5)}})
-list_db = mycol.find({"organization_id": 14,  "created_at": {"$gte" : datetime(2022, 9, 10)}})  #, "$lt": datetime(2022, 9, 5)}
+list_db = mycol.find({"organization_id": organization_id,  "created_at": {"$gte" : datetime(2022, 9, dia)}})  #, "$lt": datetime(2022, 9, 5)}
 list = []
 list_filtered = []
 b=0
@@ -91,7 +95,7 @@ print("------------------ debts_custom_fields ------------------")
 
 mycol = db.debts_custom_fields
 #test_range = mycol.find({ "created_at": {"$gte" : datetime(2022, 9, 5), "$lt": datetime(2022, 9, 5)}})
-list_db = mycol.find({"organization_id": 14,  "created_at": {"$gte" : datetime(2022, 9, 10)}})  #, "$lt": datetime(2022, 9, 5)}
+list_db = mycol.find({"organization_id": organization_id,  "created_at": {"$gte" : datetime(2022, 9, dia)}})  #, "$lt": datetime(2022, 9, 5)}
 list = []
 list_filtered = []
 a=0
@@ -109,7 +113,7 @@ print("--------------------- Phones ---------------------")
 
 mycol = db.phones
 #test_range = mycol.find({ "created_at": {"$gte" : datetime(2022, 9, 5), "$lt": datetime(2022, 9, 5)}})
-list_db = mycol.find({"organization_id": 14,  "created_at": {"$gte" : datetime(2022, 9, 10)}})  #, "$lt": datetime(2022, 9, 5)}
+list_db = mycol.find({"organization_id": organization_id,  "created_at": {"$gte" : datetime(2022, 9, dia)}})  #, "$lt": datetime(2022, 9, 5)}
 list = []
 list_filtered = []
 q=0
@@ -119,36 +123,90 @@ for l in list_db:
         print(f'{q} Phones desde db')
 print(f'{q} TOTALES Phones desde db')
 
-
-
-
+if(p==1):
+      try:
+          # Define email sender and receiver
+              from email.message import EmailMessage
+              import smtplib
+              dia=date.today()
+              remitente = "bulk@haddacloud.com"
+              destinatario = "ricardovera.93@hotmail.com"
+              destinatario2 = "jlvargas@movatec.cl"
+              #mensaje = (f'{c} DEUDORS desde db organization_id:\n{v} DEBTS desde db organization_id:\n{b} CUSTOM_FIELDS desde db organization_id:\n{a} debts_custom_fields desde db organization_id:\n{q} Phones desde db organization_id:\n')
+              mensaje = (f'Reporte carga archivo organización: {organization_id}\nFilename:{filename}\n Dia: {dia}')
+              email = EmailMessage()
+              email["From"] = remitente
+              email["To"] = destinatario
+              email["Subject"] = f'Reporte carga archivo {organization_id} {dia}'
+              email.set_content(mensaje)
+              
+              with open(f'{dia}.txt', "rb") as f:
+                  email.add_attachment(
+                      f.read(),
+                      filename=f'{dia}.txt',
+                      maintype="application",
+                      subtype="txt"
+                  )
+              
+              smtp = smtplib.SMTP_SSL("mail.haddacloud.com")
+              # O si se usa TLS:
+              # smtp = SMTP("smtp.ejemplo.com", port=587)
+              # smtp.starttls()
+              smtp.login(remitente, ",xeQTS3zpRoj")
+              smtp.sendmail(remitente, destinatario, email.as_string())
+              smtp.sendmail(remitente, destinatario2, email.as_string())
+              smtp.quit()
+              with open(f'{dia}.txt', 'a') as f: 
+                  f.write("\n ")
+                  f.write("\n ")
+                  f.write("\n ")
+                  f.write("\n ")
+                  f.write("------------------------------------------------\n")
+                  f.write(f'Mail enviado\n')
+                  f.write("-------------------------------------------------\n") 
+      except Exception as e:
+              
+              print(f"No pudo hacer envio de email {str(e)} ")  
+              with open(f'{dia}.txt', 'a') as f: 
+                  f.write("\n ")
+                  f.write("\n ")
+                  f.write("\n ")
+                  f.write("\n ")
+                  f.write("------------------------------------------------\n")
+                  f.write(f'No pudo hacer envio de email\n')
+                  f.write("-------------------------------------------------\n") 
+      
+      
 """
-# Define email sender and receiver
-email_sender = 'SOPORTE@MOVATEC.CL'
-email_password = 'bphrtpsrkdtqeeat'
-email_receiver = 'ivera@movatec.cl'
 
-# Set the subject and body of the email
-subject = 'Prueba'
-body = """
-#Archivos Json Enviados
-"""
 
-em = EmailMessage()
-em['From'] = email_sender
-em['To'] = email_receiver
-em['Subject'] = subject
-em.set_content(body)
+from email.message import EmailMessage
+import smtplib
+remitente = "bulk@haddacloud.com"
+destinatario = "ricardovera.93@hotmail.com"
+#mensaje = (f'{c} DEUDORS desde db organization_id:\n{v} DEBTS desde db organization_id:\n{b} CUSTOM_FIELDS desde db organization_id:\n{a} debts_custom_fields desde db organization_id:\n{q} Phones desde db organization_id:\n')
+mensaje = "hola" 
+email = EmailMessage()
+email["From"] = remitente
+email["To"] = destinatario
+email["Subject"] = "Bulk SBPAY"
+email.set_content(mensaje)
 
-# Add SSL (layer of security)
-context = ssl.create_default_context()
+with open("mi_fichero.txt", "rb") as f:
+    email.add_attachment(
+        f.read(),
+        filename="mi_fichero.txt",
+        maintype="application",
+        subtype="txt"
+    )
 
-# Log in and send the email
-with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-    smtp.login(email_sender, email_password)
-    smtp.sendmail(email_sender, email_receiver, em.as_string())
-
-return 1
+smtp = smtplib.SMTP_SSL("mail.haddacloud.com")
+# O si se usa TLS:
+# smtp = SMTP("smtp.ejemplo.com", port=587)
+# smtp.starttls()
+smtp.login(remitente, ",xeQTS3zpRoj")
+smtp.sendmail(remitente, destinatario, email.as_string())
+smtp.quit()
 """
 
 #pd_read_csv('ABCDIN_TARJ_GBI_20220501 _OKEY.csv')

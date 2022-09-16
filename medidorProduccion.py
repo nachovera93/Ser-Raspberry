@@ -40,6 +40,7 @@ import datetime
 import matplotlib.pyplot as plt
 import psutil
 #from connector import iot_ser_db
+from data_db import list_data_db_insert
 """
     0: connection succeeded
     1: connection failed - incorrect protocol version
@@ -1331,6 +1332,11 @@ def SendDataToBroker(vt,**kwargs):
 #    print("El mes actual es {}".format(today.month))
 #    for f in os.listdir('/home/pi/Desktop/Ser-Raspberry/'):
 #            if():
+def timest():
+    dt = datetime.now()
+    # getting the timestamp
+    ts = datetime.timestamp(dt)
+    return ts
 
     
             
@@ -1391,7 +1397,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_1
     #global OneHourEnergy_1
     global optionsave
-    global vt115
+    #global vt115
     global MaxAparentPower_1
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47): 
@@ -1479,12 +1485,26 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_1.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet2 = workbook[f"15Min-{k}-{f}"]
+                    dict = { "time":timest(),"MaxVoltage15_1": MaxVoltage15_1, "MeanVoltage15_1": MeanVoltage15_1,"MinVoltage15_1":MinVoltage15_1,
+                    "MaxCurrent15_1": MaxCurrent15_1, "MeanCurrent15_1": MeanCurrent15_1,"MinCurrent15_1":MinCurrent15_1,
+                    "MaxActivePower_1":MaxActivePower_1,"MeanActivePower_1":MeanActivePower_1,"MinActivePower_1":MinActivePower_1,
+                    "MaxReactivePower_1":MaxReactivePower_1,"MeanReactivePower_1":MeanReactivePower_1,"MinReactivePower_1":MinReactivePower_1,
+                    "MaxAparentPower_1":MaxAparentPower_1,"MeanAparentPower_1":MeanAparentPower_1,"MinAparentPower_1":MinAparentPower_1,
+                    "MaxFPInductive_1":MaxFPInductive_1,"MeanFPInductive_1":MeanFPInductive_1,"MinFPInductive_1":MinFPInductive_1,
+                    "MaxFPReactive_1":MaxFPReactive_1,"MeanFPReactive_1":MeanFPReactive_1,"MinFPReactive_1":MinFPReactive_1,
+                    "MaxFDVoltage_1":MaxFDVoltage_1,"MeanFDVoltage_1":MeanFDVoltage_1,"MinFDVoltage_1":MinFDVoltage_1,
+                    "MaxFDCurrent_1":MaxFDCurrent_1,"MeanFDCurrent_1":MeanFDCurrent_1,"MinFDCurrent_1":MinFDCurrent_1,
+                    "MaxDATVoltage_1":MaxDATVoltage_1,"MeanDATVoltage_1":MeanDATVoltage_1,"MinDATVoltage_1":MinDATVoltage_1,
+                    "MaxDATCurrent_1":MaxDATCurrent_1,"MeanDATCurrent_1":MeanDATCurrent_1,"MinDATCurrent_1":MinDATCurrent_1,
+                    "OneHourEnergy_1":OneHourEnergy,"Energy_1":Energy
+                    }
                     sheet2.append(list(data15_1))
                     print(f'Data 1: Guardando Promedios')
-                    optionsave=1
+                    #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_1}',VoltajePromedio=f'{MeanVoltage15_1}',VoltajeMin=f'{MinVoltage15_1}',MaxCorriente=f'{MaxCurrent15_1}',PromedioCorriente=f'{MeanCurrent15_1}',MinimoCorriente=f'{MinCurrent15_1}',PotenciaMax=f'{MaxAparentPower_1}',PromedioPotenciaAparente=f'{MeanAparentPower_1}',MinPotenciaAparente=f'{MinAparentPower_1}',Energia=f'{Energy}')
                     ###SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f,_)
-                    vt115=time.time()
+                    list_data_db_insert(dict)
+                    #vt115=time.time()
                     workbook.save(filename = dest_filename)
                     data15_1=[]
                     Volt15_1=[]
@@ -1656,7 +1676,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
     global Access_2
     #global OneHourEnergy_2
     global optionsave
-    global vt215
+    #global vt215
     global MaxAparentPower_2
     basea = datetime.datetime.now()
     if(basea.minute==0 or basea.minute==1 or basea.minute==2 or basea.minute==15 or basea.minute==16 or basea.minute==17 or basea.minute==30 or basea.minute==31 or basea.minute==32 or basea.minute==45 or basea.minute==46 or basea.minute==47):
@@ -1744,11 +1764,25 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_2.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet3 = workbook[f"15Min-{k}-{f}"]
-                    sheet3.append(list(data15_2))
+                    sheet3.append(list(data15_2))                   
                     print(f'Data 2: Guardando Promedios')
-                    optionsave=1
+                    dict = { "time":timest(),"MaxVoltage15_2": MaxVoltage15_2, "MeanVoltage15_2": MeanVoltage15_2,"MinVoltage15_2":MinVoltage15_2,
+                    "MaxCurrent15_2": MaxCurrent15_2, "MeanCurrent15_2": MeanCurrent15_2,"MinCurrent15_2":MinCurrent15_2,
+                    "MaxActivePower_2":MaxActivePower_2,"MeanActivePower_2":MeanActivePower_2,"MinActivePower_2":MinActivePower_2,
+                    "MaxReactivePower_2":MaxReactivePower_2,"MeanReactivePower_2":MeanReactivePower_2,"MinReactivePower_2":MinReactivePower_2,
+                    "MaxAparentPower_2":MaxAparentPower_2,"MeanAparentPower_2":MeanAparentPower_2,"MinAparentPower_2":MinAparentPower_2,
+                    "MaxFPInductive_2":MaxFPInductive_2,"MeanFPInductive_2":MeanFPInductive_2,"MinFPInductive_2":MinFPInductive_2,
+                    "MaxFPReactive_2":MaxFPReactive_2,"MeanFPReactive_2":MeanFPReactive_2,"MinFPReactive_2":MinFPReactive_2,
+                    "MaxFDVoltage_2":MaxFDVoltage_2,"MeanFDVoltage_2":MeanFDVoltage_2,"MinFDVoltage_2":MinFDVoltage_2,
+                    "MaxFDCurrent_2":MaxFDCurrent_2,"MeanFDCurrent_2":MeanFDCurrent_2,"MinFDCurrent_2":MinFDCurrent_2,
+                    "MaxDATVoltage_2":MaxDATVoltage_2,"MeanDATVoltage_2":MeanDATVoltage_2,"MinDATVoltage_2":MinDATVoltage_2,
+                    "MaxDATCurrent_2":MaxDATCurrent_2,"MeanDATCurrent_2":MeanDATCurrent_2,"MinDATCurrent_2":MinDATCurrent_2,
+                    "OneHourEnergy_2":OneHourEnergy,"Energy_2":Energy
+                    }
+                    list_data_db_insert(dict)
+                    #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_2}',VoltajePromedio=f'{MeanVoltage15_2}',VoltajeMin=f'{MinVoltage15_2}',MaxCorriente=f'{MaxCurrent15_2}',PromedioCorriente=f'{MeanCurrent15_2}',MinimoCorriente=f'{MinCurrent15_2}',PotenciaMax=f'{MaxAparentPower_2}',PromedioPotenciaAparente=f'{MeanAparentPower_2}',MinPotenciaAparente=f'{MinAparentPower_2}',Energia=f'{Energy}')
-                    vt215=time.time()
+                    #vt215=time.time()
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
                     data15_2=[]
@@ -2009,7 +2043,22 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet4 = workbook[f"15Min-{k}-{f}"]
                     sheet4.append(list(data15_3))
                     print(f'Data 3: Guardando Promedios')
-                    optionsave=1
+                    dict = { "time":timest(),
+                    "MaxVoltage15_3": MaxVoltage15_3, "MeanVoltage15_3": MeanVoltage15_3,"MinVoltage15_3":MinVoltage15_3,
+                    "MaxCurrent15_3": MaxCurrent15_3, "MeanCurrent15_3": MeanCurrent15_3,"MinCurrent15_3":MinCurrent15_3,
+                    "MaxActivePower_3":MaxActivePower_3,"MeanActivePower_3":MeanActivePower_3,"MinActivePower_3":MinActivePower_3,
+                    "MaxReactivePower_3":MaxReactivePower_3,"MeanReactivePower_3":MeanReactivePower_3,"MinReactivePower_3":MinReactivePower_3,
+                    "MaxAparentPower_3":MaxAparentPower_3,"MeanAparentPower_3":MeanAparentPower_3,"MinAparentPower_3":MinAparentPower_3,
+                    "MaxFPInductive_3":MaxFPInductive_3,"MeanFPInductive_3":MeanFPInductive_3,"MinFPInductive_3":MinFPInductive_3,
+                    "MaxFPReactive_3":MaxFPReactive_3,"MeanFPReactive_3":MeanFPReactive_3,"MinFPReactive_3":MinFPReactive_3,
+                    "MaxFDVoltage_3":MaxFDVoltage_3,"MeanFDVoltage_3":MeanFDVoltage_3,"MinFDVoltage_3":MinFDVoltage_3,
+                    "MaxFDCurrent_3":MaxFDCurrent_3,"MeanFDCurrent_3":MeanFDCurrent_3,"MinFDCurrent_3":MinFDCurrent_3,
+                    "MaxDATVoltage_3":MaxDATVoltage_3,"MeanDATVoltage_3":MeanDATVoltage_3,"MinDATVoltage_3":MinDATVoltage_3,
+                    "MaxDATCurrent_3":MaxDATCurrent_3,"MeanDATCurrent_3":MeanDATCurrent_3,"MinDATCurrent_3":MinDATCurrent_3,
+                    "OneHourEnergy_3":OneHourEnergy,"Energy_3":Energy
+                    }
+                    list_data_db_insert(dict)
+                    #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_3}',VoltajePromedio=f'{MeanVoltage15_3}',VoltajeMin=f'{MinVoltage15_3}',MaxCorriente=f'{MaxCurrent15_3}',PromedioCorriente=f'{MeanCurrent15_3}',MinimoCorriente=f'{MinCurrent15_3}',PotenciaMax=f'{MaxAparentPower_3}',PromedioPotenciaAparente=f'{MeanAparentPower_3}',MinPotenciaAparente=f'{MinAparentPower_3}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
@@ -2271,7 +2320,22 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet5 = workbook[f"15Min-{k}-{f}"]
                     sheet5.append(list(data15_4))
                     print(f'Data 4: Guardando Promedios')
-                    optionsave=1
+                    dict = { "time":timest(),
+                    "MaxVoltage15_4": MaxVoltage15_4, "MeanVoltage15_4": MeanVoltage15_4,"MinVoltage15_4":MinVoltage15_4,
+                    "MaxCurrent15_4": MaxCurrent15_4, "MeanCurrent15_4": MeanCurrent15_4,"MinCurrent15_4":MinCurrent15_4,
+                    "MaxActivePower_4":MaxActivePower_4,"MeanActivePower_4":MeanActivePower_4,"MinActivePower_4":MinActivePower_4,
+                    "MaxReactivePower_4":MaxReactivePower_4,"MeanReactivePower_4":MeanReactivePower_4,"MinReactivePower_4":MinReactivePower_4,
+                    "MaxAparentPower_4":MaxAparentPower_4,"MeanAparentPower_4":MeanAparentPower_4,"MinAparentPower_4":MinAparentPower_4,
+                    "MaxFPInductive_4":MaxFPInductive_4,"MeanFPInductive_4":MeanFPInductive_4,"MinFPInductive_4":MinFPInductive_4,
+                    "MaxFPReactive_4":MaxFPReactive_4,"MeanFPReactive_4":MeanFPReactive_4,"MinFPReactive_4":MinFPReactive_4,
+                    "MaxFDVoltage_4":MaxFDVoltage_4,"MeanFDVoltage_4":MeanFDVoltage_4,"MinFDVoltage_4":MinFDVoltage_4,
+                    "MaxFDCurrent_4":MaxFDCurrent_4,"MeanFDCurrent_4":MeanFDCurrent_4,"MinFDCurrent_4":MinFDCurrent_4,
+                    "MaxDATVoltage_4":MaxDATVoltage_4,"MeanDATVoltage_4":MeanDATVoltage_4,"MinDATVoltage_4":MinDATVoltage_4,
+                    "MaxDATCurrent_4":MaxDATCurrent_4,"MeanDATCurrent_4":MeanDATCurrent_4,"MinDATCurrent_4":MinDATCurrent_4,
+                    "OneHourEnergy_4":OneHourEnergy,"Energy_4":Energy
+                    }
+                    list_data_db_insert(dict)
+                    #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_4}',VoltajePromedio=f'{MeanVoltage15_4}',VoltajeMin=f'{MinVoltage15_4}',MaxCorriente=f'{MaxCurrent15_4}',PromedioCorriente=f'{MeanCurrent15_4}',MinimoCorriente=f'{MinCurrent15_4}',PotenciaMax=f'{MaxAparentPower_4}',PromedioPotenciaAparente=f'{MeanAparentPower_4}',MinPotenciaAparente=f'{MinAparentPower_4}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
@@ -2532,7 +2596,22 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet6 = workbook[f"15Min-{k}-{f}"]
                     sheet6.append(list(data15_5))
                     print(f'Data 5: Guardando Promedios')
-                    optionsave=1
+                    dict = { "time":timest(),
+                    "MaxVoltage15_5": MaxVoltage15_5, "MeanVoltage15_5": MeanVoltage15_5,"MinVoltage15_5":MinVoltage15_5,
+                    "MaxCurrent15_5": MaxCurrent15_5, "MeanCurrent15_5": MeanCurrent15_5,"MinCurrent15_5":MinCurrent15_5,
+                    "MaxActivePower_5":MaxActivePower_5,"MeanActivePower_5":MeanActivePower_5,"MinActivePower_5":MinActivePower_5,
+                    "MaxReactivePower_5":MaxReactivePower_5,"MeanReactivePower_5":MeanReactivePower_5,"MinReactivePower_5":MinReactivePower_5,
+                    "MaxAparentPower_5":MaxAparentPower_5,"MeanAparentPower_5":MeanAparentPower_5,"MinAparentPower_5":MinAparentPower_5,
+                    "MaxFPInductive_5":MaxFPInductive_5,"MeanFPInductive_5":MeanFPInductive_5,"MinFPInductive_5":MinFPInductive_5,
+                    "MaxFPReactive_5":MaxFPReactive_5,"MeanFPReactive_5":MeanFPReactive_5,"MinFPReactive_5":MinFPReactive_5,
+                    "MaxFDVoltage_5":MaxFDVoltage_5,"MeanFDVoltage_5":MeanFDVoltage_5,"MinFDVoltage_5":MinFDVoltage_5,
+                    "MaxFDCurrent_5":MaxFDCurrent_5,"MeanFDCurrent_5":MeanFDCurrent_5,"MinFDCurrent_5":MinFDCurrent_5,
+                    "MaxDATVoltage_5":MaxDATVoltage_5,"MeanDATVoltage_5":MeanDATVoltage_5,"MinDATVoltage_5":MinDATVoltage_5,
+                    "MaxDATCurrent_5":MaxDATCurrent_5,"MeanDATCurrent_5":MeanDATCurrent_5,"MinDATCurrent_5":MinDATCurrent_5,
+                    "OneHourEnergy_5":OneHourEnergy,"Energy_5":Energy
+                    }
+                    list_data_db_insert(dict)
+                    #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_5}',VoltajePromedio=f'{MeanVoltage15_5}',VoltajeMin=f'{MinVoltage15_5}',MaxCorriente=f'{MaxCurrent15_5}',PromedioCorriente=f'{MeanCurrent15_5}',MinimoCorriente=f'{MinCurrent15_5}',PotenciaMax=f'{MaxAparentPower_5}',PromedioPotenciaAparente=f'{MeanAparentPower_5}',MinPotenciaAparente=f'{MinAparentPower_5}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
@@ -2794,7 +2873,22 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet8 = workbook[f"15Min-{k}-{f}"]
                     sheet8.append(list(data15_7))
                     print(f'Data 7: Guardando Promedios')
-                    optionsave=1
+                    dict = { "time":timest(),
+                    "MaxVoltage15_7": MaxVoltage15_7, "MeanVoltage15_7": MeanVoltage15_7,"MinVoltage15_7":MinVoltage15_7,
+                    "MaxCurrent15_7": MaxCurrent15_7, "MeanCurrent15_7": MeanCurrent15_7,"MinCurrent15_7":MinCurrent15_7,
+                    "MaxActivePower_7":MaxActivePower_7,"MeanActivePower_7":MeanActivePower_7,"MinActivePower_7":MinActivePower_7,
+                    "MaxReactivePower_7":MaxReactivePower_7,"MeanReactivePower_7":MeanReactivePower_7,"MinReactivePower_7":MinReactivePower_7,
+                    "MaxAparentPower_7":MaxAparentPower_7,"MeanAparentPower_7":MeanAparentPower_7,"MinAparentPower_7":MinAparentPower_7,
+                    "MaxFPInductive_7":MaxFPInductive_7,"MeanFPInductive_7":MeanFPInductive_7,"MinFPInductive_7":MinFPInductive_7,
+                    "MaxFPReactive_7":MaxFPReactive_7,"MeanFPReactive_7":MeanFPReactive_7,"MinFPReactive_7":MinFPReactive_7,
+                    "MaxFDVoltage_7":MaxFDVoltage_7,"MeanFDVoltage_7":MeanFDVoltage_7,"MinFDVoltage_7":MinFDVoltage_7,
+                    "MaxFDCurrent_7":MaxFDCurrent_7,"MeanFDCurrent_7":MeanFDCurrent_7,"MinFDCurrent_7":MinFDCurrent_7,
+                    "MaxDATVoltage_7":MaxDATVoltage_7,"MeanDATVoltage_7":MeanDATVoltage_7,"MinDATVoltage_7":MinDATVoltage_7,
+                    "MaxDATCurrent_7":MaxDATCurrent_7,"MeanDATCurrent_7":MeanDATCurrent_7,"MinDATCurrent_7":MinDATCurrent_7,
+                    "OneHourEnergy_7":OneHourEnergy,"Energy_7":Energy
+                    }
+                    list_data_db_insert(dict)
+                    #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_7}',VoltajePromedio=f'{MeanVoltage15_7}',VoltajeMin=f'{MinVoltage15_7}',MaxCorriente=f'{MaxCurrent15_7}',PromedioCorriente=f'{MeanCurrent15_7}',MinimoCorriente=f'{MinCurrent15_7}',PotenciaMax=f'{MaxAparentPower_7}',PromedioPotenciaAparente=f'{MeanAparentPower_7}',MinPotenciaAparente=f'{MinAparentPower_7}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
@@ -3055,7 +3149,22 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet9 = workbook[f"15Min-{k}-{f}"]
                     sheet9.append(list(data15_8))
                     print(f'Data 8: Guardando Promedios')
-                    optionsave=1
+                    dict = { "time":timest(),
+                    "MaxVoltage15_8": MaxVoltage15_8, "MeanVoltage15_8": MeanVoltage15_8,"MinVoltage15_8":MinVoltage15_8,
+                    "MaxCurrent15_8": MaxCurrent15_8, "MeanCurrent15_8": MeanCurrent15_8,"MinCurrent15_8":MinCurrent15_8,
+                    "MaxActivePower_8":MaxActivePower_8,"MeanActivePower_8":MeanActivePower_8,"MinActivePower_8":MinActivePower_8,
+                    "MaxReactivePower_8":MaxReactivePower_8,"MeanReactivePower_8":MeanReactivePower_8,"MinReactivePower_8":MinReactivePower_8,
+                    "MaxAparentPower_8":MaxAparentPower_8,"MeanAparentPower_8":MeanAparentPower_8,"MinAparentPower_8":MinAparentPower_8,
+                    "MaxFPInductive_8":MaxFPInductive_8,"MeanFPInductive_8":MeanFPInductive_8,"MinFPInductive_8":MinFPInductive_8,
+                    "MaxFPReactive_8":MaxFPReactive_8,"MeanFPReactive_8":MeanFPReactive_8,"MinFPReactive_8":MinFPReactive_8,
+                    "MaxFDVoltage_8":MaxFDVoltage_8,"MeanFDVoltage_8":MeanFDVoltage_8,"MinFDVoltage_8":MinFDVoltage_8,
+                    "MaxFDCurrent_8":MaxFDCurrent_8,"MeanFDCurrent_8":MeanFDCurrent_8,"MinFDCurrent_8":MinFDCurrent_8,
+                    "MaxDATVoltage_8":MaxDATVoltage_8,"MeanDATVoltage_8":MeanDATVoltage_8,"MinDATVoltage_8":MinDATVoltage_8,
+                    "MaxDATCurrent_8":MaxDATCurrent_8,"MeanDATCurrent_8":MeanDATCurrent_8,"MinDATCurrent_8":MinDATCurrent_8,
+                    "OneHourEnergy_8":OneHourEnergy,"Energy_8":Energy
+                    }
+                    list_data_db_insert(dict)
+                    #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_8}',VoltajePromedio=f'{MeanVoltage15_8}',VoltajeMin=f'{MinVoltage15_8}',MaxCorriente=f'{MaxCurrent15_8}',PromedioCorriente=f'{MeanCurrent15_8}',MinimoCorriente=f'{MinCurrent15_8}',PotenciaMax=f'{MaxAparentPower_8}',PromedioPotenciaAparente=f'{MeanAparentPower_8}',MinPotenciaAparente=f'{MinAparentPower_8}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
@@ -3315,7 +3424,22 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet7 = workbook[f"15Min-{k}-{f}"]
                     sheet7.append(list(data15_6))
                     print(f'Data 6: Guardando Promedios')
-                    optionsave=1
+                    dict = { "time":timest(),
+                    "MaxVoltage15_6": MaxVoltage15_6, "MeanVoltage15_6": MeanVoltage15_6,"MinVoltage15_6":MinVoltage15_6,
+                    "MaxCurrent15_6": MaxCurrent15_6, "MeanCurrent15_6": MeanCurrent15_6,"MinCurrent15_6":MinCurrent15_6,
+                    "MaxActivePower_6":MaxActivePower_6,"MeanActivePower_6":MeanActivePower_6,"MinActivePower_6":MinActivePower_6,
+                    "MaxReactivePower_6":MaxReactivePower_6,"MeanReactivePower_6":MeanReactivePower_6,"MinReactivePower_6":MinReactivePower_6,
+                    "MaxAparentPower_6":MaxAparentPower_6,"MeanAparentPower_6":MeanAparentPower_6,"MinAparentPower_6":MinAparentPower_6,
+                    "MaxFPInductive_6":MaxFPInductive_6,"MeanFPInductive_6":MeanFPInductive_6,"MinFPInductive_6":MinFPInductive_6,
+                    "MaxFPReactive_6":MaxFPReactive_6,"MeanFPReactive_6":MeanFPReactive_6,"MinFPReactive_6":MinFPReactive_6,
+                    "MaxFDVoltage_6":MaxFDVoltage_6,"MeanFDVoltage_6":MeanFDVoltage_6,"MinFDVoltage_6":MinFDVoltage_6,
+                    "MaxFDCurrent_6":MaxFDCurrent_6,"MeanFDCurrent_6":MeanFDCurrent_6,"MinFDCurrent_6":MinFDCurrent_6,
+                    "MaxDATVoltage_6":MaxDATVoltage_6,"MeanDATVoltage_6":MeanDATVoltage_6,"MinDATVoltage_6":MinDATVoltage_6,
+                    "MaxDATCurrent_6":MaxDATCurrent_6,"MeanDATCurrent_6":MeanDATCurrent_6,"MinDATCurrent_6":MinDATCurrent_6,
+                    "OneHourEnergy_6":OneHourEnergy,"Energy_6":Energy
+                    }
+                    list_data_db_insert(dict)
+                    #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_6}',VoltajePromedio=f'{MeanVoltage15_6}',VoltajeMin=f'{MinVoltage15_6}',MaxCorriente=f'{MaxCurrent15_6}',PromedioCorriente=f'{MeanCurrent15_6}',MinimoCorriente=f'{MinCurrent15_6}',PotenciaMax=f'{MaxAparentPower_6}',PromedioPotenciaAparente=f'{MeanAparentPower_6}',MinPotenciaAparente=f'{MinAparentPower_6}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
@@ -3577,7 +3701,22 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet10 = workbook[f"15Min-{k}-{f}"] 
                     sheet10.append(list(data15_9))
                     print(f'Data 9: Guardando Promedios')
-                    optionsave=1
+                    dict = { "time":timest(),
+                    "MaxVoltage15_9": MaxVoltage15_9, "MeanVoltage15_9": MeanVoltage15_9,"MinVoltage15_9":MinVoltage15_9,
+                    "MaxCurrent15_9": MaxCurrent15_9, "MeanCurrent15_9": MeanCurrent15_9,"MinCurrent15_9":MinCurrent15_9,
+                    "MaxActivePower_9":MaxActivePower_9,"MeanActivePower_9":MeanActivePower_9,"MinActivePower_9":MinActivePower_9,
+                    "MaxReactivePower_9":MaxReactivePower_9,"MeanReactivePower_9":MeanReactivePower_9,"MinReactivePower_9":MinReactivePower_9,
+                    "MaxAparentPower_9":MaxAparentPower_9,"MeanAparentPower_9":MeanAparentPower_9,"MinAparentPower_9":MinAparentPower_9,
+                    "MaxFPInductive_9":MaxFPInductive_9,"MeanFPInductive_9":MeanFPInductive_9,"MinFPInductive_9":MinFPInductive_9,
+                    "MaxFPReactive_9":MaxFPReactive_9,"MeanFPReactive_9":MeanFPReactive_9,"MinFPReactive_9":MinFPReactive_9,
+                    "MaxFDVoltage_9":MaxFDVoltage_9,"MeanFDVoltage_9":MeanFDVoltage_9,"MinFDVoltage_9":MinFDVoltage_9,
+                    "MaxFDCurrent_9":MaxFDCurrent_9,"MeanFDCurrent_9":MeanFDCurrent_9,"MinFDCurrent_9":MinFDCurrent_9,
+                    "MaxDATVoltage_9":MaxDATVoltage_9,"MeanDATVoltage_9":MeanDATVoltage_9,"MinDATVoltage_9":MinDATVoltage_9,
+                    "MaxDATCurrent_9":MaxDATCurrent_9,"MeanDATCurrent_9":MeanDATCurrent_9,"MinDATCurrent_9":MinDATCurrent_9,
+                    "OneHourEnergy_9":OneHourEnergy,"Energy_9":Energy
+                    }
+                    list_data_db_insert(dict)
+                    #optionsave=1
                     ####SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_9}',VoltajePromedio=f'{MeanVoltage15_9}',VoltajeMin=f'{MinVoltage15_9}',MaxCorriente=f'{MaxCurrent15_9}',PromedioCorriente=f'{MeanCurrent15_9}',MinimoCorriente=f'{MinCurrent15_9}',PotenciaMax=f'{MaxAparentPower_9}',PromedioPotenciaAparente=f'{MeanAparentPower_9}',MinPotenciaAparente=f'{MinAparentPower_9}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
                     workbook.save(filename = dest_filename)
