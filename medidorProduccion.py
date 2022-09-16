@@ -1334,12 +1334,17 @@ def SendDataToBroker(vt,**kwargs):
 #            if():
 def timest():
     #dt = datetime.datetime.now()
-    now = datetime.datetime.now()
+    #now = datetime.datetime.now()
+    from datetime import datetime
+    curr_dt = datetime.now()
+ 
+    print("Current datetime: ", curr_dt)
+    ts = int(round(curr_dt.timestamp()))
     #now = datetime.now()
     # getting the timestamp
 
     # getting the timestamp
-    ts = datetime.timestamp(now)
+    #ts = datetime.timestamp(now)
     return ts
 
     
