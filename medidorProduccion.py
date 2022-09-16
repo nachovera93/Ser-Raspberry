@@ -1334,8 +1334,8 @@ def SendDataToBroker(vt,**kwargs):
 #            if():
 def timest():
     #dt = datetime.datetime.now()
-    #dt = datetime.datetime.now()
-    now = datetime.now()
+    now = datetime.datetime.now()
+    #now = datetime.now()
     # getting the timestamp
 
     # getting the timestamp
