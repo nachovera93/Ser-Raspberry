@@ -1,5 +1,5 @@
 import requests
-from datetime import date, timedelta
+from datetime import date, datetime, time, timedelta
 from datetime import datetime
 import json
 import shutil
@@ -1333,9 +1333,13 @@ def SendDataToBroker(vt,**kwargs):
 #    for f in os.listdir('/home/pi/Desktop/Ser-Raspberry/'):
 #            if():
 def timest():
-    dt = datetime.now()
+    #dt = datetime.datetime.now()
+    #dt = datetime.datetime.now()
+    now = datetime.now()
     # getting the timestamp
-    ts = datetime.timestamp(dt)
+
+    # getting the timestamp
+    ts = datetime.timestamp(now)
     return ts
 
     
