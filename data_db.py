@@ -5,6 +5,7 @@ db = iot_ser_db()
 
 def list_data_db_insert(data):
     try:
+        print(data)
         col_use = db.historic_data
         col_use.insert_many(data)
         #list_db = col_use.find({"userId": userId})
