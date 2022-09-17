@@ -1339,7 +1339,7 @@ def timest():
     curr_dt = datetime.now()
  
     print("Current datetime: ", curr_dt)
-    ts = int(round(curr_dt.timestamp()))
+    ts = int(curr_dt.timestamp())
     #now = datetime.now()
     # getting the timestamp
 
