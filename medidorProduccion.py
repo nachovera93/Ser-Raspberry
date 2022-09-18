@@ -122,7 +122,7 @@ def get_mqtt_credentials():
           
     return True
 
-
+userId="62f3d5563f5269001b12058a"
 rcConnect = 1  
 def on_disconnect(client, userdata, rc):
     if (rc != 0 and rc != 5):
@@ -1496,7 +1496,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     data15_1.insert(0,datetime.datetime.now())
                     workbook=openpyxl.load_workbook(filename = dest_filename)
                     sheet2 = workbook[f"15Min-{k}-{f}"]
-                    dict = { 'time':timest(),'MaxVoltage15_1': MaxVoltage15_1, 'MeanVoltage15_1': MeanVoltage15_1,'MinVoltage15_1':MinVoltage15_1,
+                    dict = { 'userId': userId ,'time':timest(),'MaxVoltage15_1': MaxVoltage15_1, 'MeanVoltage15_1': MeanVoltage15_1,'MinVoltage15_1':MinVoltage15_1,
                     'MaxCurrent15_1': MaxCurrent15_1, 'MeanCurrent15_1': MeanCurrent15_1,'MinCurrent15_1':MinCurrent15_1,
                     'MaxActivePower_1':MaxActivePower_1,'MeanActivePower_1':MeanActivePower_1,'MinActivePower_1':MinActivePower_1,
                     'MaxReactivePower_1':MaxReactivePower_1,'MeanReactivePower_1':MeanReactivePower_1,'MinReactivePower_1':MinReactivePower_1,
@@ -1777,7 +1777,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet3 = workbook[f"15Min-{k}-{f}"]
                     sheet3.append(list(data15_2))                   
                     print(f'Data 2: Guardando Promedios')
-                    dict = { "time":timest(),"MaxVoltage15_2": MaxVoltage15_2, "MeanVoltage15_2": MeanVoltage15_2,"MinVoltage15_2":MinVoltage15_2,
+                    dict = { "userId": userId, "time":timest(),"MaxVoltage15_2": MaxVoltage15_2, "MeanVoltage15_2": MeanVoltage15_2,"MinVoltage15_2":MinVoltage15_2,
                     "MaxCurrent15_2": MaxCurrent15_2, "MeanCurrent15_2": MeanCurrent15_2,"MinCurrent15_2":MinCurrent15_2,
                     "MaxActivePower_2":MaxActivePower_2,"MeanActivePower_2":MeanActivePower_2,"MinActivePower_2":MinActivePower_2,
                     "MaxReactivePower_2":MaxReactivePower_2,"MeanReactivePower_2":MeanReactivePower_2,"MinReactivePower_2":MinReactivePower_2,
@@ -2054,7 +2054,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet4 = workbook[f"15Min-{k}-{f}"]
                     sheet4.append(list(data15_3))
                     print(f'Data 3: Guardando Promedios')
-                    dict = { "time":timest(),
+                    dict = { "userId": userId, "time":timest(),
                     "MaxVoltage15_3": MaxVoltage15_3, "MeanVoltage15_3": MeanVoltage15_3,"MinVoltage15_3":MinVoltage15_3,
                     "MaxCurrent15_3": MaxCurrent15_3, "MeanCurrent15_3": MeanCurrent15_3,"MinCurrent15_3":MinCurrent15_3,
                     "MaxActivePower_3":MaxActivePower_3,"MeanActivePower_3":MeanActivePower_3,"MinActivePower_3":MinActivePower_3,
@@ -2331,7 +2331,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet5 = workbook[f"15Min-{k}-{f}"]
                     sheet5.append(list(data15_4))
                     print(f'Data 4: Guardando Promedios')
-                    dict = { "time":timest(),
+                    dict = { "userId": userId, "time":timest(),
                     "MaxVoltage15_4": MaxVoltage15_4, "MeanVoltage15_4": MeanVoltage15_4,"MinVoltage15_4":MinVoltage15_4,
                     "MaxCurrent15_4": MaxCurrent15_4, "MeanCurrent15_4": MeanCurrent15_4,"MinCurrent15_4":MinCurrent15_4,
                     "MaxActivePower_4":MaxActivePower_4,"MeanActivePower_4":MeanActivePower_4,"MinActivePower_4":MinActivePower_4,
@@ -2607,7 +2607,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet6 = workbook[f"15Min-{k}-{f}"]
                     sheet6.append(list(data15_5))
                     print(f'Data 5: Guardando Promedios')
-                    dict = { "time":timest(),
+                    dict = {"userId": userId, "time":timest(),
                     "MaxVoltage15_5": MaxVoltage15_5, "MeanVoltage15_5": MeanVoltage15_5,"MinVoltage15_5":MinVoltage15_5,
                     "MaxCurrent15_5": MaxCurrent15_5, "MeanCurrent15_5": MeanCurrent15_5,"MinCurrent15_5":MinCurrent15_5,
                     "MaxActivePower_5":MaxActivePower_5,"MeanActivePower_5":MeanActivePower_5,"MinActivePower_5":MinActivePower_5,
@@ -2884,7 +2884,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet8 = workbook[f"15Min-{k}-{f}"]
                     sheet8.append(list(data15_7))
                     print(f'Data 7: Guardando Promedios')
-                    dict = { "time":timest(),
+                    dict = { "userId": userId, "time":timest(),
                     "MaxVoltage15_7": MaxVoltage15_7, "MeanVoltage15_7": MeanVoltage15_7,"MinVoltage15_7":MinVoltage15_7,
                     "MaxCurrent15_7": MaxCurrent15_7, "MeanCurrent15_7": MeanCurrent15_7,"MinCurrent15_7":MinCurrent15_7,
                     "MaxActivePower_7":MaxActivePower_7,"MeanActivePower_7":MeanActivePower_7,"MinActivePower_7":MinActivePower_7,
@@ -3160,7 +3160,7 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet9 = workbook[f"15Min-{k}-{f}"]
                     sheet9.append(list(data15_8))
                     print(f'Data 8: Guardando Promedios')
-                    dict = { "time":timest(),
+                    dict = { "userId": userId, "time":timest(),
                     "MaxVoltage15_8": MaxVoltage15_8, "MeanVoltage15_8": MeanVoltage15_8,"MinVoltage15_8":MinVoltage15_8,
                     "MaxCurrent15_8": MaxCurrent15_8, "MeanCurrent15_8": MeanCurrent15_8,"MinCurrent15_8":MinCurrent15_8,
                     "MaxActivePower_8":MaxActivePower_8,"MeanActivePower_8":MeanActivePower_8,"MinActivePower_8":MinActivePower_8,
@@ -3435,7 +3435,7 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet7 = workbook[f"15Min-{k}-{f}"]
                     sheet7.append(list(data15_6))
                     print(f'Data 6: Guardando Promedios')
-                    dict = { "time":timest(),
+                    dict = {"userId": userId, "time":timest(),
                     "MaxVoltage15_6": MaxVoltage15_6, "MeanVoltage15_6": MeanVoltage15_6,"MinVoltage15_6":MinVoltage15_6,
                     "MaxCurrent15_6": MaxCurrent15_6, "MeanCurrent15_6": MeanCurrent15_6,"MinCurrent15_6":MinCurrent15_6,
                     "MaxActivePower_6":MaxActivePower_6,"MeanActivePower_6":MeanActivePower_6,"MinActivePower_6":MinActivePower_6,
@@ -3712,7 +3712,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     sheet10 = workbook[f"15Min-{k}-{f}"] 
                     sheet10.append(list(data15_9))
                     print(f'Data 9: Guardando Promedios')
-                    dict = { "time":timest(),
+                    dict = { "userId": userId, "time":timest(),
                     "MaxVoltage15_9": MaxVoltage15_9, "MeanVoltage15_9": MeanVoltage15_9,"MinVoltage15_9":MinVoltage15_9,
                     "MaxCurrent15_9": MaxCurrent15_9, "MeanCurrent15_9": MeanCurrent15_9,"MinCurrent15_9":MinCurrent15_9,
                     "MaxActivePower_9":MaxActivePower_9,"MeanActivePower_9":MeanActivePower_9,"MinActivePower_9":MinActivePower_9,
