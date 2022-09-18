@@ -145,16 +145,18 @@ def on_connected(client, userdata, flags, rc):
         print(f"rcConnection = {rcConnect}")
         print("Bad connection Returned code=",rc)
         client.bad_connection_flag=False
-
-
-get_mqtt_credentials()     
-client = mqtt.Client(str_client_id)   #Creación cliente
-client.connect(broker, port)     #Conexión al broker
-client.on_disconnect = on_disconnect
-client.username_pw_set(usernamemqtt, passwordmqtt)
-client.on_connect = on_connected
-client.loop_start()
-
+        
+ConnectBroker=False
+def ConnectToBroker():
+    if(ConnectBroker==True):
+          get_mqtt_credentials()     
+          client = mqtt.Client(str_client_id)   #Creación cliente
+          client.connect(broker, port)     #Conexión al broker
+          client.on_disconnect = on_disconnect
+          client.username_pw_set(usernamemqtt, passwordmqtt)
+          client.on_connect = on_connected
+          client.loop_start()
+    
 
 
 def get_cpuload():
@@ -1020,8 +1022,8 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ActivePower_1 = ActivePower
         ReactivePower_1 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,CosPhi_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,Energy_1,OneHourEnergy_1,i,k1,f1)
-        ##SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
-        vt1=SendDataToBroker(vt1,Potencia_Fase_1_Carga=f"{AparentPower_1}")
+        #SendDataToBroker(q=i,k=k1,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_1}",Energia=f"{Energy_1}")
+        #vt1=SendDataToBroker(vt1,Potencia_Fase_1_Carga=f"{AparentPower_1}")
         #print(f'VT1 {vt1}')
         #vt1=time.time() 
         Maximo15min_1(Vrms,Irms,ActivePower_1,ReactivePower_1,AparentPower_1,FP_1,FDVoltage_1,FDCurrent_1,DATVoltage_1,DATCurrent_1,OneHourEnergy_1,Energy_1,i,k1,f1)
@@ -1038,7 +1040,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_2 = ReactivePower 
         SaveDataCsv(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,CosPhi_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,Energy_2,OneHourEnergy_2,i,k1,f2)
         ##SendDataToBroker(q=i,k=k1,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_2}",Energia=f"{Energy_2}")
-        vt2=SendDataToBroker(vt2,Potencia_Fase_2_Carga=f"{AparentPower_2}")
+        #vt2=SendDataToBroker(vt2,Potencia_Fase_2_Carga=f"{AparentPower_2}")
         #print(f'VT2 {vt2}')
         #vt2=time.time() 
         Maximo15min_2(Vrms,Irms,ActivePower_2,ReactivePower_2,AparentPower_2,FP_2,FDVoltage_2,FDCurrent_2,DATVoltage_2,DATCurrent_2,OneHourEnergy_2,Energy_2,i,k1,f2)       
@@ -1054,7 +1056,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_3 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,CosPhi_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,Energy_3,OneHourEnergy_3,i,k1,f3)
         ##SendDataToBroker(q=i,k=k1,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_3}",Energia=f"{Energy_3}")
-        vt3=SendDataToBroker(vt3,Potencia_Fase_3_Carga=f"{AparentPower_3}")
+        #vt3=SendDataToBroker(vt3,Potencia_Fase_3_Carga=f"{AparentPower_3}")
         #vt3=time.time() 
         Maximo15min_3(Vrms,Irms,ActivePower_3,ReactivePower_3,AparentPower_3,FP_3,FDVoltage_3,FDCurrent_3,DATVoltage_3,DATCurrent_3,OneHourEnergy_3,Energy_3,i,k1,f3)             
     elif (i == 4):
@@ -1070,7 +1072,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         SaveDataCsv(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,CosPhi_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,Energy_4,OneHourEnergy_4,i,k2,f1)
         ##SendDataToBroker(q=i,k=k2,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_4}",Energia=f"{Energy_4}")
         ###SendDataToBroker(q=i,k=k2,f=f1,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_4}",Energia=f"{Energy_4}")
-        vt4=SendDataToBroker(vt4,Potencia_Fase_1_Paneles=f"{AparentPower_4}")
+        #vt4=SendDataToBroker(vt4,Potencia_Fase_1_Paneles=f"{AparentPower_4}")
         Maximo15min_4(Vrms,Irms,ActivePower_4,ReactivePower_4,AparentPower_4,FP_4,FDVoltage_4,FDCurrent_4,DATVoltage_4,DATCurrent_4,OneHourEnergy_4,Energy_4,i,k2,f1)              
     elif (i == 5):
         global vt5
@@ -1084,7 +1086,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_5 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,CosPhi_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,Energy_5,OneHourEnergy_5,i,k2,f2)
         ##SendDataToBroker(q=i,k=k2,f=f2,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_5}",Energia=f"{Energy_5}")
-        vt5=SendDataToBroker(vt5,Potencia_Fase_2_Paneles=f"{AparentPower_5}")
+        #vt5=SendDataToBroker(vt5,Potencia_Fase_2_Paneles=f"{AparentPower_5}")
         Maximo15min_5(Vrms,Irms,ActivePower_5,ReactivePower_5,AparentPower_5,FP_5,FDVoltage_5,FDCurrent_5,DATVoltage_5,DATCurrent_5,OneHourEnergy_5,Energy_5,i,k2,f2)               
     elif (i == 6):
         global vt6
@@ -1098,7 +1100,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
         ReactivePower_6 = ReactivePower
         SaveDataCsv(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,CosPhi_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,Energy_6,OneHourEnergy_6,i,k2,f3)
         ##SendDataToBroker(q=i,k=k2,f=f3,Voltaje=f"{Vrms}",Corriente=f"{Irms}",Potencia=f"{AparentPower_6}",Energia=f"{Energy_6}")
-        vt6=SendDataToBroker(vt6,Potencia_Fase_3_Paneles=f"{AparentPower_6}")
+        #vt6=SendDataToBroker(vt6,Potencia_Fase_3_Paneles=f"{AparentPower_6}")
         Maximo15min_6(Vrms,Irms,ActivePower_6,ReactivePower_6,AparentPower_6,FP_6,FDVoltage_6,FDCurrent_6,DATVoltage_6,DATCurrent_6,OneHourEnergy_6,Energy_6,i,k2,f3)           
     elif (i == 7):
         Time7b = datetime.datetime.now()
@@ -4354,7 +4356,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
     Largo=len(values_list)
     array5 = np.array([[round(OneHourEnergy_Paneles,5)]])
     worksheet.update(f'J{Largo+1}', array5.tolist())
-    vt10=SendDataToBroker(vt10,Energia_Paneles_Hora=f"{OneHourEnergy_Paneles}")
+    #vt10=SendDataToBroker(vt10,Energia_Paneles_Hora=f"{OneHourEnergy_Paneles}")
     datetim=str(datetime.datetime.now()-datetime.timedelta(minutes=3))
     #Hora=datetim.strftime('%H:%M')
     #datetim=json.dumps(datetim)
@@ -4422,7 +4424,7 @@ def ReporteDiarioHora(datetim,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,O
         valRedAcumulada=valRedAcumulada+(valRed) 
     #vt14=SendDataToBroker(vt14,)
     #vt15=SendDataToBroker(vt15,)
-    vt11=SendDataToBroker(vt11,Energia_Red_Hora=f"{OneHourEnergy_RedCompañia}",Energia_Red= f'{valRed}',Energia_Carga=f"{valCarga}",Energia_Paneles=f"{valPaneles}",Energia_Carga_Hora=f"{OneHourEnergy_Carga}")
+    #vt11=SendDataToBroker(vt11,Energia_Red_Hora=f"{OneHourEnergy_RedCompañia}",Energia_Red= f'{valRed}',Energia_Carga=f"{valCarga}",Energia_Paneles=f"{valPaneles}",Energia_Carga_Hora=f"{OneHourEnergy_Carga}")
    
     
 #ReporteDiario()
