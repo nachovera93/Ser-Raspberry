@@ -693,23 +693,23 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
             sheet22 = workbook[f"MaxHora Fase 3 Diario"] 
             datetim=datetime.datetime.now()-datetime.timedelta(minutes=3)
             connect=FuncionReporte()
-            if(connect==1):
-                    OneHourEnergy_Paneles=OneHourEnergy_4+OneHourEnergy_5+OneHourEnergy_6
-                    OneHourEnergy_Carga=OneHourEnergy_1+OneHourEnergy_2+OneHourEnergy_3
-                    OneHourEnergy_RedCompañia=OneHourEnergy_Carga-OneHourEnergy_Paneles
-                    OneHourEnergy_Carga_Fase1=OneHourEnergy_1
-                    OneHourEnergy_Carga_Fase2=OneHourEnergy_2
-                    OneHourEnergy_Carga_Fase3=OneHourEnergy_3
-                    OneHourEnergy_Paneles_Fase1=OneHourEnergy_4
-                    OneHourEnergy_Paneles_Fase2=OneHourEnergy_5
-                    OneHourEnergy_Paneles_Fase3=OneHourEnergy_6
-                    #if(OneHourEnergy_Carga-OneHourEnergy_Paneles<0):
-                      #ReporteDiarioHora(datetim.hour,None,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3)
-                    #else:
-                    #    OneHourEnergy_RedCompañia=OneHourEnergy_Carga-OneHourEnergy_Paneles
-                    ReporteDiarioHora(datetim.hour,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3)
-            else:
-                    print("No hay conexión")
+            #if(connect==1):
+            #        OneHourEnergy_Paneles=OneHourEnergy_4+OneHourEnergy_5+OneHourEnergy_6
+            #        OneHourEnergy_Carga=OneHourEnergy_1+OneHourEnergy_2+OneHourEnergy_3
+            #        OneHourEnergy_RedCompañia=OneHourEnergy_Carga-OneHourEnergy_Paneles
+            #        OneHourEnergy_Carga_Fase1=OneHourEnergy_1
+            #        OneHourEnergy_Carga_Fase2=OneHourEnergy_2
+            #        OneHourEnergy_Carga_Fase3=OneHourEnergy_3
+            #        OneHourEnergy_Paneles_Fase1=OneHourEnergy_4
+            #        OneHourEnergy_Paneles_Fase2=OneHourEnergy_5
+            #        OneHourEnergy_Paneles_Fase3=OneHourEnergy_6
+            #        #if(OneHourEnergy_Carga-OneHourEnergy_Paneles<0):
+            #          #ReporteDiarioHora(datetim.hour,None,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3)
+            #        #else:
+            #        #    OneHourEnergy_RedCompañia=OneHourEnergy_Carga-OneHourEnergy_Paneles
+            #        ReporteDiarioHora(datetim.hour,OneHourEnergy_RedCompañia,OneHourEnergy_Paneles,OneHourEnergy_Carga,OneHourEnergy_Carga_Fase1,OneHourEnergy_Carga_Fase2,OneHourEnergy_Carga_Fase3,OneHourEnergy_Paneles_Fase1,OneHourEnergy_Paneles_Fase2,OneHourEnergy_Paneles_Fase3)
+            #else:
+            #        print("No hay conexión")
             OneHourEnergy_Red_Fase1=OneHourEnergy_1-OneHourEnergy_4
             OneHourEnergy_Red_Fase2=OneHourEnergy_2-OneHourEnergy_5
             OneHourEnergy_Red_Fase3=OneHourEnergy_3-OneHourEnergy_6
@@ -860,15 +860,6 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                         except:
                             print("Error en Maximos diarios")
                 connect=FuncionReporte()
-                if(connect==1):
-                        Energy_Paneles=Energy_4+Energy_5+Energy_6
-                        Energy_Carga=Energy_1+Energy_2+Energy_3
-                        Energy_RedCompañia=Energy_Carga-Energy_Paneles
-                        datetim=datetime.datetime.now()-datetime.timedelta(days=1)
-                        print(f'Energias {Energy_RedCompañia}-{Energy_Paneles}-{Energy_Carga}')
-                        ReporteDiarioDia(datetim.date(),Energy_RedCompañia,Energy_Paneles,Energy_Carga)
-                else:      
-                        print("No hay conexión")      
                 workbook=openpyxl.load_workbook(filename = dest_filename)
                 sheet23 = workbook[f"Energia Fase 1 Mensual"]
                 sheet24 = workbook[f"Energia Fase 2 Mensual"]
@@ -1514,7 +1505,7 @@ def Maximo15min_1(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_1}',VoltajePromedio=f'{MeanVoltage15_1}',VoltajeMin=f'{MinVoltage15_1}',MaxCorriente=f'{MaxCurrent15_1}',PromedioCorriente=f'{MeanCurrent15_1}',MinimoCorriente=f'{MinCurrent15_1}',PotenciaMax=f'{MaxAparentPower_1}',PromedioPotenciaAparente=f'{MeanAparentPower_1}',MinPotenciaAparente=f'{MinAparentPower_1}',Energia=f'{Energy}')
                     ###SendDataToBroker(MaxVoltage15_1,MeanVoltage15_1,MinVoltage15_1,MaxCurrent15_1,MeanCurrent15_1,MinCurrent15_1,MaxAparentPower_1,MeanAparentPower_1,MinAparentPower_1,OneHourEnergy,Energy,k,f,_)
-                    list_data_db_insert(dict)
+                    #list_data_db_insert(dict)
                     #vt115=time.time()
                     workbook.save(filename = dest_filename)
                     data15_1=[]
@@ -1790,7 +1781,7 @@ def Maximo15min_2(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     "MaxDATCurrent_2":MaxDATCurrent_2,"MeanDATCurrent_2":MeanDATCurrent_2,"MinDATCurrent_2":MinDATCurrent_2,
                     "OneHourEnergy_2":OneHourEnergy,"Energy_2":Energy
                     }
-                    list_data_db_insert(dict)
+                    #list_data_db_insert(dict)
                     #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_2}',VoltajePromedio=f'{MeanVoltage15_2}',VoltajeMin=f'{MinVoltage15_2}',MaxCorriente=f'{MaxCurrent15_2}',PromedioCorriente=f'{MeanCurrent15_2}',MinimoCorriente=f'{MinCurrent15_2}',PotenciaMax=f'{MaxAparentPower_2}',PromedioPotenciaAparente=f'{MeanAparentPower_2}',MinPotenciaAparente=f'{MinAparentPower_2}',Energia=f'{Energy}')
                     #vt215=time.time()
@@ -2068,7 +2059,7 @@ def Maximo15min_3(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     "MaxDATCurrent_3":MaxDATCurrent_3,"MeanDATCurrent_3":MeanDATCurrent_3,"MinDATCurrent_3":MinDATCurrent_3,
                     "OneHourEnergy_3":OneHourEnergy,"Energy_3":Energy
                     }
-                    list_data_db_insert(dict)
+                    #list_data_db_insert(dict)
                     #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_3}',VoltajePromedio=f'{MeanVoltage15_3}',VoltajeMin=f'{MinVoltage15_3}',MaxCorriente=f'{MaxCurrent15_3}',PromedioCorriente=f'{MeanCurrent15_3}',MinimoCorriente=f'{MinCurrent15_3}',PotenciaMax=f'{MaxAparentPower_3}',PromedioPotenciaAparente=f'{MeanAparentPower_3}',MinPotenciaAparente=f'{MinAparentPower_3}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
@@ -2345,7 +2336,7 @@ def Maximo15min_4(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     "MaxDATCurrent_4":MaxDATCurrent_4,"MeanDATCurrent_4":MeanDATCurrent_4,"MinDATCurrent_4":MinDATCurrent_4,
                     "OneHourEnergy_4":OneHourEnergy,"Energy_4":Energy
                     }
-                    list_data_db_insert(dict)
+                    #list_data_db_insert(dict)
                     #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_4}',VoltajePromedio=f'{MeanVoltage15_4}',VoltajeMin=f'{MinVoltage15_4}',MaxCorriente=f'{MaxCurrent15_4}',PromedioCorriente=f'{MeanCurrent15_4}',MinimoCorriente=f'{MinCurrent15_4}',PotenciaMax=f'{MaxAparentPower_4}',PromedioPotenciaAparente=f'{MeanAparentPower_4}',MinPotenciaAparente=f'{MinAparentPower_4}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
@@ -2621,7 +2612,7 @@ def Maximo15min_5(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     "MaxDATCurrent_5":MaxDATCurrent_5,"MeanDATCurrent_5":MeanDATCurrent_5,"MinDATCurrent_5":MinDATCurrent_5,
                     "OneHourEnergy_5":OneHourEnergy,"Energy_5":Energy
                     }
-                    list_data_db_insert(dict)
+                    #list_data_db_insert(dict)
                     #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_5}',VoltajePromedio=f'{MeanVoltage15_5}',VoltajeMin=f'{MinVoltage15_5}',MaxCorriente=f'{MaxCurrent15_5}',PromedioCorriente=f'{MeanCurrent15_5}',MinimoCorriente=f'{MinCurrent15_5}',PotenciaMax=f'{MaxAparentPower_5}',PromedioPotenciaAparente=f'{MeanAparentPower_5}',MinPotenciaAparente=f'{MinAparentPower_5}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
@@ -2898,7 +2889,7 @@ def Maximo15min_7(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     "MaxDATCurrent_7":MaxDATCurrent_7,"MeanDATCurrent_7":MeanDATCurrent_7,"MinDATCurrent_7":MinDATCurrent_7,
                     "OneHourEnergy_7":OneHourEnergy,"Energy_7":Energy
                     }
-                    list_data_db_insert(dict)
+                    #list_data_db_insert(dict)
                     #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_7}',VoltajePromedio=f'{MeanVoltage15_7}',VoltajeMin=f'{MinVoltage15_7}',MaxCorriente=f'{MaxCurrent15_7}',PromedioCorriente=f'{MeanCurrent15_7}',MinimoCorriente=f'{MinCurrent15_7}',PotenciaMax=f'{MaxAparentPower_7}',PromedioPotenciaAparente=f'{MeanAparentPower_7}',MinPotenciaAparente=f'{MinAparentPower_7}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
@@ -3174,7 +3165,7 @@ def Maximo15min_8(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     "MaxDATCurrent_8":MaxDATCurrent_8,"MeanDATCurrent_8":MeanDATCurrent_8,"MinDATCurrent_8":MinDATCurrent_8,
                     "OneHourEnergy_8":OneHourEnergy,"Energy_8":Energy
                     }
-                    list_data_db_insert(dict)
+                    #list_data_db_insert(dict)
                     #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_8}',VoltajePromedio=f'{MeanVoltage15_8}',VoltajeMin=f'{MinVoltage15_8}',MaxCorriente=f'{MaxCurrent15_8}',PromedioCorriente=f'{MeanCurrent15_8}',MinimoCorriente=f'{MinCurrent15_8}',PotenciaMax=f'{MaxAparentPower_8}',PromedioPotenciaAparente=f'{MeanAparentPower_8}',MinPotenciaAparente=f'{MinAparentPower_8}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
@@ -3449,7 +3440,7 @@ def Maximo15min_6(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     "MaxDATCurrent_6":MaxDATCurrent_6,"MeanDATCurrent_6":MeanDATCurrent_6,"MinDATCurrent_6":MinDATCurrent_6,
                     "OneHourEnergy_6":OneHourEnergy,"Energy_6":Energy
                     }
-                    list_data_db_insert(dict)
+                    #list_data_db_insert(dict)
                     #optionsave=1
                     ##SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_6}',VoltajePromedio=f'{MeanVoltage15_6}',VoltajeMin=f'{MinVoltage15_6}',MaxCorriente=f'{MaxCurrent15_6}',PromedioCorriente=f'{MeanCurrent15_6}',MinimoCorriente=f'{MinCurrent15_6}',PotenciaMax=f'{MaxAparentPower_6}',PromedioPotenciaAparente=f'{MeanAparentPower_6}',MinPotenciaAparente=f'{MinAparentPower_6}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
@@ -3726,7 +3717,7 @@ def Maximo15min_9(Vrms,Irms,ActivePower,ReactivePower,AparentPower,FP,FDVoltage,
                     "MaxDATCurrent_9":MaxDATCurrent_9,"MeanDATCurrent_9":MeanDATCurrent_9,"MinDATCurrent_9":MinDATCurrent_9,
                     "OneHourEnergy_9":OneHourEnergy,"Energy_9":Energy
                     }
-                    list_data_db_insert(dict)
+                    #list_data_db_insert(dict)
                     #optionsave=1
                     ####SendDataToBroker(q=i,k=k,f=f,VoltajeMax=f'{MaxVoltage15_9}',VoltajePromedio=f'{MeanVoltage15_9}',VoltajeMin=f'{MinVoltage15_9}',MaxCorriente=f'{MaxCurrent15_9}',PromedioCorriente=f'{MeanCurrent15_9}',MinimoCorriente=f'{MinCurrent15_9}',PotenciaMax=f'{MaxAparentPower_9}',PromedioPotenciaAparente=f'{MeanAparentPower_9}',MinPotenciaAparente=f'{MinAparentPower_9}',OneHourEnergy=f'{OneHourEnergy}',Energia=f'{Energy}')
                     #print("Datos Insertados Correctamente!")
@@ -4265,50 +4256,6 @@ MaxAparentPower_6=0
 MaxAparentPower_7=0
 MaxAparentPower_8=0
 MaxAparentPower_9=0
-def ReportePotencias15():
-    try:
-        gc = gspread.service_account(filename='rep_medidor.json')
-        sh = gc.open('Luis_Wherhahm')
-        worksheet = sh.worksheet("Hoja 1")
-        print(f'MaxAparentPower_1 {MaxAparentPower_1}')
-        array1 = np.array([[MaxAparentPower_1]])
-        array2 = np.array([[MaxAparentPower_2]])
-        array3 = np.array([[MaxAparentPower_3]])
-        array4 = np.array([[MaxAparentPower_4]])
-        array5 = np.array([[MaxAparentPower_5]])
-        array6 = np.array([[MaxAparentPower_6]])
-        #array7 = np.array([[MaxAparentPower_7]])
-        #array8 = np.array([[MaxAparentPower_8]])
-        #array9 = np.array([[MaxAparentPower_9]])
-        datetim=str(datetime.datetime.now()-datetime.timedelta(minutes=5))
-        #worksheet.update(f'A12',datetim[0:19])
-        #datetim=datetime.datetime.now()-datetime.timedelta(minutes=5)
-        #Hora=datetim.strftime('%H:%M')
-        #x = time.time() #timestamp
-       
-        values_list = worksheet.col_values(33)
-        Largo=len(values_list)
-        #arraytime=np.array(f'{datetim.hour}:{minute}')
-        worksheet.update(f'AG{Largo+1}',datetim[0:19])
-        worksheet.update(f'AH{Largo+1}',array1.tolist())
-        values_list = worksheet.col_values(35)
-        Largo=len(values_list)
-        worksheet.update(f'AI{Largo+1}',array2.tolist())
-        values_list = worksheet.col_values(36)
-        Largo=len(values_list)
-        worksheet.update(f'AJ{Largo+1}',array3.tolist())
-        values_list = worksheet.col_values(37)
-        Largo=len(values_list)
-        worksheet.update(f'AK{Largo+1}',array4.tolist())
-        values_list = worksheet.col_values(38)
-        Largo=len(values_list)
-        worksheet.update(f'AL{Largo+1}',array5.tolist())
-        values_list = worksheet.col_values(39)
-        Largo=len(values_list)
-        worksheet.update(f'AM{Largo+1}',array6.tolist())
-       
-    except:
-        print("No insrto Potencia en google sheets")
             
        
 BT1=73.5              
@@ -4836,15 +4783,6 @@ def received():
                      else:
                               Access_1email=0
                           
-                     if(excel.minute==5 or excel.minute==20 or excel.minute==35 or excel.minute==50 ):
-                         try:
-                              if(Access_pot==0):
-                                     Access_pot=1
-                                     ReportePotencias15()
-                         except:
-                            print(".") 
-                     else:
-                            Access_pot=0
                               
                          
                         

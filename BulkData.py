@@ -17,8 +17,9 @@ def list_data_db_insert(data):
 
 def data_db_insert():
     try:
-        collection_use = DataBase.historic_data
-        DataFromDB = [x for x in collection_use.find()]
+        collection_use = DataBase.devices
+        DataFromDB = [x for x in collection_use.find_one({"selected": False, "name":"Medidor"})]
+        print(DataFromDB)
         print(len(DataFromDB))
     except Exception as e:
         print(f"Excepcion en Insertar datos a mongo: {str(e)} ")
@@ -57,8 +58,8 @@ def UpdateDatainDatabase():
 
 
 data_db_insert()
-ConsultTypeOfData()
-UpdateDatainDatabase()
+#ConsultTypeOfData()
+#UpdateDatainDatabase()
 
 s = "01-12-2011 21:17:04"
 print(time.mktime(datetime.datetime.strptime(
