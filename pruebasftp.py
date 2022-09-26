@@ -38,9 +38,9 @@ db = mydb["haddacloud-v2"]
 #"""
 
 #print(db.list_collection_names())
-dia=22
-organization_id=18
-"""
+dia=26
+organization_id=14
+
 print("--------------------- DEUDORS ---------------------------")
 mycol = db.deudors
 #test_range = mycol.find({ "created_at": {"$gte" : datetime(2022, 9, 5), "$lt": datetime(2022, 9, 5)}})
@@ -81,7 +81,7 @@ print(f'Duplicados en deudors: {x-len(df_without_duplicates)}')
 #       print(f'{dup} Borrados Deudors')
 
 ##print(d.deleted_count, " documents deleted !!")
-"""
+
 print("---------------------------------------------------------") 
 print(" ")
 print(" ")
@@ -93,28 +93,28 @@ list_db = mycol.find({"organization_id": organization_id,  "created_at": {"$gte"
 #list_db = mycol.find({"organization_id": organization_id})
 list = []
 list_filtered = []
-#v=0
-#for l in list_db:
-#    v=v+1
-#    if(v % 50000 == 0):
-#        print(f'{v} DEBTS desde db')
-#print(f'{v} TOTALES DEBTS desde db')
-c=0
-for l in list_db:  #creamos nueva lista con datos DESDE mongo y la ingresamos en una list_filtered
-        c=c+1
-        list.append({'customer_id': l['customer_id'], 'cuenta': l['cuenta'], 'dias_mora': l['dias_mora'], 'deuda_mora': l['deuda_mora'], 'campaign_id': l['campaign_id'], 'deuda_facturada': l['deuda_facturada'], 'deuda_total': l['deuda_total'], 'group_campaign_id': l['group_campaign_id'],'organization_id': l['organization_id']})#list.append({'customer_id': l['customer_id'], 'cuenta': l['cuenta'], 'dias_mora': l['dias_mora'], 'deuda_mora': l['deuda_mora'], 'campaign_id': l['campaign_id'], 'deuda_facturada': l['deuda_facturada'], 'deuda_total': l['deuda_total'], 'group_campaign_id': l['group_campaign_id']})
-        #if(c % 5000 == 0):
-        #        print(f'{c} data_db_deudors desde db')
-print(f'{c} Totales data_db_deudors desde db')
-list_filtered = pd.DataFrame(list).to_dict('records')
-df_list_filtered = pd.DataFrame(list_filtered)
-duplicados = df_list_filtered[df_list_filtered.duplicated()] 
-df_without_duplicates = df_list_filtered.drop_duplicates(subset=['customer_id','organization_id','cuenta','dias_mora','campaign_id','deuda_total','group_campaign_id'],keep=False)  #keep='last'  
-df = df_without_duplicates.reset_index(drop=True)
-List_duplicates=duplicados.to_dict(orient='records')
-print(f'Duplicados en deudors: {c-len(df_without_duplicates)}')   
-Delete_Duplicates=List_duplicates[0:10]
-print(Delete_Duplicates)
+v=0
+for l in list_db:
+    v=v+1
+    if(v % 50000 == 0):
+        print(f'{v} DEBTS desde db')
+print(f'{v} TOTALES DEBTS desde db')
+#c=0
+#for l in list_db:  #creamos nueva lista con datos DESDE mongo y la ingresamos en una list_filtered
+#        c=c+1
+#        list.append({'customer_id': l['customer_id'], 'cuenta': l['cuenta'], 'dias_mora': l['dias_mora'], 'deuda_mora': l['deuda_mora'], 'campaign_id': l['campaign_id'], 'deuda_facturada': l['deuda_facturada'], 'deuda_total': l['deuda_total'], 'group_campaign_id': l['group_campaign_id'],'organization_id': l['organization_id']})#list.append({'customer_id': l['customer_id'], 'cuenta': l['cuenta'], 'dias_mora': l['dias_mora'], 'deuda_mora': l['deuda_mora'], 'campaign_id': l['campaign_id'], 'deuda_facturada': l['deuda_facturada'], 'deuda_total': l['deuda_total'], 'group_campaign_id': l['group_campaign_id']})
+#        #if(c % 5000 == 0):
+#        #        print(f'{c} data_db_deudors desde db')
+#print(f'{c} Totales data_db_deudors desde db')
+#list_filtered = pd.DataFrame(list).to_dict('records')
+#df_list_filtered = pd.DataFrame(list_filtered)
+#duplicados = df_list_filtered[df_list_filtered.duplicated()] 
+#df_without_duplicates = df_list_filtered.drop_duplicates(subset=['customer_id','organization_id','cuenta','dias_mora','campaign_id','deuda_total','group_campaign_id'],keep=False)  #keep='last'  
+#df = df_without_duplicates.reset_index(drop=True)
+#List_duplicates=duplicados.to_dict(orient='records')
+#print(f'Duplicados en deudors: {c-len(df_without_duplicates)}')   
+#Delete_Duplicates=List_duplicates[0:10]
+#print(Delete_Duplicates)
 #dup=0
 #for k in Delete_Duplicates:
 #    dup=dup+1   
@@ -130,7 +130,7 @@ print("---------------------------------------------------------")
 print(" ")
 print(" ")
 print("--------------------- CUSTOM FIELDS ---------------------")
-"""
+
 mycol = db.custom_fields
 #test_range = mycol.find({ "created_at": {"$gte" : datetime(2022, 9, 5), "$lt": datetime(2022, 9, 5)}})
 list_db = mycol.find({"organization_id": organization_id,  "created_at": {"$gte" : datetime(2022, 9, dia)}})  #, "$lt": datetime(2022, 9, 5)}
@@ -284,4 +284,4 @@ with open('ABCDIN_TARJ_GBI_20220501.csv', 'r') as f_in, open('my_file.txt', 'w')
     content = f_in.read()
     # 3. Write the content into the TXT file
     f_out.write(content)
-"""
+
