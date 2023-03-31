@@ -109,8 +109,8 @@ def get_mqtt_credentials():
           my_bytes_value = respuesta.content      #Contenido entero del json
           my_new_string = my_bytes_value.decode("utf-8").replace("'", '"')
           data = json.loads(my_new_string)
-          s = json.dumps(data, indent=4, sort_keys=True)
-          print(s)
+          #s = json.dumps(data, indent=4, sort_keys=True)
+          #print(s)
           usernamemqtt = data["username"]
           passwordmqtt = data["password"]
           topicmqtt = data["topic"]   #topico al que nos vamos a suscribir
@@ -305,6 +305,7 @@ FDVoltage_9 = 0.0
 DATVoltage_9= 0.0
 sincvoltaje=0
 PhaseVoltage=0.0
+
 def VoltageFFT(list_fftVoltages, samplings,i):
     global PhaseVoltage
     global j
@@ -805,9 +806,9 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             print(x)
                             workbook=openpyxl.load_workbook(filename = f'Reportes/{f}')
                             print(f'Cargando Reportes/{f}')
-                            sheet1 = workbook[f"REDCompañia-Fase-1"]
-                            sheet2 = workbook[f"REDCompañia-Fase-2"]
-                            sheet3 = workbook[f"REDCompañia-Fase-3"]
+                            sheet1 = workbook[f"REDCompañia-Fase-1"] #Carga Fase 1
+                            sheet2 = workbook[f"REDCompañia-Fase-2"] #Carga Fase 2
+                            sheet3 = workbook[f"REDCompañia-Fase-3"] #Carga Fase 3
                             sheet4 = workbook[f"CentralFotovoltaica-Fase-1"]
                             sheet5 = workbook[f"CentralFotovoltaica-Fase-2"]
                             sheet6 = workbook[f"CentralFotovoltaica-Fase-3"]
@@ -823,7 +824,7 @@ def Potencias(i,Irms,Vrms,potrmsCGE):
                             LargeSheet71=len(sheet7["FP"])
                             LargeSheet81=len(sheet8["FP"])
                             LargeSheet91=len(sheet9["FP"])
-                            Energy_1 = float(sheet1[f'm{LargeSheet11}'].value)
+                            Energy_1 = float(sheet1[f'm{LargeSheet11}'].value) #Energia Carga Fase 1
                             Energy_2 = float(sheet2[f'm{LargeSheet21}'].value)
                             Energy_3 = float(sheet3[f'm{LargeSheet31}'].value)
                             Energy_4 = float(sheet4[f'm{LargeSheet41}'].value)
@@ -1242,7 +1243,6 @@ def SendDataToBroker(vt,**kwargs):
             #print(f" vttime {vttime}")
             #if(len(kwargs.values())==4):
             timeToSend=time.time() #10 // 20
-            #print(timeToSend)
             #print(timeToSend - vttime)
             for key, value in kwargs.items():
                 str_num = {"value":value,"save":optionsave}
