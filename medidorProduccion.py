@@ -26,7 +26,7 @@ from scipy import signal
 from scipy.signal import savgol_filter
 import numpy as np
 import subprocess
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import time
 import os
 import serial
@@ -64,13 +64,13 @@ def BorrarArchivos():
 #BorrarArchivos()
 
 
-try:                           
-     esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
-     esp32.flushInput()                          
-     
-except:
-     esp32 = serial.Serial('/dev/ttyUSB2', 230400, timeout=0.5)
-     esp32.flushInput()
+#try:                           
+#     esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
+#     esp32.flushInput()                          
+#     
+#except:
+#     esp32 = serial.Serial('/dev/ttyUSB2', 230400, timeout=0.5)
+#     esp32.flushInput()
      
 horasetup=datetime.datetime.now()
 print("Hora de comienzo:", horasetup)
@@ -4035,7 +4035,7 @@ def AbrirExcel():
                     horaComienzo=datetime.datetime.now()
                     f.write(f'Hora comienzo con creacion de nuevo excel: {horaComienzo}')
     
-AbrirExcel()
+#AbrirExcel()
 
 with open('mi_fichero.txt', 'w') as f:
             horaComienzo=datetime.datetime.now()
@@ -4403,346 +4403,128 @@ try:
     f.write(fecha)
 finally:
     f.close()
-tm1=time.time()
-tm2=time.time()
-CurrentCal=0.94
-Vrms=0.0
-Irms=0.0
-BufferVoltaje_1=[]
-BufferVoltaje_2=[]
-BufferVoltaje_3=[]
-BufferVoltaje_4=[]
-BufferVoltaje_5=[]
-BufferVoltaje_6=[]
-BufferVoltaje_7=[]
-BufferVoltaje_8=[]
-BufferVoltaje_9=[]
-BufferCurrent_1=[]
-BufferCurrent_2=[]
-BufferCurrent_3=[]
-BufferCurrent_4=[]
-BufferCurrent_5=[]
-BufferCurrent_6=[]
-BufferCurrent_7=[]
-BufferCurrent_8=[]
-BufferCurrent_9=[]
-global Access_1email
-Access_1email=0
-global Access_1excel
-Access_1xcel=0
-countbroker=0
 
-def TomaDatos(list_Voltage,list_Current,samplings,i):
-    global tm1
-    global tm2
-    global BufferVoltaje_1
-    global BufferVoltaje_2
-    global BufferVoltaje_3
-    global BufferVoltaje_4
-    global BufferVoltaje_5
-    global BufferVoltaje_6
-    global BufferVoltaje_7
-    global BufferVoltaje_8
-    global BufferVoltaje_9
-    global BufferCurrent_1
-    global BufferCurrent_2
-    global BufferCurrent_3
-    global BufferCurrent_4
-    global BufferCurrent_5
-    global BufferCurrent_6
-    global BufferCurrent_7
-    global BufferCurrent_8
-    global BufferCurrent_9
-    global Vrms
-    global Irms
-    global NoVoltageOffset
-    global NoCurrentoffset
-    global ListaIrmsPeak1
-                           
+tm1 = time.time()
+tm2 = time.time()
+CurrentCal = 0.94
+Vrms = 0.0
+Irms = 0.0
+buffer_voltage = {i: [] for i in range(1, 10)}
+buffer_current = {i: [] for i in range(1, 10)}
+
+Access_1email = 0
+Access_1excel = 0
+countbroker = 0
+
+
+                        
+def TomaDatos(list_Voltage, list_Current, samplings, i):
+    global tm1, tm2, buffer_voltage, buffer_current, Vrms, Irms
+
     sos = signal.butter(10, 2500, 'low', fs=samplings, output='sos')
     list_VoltageFilterComplete = signal.sosfilt(sos, list_Voltage)
     list_CurrentFilterComplete = signal.sosfilt(sos, list_Current)
     list_FinalVoltage = list_VoltageFilterComplete[104:4200]
-    list_FinalCurrent = list_CurrentFilterComplete [103:4200]
-    #print(f'list_FinalCurrent {i} Max: {max(list_FinalCurrent)}')
+    list_FinalCurrent = list_CurrentFilterComplete[103:4200]
 
-    List_MaxVoltage=getMaxValues(list_FinalVoltage, 100)
-    List_MinVoltage=getMinValues(list_FinalVoltage, 100)
+    List_MaxVoltage = getMaxValues(list_FinalVoltage, 100)
+    List_MinVoltage = getMinValues(list_FinalVoltage, 100)
     MaxVoltage = np.min(List_MaxVoltage)
     MinVoltage = np.max(List_MinVoltage)
-    DC_VoltageMedian = (MaxVoltage+MinVoltage)/2
-    NoVoltageOffset=(list_FinalVoltage-DC_VoltageMedian)             
-    Vrms=VoltajeRms(NoVoltageOffset)*0.92
-    if(i==1):
-        if (len(BufferVoltaje_1)>=3):
-            MediaBufferVoltaje=np.median(BufferVoltaje_1)
-            Vrms=VoltRms(MediaBufferVoltaje)
-            if(Vrms>240):
-                print(f"Mayor a 240 {i}")
-            else:
-                print(f'Vrms {i}: {Vrms}')
-                VoltageFFT(NoVoltageOffset,samplings,i)
-            BufferVoltaje_1=[]
-        else:
-            BufferVoltaje_1.append(Vrms)
-    elif(i==2):
-        if (len(BufferVoltaje_2)>=3):
-            MediaBufferVoltaje=np.median(BufferVoltaje_2)
-            Vrms=VoltRms(MediaBufferVoltaje)
-            if(Vrms>240):
-                print(f"Mayor a 240 {i}")
-            else:
-                print(f'Vrms {i}: {Vrms}')
-                VoltageFFT(NoVoltageOffset,samplings,i)
-            BufferVoltaje_2=[]
-        else:
-            BufferVoltaje_2.append(Vrms)
-    elif(i==3):
-        if (len(BufferVoltaje_3)>=3):
-            MediaBufferVoltaje=np.median(BufferVoltaje_3)
-            Vrms=VoltRms(MediaBufferVoltaje)
-            if(Vrms>240):
-                print(f"Mayor a 240 {i}")
-            else:
-                print(f'Vrms {i}: {Vrms}')
-                VoltageFFT(NoVoltageOffset,samplings,i)
-            BufferVoltaje_3=[]
-        else:
-            BufferVoltaje_3.append(Vrms)
-    elif(i==4):
-        if (len(BufferVoltaje_4)>=3):
-            MediaBufferVoltaje=np.median(BufferVoltaje_4)
-            Vrms=VoltRms(MediaBufferVoltaje)
-            if(Vrms>240):
-                print(f"Mayor a 240 {i}")
-            else:
-                print(f'Vrms {i}: {Vrms}')
-                VoltageFFT(NoVoltageOffset,samplings,i)
-            BufferVoltaje_4=[]
-        else:
-            BufferVoltaje_4.append(Vrms)
-    elif(i==5):
-        if (len(BufferVoltaje_5)>=3):
-            MediaBufferVoltaje=np.median(BufferVoltaje_5)
-            Vrms=VoltRms(MediaBufferVoltaje)
-            if(Vrms>240):
-                print(f"Mayor a 240 {i}")
-            else:
-                print(f'Vrms {i}: {Vrms}')
-                VoltageFFT(NoVoltageOffset,samplings,i)
-            BufferVoltaje_5=[]
-        else:
-            BufferVoltaje_5.append(Vrms)
-    elif(i==6):
-        if (len(BufferVoltaje_6)>=3):
-            MediaBufferVoltaje=np.median(BufferVoltaje_6)
-            Vrms=VoltRms(MediaBufferVoltaje)
-            if(Vrms>240):
-                print(f"Mayor a 240 {i}")
-            else:
-                print(f'Vrms {i}: {Vrms}')
-                VoltageFFT(NoVoltageOffset,samplings,i)
-            BufferVoltaje_6=[]
-        else:
-            BufferVoltaje_6.append(Vrms)
-    elif(i==7):
-        if (len(BufferVoltaje_7)>=3):
-            MediaBufferVoltaje=np.median(BufferVoltaje_7)
-            Vrms=VoltRms(MediaBufferVoltaje)
-            if(Vrms>240):
-                print(f"Mayor a 240 {i}")
-            else:
-                print(f'Vrms {i}: {Vrms}')
-                VoltageFFT(NoVoltageOffset,samplings,i)
-            BufferVoltaje_7=[]
-        else:
-            BufferVoltaje_7.append(Vrms)
-    elif(i==8):
-        if (len(BufferVoltaje_8)>=3):
-            MediaBufferVoltaje=np.median(BufferVoltaje_8)
-            Vrms=VoltRms(MediaBufferVoltaje)
-            if(Vrms>240):
-                print(f"Mayor a 240 {i}")
-            else:
-                print(f'Vrms {i}: {Vrms}')
-                VoltageFFT(NoVoltageOffset,samplings,i)
-            BufferVoltaje_8=[]
-        else:
-            BufferVoltaje_8.append(Vrms)
-    elif(i==9):
-        if (len(BufferVoltaje_9)>=3):
-            MediaBufferVoltaje=np.median(BufferVoltaje_9)
-            Vrms=VoltRms(MediaBufferVoltaje)
-            if(Vrms>240):
-                print(f"Mayor a 240 {i}")
-            else:
-                print(f'Vrms {i}: {Vrms}')
-                VoltageFFT(NoVoltageOffset,samplings,i)
-            BufferVoltaje_9=[]
-        else:
-            BufferVoltaje_9.append(Vrms)
-                        
+    DC_VoltageMedian = (MaxVoltage + MinVoltage) / 2
+    NoVoltageOffset = (list_FinalVoltage - DC_VoltageMedian)
+    Vrms = VoltajeRms(NoVoltageOffset) * 0.92
 
-    List_MaxCurrent=getMaxValues(list_FinalCurrent, 50)
-    List_MinCurrent=getMinValues(list_FinalCurrent, 50)
+    buffer_voltage[i].append(Vrms)
+    if len(buffer_voltage[i]) >= 3:
+        MediaBufferVoltaje = np.median(buffer_voltage[i])
+        Vrms = VoltRms(MediaBufferVoltaje)
+        if Vrms <= 240:
+            VoltageFFT(NoVoltageOffset, samplings, i)
+        else:
+            print(f"Mayor a 240 {i}")
+        buffer_voltage[i] = []
+
+    List_MaxCurrent = getMaxValues(list_FinalCurrent, 50)
+    List_MinCurrent = getMinValues(list_FinalCurrent, 50)
     MaxCurrent = np.median(List_MaxCurrent)
-    Mincurrent = np.median(List_MinCurrent)
-    DC_CurrentMedian = (MaxCurrent+Mincurrent)/2
-    NoCurrentoffset=list_FinalCurrent-DC_CurrentMedian
-    Irms=CorrienteRms(NoCurrentoffset)
-                               
-    if(i==1):
-        if(len(BufferCurrent_1)>=3 and Vrms<240):
-            tm1=time.time() #1 -> 10 ->23
-            try:
-                print(f' Tiempos de diferencia: {tm1-tm2}')
-            except:
-                print("No hay tiempos")
-            MediaBufferCurrent=np.median(BufferCurrent_1)
-            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            print(f'Irms {i}: {Irms}')
-            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
-            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
-            Potencias(i,Irms,Vrms,potrmsCGE)     
-            BufferCurrent_1=[]
-            tm2=time.time() #2 -> 11
-        else:
-            BufferCurrent_1.append(Irms)
-    elif(i==2):
-        if(len(BufferCurrent_2)>=3 and Vrms<240):
-            MediaBufferCurrent=np.median(BufferCurrent_2)
-            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            print(f'Irms {i}: {Irms}')
-            #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
-            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
-            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
-            Potencias(i,Irms,Vrms,potrmsCGE)     
-            BufferCurrent_2=[]
-        else:
-            BufferCurrent_2.append(Irms)
-    elif(i==3):
-        if(len(BufferCurrent_3)>=3 and Vrms<240):
-            MediaBufferCurrent=np.median(BufferCurrent_3)
-            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            #print(f'Current cal 4: {MediaBufferCurrent}')
-            print(f'Irms {i}: {Irms}')
-            #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
-            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
-            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
-            Potencias(i,Irms,Vrms,potrmsCGE)     
-            BufferCurrent_3=[]
-        else:
-            BufferCurrent_3.append(Irms)
-    elif(i==4):
-        if(len(BufferCurrent_4)>=3 and Vrms<240):
-            MediaBufferCurrent=np.median(BufferCurrent_4)
-            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            #print(f'Current cal 4: {MediaBufferCurrent}')
-            print(f'Irms {i}: {Irms}')
-            #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
-            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
-            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
-            Potencias(i,Irms,Vrms,potrmsCGE)     
-            BufferCurrent_4=[]
-        else:
-            BufferCurrent_4.append(Irms)
-    elif(i==5):
-        if(len(BufferCurrent_5)>=3 and Vrms<240):
-            MediaBufferCurrent=np.median(BufferCurrent_5)
-            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            print(f'Irms {i}: {Irms}')
-            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
-            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
-            Potencias(i,Irms,Vrms,potrmsCGE)     
-            BufferCurrent_5=[]
-        else:
-            BufferCurrent_5.append(Irms)
-    elif(i==6):
-        if(len(BufferCurrent_6)>=3 and Vrms<240):
-            MediaBufferCurrent=np.median(BufferCurrent_6)
-            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            print(f'Irms {i}: {Irms}')
-            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
-            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
-            Potencias(i,Irms,Vrms,potrmsCGE)     
-            BufferCurrent_6=[]
-        else:
-            BufferCurrent_6.append(Irms)
-    elif(i==7):
-        if(len(BufferCurrent_7)>=3 and Vrms<240):
-            MediaBufferCurrent=np.median(BufferCurrent_7)
-            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            print(f'Irms {i}: {Irms}')
-            #print(f'Irms {i} Max: {max(NoCurrentoffset)}')
-            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
-            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
-            Potencias(i,Irms,Vrms,potrmsCGE)     
-            BufferCurrent_7=[]
-        else:
-            BufferCurrent_7.append(Irms)
-    elif(i==8):
-        if(len(BufferCurrent_8)>=3 and Vrms<240):
-            MediaBufferCurrent=np.median(BufferCurrent_8)
-            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            print(f'Irms {i}: {Irms}')
-            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
-            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
-            Potencias(i,Irms,Vrms,potrmsCGE)     
-            BufferCurrent_8=[]
-        else:
-            BufferCurrent_8.append(Irms)
-    elif(i==9):
-        if(len(BufferCurrent_9)>=3 and Vrms<240):
-            MediaBufferCurrent=np.median(BufferCurrent_9)
-            Irms=CurrentRms(MediaBufferCurrent)*CurrentCal
-            print(f'Irms {i}: {Irms}')
-            CurrentFFT(NoCurrentoffset,samplings,i,Irms)
-            potrmsCGE = PotenciaRms(NoCurrentoffset,NoVoltageOffset)
-            Potencias(i,Irms,Vrms,potrmsCGE)     
-            BufferCurrent_9=[]
-        else:
-            BufferCurrent_9.append(Irms)
+    MinCurrent = np.median(List_MinCurrent)
+    DC_CurrentMedian = (MaxCurrent + MinCurrent) / 2
+    NoCurrentOffset = list_FinalCurrent - DC_CurrentMedian
+    Irms = CorrienteRms(NoCurrentOffset)
+
+    buffer_current[i].append(Irms)
+    if len(buffer_current[i]) >= 3 and Vrms < 240:
+        tm1 = time.time()
+        MediaBufferCurrent = np.median(buffer_current[i])
+        Irms = CurrentRms(MediaBufferCurrent) * CurrentCal
+        print(f'Irms {i}: {Irms}')
+        CurrentFFT(NoCurrentOffset, samplings, i, Irms)
+        potrmsCGE = PotenciaRms(NoCurrentOffset, NoVoltageOffset)
+        Potencias(i, Irms, Vrms, potrmsCGE)
+        buffer_current[i] = []
+        tm2 = time.time()
+        print(f' Tiempos de diferencia: {tm1 - tm2}')
+        
+
+def generate_simulated_data():
+    signal_type = random.choice([11, 22, 33, 44, 55, 66, 77, 88, 99])
+    
+    duration = 0.14
+    sampling_rate = 30000  # 30 KS/s
+    time = np.linspace(0, duration, int(duration * sampling_rate))
+    
+    voltage_signal = np.sin(2 * np.pi * 60 * time)  # Ejemplo de señal de voltaje: seno de 60 Hz
+    voltage_data = 2.5 + 2.5 * voltage_signal  # Escalar y desplazar la señal para que esté entre 0 y 5
+
+    current_signal = np.sin(2 * np.pi * 60 * time + np.pi / 4)  # Ejemplo de señal de corriente: seno de 60 Hz desfasado 45 grados
+    current_data = 0.5 + 0.5 * current_signal  # Escalar y desplazar la señal para que esté entre 0 y 1
+    
+    samplings = 30000  # Suponiendo que hay 30 muestreos por segundo en el sistema
+
+    simulated_data = [signal_type] + voltage_data.tolist() + current_data.tolist() + [samplings]
+    return ','.join(map(str, simulated_data))
+
 
 Access_pot=0
 def received():
     global Access_pot
     while True:
-                try:
-                     esp32_bytes = esp32.readline()
-                     decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
+                try: 
+                     decoded_bytes = generate_simulated_data().encode('utf-8')
+                     #esp32_bytes = esp32.readline()
+                     #decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
                 except:
                      print("Error en la codificación")
                      continue
                 np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')   
-                 #print(f'Largo Array {len(np_array)}')
+                #print(f'Largo Array {len(np_array)}')
+                time.sleep(2)
                 try:
-                     if (len(np_array) == 8402):
-                           if (np_array[0] == 11 or np_array[0] == 22 or np_array[0] == 33 or np_array[0] == 44 or np_array[0] == 55 or np_array[0] == 66 or np_array[0] == 77 or np_array[0] == 88 or np_array[0] == 99):
-                               if (np_array[0] == 11):
-                                   i = 1
-                               elif (np_array[0] == 22):
-                                   i = 2
-                               elif (np_array[0] == 33):
-                                   i = 3
-                               elif (np_array[0] == 44):
-                                   i = 4
-                               elif (np_array[0] == 55):
-                                   i = 5
-                               elif (np_array[0] == 66):
-                                   i = 6
-                               elif (np_array[0] == 77):
-                                   i = 7
-                               elif (np_array[0] == 88):
-                                   i = 8
-                               elif (np_array[0] == 99):
-                                   i = 9
-                               samplings = np_array[-1]
-                               #print(f'samplings {samplings}')
-                               
-                               list_Voltage = (np_array[0:4200])
-                               list_Current = np_array[4201:8400]
-                               #try:
-                               TomaDatos(list_Voltage,list_Current,samplings,i)
+                     if len(np_array) == 8402:
+                         signal_type_to_index = {
+                             11: 1,
+                             22: 2,
+                             33: 3,
+                             44: 4,
+                             55: 5,
+                             66: 6,
+                             77: 7,
+                             88: 8,
+                             99: 9
+                         }
+                 
+                         signal_type = np_array[0]
+                         if signal_type in signal_type_to_index:
+                             i = signal_type_to_index[signal_type]
+                             samplings = np_array[-1]
+                 
+                             list_Voltage = np_array[1:4201]
+                             list_Current = np_array[4201:8401]
+                 
+                             TomaDatos(list_Voltage, list_Current, samplings, i)
+
+
                                #except OSError as err:
                                #      print("OS error: {0}".format(err))
                                #      continue
