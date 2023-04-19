@@ -1,0 +1,1 @@
+Error a las: 2023-04-02 00:54:04.653927 <class 'ValueError'>
