@@ -45,8 +45,82 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import argparse
 import psutil
+from DataSave import Maximo15min
 #from connector import iot_ser_db
 #from data_db import list_data_db_insert
+
+broker = '54.94.243.121'   #'192.168.1.85' #mqtt server
+port = 1883
+dId = '121212'
+passw = 'x0ZLpgmciV'
+
+
+webhook_endpoint = 'http://54.94.243.121:3001/api/getdevicecredentials'
+
+userId="62f3d5563f5269001b12058a"
+rcConnect = 1 
+def get_mqtt_credentials():
+    print("Getting MQTT Credentials from WebHook")
+    time.sleep(2)
+    toSend = {"dId": dId, "password": passw}
+    respuesta = requests.post(webhook_endpoint, data=toSend)
+
+    if respuesta.status_code != 200:
+        print("Error in response ", respuesta.status_code)
+        respuesta.close()
+        return None
+
+    print("Mqtt Credentials Obtained Successfully :)   ")
+    my_bytes_value = respuesta.content
+    my_new_string = my_bytes_value.decode("utf-8").replace("'", '"')
+    data = json.loads(my_new_string)
+    respuesta.close()
+    print("Ends mqtt credentials")
+
+    return {
+        "username": data["username"],
+        "password": data["password"],
+        "topic": data["topic"] + "+/actdata",
+        "client_id": f'device_{dId}_{random.randint(0, 9999)}',
+    }
+
+
+def on_disconnect(client, userdata, rc):
+    if rc != 0 and rc != 5:
+        print("Unexpected disconnection, will auto-reconnect")
+    elif rc == 5:
+        print("Getting new credentials!")
+        mqtt_credentials = get_mqtt_credentials()
+        if mqtt_credentials is not None:
+            client.username_pw_set(mqtt_credentials["username"], mqtt_credentials["password"])
+
+
+def on_connected(client, userdata, flags, rc):
+    if rc == 0:
+        client.connected_flag = True
+        client.subscribe(mqtt_credentials["topic"])
+        print("connected OK")
+        print("rc =", client.connected_flag)
+    else:
+        print("Bad connection Returned code=", rc)
+        client.bad_connection_flag = False
+
+
+def ConnectToBroker(mqtt_credentials):
+    client = mqtt.Client(mqtt_credentials["client_id"])
+    client.connect(broker, port)
+    client.on_disconnect = on_disconnect
+    client.username_pw_set(mqtt_credentials["username"], mqtt_credentials["password"])
+    client.on_connect = on_connected
+    client.loop_start()
+
+
+ConnectBroker = True
+if ConnectBroker:
+    mqtt_credentials = get_mqtt_credentials()
+    if mqtt_credentials is not None:
+        ConnectToBroker(mqtt_credentials)
+
 
 
 k1="REDCompañia"	
@@ -67,6 +141,10 @@ def get_max_values(my_list, quantity):
 def get_min_values(my_list, quantity):
     return get_extreme_values(my_list, quantity, False)
 
+
+def print_memory_usage():
+    mem = psutil.virtual_memory()
+    print("Memoria RAM usada: {:.2f}%".format(mem.percent))
 
 def VoltajeRms(listVoltage):
     N = len(listVoltage)
@@ -199,14 +277,6 @@ def create_tkinter_window():
     pause_button.grid(row=1, column=0)
 
     return root, fig, ax1, ax2, ax3, ax4, pause_button
-
-# Crear la ventana de aplicación de Tkinter y los objetos de Matplotlib
-#root, fig, ax1, ax2, ax3, ax4 = create_tkinter_window()
-#
-
-
-
-#plt.ion()
 
 
 FDVoltage_dict = {}
@@ -413,14 +483,22 @@ TimeA = {
     9: datetime.datetime.now(),
 }
 
+Vrms_lists = [[] for _ in range(9)]
+Irms_lists = [[] for _ in range(9)]
+FP_Reactive_lists = [[] for _ in range(9)]
+FP_Inductive_lists = [[] for _ in range(9)]
+FDVoltage_lists = [[] for _ in range(9)]
+FDCurrent_lists = [[] for _ in range(9)]
+DATVoltage_lists = [[] for _ in range(9)]
+DATCurrent_lists = [[] for _ in range(9)]
+OneHourEnergy_lists = [[] for _ in range(9)]
+Energy_lists = [[] for _ in range(9)]
 
 def Potencias(i, Irms, Vrms, potrmsCGE):
-    TimeEnergy = datetime.datetime.now()
-    dest_filename = "path/to/dest_filename"
-    acceshourenergy = 0
-
-    #if TimeEnergy.minute in [4, 5, 6, 7, 10, 12, 13, 15, 19]:
-    #    acceshourenergy = 0
+    global Vrms_lists, Irms_lists
+    global ActivePower_lists, ReactivePower_lists, AparentPower_lists
+    global FP_Reactive_lists, FP_Inductive_lists, FDVoltage_lists, FDCurrent_lists, DATVoltage_lists, DATCurrent_lists, OneHourEnergy_lists, Energy_lists
+    
     
     AparentPower = Vrms*Irms               
     if(potrmsCGE>=0):
@@ -431,7 +509,6 @@ def Potencias(i, Irms, Vrms, potrmsCGE):
           ActivePower = np.abs(ActivePower)
           ActivePower = ActivePower*(-1)
     ReactivePower = Vrms*Irms*np.sin(PhaseVoltage-PhaseCurrent)
-    optionsave=1
   
     print(f"  TimeA: {TimeA[i]}")
     TimeB[i] = datetime.datetime.now()
@@ -453,17 +530,41 @@ def Potencias(i, Irms, Vrms, potrmsCGE):
     print(f"  TimeA: {TimeA[i]}")
     
     print(f"  Delta: {delta_readable} seconds\n")
-    # You can add your other variables to the dictionaries in the same way, e.g.
-    # FP_dict[i] = ...
-    # CosPhi_dict[i] = ...
-    # FDVoltage_dict[i] = ...
-    # FDCurrent_dict[i] = ...
-    # DATVoltage_dict[i] = ...
-    # DATCurrent_dict[i] = ...
+    Vrms_lists[i].append(Vrms)
+    Irms_lists[i].append(Irms)
+    ActivePower_lists[i].append(ActivePower)
+    ReactivePower_lists[i].append(ReactivePower)
+    AparentPower_lists[i].append(AparentPower)
+    if FP_dict[i] > 0.0:
+        FP_Reactive_lists[i].append(FP_dict[i])
+    else:
+        FP_Inductive_lists[i].append(FP_dict[i])
+    FDVoltage_lists[i].append(FDVoltage_dict[i])
+    FDCurrent_lists[i].append(FDCurrent_dict[i])
+    DATVoltage_lists[i].append(DATVoltage_dict[i])
+    DATCurrent_lists[i].append(DATCurrent_dict[i])
+    OneHourEnergy_lists[i].append(OneHourEnergy[i])
+    Energy_lists[i].append(Energy[i])
+    if len(Vrms_lists[i]) == 5:
+        Maximo15min(Vrms_lists[i], Irms_lists[i], ActivePower_lists[i], ReactivePower_lists[i], AparentPower_lists[i], FP_Reactive_lists[i],FP_Inductive_lists[i], FDVoltage_lists[i], FDCurrent_lists[i], DATVoltage_lists[i], DATCurrent_lists[i], OneHourEnergy_lists[i], Energy_lists[i],mongo_connect)
+
+        # Limpiar las listas después de llamar a Maximo15min
+        Vrms_lists[i] = []
+        Irms_lists[i] = []
+        ActivePower_lists[i] = []
+        ReactivePower_lists[i] = []
+        AparentPower_lists[i] = []
+        FP_Reactive_lists[i] = []
+        FP_Inductive_lists[i] = []
+        FDVoltage_lists[i] = []
+        FDCurrent_lists[i] = []
+        DATVoltage_lists[i] = []
+        DATCurrent_lists[i] = []
+        OneHourEnergy_lists[i] = []
+        Energy_lists[i] = []
 
     #SaveDataCsv(Vrms, Irms, ActivePower_dict[i], ReactivePower_dict[i], AparentPower_dict[i], FP_dict[i], CosPhi_dict[i], FDVoltage_dict[i], FDCurrent_dict[i], DATVoltage_dict[i], DATCurrent_dict[i], Energy[i], OneHourEnergy[i], i, k1, f1)
-    #Maximo15min(Vrms, Irms, ActivePower_dict[i], ReactivePower_dict[i], AparentPower_dict[i], FP_dict[i], FDVoltage_dict[i], FDCurrent_dict[i], DATVoltage_dict[i], DATCurrent_dict[i], OneHourEnergy[i], Energy[i], i, k1, f1)
-
+    
 
 buffer_voltage = {i: [] for i in range(1, 10)}
 buffer_current = {i: [] for i in range(1, 10)}
@@ -556,13 +657,16 @@ def process_signal(list_voltage, list_current, samplings, i, fig, ax1, ax2, ax3,
 
 
 
-def receive(root=None, fig=None, ax1=None, ax2=None, ax3=None, ax4=None):
-
+def receive(use_serial,root=None, fig=None, ax1=None, ax2=None, ax3=None, ax4=None):
+    print(f'use_serial receive: {use_serial}')
+    time.sleep(10)
     while True:
         try:
-            decoded_bytes = generate_simulated_data().encode('utf-8')
-            #esp32_bytes = esp32.readline()
-            #decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
+            if use_serial:
+                esp32_bytes = esp32.readline()
+                decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))
+            else:
+                decoded_bytes = generate_simulated_data().encode('utf-8')
         except:
             print("Error en la codificación")
             continue
@@ -582,7 +686,7 @@ def receive(root=None, fig=None, ax1=None, ax2=None, ax3=None, ax4=None):
                 88: 8,
                 99: 9
             }
-
+            print_memory_usage()
             signal_type = np_array[0]
             if signal_type in signal_type_to_index:
                 i = signal_type_to_index[signal_type]
@@ -593,16 +697,18 @@ def receive(root=None, fig=None, ax1=None, ax2=None, ax3=None, ax4=None):
                 
                 process_signal(list_voltage, list_current, samplings, i, fig, ax1, ax2, ax3, ax4)
                 if root is not None:
-                    root.after(100, receive, root, fig, ax1, ax2, ax3, ax4)
+                    root.after(100, receive,use_serial, root, fig, ax1, ax2, ax3, ax4)
                 break
 
 
-def process_signals_without_tkinter(root=None, fig=None, ax1=None, ax2=None, ax3=None, ax4=None):
+def process_signals_without_tkinter(use_serial,root=None, fig=None, ax1=None, ax2=None, ax3=None, ax4=None):
     while True:
         try:
-            decoded_bytes = generate_simulated_data().encode('utf-8')
-            #esp32_bytes = esp32.readline()
-            #decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))#utf-8
+            if use_serial:
+                esp32_bytes = esp32.readline()
+                decoded_bytes = str(esp32_bytes[0:len(esp32_bytes)-2].decode("utf-8"))
+            else:
+                decoded_bytes = generate_simulated_data().encode('utf-8')
         except:
             print("Error en la codificación")
             continue
@@ -622,6 +728,7 @@ def process_signals_without_tkinter(root=None, fig=None, ax1=None, ax2=None, ax3
                 88: 8,
                 99: 9
             }
+            print_memory_usage()
 
             signal_type = np_array[0]
             if signal_type in signal_type_to_index:
@@ -634,22 +741,48 @@ def process_signals_without_tkinter(root=None, fig=None, ax1=None, ax2=None, ax3
                 process_signal(list_voltage, list_current, samplings, i, fig, ax1, ax2, ax3, ax4)
                 #break
 
-def main(use_tkinter):
+mongo_connect=0
+def main(use_tkinter, use_serial, use_mqtt, use_mongo):
+    global mongo_connect
+    print(f'use_tkinter: {use_tkinter}')
+    time.sleep(10)
     if use_tkinter:
+        print("Usando tkinter")
         # Crear la ventana de aplicación de Tkinter y los objetos de Matplotlib
         root, fig, ax1, ax2, ax3, ax4, pause_button = create_tkinter_window()
 
         # Llamar a root.mainloop() para iniciar la interfaz gráfica
-        root.after(100, receive, root, fig, ax1, ax2, ax3, ax4)
+        root.after(100, receive, use_serial, root, fig, ax1, ax2, ax3, ax4)
         root.mainloop()
     else:
         # Ejecutar el código sin la interfaz gráfica
-        process_signals_without_tkinter()
+        process_signals_without_tkinter(use_serial)
+    if use_mqtt:
+        print("Conectando al broker MQTT")
+        ConnectToBroker()
+    if use_mongo:
+        print("Conectando a mongo")
+        mongo_connect=1
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Análisis de señales digitales")
     parser.add_argument("--use_tkinter", action="store_true", help="Habilitar la interfaz gráfica Tkinter")
+    parser.add_argument("--use_serial", action="store_true", help="Habilitar la lectura de datos desde el puerto serie")
+    parser.add_argument("--use_mqtt", action="store_true", help="Habilitar la conexión con el broker MQTT")
+    parser.add_argument("--use_mongo", action="store_true", help="Habilitar el guardado en mongo")
 
     args = parser.parse_args()
 
-    main(args.use_tkinter)
+    if args.use_serial:
+        print("Usando arg serial")
+        time.sleep(10)
+        try:                           
+             esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
+             esp32.flushInput()                          
+             
+        except:
+             esp32 = serial.Serial('/dev/ttyUSB2', 230400, timeout=0.5)
+             esp32.flushInput()
+    print("No usa")
+    time.sleep(5)
+    main(args.use_tkinter, args.use_serial, args.use_mqtt, args.use_mongo)
