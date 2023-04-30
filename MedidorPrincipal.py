@@ -717,6 +717,15 @@ def receive(use_serial,root=None, fig=None, ax1=None, ax2=None, ax3=None, ax4=No
 
 
 def process_signals_without_tkinter(use_serial,root=None, fig=None, ax1=None, ax2=None, ax3=None, ax4=None):
+    if use_serial:
+        try:                           
+            esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
+            esp32.flushInput()                          
+                 
+        except:
+            esp32 = serial.Serial('/dev/ttyUSB1', 230400, timeout=0.5)
+            esp32.flushInput()
+    
     while True:
         try:
             if use_serial:
@@ -757,9 +766,10 @@ def process_signals_without_tkinter(use_serial,root=None, fig=None, ax1=None, ax
                 #break
 
 mongo_connect=0
-def main(use_tkinter, use_serial, use_mqtt, use_mongo):
+def main(use_tkinter, use_serial, use_mqtt, use_mongo, ):
     global mongo_connect
     print(f'use_tkinter: {use_tkinter}')
+    print(f'use_serial: {use_serial}')
     time.sleep(10)
     if use_tkinter:
         print("Usando tkinter")
@@ -795,17 +805,4 @@ if __name__ == "__main__":
            if mqtt_credentials is not None:
                ConnectToBroker(mqtt_credentials)
            sys.exit()
-    if args.use_serial:
-        print("Usando arg serial")
-        time.sleep(10)
-        global esp32
-        try:                           
-             esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
-             esp32.flushInput()                          
-             
-        except:
-             esp32 = serial.Serial('/dev/ttyUSB1', 230400, timeout=0.5)
-             esp32.flushInput()
-    print("No usa")
-    time.sleep(5)
     main(args.use_tkinter, args.use_serial, args.use_mqtt, args.use_mongo)
