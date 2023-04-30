@@ -755,7 +755,7 @@ def process_signals_without_tkinter(use_serial,root=None, fig=None, ax1=None, ax
 
                 process_signal(list_voltage, list_current, samplings, i, fig, ax1, ax2, ax3, ax4)
                 #break
-
+esp32=None
 mongo_connect=0
 def main(use_tkinter, use_serial, use_mqtt, use_mongo):
     global mongo_connect
@@ -798,12 +798,13 @@ if __name__ == "__main__":
     if args.use_serial:
         print("Usando arg serial")
         time.sleep(10)
+        global esp32
         try:                           
              esp32 = serial.Serial('/dev/ttyUSB0', 230400, timeout=0.5)
              esp32.flushInput()                          
              
         except:
-             esp32 = serial.Serial('/dev/ttyUSB2', 230400, timeout=0.5)
+             esp32 = serial.Serial('/dev/ttyUSB1', 230400, timeout=0.5)
              esp32.flushInput()
     print("No usa")
     time.sleep(5)
