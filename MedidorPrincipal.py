@@ -28,6 +28,7 @@ from scipy.signal import savgol_filter
 import numpy as np
 import subprocess
 #import RPi.GPIO as GPIO
+import sys
 import time
 import os
 import serial
@@ -46,18 +47,21 @@ from matplotlib.figure import Figure
 import argparse
 import psutil
 from DataSave import Maximo15min
+import threading
 #from connector import iot_ser_db
 #from data_db import list_data_db_insert
 
-broker = '54.94.243.121'   #'192.168.1.85' #mqtt server
+broker = '192.168.43.74'   #'192.168.1.85' #mqtt server
 port = 1883
 dId = '121212'
-passw = 'x0ZLpgmciV'
+passw = 'eLNlwkgAaj'
 
 
-webhook_endpoint = 'http://54.94.243.121:3001/api/getdevicecredentials'
+#FALTA CONECTAR AL BROKER CON LOS DEVICES PARA ENVIAR DATOS
 
-userId="62f3d5563f5269001b12058a"
+webhook_endpoint = 'http://192.168.43.74:3001/api/getdevicecredentials'
+
+userId="63d87d13afeae04cb7827725"
 rcConnect = 1 
 def get_mqtt_credentials():
     print("Getting MQTT Credentials from WebHook")
@@ -74,9 +78,10 @@ def get_mqtt_credentials():
     my_bytes_value = respuesta.content
     my_new_string = my_bytes_value.decode("utf-8").replace("'", '"')
     data = json.loads(my_new_string)
+    s = json.dumps(data, indent=4, sort_keys=True)
+    print(s)
     respuesta.close()
     print("Ends mqtt credentials")
-
     return {
         "username": data["username"],
         "password": data["password"],
@@ -115,11 +120,7 @@ def ConnectToBroker(mqtt_credentials):
     client.loop_start()
 
 
-ConnectBroker = True
-if ConnectBroker:
-    mqtt_credentials = get_mqtt_credentials()
-    if mqtt_credentials is not None:
-        ConnectToBroker(mqtt_credentials)
+
 
 
 
@@ -165,8 +166,6 @@ def PotenciaRms(listCurrent, listVoltage):
     Squares = [listCurrent[i] * listVoltage[i] for i in range(N)]
     MeanSquares = sum(Squares) / N
     return MeanSquares
-
-
 
 def butter_lowpass_filter(data, cutoff, fs, order=10):
     sos = signal.butter(order, cutoff, 'low', fs=fs, output='sos')
@@ -238,8 +237,6 @@ def plot_signal_and_fft(signal, xf, amplitudes, index, fig, ax1, ax2,SeñalType,
         fig.canvas.draw()  # Redibujar el gráfico
 
 
-
-
 # Agregar un atributo global 'paused' para controlar la actualización de la gráfica
 paused = False
 
@@ -280,7 +277,7 @@ def create_tkinter_window():
 
 
 FDVoltage_dict = {}
-THD_dict = {}
+DATVoltage_dict = {}
 PhaseVoltage = 0.0
 
 def VoltageFFT(signal, sample_rate, i, fig, ax3, ax4):
@@ -333,20 +330,19 @@ def VoltageFFT(signal, sample_rate, i, fig, ax3, ax4):
         FDVoltage_dict[p] = fundamental_amplitude / np.sum(harmonic_amplitudes)
 
         # Calcular el Factor de Distorsión Armónica Total (THD)
-        THD_dict[p] = np.sqrt((np.sum(harmonic_amplitudes) ** 2 - fundamental_amplitude ** 2) / (fundamental_amplitude ** 2))
+        DATVoltage_dict[p] = np.sqrt((np.sum(harmonic_amplitudes) ** 2 - fundamental_amplitude ** 2) / (fundamental_amplitude ** 2))
 
         sincvoltaje1 = 1
-        return fundamental_amplitude, PhaseVoltage, FDVoltage_dict[p], THD_dict[p], sincvoltaje1
+        return fundamental_amplitude, PhaseVoltage, FDVoltage_dict[p], DATVoltage_dict[p], sincvoltaje1
    
 
 CosPhi_dict = {}
 FP_dict = {}
-DATCurrent_dict = {}
 FDCurrent_dict = {}
-THDCurrent_dict = {}
+DATCurrent_dict = {}
 PhaseCurrent = 0.0
 sincvoltaje1 = 0
-
+desfaseCGE = {}
 def CurrentFFT(signal, sample_rate, i, Irms, sincvoltaje1, PhaseVoltage, fundamental_amplitude_current, fig, ax1, ax2):
     global CosPhi_dict, FP_dict, THDCurrent_dict, FDCurrent_dict, PhaseCurrent,paused
     
@@ -368,11 +364,8 @@ def CurrentFFT(signal, sample_rate, i, Irms, sincvoltaje1, PhaseVoltage, fundame
     f = interpolate.interp1d(xf, yf)
     xnew = np.arange(0, 50 * 51, 1)
     ynew = f(xnew)
-    print(f'xnew: {len(xnew)}')
-    print(f'ynew: {len(ynew)}')
     # Calcular las amplitudes de los armónicos
     amplitudes = 2.0 / N * np.abs(ynew)
-    print(len(amplitudes))
     if not paused:
         plot_signal_and_fft(signal, xnew, amplitudes, p, fig, ax1, ax2,"Current",args.use_tkinter)
     
@@ -399,20 +392,20 @@ def CurrentFFT(signal, sample_rate, i, Irms, sincvoltaje1, PhaseVoltage, fundame
     FDCurrent_dict[p] = fundamental_amplitude / total_amplitude
 
     # Calcular el Factor de Distorsión Armónica Total (THD)
-    THDCurrent_dict[p] = np.sqrt((total_amplitude ** 2 - fundamental_amplitude ** 2) / (fundamental_amplitude ** 2))
+    DATCurrent_dict[p] = np.sqrt((total_amplitude ** 2 - fundamental_amplitude ** 2) / (fundamental_amplitude ** 2))
 
     # Calcular la proporción de corriente en función de la amplitud fundamental del voltaje
     Irms_ratio = Irms / (np.sqrt(fundamental_amplitude_current ** 2 + fundamental_amplitude ** 2))
 
     if sincvoltaje1 == 1:
         if PhaseVoltage - PhaseCurrent >= 0:
-            desfaseCGE = "Corriente Adelantada a Voltaje"
+            desfaseCGE[p] = "Corriente Adelantada a Voltaje"
         else:
-            desfaseCGE = "Voltaje Adelantado a Corriente"
+            desfaseCGE[p] = "Voltaje Adelantado a Corriente"
         FP_dict[p] = np.cos(PhaseVoltage - PhaseCurrent) * FDCurrent_dict[p]
         CosPhi_dict[p] = np.cos(PhaseVoltage - PhaseCurrent)
 
-    #return FP_dict[p],CosPhi_dict[p],desfaseCGE, THDCurrent_dict[p]
+    return FP_dict[p],CosPhi_dict[p],desfaseCGE[p], DATCurrent_dict[p], FDCurrent_dict[p]
 
 
 
@@ -483,29 +476,31 @@ TimeA = {
     9: datetime.datetime.now(),
 }
 
-Vrms_lists = [[] for _ in range(9)]
-Irms_lists = [[] for _ in range(9)]
-FP_Reactive_lists = [[] for _ in range(9)]
-FP_Inductive_lists = [[] for _ in range(9)]
-FDVoltage_lists = [[] for _ in range(9)]
-FDCurrent_lists = [[] for _ in range(9)]
-DATVoltage_lists = [[] for _ in range(9)]
-DATCurrent_lists = [[] for _ in range(9)]
-OneHourEnergy_lists = [[] for _ in range(9)]
-Energy_lists = [[] for _ in range(9)]
+Vrms_lists = {i: [] for i in range(1, 10)}
+Irms_lists = {i: [] for i in range(1, 10)}
+FP_Reactive_lists = {i: [] for i in range(1, 10)}
+FP_Inductive_lists = {i: [] for i in range(1, 10)}
+FDVoltage_lists = {i: [] for i in range(1, 10)}
+FDCurrent_lists = {i: [] for i in range(1, 10)}
+DATVoltage_lists = {i: [] for i in range(1, 10)}
+DATCurrent_lists = {i: [] for i in range(1, 10)}
+OneHourEnergy_lists = {i: [] for i in range(1, 10)} 
+Energy_lists = {i: [] for i in range(1, 10)}
+ActivePower_lists = {i: [] for i in range(1, 10)}
+ReactivePower_lists = {i: [] for i in range(1, 10)}
+AparentPower_lists = {i: [] for i in range(1, 10)}
 
-def Potencias(i, Irms, Vrms, potrmsCGE):
-    global Vrms_lists, Irms_lists
-    global ActivePower_lists, ReactivePower_lists, AparentPower_lists
-    global FP_Reactive_lists, FP_Inductive_lists, FDVoltage_lists, FDCurrent_lists, DATVoltage_lists, DATCurrent_lists, OneHourEnergy_lists, Energy_lists
-    
+def Potencias(i, Irms, Vrms, potrmsCGE, FP, CosPhi,desfaseCGE, DATCurrent, FDCurrent):
+    global Vrms_lists, Irms_lists, called_this_minute
+    global ActivePower_lists, ReactivePower_lists, AparentPower_lists, OneHourEnergy_lists, Energy_lists
+    global FP_Reactive_lists, FP_Inductive_lists, FDVoltage_lists, FDCurrent_lists, DATVoltage_lists, DATCurrent_lists
     
     AparentPower = Vrms*Irms               
     if(potrmsCGE>=0):
-          ActivePower = Vrms*Irms*CosPhi_dict[i]
+          ActivePower = Vrms*Irms*CosPhi
           ActivePower = np.abs(ActivePower)
     else:
-          ActivePower = Vrms*Irms*CosPhi_dict[i]
+          ActivePower = Vrms*Irms*CosPhi
           ActivePower = np.abs(ActivePower)
           ActivePower = ActivePower*(-1)
     ReactivePower = Vrms*Irms*np.sin(PhaseVoltage-PhaseCurrent)
@@ -517,10 +512,9 @@ def Potencias(i, Irms, Vrms, potrmsCGE):
     Energy[i] = Energy.get(i, 0) + np.abs(AparentPower * delta * EnergyFactor)
     OneHourEnergy[i] = OneHourEnergy.get(i, 0) + np.abs(AparentPower * delta * EnergyFactor)
     TimeA[i] = datetime.datetime.now()
-    AparentPower_dict[i] = AparentPower
-    ActivePower_dict[i] = ActivePower
-    ReactivePower_dict[i] = ReactivePower
+
     print(f"Iteration {i}:")
+    print(f"  Vrms: {Vrms}")
     print(f"  AparentPower: {AparentPower}")
     print(f"  ActivePower: {ActivePower}")
     print(f"  ReactivePower: {ReactivePower}")
@@ -528,14 +522,15 @@ def Potencias(i, Irms, Vrms, potrmsCGE):
     print(f"  OneHourEnergy: {OneHourEnergy[i]}")
     print(f"  TimeB: {TimeB[i]}")
     print(f"  TimeA: {TimeA[i]}")
-    
     print(f"  Delta: {delta_readable} seconds\n")
+
+    print(f"  Vrms_lists: {Vrms_lists}")
     Vrms_lists[i].append(Vrms)
     Irms_lists[i].append(Irms)
     ActivePower_lists[i].append(ActivePower)
     ReactivePower_lists[i].append(ReactivePower)
     AparentPower_lists[i].append(AparentPower)
-    if FP_dict[i] > 0.0:
+    if FP > 0.0:
         FP_Reactive_lists[i].append(FP_dict[i])
     else:
         FP_Inductive_lists[i].append(FP_dict[i])
@@ -545,10 +540,29 @@ def Potencias(i, Irms, Vrms, potrmsCGE):
     DATCurrent_lists[i].append(DATCurrent_dict[i])
     OneHourEnergy_lists[i].append(OneHourEnergy[i])
     Energy_lists[i].append(Energy[i])
-    if len(Vrms_lists[i]) == 5:
-        Maximo15min(Vrms_lists[i], Irms_lists[i], ActivePower_lists[i], ReactivePower_lists[i], AparentPower_lists[i], FP_Reactive_lists[i],FP_Inductive_lists[i], FDVoltage_lists[i], FDCurrent_lists[i], DATVoltage_lists[i], DATCurrent_lists[i], OneHourEnergy_lists[i], Energy_lists[i],mongo_connect)
-
+    print(f'{Vrms_lists[i]} .... {i}')
+    #if len(Vrms_lists[i]) == 5:
+    now = datetime.datetime.now()
+    if now.minute % 5 == 0:
+        if not called_this_minute:
+            call_every_five_minutes()
+            called_this_minute = True
+    else:
+        called_this_minute = False
+        
         # Limpiar las listas después de llamar a Maximo15min
+        
+
+    #SaveDataCsv(Vrms, Irms, ActivePower_dict[i], ReactivePower_dict[i], AparentPower_dict[i], FP_dict[i], CosPhi_dict[i], FDVoltage_dict[i], FDCurrent_dict[i], DATVoltage_dict[i], DATCurrent_dict[i], Energy[i], OneHourEnergy[i], i, k1, f1)
+
+called_this_minute = False
+def call_every_five_minutes():
+    print(f"entrando a call_every_five_minutes")
+    Variable=None
+    for i in range(1, 10):
+        t = threading.Thread(target=Maximo15min, args=(Variable,Vrms_lists[i], Irms_lists[i], ActivePower_lists[i], ReactivePower_lists[i], AparentPower_lists[i], FP_Reactive_lists[i], FP_Inductive_lists[i], FDVoltage_lists[i], FDCurrent_lists[i], DATVoltage_lists[i], DATCurrent_lists[i], OneHourEnergy_lists[i], Energy_lists[i], mongo_connect))
+        t.start()
+        t.join()
         Vrms_lists[i] = []
         Irms_lists[i] = []
         ActivePower_lists[i] = []
@@ -563,8 +577,9 @@ def Potencias(i, Irms, Vrms, potrmsCGE):
         OneHourEnergy_lists[i] = []
         Energy_lists[i] = []
 
-    #SaveDataCsv(Vrms, Irms, ActivePower_dict[i], ReactivePower_dict[i], AparentPower_dict[i], FP_dict[i], CosPhi_dict[i], FDVoltage_dict[i], FDCurrent_dict[i], DATVoltage_dict[i], DATCurrent_dict[i], Energy[i], OneHourEnergy[i], i, k1, f1)
-    
+
+
+
 
 buffer_voltage = {i: [] for i in range(1, 10)}
 buffer_current = {i: [] for i in range(1, 10)}
@@ -648,10 +663,10 @@ def process_signal(list_voltage, list_current, samplings, i, fig, ax1, ax2, ax3,
 
         #irms *= 0.94
         print(f'Irms {i}: {irms}')
-        CurrentFFT(no_current_offset, samplings, i, Irms, sincvoltaje1, PhaseVoltage, fundamental_amplitude_voltage, fig, ax1, ax2)
+        FP, CosPhi,desfaseCGE, DATCurrent, FDCurrent = CurrentFFT(no_current_offset, samplings, i, Irms, sincvoltaje1, PhaseVoltage, fundamental_amplitude_voltage, fig, ax1, ax2)
         potrmsCGE = PotenciaRms(no_current_offset, no_voltage_offset)
         print(f'potrmsCGE {i}: {potrmsCGE}')
-        Potencias(i, irms, vrms, potrmsCGE)
+        Potencias(i, irms, vrms, potrmsCGE, FP, CosPhi,desfaseCGE, DATCurrent, FDCurrent)
         
         buffer_current[i] = []
 
@@ -758,10 +773,10 @@ def main(use_tkinter, use_serial, use_mqtt, use_mongo):
         # Ejecutar el código sin la interfaz gráfica
         process_signals_without_tkinter(use_serial)
     if use_mqtt:
-        print("Conectando al broker MQTT")
+        print("Conectando al broker MQTT ..")
         ConnectToBroker()
     if use_mongo:
-        print("Conectando a mongo")
+        print("Conectando a MongoDB ..")
         mongo_connect=1
 
 if __name__ == "__main__":
@@ -770,9 +785,16 @@ if __name__ == "__main__":
     parser.add_argument("--use_serial", action="store_true", help="Habilitar la lectura de datos desde el puerto serie")
     parser.add_argument("--use_mqtt", action="store_true", help="Habilitar la conexión con el broker MQTT")
     parser.add_argument("--use_mongo", action="store_true", help="Habilitar el guardado en mongo")
+    parser.add_argument("--get_devices", action="store_true", help="Obtener devices")
 
     args = parser.parse_args()
-
+    
+    if args.get_devices:
+           mqtt_credentials = get_mqtt_credentials()
+           print(mqtt_credentials)
+           if mqtt_credentials is not None:
+               ConnectToBroker(mqtt_credentials)
+           sys.exit()
     if args.use_serial:
         print("Usando arg serial")
         time.sleep(10)
