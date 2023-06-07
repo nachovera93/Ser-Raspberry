@@ -4,15 +4,12 @@ import json
 
 db = iot_ser_db()
 
-def list_data_db_insert(data):
+def insert_data(collection_name, data):
     try:
-        col_use = db.historic_data
-        #payload=json.dumps(data)
-        #print(payload)
+        col_use = db[collection_name]
         col_use.insert_one(data)
-        #list_db = col_use.find({"userId": userId})
     except Exception as e:
-        print(f"Excepcion en Insertar datos a mongo: {str(e)} ")
+        print(f"Excepción al insertar datos en Mongo: {str(e)}")
         #return -1
     #bf=[]
     #for m in data:

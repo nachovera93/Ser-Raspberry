@@ -50,77 +50,7 @@ from DataSave import Maximo15min
 import threading
 #from connector import iot_ser_db
 #from data_db import list_data_db_insert
-
-broker = '192.168.43.74'   #'192.168.1.85' #mqtt server
-port = 1883
-dId = '121212'
-passw = 'eLNlwkgAaj'
-
-
-#FALTA CONECTAR AL BROKER CON LOS DEVICES PARA ENVIAR DATOS
-
-webhook_endpoint = 'http://192.168.43.74:3001/api/getdevicecredentials'
-
-userId="63d87d13afeae04cb7827725"
-rcConnect = 1 
-def get_mqtt_credentials():
-    print("Getting MQTT Credentials from WebHook")
-    time.sleep(2)
-    toSend = {"dId": dId, "password": passw}
-    respuesta = requests.post(webhook_endpoint, data=toSend)
-
-    if respuesta.status_code != 200:
-        print("Error in response ", respuesta.status_code)
-        respuesta.close()
-        return None
-
-    print("Mqtt Credentials Obtained Successfully :)   ")
-    my_bytes_value = respuesta.content
-    my_new_string = my_bytes_value.decode("utf-8").replace("'", '"')
-    data = json.loads(my_new_string)
-    s = json.dumps(data, indent=4, sort_keys=True)
-    print(s)
-    respuesta.close()
-    print("Ends mqtt credentials")
-    return {
-        "username": data["username"],
-        "password": data["password"],
-        "topic": data["topic"] + "+/actdata",
-        "client_id": f'device_{dId}_{random.randint(0, 9999)}',
-    }
-
-
-def on_disconnect(client, userdata, rc):
-    if rc != 0 and rc != 5:
-        print("Unexpected disconnection, will auto-reconnect")
-    elif rc == 5:
-        print("Getting new credentials!")
-        mqtt_credentials = get_mqtt_credentials()
-        if mqtt_credentials is not None:
-            client.username_pw_set(mqtt_credentials["username"], mqtt_credentials["password"])
-
-
-def on_connected(client, userdata, flags, rc):
-    if rc == 0:
-        client.connected_flag = True
-        client.subscribe(mqtt_credentials["topic"])
-        print("connected OK")
-        print("rc =", client.connected_flag)
-    else:
-        print("Bad connection Returned code=", rc)
-        client.bad_connection_flag = False
-
-
-def ConnectToBroker(mqtt_credentials):
-    client = mqtt.Client(mqtt_credentials["client_id"])
-    client.connect(broker, port)
-    client.on_disconnect = on_disconnect
-    client.username_pw_set(mqtt_credentials["username"], mqtt_credentials["password"])
-    client.on_connect = on_connected
-    client.loop_start()
-
-
-
+from mqtt_helper import get_mqtt_credentials, on_disconnect, on_connected, ConnectToBroker, userId, dId
 
 
 
@@ -131,7 +61,22 @@ f1="Fase-1"
 f2="Fase-2"	
 f3="Fase-3"
 
+parser = argparse.ArgumentParser(description="Análisis de señales digitales")
+parser.add_argument("--use_tkinter", action="store_true", help="Habilitar la interfaz gráfica Tkinter")
+parser.add_argument("--use_serial", action="store_true", help="Habilitar la lectura de datos desde el puerto serie")
+parser.add_argument("--use_mqtt", action="store_true", help="Habilitar la conexión con el broker MQTT")
+parser.add_argument("--use_mongo", action="store_true", help="Habilitar el guardado en mongo")
+parser.add_argument("--get_devices", action="store_true", help="Obtener devices")
+parser.add_argument('--largo', type=int, default=9, help='Largo de la lista (predeterminado: 9).')
+args = parser.parse_args()
+largo_lista = args.largo
 
+if largo_lista == 3:
+    Variable_list = ["carga_fase_1","paneles_fase_1","red_fase_1"]
+elif largo_lista == 6:
+    Variable_list = ["carga_fase_1","paneles_fase_1","red_fase_1","carga_fase_2","paneles_fase_2","red_fase_2"]
+elif largo_lista == 9:
+    Variable_list = ["carga_fase_1","paneles_fase_1","red_fase_1","carga_fase_2","paneles_fase_2","red_fase_2","carga_fase_3","paneles_fase_3","red_fase_3"]
 
 def get_extreme_values(my_list, quantity, max_or_min):
     return sorted(set(my_list), reverse=max_or_min)[:quantity]
@@ -167,9 +112,9 @@ def PotenciaRms(listCurrent, listVoltage):
     MeanSquares = sum(Squares) / N
     return MeanSquares
 
-def butter_lowpass_filter(data, cutoff, fs, order=10):
+def butter_lowpass_filter(datas, cutoff, fs, order=10):
     sos = signal.butter(order, cutoff, 'low', fs=fs, output='sos')
-    return signal.sosfilt(sos, data)
+    return signal.sosfilt(sos, datas)
 
 
 def plot_signal_and_fft(signal, xf, amplitudes, index, fig, ax1, ax2,SeñalType,use_tkinter=True):
@@ -408,26 +353,11 @@ def CurrentFFT(signal, sample_rate, i, Irms, sincvoltaje1, PhaseVoltage, fundame
     return FP_dict[p],CosPhi_dict[p],desfaseCGE[p], DATCurrent_dict[p], FDCurrent_dict[p]
 
 
-
-
-def FuncionReporte():
-    import socket
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.settimeout(5)
-    try:
-        s.connect(("www.google.com", 80))
-    except (socket.gaierror, socket.timeout):
-        print("Sin conexión a internet")
-        return 0
-    else:
-        print("Con conexión a internet")
-        s.close()
-        return 1
     
 
-energy_times = [datetime.datetime.now()] * 9
-energies = [0.0] * 9
-one_hour_energies = [0.0] * 9
+energy_times = [datetime.datetime.now()] * largo_lista 
+energies = [0.0] * largo_lista
+one_hour_energies = [0.0] * largo_lista
 aparent_power = 0.0
 active_power = 0.0
 reactive_power = 0.0
@@ -446,7 +376,6 @@ count_current = 0
 currents_load = 0
 currents_panels = 0
 energy_factor = 2.5
-v_times = [time.time()] * 15
 EnergyFactor=2.5
 # Use dictionaries to store variable values
 TimeA = {}
@@ -464,31 +393,24 @@ DATVoltage_dict = {}
 DATCurrent_dict = {}
 TimeInit = datetime.datetime.now()
 print(f'Hora Inicio: {TimeInit}')
-TimeA = {
-    1: datetime.datetime.now(),
-    2: datetime.datetime.now(),
-    3: datetime.datetime.now(),
-    4: datetime.datetime.now(),
-    5: datetime.datetime.now(),
-    6: datetime.datetime.now(),
-    7: datetime.datetime.now(),
-    8: datetime.datetime.now(),
-    9: datetime.datetime.now(),
-}
 
-Vrms_lists = {i: [] for i in range(1, 10)}
-Irms_lists = {i: [] for i in range(1, 10)}
-FP_Reactive_lists = {i: [] for i in range(1, 10)}
-FP_Inductive_lists = {i: [] for i in range(1, 10)}
-FDVoltage_lists = {i: [] for i in range(1, 10)}
-FDCurrent_lists = {i: [] for i in range(1, 10)}
-DATVoltage_lists = {i: [] for i in range(1, 10)}
-DATCurrent_lists = {i: [] for i in range(1, 10)}
-OneHourEnergy_lists = {i: [] for i in range(1, 10)} 
-Energy_lists = {i: [] for i in range(1, 10)}
-ActivePower_lists = {i: [] for i in range(1, 10)}
-ReactivePower_lists = {i: [] for i in range(1, 10)}
-AparentPower_lists = {i: [] for i in range(1, 10)}
+TimeA = {i: datetime.datetime.now() for i in range(1, largo_lista + 1)}
+
+Vrms_lists = {i: [] for i in range(1, largo_lista + 1)}
+Irms_lists = {i: [] for i in range(1, largo_lista + 1)}
+FP_Reactive_lists = {i: [] for i in range(1, largo_lista + 1)}
+FP_Inductive_lists = {i: [] for i in range(1, largo_lista + 1)}
+FDVoltage_lists = {i: [] for i in range(1, largo_lista + 1)}
+FDCurrent_lists = {i: [] for i in range(1, largo_lista + 1)}
+DATVoltage_lists = {i: [] for i in range(1, largo_lista + 1)}
+DATCurrent_lists = {i: [] for i in range(1, largo_lista + 1)}
+OneHourEnergy_lists = {i: [] for i in range(1, largo_lista + 1)} 
+Energy_lists = {i: [] for i in range(1, largo_lista + 1)}
+ActivePower_lists = {i: [] for i in range(1, largo_lista + 1)}
+ReactivePower_lists = {i: [] for i in range(1, largo_lista + 1)}
+AparentPower_lists = {i: [] for i in range(1, largo_lista + 1)}
+
+print(f' Vrms_lists: {Vrms_lists}')
 
 def Potencias(i, Irms, Vrms, potrmsCGE, FP, CosPhi,desfaseCGE, DATCurrent, FDCurrent):
     global Vrms_lists, Irms_lists, called_this_minute
@@ -505,7 +427,7 @@ def Potencias(i, Irms, Vrms, potrmsCGE, FP, CosPhi,desfaseCGE, DATCurrent, FDCur
           ActivePower = ActivePower*(-1)
     ReactivePower = Vrms*Irms*np.sin(PhaseVoltage-PhaseCurrent)
   
-    print(f"  TimeA: {TimeA[i]}")
+    #print(f"  TimeA: {TimeA[i]}")
     TimeB[i] = datetime.datetime.now()
     delta_readable = (TimeB[i] - TimeA[i]).total_seconds()
     delta = (((TimeB[i] - TimeA[i]).microseconds) / 1000 + ((TimeB[i] - TimeA[i]).seconds) * 1000) / 10000000000
@@ -513,17 +435,17 @@ def Potencias(i, Irms, Vrms, potrmsCGE, FP, CosPhi,desfaseCGE, DATCurrent, FDCur
     OneHourEnergy[i] = OneHourEnergy.get(i, 0) + np.abs(AparentPower * delta * EnergyFactor)
     TimeA[i] = datetime.datetime.now()
 
-    print(f"Iteration {i}:")
-    print(f"  Vrms: {Vrms}")
-    print(f"  AparentPower: {AparentPower}")
-    print(f"  ActivePower: {ActivePower}")
-    print(f"  ReactivePower: {ReactivePower}")
-    print(f"  Energy: {Energy[i]}")
-    print(f"  OneHourEnergy: {OneHourEnergy[i]}")
-    print(f"  TimeB: {TimeB[i]}")
-    print(f"  TimeA: {TimeA[i]}")
-    print(f"  Delta: {delta_readable} seconds\n")
-
+    #print(f"Iteration {i}:")
+    #print(f"  Vrms: {Vrms}")
+    #print(f"  AparentPower: {AparentPower}")
+    #print(f"  ActivePower: {ActivePower}")
+    #print(f"  ReactivePower: {ReactivePower}")
+    #print(f"  Energy: {Energy[i]}")
+    #print(f"  OneHourEnergy: {OneHourEnergy[i]}")
+    #print(f"  TimeB: {TimeB[i]}")
+    #print(f"  TimeA: {TimeA[i]}")
+    #print(f"  Delta: {delta_readable} seconds\n")
+#
     print(f"  Vrms_lists: {Vrms_lists}")
     Vrms_lists[i].append(Vrms)
     Irms_lists[i].append(Irms)
@@ -540,7 +462,7 @@ def Potencias(i, Irms, Vrms, potrmsCGE, FP, CosPhi,desfaseCGE, DATCurrent, FDCur
     DATCurrent_lists[i].append(DATCurrent_dict[i])
     OneHourEnergy_lists[i].append(OneHourEnergy[i])
     Energy_lists[i].append(Energy[i])
-    print(f'{Vrms_lists[i]} .... {i}')
+    #print(f'{Vrms_lists[i]} .... {i}')
     #if len(Vrms_lists[i]) == 5:
     now = datetime.datetime.now()
     if now.minute % 5 == 0:
@@ -557,10 +479,11 @@ def Potencias(i, Irms, Vrms, potrmsCGE, FP, CosPhi,desfaseCGE, DATCurrent, FDCur
 
 called_this_minute = False
 def call_every_five_minutes():
-    print(f"entrando a call_every_five_minutes")
+    print(f"entrando a call_every_five_minutes {Variable_list}")
     Variable=None
-    for i in range(1, 10):
-        t = threading.Thread(target=Maximo15min, args=(Variable,Vrms_lists[i], Irms_lists[i], ActivePower_lists[i], ReactivePower_lists[i], AparentPower_lists[i], FP_Reactive_lists[i], FP_Inductive_lists[i], FDVoltage_lists[i], FDCurrent_lists[i], DATVoltage_lists[i], DATCurrent_lists[i], OneHourEnergy_lists[i], Energy_lists[i], mongo_connect))
+    for i in range(1, largo_lista+1):
+        print(f"entrando a call_every_five_minutes {Variable_list[i-1]}")
+        t = threading.Thread(target=Maximo15min, args=(data,userId,dId,Variable_list[i-1],Vrms_lists[i], Irms_lists[i], ActivePower_lists[i], ReactivePower_lists[i], AparentPower_lists[i], FP_Reactive_lists[i], FP_Inductive_lists[i], FDVoltage_lists[i], FDCurrent_lists[i], DATVoltage_lists[i], DATCurrent_lists[i], OneHourEnergy_lists[i], Energy_lists[i], mongo_connect))
         t.start()
         t.join()
         Vrms_lists[i] = []
@@ -581,11 +504,11 @@ def call_every_five_minutes():
 
 
 
-buffer_voltage = {i: [] for i in range(1, 10)}
-buffer_current = {i: [] for i in range(1, 10)}
-
+buffer_voltage = {i: [] for i in range(1, largo_lista + 1)}
+buffer_current = {i: [] for i in range(1, largo_lista + 1)}
+print(f' buffer_voltage: {buffer_voltage}')
 def generate_simulated_data():
-    signal_type = random.choice([11, 22, 33, 44, 55, 66, 77, 88, 99])
+    signal_type = random.choice(range(11, 11 + largo_lista))
     duration = 0.14
     sampling_rate = 30000  # 30 KS/s
     time = np.linspace(0, duration, int(duration * sampling_rate))
@@ -634,7 +557,8 @@ def process_signal(list_voltage, list_current, samplings, i, fig, ax1, ax2, ax3,
     dc_voltage_median = (max_voltage + min_voltage) / 2
     no_voltage_offset = (list_final_voltage - dc_voltage_median)
     vrms = VoltajeRms(no_voltage_offset) * 0.92
-
+    print(vrms)
+    print(i)
     buffer_voltage[i].append(vrms)
     if len(buffer_voltage[i]) >= 3:
         median_buffer_voltage = np.median(buffer_voltage[i])
@@ -740,37 +664,33 @@ def process_signals_without_tkinter(use_serial,root=None, fig=None, ax1=None, ax
         np_array = np.fromstring(decoded_bytes, dtype=float, sep=',')
         time.sleep(2)
 
-        if len(np_array) == 8402:
-            signal_type_to_index = {
-                11: 1,
-                22: 2,
-                33: 3,
-                44: 4,
-                55: 5,
-                66: 6,
-                77: 7,
-                88: 8,
-                99: 9
-            }
-            print_memory_usage()
+        signal_type_to_index = {key: index for index, key in enumerate(range(11, 11 + largo_lista), start=1)}
+            #print_memory_usage()
 
-            signal_type = np_array[0]
-            if signal_type in signal_type_to_index:
-                i = signal_type_to_index[signal_type]
-                samplings = np_array[-1]
-
-                list_voltage = np_array[1:4201]
-                list_current = np_array[4201:8401]
-
-                process_signal(list_voltage, list_current, samplings, i, fig, ax1, ax2, ax3, ax4)
-                #break
+        signal_type = np_array[0]
+        if signal_type in signal_type_to_index:
+            i = signal_type_to_index[signal_type]
+            samplings = np_array[-1]
+            list_voltage = np_array[1:4201]
+            list_current = np_array[4201:8401]
+            process_signal(list_voltage, list_current, samplings, i, fig, ax1, ax2, ax3, ax4)
+            #break
 
 mongo_connect=0
-def main(use_tkinter, use_serial, use_mqtt, use_mongo, ):
+data=None
+def main(use_tkinter, use_serial, use_mqtt, use_mongo):
     global mongo_connect
     print(f'use_tkinter: {use_tkinter}')
     print(f'use_serial: {use_serial}')
     time.sleep(10)
+    if use_mqtt:
+        global data
+        _,data = get_mqtt_credentials()
+        print("Conectando al broker MQTT ..")
+        ConnectToBroker()
+    if use_mongo:
+        print("Conectando a MongoDB ..")
+        mongo_connect=1
     if use_tkinter:
         print("Usando tkinter")
         # Crear la ventana de aplicación de Tkinter y los objetos de Matplotlib
@@ -782,27 +702,16 @@ def main(use_tkinter, use_serial, use_mqtt, use_mongo, ):
     else:
         # Ejecutar el código sin la interfaz gráfica
         process_signals_without_tkinter(use_serial)
-    if use_mqtt:
-        print("Conectando al broker MQTT ..")
-        ConnectToBroker()
-    if use_mongo:
-        print("Conectando a MongoDB ..")
-        mongo_connect=1
+    
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Análisis de señales digitales")
-    parser.add_argument("--use_tkinter", action="store_true", help="Habilitar la interfaz gráfica Tkinter")
-    parser.add_argument("--use_serial", action="store_true", help="Habilitar la lectura de datos desde el puerto serie")
-    parser.add_argument("--use_mqtt", action="store_true", help="Habilitar la conexión con el broker MQTT")
-    parser.add_argument("--use_mongo", action="store_true", help="Habilitar el guardado en mongo")
-    parser.add_argument("--get_devices", action="store_true", help="Obtener devices")
-
-    args = parser.parse_args()
+   
     
     if args.get_devices:
-           mqtt_credentials = get_mqtt_credentials()
-           print(mqtt_credentials)
-           if mqtt_credentials is not None:
-               ConnectToBroker(mqtt_credentials)
+           #mqtt_credentials = get_mqtt_credentials()
+           get_mqtt_credentials()
+           #print(mqtt_credentials)
+           #if mqtt_credentials is not None:
+           #    ConnectToBroker(mqtt_credentials)
            sys.exit()
     main(args.use_tkinter, args.use_serial, args.use_mqtt, args.use_mongo)
